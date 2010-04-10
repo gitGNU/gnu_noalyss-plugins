@@ -32,7 +32,7 @@ function show($p_res,$p_code,$p_desc) {
 <span class="notice">
 <?=_('Vous pouvez mettre plusieurs postes comptables séparés par une virgule dans une grille')?>
 </span>
-<tr> <legend><?=_("Opération à l'entrée");?></legend>
+<fieldset> <legend><?=_("Opération à l'entrée");?></legend>
 <TABLE class="result">
 <TR>
 	<TH><?=_("code")?></TH>

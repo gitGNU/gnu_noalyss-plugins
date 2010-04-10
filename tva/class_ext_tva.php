@@ -118,12 +118,12 @@ class Ext_Tva extends Ext_Tva_Gen
   public function load() {
 
    $sql="select tva_label,tva_rate, tva_comment,tva_poste from tva_rate where tva_id=$1"; 
-    /* please adapt
+   /* please adapt */
     $res=$this->cn->get_array(
 		 $sql,
 		 array($this->tva_id)
 		 );
-		 */
+		 
     if ( Database::num_row($res) == 0 ) return;
     foreach ($res as $idx=>$value) { $this->$idx=$value; }
   }
@@ -196,7 +196,7 @@ class Ext_Tva extends Ext_Tva_Gen
     $exist=$this->db->get_value('select count(*) from jrn join parm_periode on (p_id=jr_tech_per) where p_exercice=$1',array($this->exercice));
     if ( $exist==0 ) { alert(_("Cette exercice comptable n'est pas dans ce dossier")); exit;}
 
-    // set 0 for all
+    // set default value 0 for all
     $keys=array_keys($this->variable);
     for ($i = 0;$i < count($this->variable);$i++) { 
       $idx=$keys[$i];
@@ -205,77 +205,129 @@ class Ext_Tva extends Ext_Tva_Gen
     }
 
     $ctva=new Tva_Parameter($this->db);
-    // Compute all the values now
-    //d00 ?????
+    $array=array('00','01','02','03','44','45','46','47','48','49');
+    for ($e=0;$e<count($array);$e++) {
+      // Compute div 2
+      $amount=$this->get_amount('GRIL'.$array[$e],'out');
+      $this->set_parameter('d'.$array[$e],$amount);
+    }
 
-    //d01
-    $ctva->set_parameter('code','GRIL01');
-    $ctva->load();
-    $poste=$ctva->get_parameter('value');
-    //!!! From the first day of the exercice until end_date
-    /**
-     *@todo create new function 
-     * - get_amount_account
-     * - get_amount_account_involved
-     */
-    $this->set_parameter('d01',$solde['solde']);
+   }
+   function display_declaration_amount() {
+     $itext_00=new INum('val[]',$this->get_parameter('d00')); $str_00=$itext_00->input().HtmlInput::hidden('code[]','d00');
+     $itext_01=new INum('val[]',$this->get_parameter('d01')); $str_01=$itext_01->input().HtmlInput::hidden('code[]','d01');
+     $itext_02=new INum('val[]',$this->get_parameter('d02')); $str_02=$itext_02->input().HtmlInput::hidden('code[]','d02');
+     $itext_03=new INum('val[]',$this->get_parameter('d03')); $str_03=$itext_03->input().HtmlInput::hidden('code[]','d03');
+     $itext_44=new INum('val[]',$this->get_parameter('d44')); $str_44=$itext_44->input().HtmlInput::hidden('code[]','d44');
+     $itext_45=new INum('val[]',$this->get_parameter('d45')); $str_45=$itext_45->input().HtmlInput::hidden('code[]','d45');
+     $itext_46=new INum('val[]',$this->get_parameter('d46')); $str_46=$itext_46->input().HtmlInput::hidden('code[]','d46');
+     $itext_47=new INum('val[]',$this->get_parameter('d47')); $str_47=$itext_47->input().HtmlInput::hidden('code[]','d47');
+     $itext_48=new INum('val[]',$this->get_parameter('d48')); $str_48=$itext_48->input().HtmlInput::hidden('code[]','d48');
+     $itext_49=new INum('val[]',$this->get_parameter('d49')); $str_49=$itext_49->input().HtmlInput::hidden('code[]','d49');
+     $itext_81=new INum('val[]',$this->get_parameter('d81')); $str_81=$itext_81->input().HtmlInput::hidden('code[]','d81');
+     $itext_82=new INum('val[]',$this->get_parameter('d82')); $str_82=$itext_82->input().HtmlInput::hidden('code[]','d82');
+     $itext_83=new INum('val[]',$this->get_parameter('d83')); $str_83=$itext_83->input().HtmlInput::hidden('code[]','d83');
+     $itext_84=new INum('val[]',$this->get_parameter('d84')); $str_84=$itext_84->input().HtmlInput::hidden('code[]','d84');
+     $itext_85=new INum('val[]',$this->get_parameter('d85')); $str_85=$itext_85->input().HtmlInput::hidden('code[]','d85');
+     $itext_86=new INum('val[]',$this->get_parameter('d86')); $str_86=$itext_86->input().HtmlInput::hidden('code[]','d86');
+     $itext_87=new INum('val[]',$this->get_parameter('d87')); $str_87=$itext_87->input().HtmlInput::hidden('code[]','d87');
+     $itext_88=new INum('val[]',$this->get_parameter('d88')); $str_88=$itext_88->input().HtmlInput::hidden('code[]','d88');
 
-    //d02
-    $ctva->set_parameter('code','GRIL02');
-    $ctva->load();
-    $poste=$ctva->get_parameter('value');
-    $oAccount=new Acc_Account_Ledger($this->db,$poste);
-    $solde=$oAccount->get_solde_detail($cond);
-    $this->set_parameter('d02',$solde['solde']);
-
-    //d03
-    $ctva->set_parameter('code','GRIL03');
-    $ctva->load();
-    $poste=$ctva->get_parameter('value');
-    $oAccount=new Acc_Account_Ledger($this->db,$poste);
-    $solde=$oAccount->get_solde_detail($cond);
-    $this->set_parameter('d03',$solde['solde']);
-
-  }
-  function display_declaration_amount() {
-    $itext_00=new INum('val[]',$this->get_parameter('d00')); $str_00=$itext_00->input().HtmlInput::hidden('code[]','d00');
-    $itext_01=new INum('val[]',$this->get_parameter('d01')); $str_01=$itext_01->input().HtmlInput::hidden('code[]','d01');
-    $itext_02=new INum('val[]',$this->get_parameter('d02')); $str_02=$itext_02->input().HtmlInput::hidden('code[]','d02');
-    $itext_03=new INum('val[]',$this->get_parameter('d03')); $str_03=$itext_03->input().HtmlInput::hidden('code[]','d03');
-    $itext_44=new INum('val[]',$this->get_parameter('d44')); $str_44=$itext_44->input().HtmlInput::hidden('code[]','d44');
-    $itext_45=new INum('val[]',$this->get_parameter('d45')); $str_45=$itext_45->input().HtmlInput::hidden('code[]','d45');
-    $itext_46=new INum('val[]',$this->get_parameter('d46')); $str_46=$itext_46->input().HtmlInput::hidden('code[]','d46');
-    $itext_47=new INum('val[]',$this->get_parameter('d47')); $str_47=$itext_47->input().HtmlInput::hidden('code[]','d47');
-    $itext_48=new INum('val[]',$this->get_parameter('d48')); $str_48=$itext_48->input().HtmlInput::hidden('code[]','d48');
-    $itext_49=new INum('val[]',$this->get_parameter('d49')); $str_49=$itext_49->input().HtmlInput::hidden('code[]','d49');
-    $itext_81=new INum('val[]',$this->get_parameter('d81')); $str_81=$itext_81->input().HtmlInput::hidden('code[]','d81');
-    $itext_82=new INum('val[]',$this->get_parameter('d82')); $str_82=$itext_82->input().HtmlInput::hidden('code[]','d82');
-    $itext_83=new INum('val[]',$this->get_parameter('d83')); $str_83=$itext_83->input().HtmlInput::hidden('code[]','d83');
-    $itext_84=new INum('val[]',$this->get_parameter('d84')); $str_84=$itext_84->input().HtmlInput::hidden('code[]','d84');
-    $itext_85=new INum('val[]',$this->get_parameter('d85')); $str_85=$itext_85->input().HtmlInput::hidden('code[]','d85');
-    $itext_86=new INum('val[]',$this->get_parameter('d86')); $str_86=$itext_86->input().HtmlInput::hidden('code[]','d86');
-    $itext_87=new INum('val[]',$this->get_parameter('d87')); $str_87=$itext_87->input().HtmlInput::hidden('code[]','d87');
-    $itext_88=new INum('val[]',$this->get_parameter('d88')); $str_88=$itext_88->input().HtmlInput::hidden('code[]','d88');
-
-    $itext_54=new INum('val[]',$this->get_parameter('d54')); $str_54=$itext_54->input().HtmlInput::hidden('code[]','d54');
-    $itext_55=new INum('val[]',$this->get_parameter('d55')); $str_55=$itext_55->input().HtmlInput::hidden('code[]','d55');
-    $itext_56=new INum('val[]',$this->get_parameter('d56')); $str_56=$itext_56->input().HtmlInput::hidden('code[]','d56');
-    $itext_57=new INum('val[]',$this->get_parameter('d57')); $str_57=$itext_57->input().HtmlInput::hidden('code[]','d57');
-    $itext_63=new INum('val[]',$this->get_parameter('d63')); $str_63=$itext_63->input().HtmlInput::hidden('code[]','d63');
-    $itext_xx=new INum('val[]',$this->get_parameter('dxx')); $str_xx=$itext_xx->input().HtmlInput::hidden('code[]','dxx');
-    $itext_59=new INum('val[]',$this->get_parameter('d59')); $str_59=$itext_59->input().HtmlInput::hidden('code[]','d59');
-    $itext_62=new INum('val[]',$this->get_parameter('d62')); $str_62=$itext_62->input().HtmlInput::hidden('code[]','d62');
-    $itext_64=new INum('val[]',$this->get_parameter('d64')); $str_64=$itext_64->input().HtmlInput::hidden('code[]','d64');
-    $itext_yy=new INum('val[]',$this->get_parameter('dyy')); $str_yy=$itext_yy->input().HtmlInput::hidden('code[]','dyy');
-    $itext_71=new INum('val[]',$this->get_parameter('d71')); $str_71=$itext_71->input().HtmlInput::hidden('code[]','d71');
-    $itext_91=new INum('val[]',$this->get_parameter('d91')); $str_91=$itext_91->input().HtmlInput::hidden('code[]','d91');
+     $itext_54=new INum('val[]',$this->get_parameter('d54')); $str_54=$itext_54->input().HtmlInput::hidden('code[]','d54');
+     $itext_55=new INum('val[]',$this->get_parameter('d55')); $str_55=$itext_55->input().HtmlInput::hidden('code[]','d55');
+     $itext_56=new INum('val[]',$this->get_parameter('d56')); $str_56=$itext_56->input().HtmlInput::hidden('code[]','d56');
+     $itext_57=new INum('val[]',$this->get_parameter('d57')); $str_57=$itext_57->input().HtmlInput::hidden('code[]','d57');
+     $itext_63=new INum('val[]',$this->get_parameter('d63')); $str_63=$itext_63->input().HtmlInput::hidden('code[]','d63');
+     $itext_xx=new INum('val[]',$this->get_parameter('dxx')); $str_xx=$itext_xx->input().HtmlInput::hidden('code[]','dxx');
+     $itext_59=new INum('val[]',$this->get_parameter('d59')); $str_59=$itext_59->input().HtmlInput::hidden('code[]','d59');
+     $itext_62=new INum('val[]',$this->get_parameter('d62')); $str_62=$itext_62->input().HtmlInput::hidden('code[]','d62');
+     $itext_64=new INum('val[]',$this->get_parameter('d64')); $str_64=$itext_64->input().HtmlInput::hidden('code[]','d64');
+     $itext_yy=new INum('val[]',$this->get_parameter('dyy')); $str_yy=$itext_yy->input().HtmlInput::hidden('code[]','dyy');
+     $itext_71=new INum('val[]',$this->get_parameter('d71')); $str_71=$itext_71->input().HtmlInput::hidden('code[]','d71');
+     $itext_91=new INum('val[]',$this->get_parameter('d91')); $str_91=$itext_91->input().HtmlInput::hidden('code[]','d91');
 
 
-    ob_start();
-    require_once('form_decl.php');
-    $r=ob_get_contents();
-    ob_clean();
-    return $r;
-    
-  }
-  }
+     ob_start();
+     require_once('form_decl.php');
+     $r=ob_get_contents();
+     ob_clean();
+     return $r;
+
+   }
+   /**
+    *@brief get the amount of operations related to the accounting linked
+    *       to $p_code, in the range of start_periode and end_periode
+    *@param $p_code is the code is tva_belge.parameter.pcode
+    *@param $p_dir direction of the operation (in for sales, out for purchases)
+    *       
+    *@return the amount
+    */
+   function get_amount($p_code,$p_dir) {
+     $result=0;
+
+     // load the code and find the related acccounting
+     $ctva=new Tva_Parameter($this->db);
+     $ctva->set_parameter('code',$p_code);
+
+     // check parameters
+     if ( $ctva->load() == -1 )
+       throw new Exception (_("p_code $p_code non trouvé"));
+
+     if ( $p_dir != 'in' && $p_dir != 'out') 
+       throw new Exception (_("p_dir $p_dir est incorrect"));
+
+     // find all the operation using the accounting and
+     // compute the total of in of out (6 or 7) with this accounting
+     $related=($p_dir == 'in')?'6%':'7%';
+
+     $poste=$ctva->get_parameter('value');
+     if ( strpos(',',$poste) != 0 ) {
+       $result=0;
+       $aPoste=split(',',$poste) ;
+	 for ($i=0;$i<$count($aPoste);$i++){
+	   $result+=$this->get_amount_account($aPoste[$i],$related,$p_dir);
+	 }
+     } else
+       $result=$this->get_amount_account($poste,$related,$p_dir);
+     if ($result < 0 ) alert(_('Montant négatif détecté'));
+     return $result;
+   }
+   /**
+    *@brief return the amount for an account 
+    *@see get_amount
+    *@param $p_poste accounting
+    *@param $related is '6%' or '
+    *@param $p_dir is out or in for purchases or sales
+    *@return amount of this accounting
+    */
+   function get_amount_account($p_poste,$related,$p_dir) {
+     $sql="
+select coalesce(sum(amount_deb),0) as sum_deb, 
+coalesce (sum(amount_cred),0) as sum_cred from (
+select 
+case when j_debit is true  then j_montant else 0 end  as amount_deb,
+case when j_debit is false then j_montant else 0 end  as amount_cred
+from jrnx 
+where
+j_grpt in ( select j_grpt from jrnx 
+where 
+j_poste=$1
+)
+and ( 
+j_poste::text like $2
+ and (
+j_date >= to_date($3,'DD.MM.YYYY') and j_date <= to_date($4,'DD.MM.YYYY')))
+) as compute_amount_side
+";
+     $res=$this->db->get_array($sql,array($p_poste,
+					  $related,
+					  $this->start_periode,
+					  $this->end_periode
+					  )
+			       );
+     $result=$res[0]['sum_deb']-$res[0]['sum_cred'];
+     if ( $p_dir == 'out') 
+       $result=(-1)*$result;
+     return $result;
+   }
+}

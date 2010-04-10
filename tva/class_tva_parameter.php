@@ -102,8 +102,9 @@ class  Tva_Parameter
 		 array($this->pcode)
 		 );
 
-    if ( count($res) == 0 ) return;
+    if ( count($res) == 0 ) return -1;
     for ($i=0;$i<count($res);$i++) { $this->pcode=$res[$i]['pcode'];$this->pvalue=$res[$i]['pvalue']; }
+    return 0;
   }
   /**
    *@brief check that this accounting does exist in the accounting plan
