@@ -53,34 +53,37 @@ CREATE TABLE tva_belge.parameter
 (
   pcode text NOT NULL,
   pvalue text,
+  paccount text,
   CONSTRAINT parameter_pkey PRIMARY KEY (pcode)
  );
 EOF;
 $this->cn->exec_sql($sql);
 // load default value
 $array=array(
-	     'GRIL00'=>'4114',
-	     'GRIL01'=>'4113',
-	     'GRIL02'=>'4112',
-	     'GRIL03'=>'4111',
-	     'GRIL44'=>'41142',
-	     'GRIL45'=>'41144',
-	     'GRIL46'=>'41145',
-	     'GRIL47'=>'41141',
-	     'GRIL48'=>'7091',
-	     'GRIL49'=>'7092',
-	     'GRIL81'=>'60',
-	     'GRIL82'=>'61',
-	     'GRIL83'=>'21,22,23,24',
-	     'GRIL84'=>'6096',
-	     'GRIL85'=>'6097',
-	     'GRIL86'=>'45142',
-	     'GRIL87'=>'45144',
-	     'GRIL88'=>'45145',
-	     'ATVA'=>'4117');
+	     'GRIL00'=>array('4514','70%,71%'),
+	     'GRIL01'=>array('4513','70%,71%,'),
+	     'GRIL02'=>array('4512','70%,71%'),
+	     'GRIL03'=>array('4511','70%,71%'),
+	     'GRIL44'=>array('45145','70%,71%'),
+	     'GRIL45'=>array('45144','70%,71%'),
+	     'GRIL46'=>array('45145','70%,71%'),
+	     'GRIL47'=>array('4514','701%'),
+	     'GRIL48'=>array('4514','7091'),
+	     'GRIL49'=>array('4511,4512,4513','7092'),
+	     'GRIL81'=>array('4111,4112,4113','60%'),
+	     'GRIL82'=>array('4111,4112,4113','61%'),
+	     'GRIL83'=>array('4111','21,22,23,24,25'),
+	     'GRIL84'=>array('','6096'),
+	     'GRIL85'=>array('','6097'),
+	     'GRIL86'=>array('45142','61%'),
+	     'GRIL87'=>array('451',''),
+	     'GRIL88'=>array('45145',''),
+	     'ATVA'=>array('4117',''));
+
 foreach ($array as $code=>$value) {
-  $this->cn->exec_sql('insert into tva_belge.parameter(pcode,pvalue) values ($1,$2)',
-		      array($code,$value));
+  var_dump($value);
+  $this->cn->exec_sql('insert into tva_belge.parameter(pcode,pvalue,paccount) values ($1,$2,$3)',
+		      array($code,$value[0],$value[1]));
   }
 }
 }

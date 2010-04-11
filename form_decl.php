@@ -38,28 +38,28 @@ C. Services pour lesquels la T.V.A. étrangère est due par le cocontractant [44
 </td>
 <td>
 <?=$str_44;?>
-</td> 
+</td>
 </tr><tr>
 <td>
 D. Opérations pour lesquelles la T.V.A. est due par le cocontractant [45]
 </td>
 <td>
 <?=$str_45;?>
-</td> 
+</td>
 </tr><tr>
 <td>
 E. Livraisons intracommunautaires exemptées effectuées en Belgique et ventes ABC [46]
 </td>
 <td>
 <?=$str_46;?>
-</td> 
+</td>
 </tr><tr>
 <td>
  F. Autres opérations exemptées et autres opérations effectuées à l'étranger [47]
 </td>
 <td>
 <?=$str_47;?>
-</td> 
+</td>
 </tr><tr>
 <td>
 G. Montant des notes de crédit délivrées et des corrections négatives : </td>
@@ -67,13 +67,13 @@ G. Montant des notes de crédit délivrées et des corrections négatives : </td
  <td>&nbsp;&nbsp;&nbsp;&nbsp;- relatif aux opérations inscrites en grilles 44 et 46 [48] </td>
 <td>
 <?=$str_48;?>
-</td> 
+</td>
 
  </tr><tr>
  <td>&nbsp;&nbsp;&nbsp;&nbsp;- relatif aux autres opérations du cadre II [49]</td>
 <td>
 <?=$str_49;?>
-</td> 
+</td>
 
  </tr><tr>
  </table>
@@ -135,7 +135,8 @@ D. Autres opérations à l'entrée pour lesquelles la T.V.A. est due par le déc
 
 <h1>Cadre IV : </h1>
 <table>
-<tr><td>Taxes dues A. T.V.A. relative aux opérations déclarées en : </td>
+<tr><td>Taxes dues</td></tr>
+<tr><TD> A. T.V.A. relative aux opérations déclarées en : </td>
 </tr>
 <tr>
 <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;-grilles 01, 02 et 03 [54]</td>
@@ -161,7 +162,7 @@ B. T.V.A. relative aux importations avec report de perception [57] </td>
 <tr>
 <td>
 
-C. Diverses régularisations T.V.A. en faveur de l'Etat [61]</td> 
+C. Diverses régularisations T.V.A. en faveur de l'Etat [61]</td>
 <td></td>
 </tr>
 <tr>
@@ -219,7 +220,7 @@ Total des grilles 59, 62 et 64[yy]
 </tr>
 <tr>
 <td>Sommes dues par l'Etat : grille yy - grille xx [72]</td>
-<td><?=$str_82;?></td>
+<td><?=$str_72;?></td>
 </tr>
 </table>
 <span class="notice">*Une seule des grilles 71 ou 72 peut être remplie </span>

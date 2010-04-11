@@ -53,10 +53,12 @@ class Ext_Tva extends Ext_Tva_Gen
 			   "d63"=>"d63",
 			   "dxx"=>"dxx",
 			   "d59"=>"d59",
+			   "d61"=>"d61",
 			   "d62"=>"d62",
 			   "d64"=>"d64",
 			   "dyy"=>"dyy",
 			   "d71"=>"d71",
+			   "d72"=>"d72",
 			   "d82"=>"d82",
 			   "d87"=>"d87",
 			   "d88"=>"d88",
@@ -79,40 +81,15 @@ class Ext_Tva extends Ext_Tva_Gen
    */
    public function seek($cond,$p_array=null) 
    {
-   /*
-     $sql="select * from * where $cond";
-     return $this->cn->get_array($cond,$p_array)
-  */
    }
   public function insert() {
     if ( $this->verify() != 0 ) return;
-    /*  please adapt
-    $sql="insert into tva_rate (tva_label,tva_rate,tva_comment,tva_poste) ".
-      " values ($1,$2,$3,$4)  returning tva_id";
-    $this->tva_id=$this->cn->get_value(
-		 $sql,
-		 array($this->tva_label,
-		       $this->tva_rate,
-		       $this->tva_comment,
-		       $this->tva_poste)
-		 );
-    */
+
   }
 
   public function update() {
     if ( $this->verify() != 0 ) return;
-    /*   please adapt
-    $sql="update tva_rate set tva_label=$1,tva_rate=$2,tva_comment=$3,tva_poste=$4 ".
-      " where tva_id = $5";
-    $res=$this->cn->exec_sql(
-		 $sql,
-		 array($this->tva_label,
-		       $this->tva_rate,
-		       $this->tva_comment,
-		       $this->tva_poste,
-		       $this->tva_id)
-		 );
-		 */
+
   }
 
   public function load() {
@@ -207,11 +184,202 @@ class Ext_Tva extends Ext_Tva_Gen
     $ctva=new Tva_Parameter($this->db);
     $array=array('00','01','02','03','44','45','46','47','48','49');
     for ($e=0;$e<count($array);$e++) {
-      // Compute div 2
+      // Compute frame 2
       $amount=$this->get_amount('GRIL'.$array[$e],'out');
       $this->set_parameter('d'.$array[$e],$amount);
     }
+    $array=array('81','82','83','84','85','86','87','88');
+    for ($e=0;$e<count($array);$e++) {
+      // Compute frame 3
+      $amount=$this->get_amount('GRIL'.$array[$e],'in');
+      $this->set_parameter('d'.$array[$e],$amount);
+    }
 
+    // Compute GRIL54
+    $array=array('01','02','03');
+    $rposte='';$rrelated='';
+    for ($e=0;$e<count($array);$e++) {
+      // Compute frame 3
+      $ctva=new Tva_Parameter($this->db);
+      $ctva->set_parameter('code','GRIL'.$array[$e]);
+      $ctva->load();
+      $poste=$ctva->get_parameter('value');
+      $related=$ctva->get_parameter('account');
+      $rposte.=$related;
+      $rrelated.=$poste;
+    }
+    $amount=$this->get_poste($poste,$related,'out');
+    $this->set_parameter('d54',$amount);
+
+    // Compute GRIL55
+    $array=array('86','88');
+    $rposte='';$rrelated='';
+    for ($e=0;$e<count($array);$e++) {
+      // Compute frame 3
+      $ctva=new Tva_Parameter($this->db);
+      $ctva->set_parameter('code','GRIL'.$array[$e]);
+      $ctva->load();
+      $poste=$ctva->get_parameter('value');
+      $related=$ctva->get_parameter('account');
+      $rposte.=$related;
+      $rrelated.=$poste;
+    }
+    $amount=$this->get_poste($poste,$related,'out');
+    $this->set_parameter('d55',$amount);
+    /**
+     *@todo
+     * GRIL57 - GRIL61 - GRIL63
+     */
+
+    //GRILXX
+    $amount=$this->d54+$this->d55+$this->d56+$this->d57+$this->d61+$this->d63;
+    $this->set_parameter('dxx',$amount);
+
+
+    // Frame V 
+    //gril59
+    $array=array('81','82','83','84','85','86','87','88');
+    $rposte='';$rrelated='';
+    for ($e=0;$e<count($array);$e++) {
+      // Compute frame 3
+      $ctva=new Tva_Parameter($this->db);
+      $ctva->set_parameter('code','GRIL'.$array[$e]);
+      $ctva->load();
+      $poste=$ctva->get_parameter('value');
+      $related=$ctva->get_parameter('account');
+      $rposte.=$related;
+      $rrelated.=$poste;
+    }
+    $amount=$this->get_poste($poste,$related,'out');
+    $this->set_parameter('d59',$amount);
+    /**
+     *@todo indiquez que GRIL62 n'est pas calculé automatiquement
+     */
+    //gril64
+    $array=array('81','82','83','84','85','86','87','88');
+    $rposte='';$rrelated='';
+    for ($e=0;$e<count($array);$e++) {
+      // Compute frame 3
+      $ctva=new Tva_Parameter($this->db);
+      $ctva->set_parameter('code','GRIL'.$array[$e]);
+      $ctva->load();
+      $poste=$ctva->get_parameter('value');
+      $related=$ctva->get_parameter('account');
+      $rposte.=$related;
+      $rrelated.=$poste;
+    }
+    $amount=$this->get_poste($poste,$related,'out');
+    $this->set_parameter('d64',$amount);
+
+    // GRILYY
+    $this->dyy=$this->d59+$this->d62+$this->d64;
+    
+    //Fram VI
+    if ( $this->dxx > $this->dyy ) $this->d71=$this->dxx-$this->dyy;
+    if ( $this->dxx < $this->dyy ) $this->d72=$this->dyy-$this->dxx;
+
+   }
+   /**
+    *@brief get the amount of operations related to the accounting linked
+    *       to $p_code, in the range of start_periode and end_periode
+    *@param $p_code is the code is tva_belge.parameter.pcode
+    *@param $p_dir direction of the operation (in for sales, out for purchases)
+    *       
+    *@return the amount
+    */
+   function get_amount($p_code,$p_dir) {
+     $result=0;
+
+     // load the code and find the related acccounting
+     $ctva=new Tva_Parameter($this->db);
+     $ctva->set_parameter('code',$p_code);
+
+     // check parameters
+     if ( $ctva->load() == -1 )
+       throw new Exception (_("p_code $p_code non trouvé"));
+
+     if ( $p_dir != 'in' && $p_dir != 'out') 
+       throw new Exception (_("p_dir $p_dir est incorrect"));
+
+     // find all the operation using the accounting and
+     // compute the total of in of out (6 or 7) with this accounting
+     $related=$ctva->get_parameter('value');
+     $poste=$ctva->get_parameter('account');
+     $result=$this->get_poste($poste,$related,$p_dir);
+     return $result;
+   }
+   /**
+    *@brief split poste and amount and call get_amount_account
+    *@param $poste accounting for which the amount is asked
+    *@param $related accounting involved 
+    *@param $p_dir in or out
+    *@return total amount for account $poste in the operations which involved $related
+    *@see get_amount
+    */
+   function get_poste($poste,$related,$p_dir) {
+     $result=0;
+     if ( strpos($poste,',') != 0 ) {
+       $aPoste=split(',',$poste) ;
+	 for ($i=0;$i<count($aPoste);$i++){
+	   if ( strpos($related,',') != 0 ) {
+	     $aRelated=split(',',$related);
+	     for($j=0;$j<count($aRelated);$j++) {
+	       $result+=$this->get_amount_account($aPoste[$i],$aRelated[$j],$p_dir);
+	     }
+	   } else
+	     $result+=$this->get_amount_account($aPoste[$i],$related,$p_dir);
+	 }
+     } else {
+       if ( strpos($related,',') != 0 ) {
+	 $aRelated=split(',',$related);
+	 for($j=0;$j<count($aRelated);$j++) {
+	   $result+=$this->get_amount_account($poste,$aRelated[$j],$p_dir);
+	 } 
+       }else {
+	 $result=$this->get_amount_account($poste,$related,$p_dir);
+       }
+     }
+     if ($result < 0 ) alert(_('Montant négatif détecté'));
+     return $result;
+   }
+   /**
+    *@brief return the amount for an account 
+    *@see get_amount
+    *@param $p_poste accounting
+    *@param $related is '6%' or '
+    *@param $p_dir is out or in for purchases or sales
+    *@return amount of this accounting
+    */
+   function get_amount_account($p_poste,$related,$p_dir) {
+
+     $sql="
+select coalesce(sum(amount_deb),0) as sum_deb, 
+coalesce (sum(amount_cred),0) as sum_cred from (
+select 
+case when j_debit is true  then j_montant else 0 end  as amount_deb,
+case when j_debit is false then j_montant else 0 end  as amount_cred
+from jrnx 
+where
+j_grpt in ( select j_grpt from jrnx 
+where 
+j_poste::text like $1
+)
+and ( 
+j_poste::text like $2
+ and (
+j_date >= to_date($3,'DD.MM.YYYY') and j_date <= to_date($4,'DD.MM.YYYY')))
+) as compute_amount_side
+";
+     $res=$this->db->get_array($sql,array($related,
+					  $p_poste,
+					  $this->start_periode,
+					  $this->end_periode
+					  )
+			       );
+     $result=$res[0]['sum_deb']-$res[0]['sum_cred'];
+     if ( $p_dir == 'out') 
+       $result=(-1)*$result;
+     return $result;
    }
    function display_declaration_amount() {
      $itext_00=new INum('val[]',$this->get_parameter('d00')); $str_00=$itext_00->input().HtmlInput::hidden('code[]','d00');
@@ -244,6 +412,7 @@ class Ext_Tva extends Ext_Tva_Gen
      $itext_64=new INum('val[]',$this->get_parameter('d64')); $str_64=$itext_64->input().HtmlInput::hidden('code[]','d64');
      $itext_yy=new INum('val[]',$this->get_parameter('dyy')); $str_yy=$itext_yy->input().HtmlInput::hidden('code[]','dyy');
      $itext_71=new INum('val[]',$this->get_parameter('d71')); $str_71=$itext_71->input().HtmlInput::hidden('code[]','d71');
+     $itext_72=new INum('val[]',$this->get_parameter('d72')); $str_72=$itext_72->input().HtmlInput::hidden('code[]','d72');
      $itext_91=new INum('val[]',$this->get_parameter('d91')); $str_91=$itext_91->input().HtmlInput::hidden('code[]','d91');
 
 
@@ -254,80 +423,5 @@ class Ext_Tva extends Ext_Tva_Gen
      return $r;
 
    }
-   /**
-    *@brief get the amount of operations related to the accounting linked
-    *       to $p_code, in the range of start_periode and end_periode
-    *@param $p_code is the code is tva_belge.parameter.pcode
-    *@param $p_dir direction of the operation (in for sales, out for purchases)
-    *       
-    *@return the amount
-    */
-   function get_amount($p_code,$p_dir) {
-     $result=0;
 
-     // load the code and find the related acccounting
-     $ctva=new Tva_Parameter($this->db);
-     $ctva->set_parameter('code',$p_code);
-
-     // check parameters
-     if ( $ctva->load() == -1 )
-       throw new Exception (_("p_code $p_code non trouvé"));
-
-     if ( $p_dir != 'in' && $p_dir != 'out') 
-       throw new Exception (_("p_dir $p_dir est incorrect"));
-
-     // find all the operation using the accounting and
-     // compute the total of in of out (6 or 7) with this accounting
-     $related=($p_dir == 'in')?'6%':'7%';
-
-     $poste=$ctva->get_parameter('value');
-     if ( strpos(',',$poste) != 0 ) {
-       $result=0;
-       $aPoste=split(',',$poste) ;
-	 for ($i=0;$i<$count($aPoste);$i++){
-	   $result+=$this->get_amount_account($aPoste[$i],$related,$p_dir);
-	 }
-     } else
-       $result=$this->get_amount_account($poste,$related,$p_dir);
-     if ($result < 0 ) alert(_('Montant négatif détecté'));
-     return $result;
-   }
-   /**
-    *@brief return the amount for an account 
-    *@see get_amount
-    *@param $p_poste accounting
-    *@param $related is '6%' or '
-    *@param $p_dir is out or in for purchases or sales
-    *@return amount of this accounting
-    */
-   function get_amount_account($p_poste,$related,$p_dir) {
-     $sql="
-select coalesce(sum(amount_deb),0) as sum_deb, 
-coalesce (sum(amount_cred),0) as sum_cred from (
-select 
-case when j_debit is true  then j_montant else 0 end  as amount_deb,
-case when j_debit is false then j_montant else 0 end  as amount_cred
-from jrnx 
-where
-j_grpt in ( select j_grpt from jrnx 
-where 
-j_poste=$1
-)
-and ( 
-j_poste::text like $2
- and (
-j_date >= to_date($3,'DD.MM.YYYY') and j_date <= to_date($4,'DD.MM.YYYY')))
-) as compute_amount_side
-";
-     $res=$this->db->get_array($sql,array($p_poste,
-					  $related,
-					  $this->start_periode,
-					  $this->end_periode
-					  )
-			       );
-     $result=$res[0]['sum_deb']-$res[0]['sum_cred'];
-     if ( $p_dir == 'out') 
-       $result=(-1)*$result;
-     return $result;
-   }
 }

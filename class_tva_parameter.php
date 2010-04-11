@@ -31,7 +31,7 @@
  */
 class  Tva_Parameter
 {
-  private static $variable=array("code"=>"pcode","value"=>"pvalue");
+  private static $variable=array("code"=>"pcode","value"=>"pvalue","account"=>'paccount');
   function __construct ($p_init) {
     $this->cn=$p_init;
   }
@@ -70,12 +70,13 @@ class  Tva_Parameter
   public function insert() {
     if ( $this->verify() != 0 ) return;
 
-    $sql="insert into tva_belge.parameter (pcode,pvalue) ".
+    $sql="insert into tva_belge.parameter (pcode,pvalue,paccount) ".
       " values ($1,$2) ";
     $this->tva_id=$this->cn->exec_sql(
 				       $sql,
 				       array($this->pcode,
-					     $this->pvalue)
+					     $this->pvalue,
+					     $this->paccount)
 				       );
 
   }
@@ -83,11 +84,12 @@ class  Tva_Parameter
   public function update() {
     if ( $this->verify() != 0 ) return;
 
-    $sql="update tva_belge.parameter  set pvalue=$1 ".
-      " where pcode = $2";
+    $sql="update tva_belge.parameter  set pvalue=$1,paccount=$2 ".
+      " where pcode = $3";
     $res=$this->cn->exec_sql(
 		 $sql,
 		 array($this->pvalue,
+		       $this->paccount,
 		       $this->pcode)
 		 );
 
@@ -95,7 +97,7 @@ class  Tva_Parameter
 
   public function load() {
 
-   $sql="select pcode,pvalue from tva_belge.parameter where pcode=$1"; 
+   $sql="select pcode,pvalue,paccount from tva_belge.parameter where pcode=$1"; 
 
     $res=$this->cn->get_array(
 		 $sql,
@@ -103,7 +105,7 @@ class  Tva_Parameter
 		 );
 
     if ( count($res) == 0 ) return -1;
-    for ($i=0;$i<count($res);$i++) { $this->pcode=$res[$i]['pcode'];$this->pvalue=$res[$i]['pvalue']; }
+    for ($i=0;$i<count($res);$i++) { $this->pcode=$res[$i]['pcode'];$this->pvalue=$res[$i]['pvalue'];$this->paccount=$res[$i]['paccount']; }
     return 0;
   }
   /**
@@ -112,14 +114,14 @@ class  Tva_Parameter
    *@return the number of row found (0 if none)
    */
   public function exist_pcmn($p_code) {
-    $count=$this->cn->get_value('select count(*) from tmp_pcmn where pcm_val=$1',array($p_code));
+    $count=$this->cn->get_value('select count(*) from tmp_pcmn where pcm_val::text like $1',array($p_code));
     return $count;
   }
   /**
    *@brief show the content of the table tva_belge.parameter
    */
   public function display() {
-    $res=$this->cn->get_array("select pcode,pvalue from tva_belge.parameter");
+    $res=$this->cn->get_array("select pcode,pvalue,paccount from tva_belge.parameter");
     ob_start();
     require_once('form_parameter.php');
     $r=ob_get_contents();
