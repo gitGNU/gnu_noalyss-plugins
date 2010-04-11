@@ -29,10 +29,15 @@ require_once('class_tva_parameter.php');
 if ( isset ($_REQUEST['RECORD']))  {
   $aCode=$_POST['code'];
   $aValue=$_POST['value'];
+  $aAccount=$_POST['account'];
   for ($i=0;$i<count($aCode);$i++) {
     $code=new Tva_Parameter($cn);
     $code->set_parameter('code',$aCode[$i]);
     $code->set_parameter('value',$aValue[$i]);
+    if ( isset($aAccount[$i]))
+      $code->set_parameter('account',$aAccount[$i]);
+    else
+      $code->set_parameter('account','');
     $code->update();
   }
 }

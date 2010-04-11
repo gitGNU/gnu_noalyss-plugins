@@ -15,15 +15,33 @@ function show($p_res,$p_code,$p_desc) {
 			$aPoste=split(',',$p_res[$i]['pvalue']);
 			foreach ($aPoste as $e) {
 				if ( $tvap->exist_pcmn($e) ==0 ) {
-				$msg='<span class="notice">'.$e._(" n'existe pas dans votre plan comptable")."</span>";
+				$msg='<span class="notice">'.$e._(" n'existe pas dans PCMN")."</span>";
 		}
 			}
 		} else
 		if ( $tvap->exist_pcmn($p_res[$i]['pvalue']) ==0 ) {
-			$msg='<span class="notice">'._("Ce poste comptable n'existe pas dans votre plan comptable")."</span>";
+			$msg='<span class="notice">'.$p_res[$i]['pvalue']._(" n'existe pas dans PCMN")."</span>";
 		}
 		echo $text->input();
-		echo "</td><td>$p_desc $msg</td>";
+		echo '</td>';
+		if ( $p_code != 'ATVA') {
+			echo '<td>';
+			$text=new IText('account[]',$p_res[$i]['paccount']);
+			if (strpos($p_res[$i]['paccount'],',') != 0 ) {
+				$aPoste=split(',',$p_res[$i]['paccount']);
+				foreach ($aPoste as $e) {
+					if ( $tvap->exist_pcmn($e) ==0 ) {
+					$msg='<span class="notice">'.$e._(" n'existe pas dans PCMN")."</span>";
+			}
+				}
+			} else
+			if ( $tvap->exist_pcmn($p_res[$i]['paccount']) ==0 ) {
+				$msg='<span class="notice">'.$p_res[$i]['paccount']._(" n'existe pas dans PCMN")."</span>";
+			}
+			echo $text->input();
+			echo '</td>';
+		}
+		echo "<td>$p_desc $msg</td>";
 		break;
 	}
     }
@@ -36,7 +54,8 @@ function show($p_res,$p_code,$p_desc) {
 <TABLE class="result">
 <TR>
 	<TH><?=_("code")?></TH>
-	<TH><?=_('Poste comptable')?></TH>
+	<TH><?=_('Poste comptable TVA')?></TH>
+	<TH><?=_('Poste comptable Montant')?></TH>
 	<TH><?=_('Description')?></TH>
 </TR>
 <TR>
@@ -67,7 +86,7 @@ function show($p_res,$p_code,$p_desc) {
 <?=show($res,"GRIL48",_("Grille 48 : Opérations relatives aux notes de crédit des grilles 44 et 48"))?>
 </tr>
 <TR>
-<?=show($res,"GRIL49",_("Grille 49 : Opérations relatives aux notes de crédit sauf grilles 44 et 48"))?>
+<?=show($res,"GRIL49",_("Grille 49 : Opérations relatives aux notes de crédit"))?>
 </tr>
 </TABLE>
 </fieldset>
@@ -77,6 +96,7 @@ function show($p_res,$p_code,$p_desc) {
 <TR>
 	<TH><?=_("code")?></TH>
 	<TH><?=_('Poste comptable')?></TH>
+	<TH><?=_('Poste comptable Montant')?></TH>
 	<TH><?=_('Description')?></TH>
 </TR>
 <TR>
@@ -89,14 +109,14 @@ function show($p_res,$p_code,$p_desc) {
 <?=show($res,"GRIL83",_("Grille 83 : Opération sur les biens d'investissements"))?>
 </tr>
 <TR>
-<?=show($res,"GRIL84",_("Grille 84 : Opération sur les biens d'investissements"))?>
+<?=show($res,"GRIL84",_("Grille 84 : Montant des notes de crédit reçues et des corrections négatives relatif aux opérations inscrites en grilles 86 et 88"))?>
 </tr>
 <TR>
-<?=show($res,"GRIL85",_("Grille 85 : Opération sur les biens d'investissements"))?>
+<?=show($res,"GRIL85",_("Grille 85 : Montant des notes de crédit reçues et des corrections négatives relatif aux autres opérations du cadre III  "))?>
 </tr>
 
 <TR>
-<?=show($res,"GRIL86",_("Opération sur les biens d'investissements"))?>
+<?=show($res,"GRIL86",_("Grille 86 : Acquisitions intracommunautaires effectuées en Belgique et ventes ABC  "))?>
 </tr>
 
 <TR>
