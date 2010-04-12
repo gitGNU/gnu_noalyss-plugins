@@ -25,11 +25,30 @@
  */
 require_once('class_ext_tvagen.php');
 require_once('class_tva_parameter.php');
-
+/**
+ *@brief transform a string into an arrau without empty element and  duplicate
+ * the array is sorted 
+ *@param $p_string string containing a comma a separator
+ *@return array
+ *
+ */
+function get_array_nodup($p_string) {
+  var_dump(__LINE__."get_array_nodup");
+  $array=split(',',$p_string);
+  sort($array);
+  $array=array_unique($array);
+  $result=array();
+  foreach ($array as $val) {
+    if ( $val == '') continue;
+    $result[]=$val;
+  }
+  $r=join(',',$result);
+  var_dump($r);
+  return $result;
+}
 class Ext_Tva extends Ext_Tva_Gen
 {
-  /* example private $variable=array("val1"=>1,"val2"=>"Seconde valeur","val3"=>0); */
-  protected   $variable=array(
+    protected   $variable=array(
 			   "d00"=>"d00",
 			   "d01"=>"d01",
 			   "d02"=>"d02",
@@ -154,9 +173,11 @@ class Ext_Tva extends Ext_Tva_Gen
     $this->set_parameter('end_periode',$per_end);
     // compute amount from periode
     var_dump($per_start." ".$per_end);
-
-    
   }
+
+  /**
+   *@brief display the information about the company
+   */
   function display_info(){
     $itva=new IText('num_tva',$this->num_tva);$str_tva=$itva->input();
     $iname=new IText('name',$this->tva_name); $str_name=$iname->input();
@@ -168,6 +189,9 @@ class Ext_Tva extends Ext_Tva_Gen
     ob_clean();
     return $r;
   }
+  /**
+   *@brief compute the amount
+   */
   function compute() {
     // check that this exercice exist
     $exist=$this->db->get_value('select count(*) from jrn join parm_periode on (p_id=jr_tech_per) where p_exercice=$1',array($this->exercice));
@@ -182,6 +206,10 @@ class Ext_Tva extends Ext_Tva_Gen
     }
 
     $ctva=new Tva_Parameter($this->db);
+    /**
+     *@todo on ne peut pas calculer de cette façon à cause des opérations qui comprennent plusieurs taux de tva diff.
+     *il faut aller chercher les montants dans les tables quant_*
+     */
     $array=array('00','01','02','03','44','45','46','47','48','49');
     for ($e=0;$e<count($array);$e++) {
       // Compute frame 2
@@ -205,10 +233,10 @@ class Ext_Tva extends Ext_Tva_Gen
       $ctva->load();
       $poste=$ctva->get_parameter('value');
       $related=$ctva->get_parameter('account');
-      $rposte.=$related;
-      $rrelated.=$poste;
+      $rposte.=$related.',';
+      $rrelated.=$poste.',';
     }
-    $amount=$this->get_poste($poste,$related,'out');
+    $amount=$this->get_poste($rrelated,$rposte,'out');
     $this->set_parameter('d54',$amount);
 
     // Compute GRIL55
@@ -224,7 +252,7 @@ class Ext_Tva extends Ext_Tva_Gen
       $rposte.=$related;
       $rrelated.=$poste;
     }
-    $amount=$this->get_poste($poste,$related,'out');
+    $amount=$this->get_poste($rrelated,$rposte,'out');
     $this->set_parameter('d55',$amount);
     /**
      *@todo
@@ -247,10 +275,10 @@ class Ext_Tva extends Ext_Tva_Gen
       $ctva->load();
       $poste=$ctva->get_parameter('value');
       $related=$ctva->get_parameter('account');
-      $rposte.=$related;
-      $rrelated.=$poste;
+      $rposte.=$related.',';
+      $rrelated.=$poste.',';
     }
-    $amount=$this->get_poste($poste,$related,'out');
+    $amount=$this->get_poste($rrelated,$rposte,'in');
     $this->set_parameter('d59',$amount);
     /**
      *@todo indiquez que GRIL62 n'est pas calculé automatiquement
@@ -265,8 +293,8 @@ class Ext_Tva extends Ext_Tva_Gen
       $ctva->load();
       $poste=$ctva->get_parameter('value');
       $related=$ctva->get_parameter('account');
-      $rposte.=$related;
-      $rrelated.=$poste;
+      $rposte.=','.$related;
+      $rrelated.=','.$poste;
     }
     $amount=$this->get_poste($poste,$related,'out');
     $this->set_parameter('d64',$amount);
@@ -318,20 +346,27 @@ class Ext_Tva extends Ext_Tva_Gen
     */
    function get_poste($poste,$related,$p_dir) {
      $result=0;
-     if ( strpos($poste,',') != 0 ) {
-       $aPoste=split(',',$poste) ;
+     if ( strpos($poste,',') == true ) {
+
+       // remove duplicate
+       $aPoste=get_array_nodup($poste);
+       var_dump(__LINE__.":".$poste);
 	 for ($i=0;$i<count($aPoste);$i++){
-	   if ( strpos($related,',') != 0 ) {
-	     $aRelated=split(',',$related);
+	   if ( strpos($related,',') == true ) {
+	     $aRelated=get_array_nodup($related);
+
 	     for($j=0;$j<count($aRelated);$j++) {
+	       var_dump(__LINE__." > ".$aPoste[$i].">".$aRelated[$j]);
 	       $result+=$this->get_amount_account($aPoste[$i],$aRelated[$j],$p_dir);
 	     }
-	   } else
+	   } else {
 	     $result+=$this->get_amount_account($aPoste[$i],$related,$p_dir);
+	     var_dump(__LINE__." > ".$aPoste[$i].">".$related);
+	   }
 	 }
      } else {
-       if ( strpos($related,',') != 0 ) {
-	 $aRelated=split(',',$related);
+       if ( strpos($related,',') == true ) {
+	 $aRelated=get_array_nodup($related);
 	 for($j=0;$j<count($aRelated);$j++) {
 	   $result+=$this->get_amount_account($poste,$aRelated[$j],$p_dir);
 	 } 
@@ -376,6 +411,7 @@ j_date >= to_date($3,'DD.MM.YYYY') and j_date <= to_date($4,'DD.MM.YYYY')))
 					  $this->end_periode
 					  )
 			       );
+     var_dump($this->db);
      $result=$res[0]['sum_deb']-$res[0]['sum_cred'];
      if ( $p_dir == 'out') 
        $result=(-1)*$result;
