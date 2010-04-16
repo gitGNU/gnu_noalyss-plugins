@@ -45,6 +45,13 @@ if ( isset ($_REQUEST['RECORD']))  {
 /* show all the possible parameters */
 $cn=new Database(dossier::id());
 $tvap=new Tva_Parameter($cn);
+require_once('class_itva_popup.php');
+$a=new IPopup('popup_tva');
+$a->set_title('Choississez la tva qui convient');
+echo $a->input();
+require_once('class_iposte.php');
+echo IPoste::ipopup('ipop_account');
+
 echo '<form method="post">';
 echo dossier::hidden();
 echo HtmlInput::extension();

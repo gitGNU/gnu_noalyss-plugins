@@ -122,6 +122,7 @@ class  Tva_Parameter
    */
   public function display() {
     $res=$this->cn->get_array("select pcode,pvalue,paccount from tva_belge.parameter");
+
     ob_start();
     require_once('form_parameter.php');
     $r=ob_get_contents();
