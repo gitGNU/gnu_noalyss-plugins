@@ -25,6 +25,7 @@
  */
 require_once('class_ext_tvagen.php');
 require_once('class_tva_parameter.php');
+require_once('class_tva_amount.php');
 /**
  *@brief transform a string into an arrau without empty element and  duplicate
  * the array is sorted 
@@ -33,7 +34,6 @@ require_once('class_tva_parameter.php');
  *
  */
 function get_array_nodup($p_string) {
-  var_dump(__LINE__."get_array_nodup");
   $array=split(',',$p_string);
   sort($array);
   $array=array_unique($array);
@@ -43,7 +43,6 @@ function get_array_nodup($p_string) {
     $result[]=$val;
   }
   $r=join(',',$result);
-  var_dump($r);
   return $result;
 }
 class Ext_Tva extends Ext_Tva_Gen
@@ -101,9 +100,73 @@ class Ext_Tva extends Ext_Tva_Gen
    public function seek($cond,$p_array=null) 
    {
    }
+   public function from_array($p_array) {
+     $val=$p_array['val'];
+     $code=$p_array['code'];
+     for ($i=0;$i<count($val);$i++) {
+       $this->$code[$i]=$val[$i];
+     }
+     $this->start_periode=$p_array['start_periode'];
+     $this->end_periode=$p_array['end_periode'];
+     $this->flag_periode=$p_array['flag_periode'];
+     $this->tva_name=$p_array['name'];
+     $this->num_tva=$p_array['num_tva'];
+     $this->adress=$p_array['adress'];
+     $this->country=$p_array['country'];
+   }
   public function insert() {
     if ( $this->verify() != 0 ) return;
-
+    $sql="INSERT INTO tva_belge.declaration_amount(
+             d00, d01, d02, d03, d44, d45, d46, d47, d48, d49, d81, 
+            d82, d83, d84, d85, d86, d87, d88, d54, d55, d56, d57, d61, d63, 
+            dxx, d59, d62, d64, dyy, d71, d72, d91, start_date, end_date, 
+             periodicity,name,num_tva,adress,country)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 
+            $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, 
+            $26, $27, $28, $29, $30, $31, $32, to_date($33,'DD.MM.YYYY'), to_date($34,'DD.MM.YYYY'), $35,$36,
+            $37,$38,$39) 
+             returning da_id;";
+      $this->id=$this->db->get_value($sql,
+				     array($this->d00, /* 1 */
+					   $this->d01, /* 2 */
+					   $this->d02, /* 3 */
+					   $this->d03, /* 4 */
+					   $this->d44, /* 5 */
+					   $this->d45, /* 6 */
+					   $this->d46, /* 7 */
+					   $this->d47, /* 8 */
+					   $this->d48, /* 9 */
+					   $this->d49, /* 10 */
+					   $this->d81, /* 11 */
+					   $this->d82, /* 12 */
+					   $this->d83, /* 13 */
+					   $this->d84, /* 14 */
+					   $this->d85, /* 15 */
+					   $this->d86, /* 16 */
+					   $this->d87, /* 17 */
+					   $this->d88, /* 18 */
+					   $this->d54, /* 19 */
+					   $this->d55, /* 20 */
+					   $this->d56, /* 21 */
+					   $this->d57, /* 22 */
+					   $this->d61, /* 23 */
+					   $this->d63, /* 24 */
+					   $this->dxx, /* 25 */
+					   $this->d59, /* 26 */
+					   $this->d62, /* 27 */
+					   $this->d64, /* 28 */
+					   $this->dyy, /* 29 */
+					   $this->d71, /* 30 */
+					   $this->d72, /* 31 */
+					   $this->d91, /* 32 */
+					   $this->start_periode, /* 33 */
+					   $this->end_periode, /* 34 */
+					   $this->flag_periode, /* 35 */
+					   $this->tva_name,	/* 36 */
+					   $this->num_tva,	/* 37 */
+					   $this->adress,	/* 38 */
+					   $this->country	/* 39 */
+					   ));
   }
 
   public function update() {
@@ -136,6 +199,7 @@ class Ext_Tva extends Ext_Tva_Gen
      * MY_TVA contains BE and has 10 digits
      * this->adress and $this->country can not be empty
      */
+    return 0;
   }
   function blank($p_year,$p_periode,$p_flag_quaterly) {
     // load parameter from myown
@@ -148,8 +212,9 @@ class Ext_Tva extends Ext_Tva_Gen
     $this->set_parameter('exercice',$p_year);
     try {
       $this->verify() ;
-    } catch (Exception $e) {
+    } catch ( Exception $e) {
       echo $e->getMessage();
+      throw $e;
     }
     // by month
     if ( $p_flag_quaterly == 1) {
@@ -195,7 +260,7 @@ class Ext_Tva extends Ext_Tva_Gen
   function compute() {
     // check that this exercice exist
     $exist=$this->db->get_value('select count(*) from jrn join parm_periode on (p_id=jr_tech_per) where p_exercice=$1',array($this->exercice));
-    if ( $exist==0 ) { alert(_("Cette exercice comptable n'est pas dans ce dossier")); exit;}
+    if ( $exist==0 ) { alert(_("Cette exercice comptable n'est pas dans ce dossier")); throw  new Exception('INVALYEAR',1 ) ;}
 
     // set default value 0 for all
     $keys=array_keys($this->variable);
@@ -213,50 +278,46 @@ class Ext_Tva extends Ext_Tva_Gen
     $array=array('00','01','02','03','44','45','46','47','48','49');
     for ($e=0;$e<count($array);$e++) {
       // Compute frame 2
-      $amount=$this->get_amount('GRIL'.$array[$e],'out');
+      $oTva=new Tva_amount($this->db,'out',$this->start_periode,$this->end_periode);
+      $oTva->set_parameter('grid','GRIL'.$array[$e]);
+      $amount=$oTva->amount_operation();
       $this->set_parameter('d'.$array[$e],$amount);
     }
+
     $array=array('81','82','83','84','85','86','87','88');
     for ($e=0;$e<count($array);$e++) {
       // Compute frame 3
-      $amount=$this->get_amount('GRIL'.$array[$e],'in');
+      $oTva=new Tva_amount($this->db,'in',$this->start_periode,$this->end_periode);
+      $oTva->set_parameter('grid','GRIL'.$array[$e]);
+      $amount=$oTva->amount_operation();
       $this->set_parameter('d'.$array[$e],$amount);
+     
+    }
+    //Frame IV
+    $array=array('54','55','56','57','61','63');
+    for ($e=0;$e<count($array);$e++) {
+      $oTva=new Tva_amount($this->db,'out',$this->start_periode,$this->end_periode);
+      $oTva->set_parameter('grid','GRIL'.$array[$e]);
+      $amount=$oTva->amount_vat();
+      $this->set_parameter('d'.$array[$e],$amount);
+
     }
 
-    // Compute GRIL54
-    $array=array('01','02','03');
-    $rposte='';$rrelated='';
+   
+    $array=array('59','62','64');
     for ($e=0;$e<count($array);$e++) {
-      // Compute frame 3
-      $ctva=new Tva_Parameter($this->db);
-      $ctva->set_parameter('code','GRIL'.$array[$e]);
-      $ctva->load();
-      $poste=$ctva->get_parameter('value');
-      $related=$ctva->get_parameter('account');
-      $rposte.=$related.',';
-      $rrelated.=$poste.',';
-    }
-    $amount=$this->get_poste($rrelated,$rposte,'out');
-    $this->set_parameter('d54',$amount);
+      $oTva=new Tva_amount($this->db,'in',$this->start_periode,$this->end_periode);
+      $oTva->set_parameter('grid','GRIL'.$array[$e]);
+      $amount=$oTva->amount_vat();
+      $this->set_parameter('d'.$array[$e],$amount);
 
-    // Compute GRIL55
-    $array=array('86','88');
-    $rposte='';$rrelated='';
-    for ($e=0;$e<count($array);$e++) {
-      // Compute frame 3
-      $ctva=new Tva_Parameter($this->db);
-      $ctva->set_parameter('code','GRIL'.$array[$e]);
-      $ctva->load();
-      $poste=$ctva->get_parameter('value');
-      $related=$ctva->get_parameter('account');
-      $rposte.=$related;
-      $rrelated.=$poste;
     }
-    $amount=$this->get_poste($rrelated,$rposte,'out');
-    $this->set_parameter('d55',$amount);
+    // for intracom, we compute a false VAT, have to paid it and deduce
+    $this->d55=$this->d86*0.21+$this->d88*0.21;
+    $this->d59+=$this->d55;
     /**
      *@todo
-     * GRIL57 - GRIL61 - GRIL63
+     * GRIL56 - GRIL57 - GRIL61 - GRIL63
      */
 
     //GRILXX
@@ -264,159 +325,24 @@ class Ext_Tva extends Ext_Tva_Gen
     $this->set_parameter('dxx',$amount);
 
 
-    // Frame V 
-    //gril59
-    $array=array('81','82','83','84','85','86','87','88');
-    $rposte='';$rrelated='';
-    for ($e=0;$e<count($array);$e++) {
-      // Compute frame 3
-      $ctva=new Tva_Parameter($this->db);
-      $ctva->set_parameter('code','GRIL'.$array[$e]);
-      $ctva->load();
-      $poste=$ctva->get_parameter('value');
-      $related=$ctva->get_parameter('account');
-      $rposte.=$related.',';
-      $rrelated.=$poste.',';
-    }
-    $amount=$this->get_poste($rrelated,$rposte,'in');
-    $this->set_parameter('d59',$amount);
-    /**
-     *@todo indiquez que GRIL62 n'est pas calculé automatiquement
-     */
-    //gril64
-    $array=array('81','82','83','84','85','86','87','88');
-    $rposte='';$rrelated='';
-    for ($e=0;$e<count($array);$e++) {
-      // Compute frame 3
-      $ctva=new Tva_Parameter($this->db);
-      $ctva->set_parameter('code','GRIL'.$array[$e]);
-      $ctva->load();
-      $poste=$ctva->get_parameter('value');
-      $related=$ctva->get_parameter('account');
-      $rposte.=','.$related;
-      $rrelated.=','.$poste;
-    }
-    $amount=$this->get_poste($poste,$related,'out');
-    $this->set_parameter('d64',$amount);
-
     // GRILYY
     $this->dyy=$this->d59+$this->d62+$this->d64;
+
     
     //Fram VI
     if ( $this->dxx > $this->dyy ) $this->d71=$this->dxx-$this->dyy;
     if ( $this->dxx < $this->dyy ) $this->d72=$this->dyy-$this->dxx;
 
    }
-   /**
-    *@brief get the amount of operations related to the accounting linked
-    *       to $p_code, in the range of start_periode and end_periode
-    *@param $p_code is the code is tva_belge.parameter.pcode
-    *@param $p_dir direction of the operation (in for sales, out for purchases)
-    *       
-    *@return the amount
-    */
-   function get_amount($p_code,$p_dir) {
-     $result=0;
+  /**
+   *@brief get into the table quant_purchase or quant_sold the amount
+   * of VAT
+   *@param
+   *@param
+   *@return
+   *@see
+   */
 
-     // load the code and find the related acccounting
-     $ctva=new Tva_Parameter($this->db);
-     $ctva->set_parameter('code',$p_code);
-
-     // check parameters
-     if ( $ctva->load() == -1 )
-       throw new Exception (_("p_code $p_code non trouvé"));
-
-     if ( $p_dir != 'in' && $p_dir != 'out') 
-       throw new Exception (_("p_dir $p_dir est incorrect"));
-
-     // find all the operation using the accounting and
-     // compute the total of in of out (6 or 7) with this accounting
-     $related=$ctva->get_parameter('value');
-     $poste=$ctva->get_parameter('account');
-     $result=$this->get_poste($poste,$related,$p_dir);
-     return $result;
-   }
-   /**
-    *@brief split poste and amount and call get_amount_account
-    *@param $poste accounting for which the amount is asked
-    *@param $related accounting involved 
-    *@param $p_dir in or out
-    *@return total amount for account $poste in the operations which involved $related
-    *@see get_amount
-    */
-   function get_poste($poste,$related,$p_dir) {
-     $result=0;
-     if ( strpos($poste,',') == true ) {
-
-       // remove duplicate
-       $aPoste=get_array_nodup($poste);
-       var_dump(__LINE__.":".$poste);
-	 for ($i=0;$i<count($aPoste);$i++){
-	   if ( strpos($related,',') == true ) {
-	     $aRelated=get_array_nodup($related);
-
-	     for($j=0;$j<count($aRelated);$j++) {
-	       var_dump(__LINE__." > ".$aPoste[$i].">".$aRelated[$j]);
-	       $result+=$this->get_amount_account($aPoste[$i],$aRelated[$j],$p_dir);
-	     }
-	   } else {
-	     $result+=$this->get_amount_account($aPoste[$i],$related,$p_dir);
-	     var_dump(__LINE__." > ".$aPoste[$i].">".$related);
-	   }
-	 }
-     } else {
-       if ( strpos($related,',') == true ) {
-	 $aRelated=get_array_nodup($related);
-	 for($j=0;$j<count($aRelated);$j++) {
-	   $result+=$this->get_amount_account($poste,$aRelated[$j],$p_dir);
-	 } 
-       }else {
-	 $result=$this->get_amount_account($poste,$related,$p_dir);
-       }
-     }
-     if ($result < 0 ) alert(_('Montant négatif détecté'));
-     return $result;
-   }
-   /**
-    *@brief return the amount for an account 
-    *@see get_amount
-    *@param $p_poste accounting
-    *@param $related is '6%' or '
-    *@param $p_dir is out or in for purchases or sales
-    *@return amount of this accounting
-    */
-   function get_amount_account($p_poste,$related,$p_dir) {
-
-     $sql="
-select coalesce(sum(amount_deb),0) as sum_deb, 
-coalesce (sum(amount_cred),0) as sum_cred from (
-select 
-case when j_debit is true  then j_montant else 0 end  as amount_deb,
-case when j_debit is false then j_montant else 0 end  as amount_cred
-from jrnx 
-where
-j_grpt in ( select j_grpt from jrnx 
-where 
-j_poste::text like $1
-)
-and ( 
-j_poste::text like $2
- and (
-j_date >= to_date($3,'DD.MM.YYYY') and j_date <= to_date($4,'DD.MM.YYYY')))
-) as compute_amount_side
-";
-     $res=$this->db->get_array($sql,array($related,
-					  $p_poste,
-					  $this->start_periode,
-					  $this->end_periode
-					  )
-			       );
-     var_dump($this->db);
-     $result=$res[0]['sum_deb']-$res[0]['sum_cred'];
-     if ( $p_dir == 'out') 
-       $result=(-1)*$result;
-     return $result;
-   }
    function display_declaration_amount() {
      $itext_00=new INum('val[]',$this->get_parameter('d00')); $str_00=$itext_00->input().HtmlInput::hidden('code[]','d00');
      $itext_01=new INum('val[]',$this->get_parameter('d01')); $str_01=$itext_01->input().HtmlInput::hidden('code[]','d01');
@@ -442,6 +368,7 @@ j_date >= to_date($3,'DD.MM.YYYY') and j_date <= to_date($4,'DD.MM.YYYY')))
      $itext_56=new INum('val[]',$this->get_parameter('d56')); $str_56=$itext_56->input().HtmlInput::hidden('code[]','d56');
      $itext_57=new INum('val[]',$this->get_parameter('d57')); $str_57=$itext_57->input().HtmlInput::hidden('code[]','d57');
      $itext_63=new INum('val[]',$this->get_parameter('d63')); $str_63=$itext_63->input().HtmlInput::hidden('code[]','d63');
+     $itext_61=new INum('val[]',$this->get_parameter('d61')); $str_61=$itext_61->input().HtmlInput::hidden('code[]','d61');
      $itext_xx=new INum('val[]',$this->get_parameter('dxx')); $str_xx=$itext_xx->input().HtmlInput::hidden('code[]','dxx');
      $itext_59=new INum('val[]',$this->get_parameter('d59')); $str_59=$itext_59->input().HtmlInput::hidden('code[]','d59');
      $itext_62=new INum('val[]',$this->get_parameter('d62')); $str_62=$itext_62->input().HtmlInput::hidden('code[]','d62');
@@ -458,6 +385,14 @@ j_date >= to_date($3,'DD.MM.YYYY') and j_date <= to_date($4,'DD.MM.YYYY')))
      ob_clean();
      return $r;
 
+   }
+   function display() {
+     $r= '<form id="readonly">';
+     $r.=$this->display_info();
+     $r.=$this->display_declaration_amount();
+     $r.='</form>';
+     $r.= create_script("$('readonly').disable();");
+     return $r;
    }
 
 }

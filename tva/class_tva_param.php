@@ -58,27 +58,7 @@ class
     // Verify that the elt we want to add is correct
   }
   public function save() {
-  /* please adapt */
-    if (  $this->get_parameter("id") == 0 ) 
-      $this->insert();
-    else
       $this->update();
-  }
-
-  public function insert() {
-    if ( $this->verify() != 0 ) return;
-    /*  please adapt
-    $sql="insert into tva_rate (tva_label,tva_rate,tva_comment,tva_poste) ".
-      " values ($1,$2,$3,$4)  returning tva_id";
-    $res=$this->cn->get_value(
-    $sql,
-		 array($this->tva_label,
-		       $this->tva_rate,
-		       $this->tva_comment,
-		       $this->tva_poste)
-		 );
-    $this->tva_id=pg_fetch_result($res,0,0);
-    */
   }
 
   public function update() {

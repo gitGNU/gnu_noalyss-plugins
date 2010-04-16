@@ -133,9 +133,8 @@ D. Autres opérations à l'entrée pour lesquelles la T.V.A. est due par le déc
 </td>
 </table>
 
-<h1>Cadre IV : </h1>
+<h1>Cadre IV : Taxe due</h1>
 <table>
-<tr><td>Taxes dues</td></tr>
 <tr><TD> A. T.V.A. relative aux opérations déclarées en : </td>
 </tr>
 <tr>
@@ -163,7 +162,7 @@ B. T.V.A. relative aux importations avec report de perception [57] </td>
 <td>
 
 C. Diverses régularisations T.V.A. en faveur de l'Etat [61]</td>
-<td></td>
+<td><?=$str_61?></td>
 </tr>
 <tr>
 <td>

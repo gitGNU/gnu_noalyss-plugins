@@ -25,18 +25,32 @@
  * 
  */
 require_once('class_ext_tva.php');
+// verify the year
+if ( isset($_REQUEST['year']) && (trim(strlen($_REQUEST['year'])) < 4 || isNumber($_REQUEST['year'] ) == 0 ||$_REQUEST['year'] < 2000||$_REQUEST['year']>2100)) {
+  alert(j(_('Année invalide'.' ['.$_REQUEST['year'].']')));
+  echo Ext_Tva::choose_periode();
+  exit;
+}
+
   // if the periode is not set we have to ask it
 if ( ! isset($_REQUEST['decl']) ){
   echo Ext_Tva::choose_periode();
   exit;
 }
-// verify the year
-if ( trim(strlen($_REQUEST['year'])) < 4 || isNumber($_REQUEST['year'] ) == 0 ||$_REQUEST['year'] < 2000||$_REQUEST['year']>2100) {
-  alert(j(_('Année invalide'.' ['.$_REQUEST['year'].']')));
-  echo Ext_Tva::choose_periode();
+$cn=new Database(Dossier::id());
+if (isset($_POST['save'] )) {
+  $save=new Ext_Tva($cn);
+  $save->from_array($_POST);
+  $save->insert();
+  echo h2info(_('Déclaration sauvée'));
+  echo $save->display();
+  /**
+   *@todo add a div for the button generate, get_xml, create ODS, print...
+   */
+   echo '<div style="position:absolute;z-index:14;top:25%;right:30" class="noprint">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>';
   exit;
 }
-$cn=new Database(Dossier::id());
+
 $tva=new Ext_Tva($cn);
 
 /* by month */
@@ -45,7 +59,6 @@ if ( $_REQUEST['periodic']==1) {
   $str_month=$_GET['bymonth'];$str_year=$_GET['year'];$str_quaterly="";$str_hidden='';$str_submit='';$str_quater='-';
   $tva->blank($_REQUEST['year'],$_GET['bymonth'],1);
 
-  require_once('form_periode.php');
 }
 
 /* by quater */
@@ -56,14 +69,39 @@ if ($_REQUEST['periodic'] == 2) {
   $str_quater=$_REQUEST['byquaterly'];
   $str_hidden='';$str_submit='';$str_monthly='';
   $tva->blank($_REQUEST['year'],$_GET['byquaterly'],2);
-  require_once('form_periode.php');
 }
+  xdebug_disable();
+try {
+  $r=$tva->compute();
+} catch (Exception $e) {
+
+  echo Ext_Tva::choose_periode();
+  exit();
+  }
+xdebug_enable();
+require_once('form_periode.php');
+echo '<div class="content">';
+echo '<form method="post">';
+echo dossier::hidden();
+echo HtmlInput::extension();
+echo HtmlInput::phpsessid();
+echo HtmlInput::hidden('start_periode',$tva->start_periode);
+echo HtmlInput::hidden('end_periode',$tva->end_periode);
+echo HtmlInput::hidden('flag_periode',$tva->flag_periode);
+echo HtmlInput::hidden('name',$tva->tva_name);
+echo HtmlInput::hidden('num_tva',$tva->num_tva);
+echo HtmlInput::hidden('adress',$tva->adress);
+echo HtmlInput::hidden('country',$tva->country);
+
+
+
 
 echo $tva->display_info();
-$tva->compute();
+echo $r;
 echo $tva->display_declaration_amount();
-
-
+echo HtmlInput::submit('save',_('Sauvegarde'));
+echo '</form>';
+echo '</div>';
   // create the XML files and the OD operation, validate it to save it into the vat history
 
 

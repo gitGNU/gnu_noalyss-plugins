@@ -42,10 +42,64 @@ class Install_Plugin
     $this->create_schema();
     // create table + put default values
     $this->create_table_parameter();
+    $this->create_table_declaration_amount();
     $this->cn->commit();
   }
   function create_schema() {
     $this->cn->exec_sql('create schema tva_belge');
+  }
+  /**
+   *@brief create the table tva_belge.declaration_amount
+   */
+  function create_declaration_amount() {
+    $sql=<<<EOF
+      create table tva_belge.declaration_amount
+(
+ da_id serial,
+ d00 numeric(20,4) default 0.0 not null,
+ d01 numeric(20,4) default 0.0 not null,
+ d02 numeric(20,4) default 0.0 not null,
+ d03 numeric(20,4) default 0.0 not null,
+ d44 numeric(20,4) default 0.0 not null,
+ d45 numeric(20,4) default 0.0 not null,
+ d46 numeric(20,4) default 0.0 not null,
+ d47 numeric(20,4) default 0.0 not null,
+ d48 numeric(20,4) default 0.0 not null,
+ d49 numeric(20,4) default 0.0 not null,
+ d81 numeric(20,4) default 0.0 not null,
+ d82 numeric(20,4) default 0.0 not null,
+ d83 numeric(20,4) default 0.0 not null,
+ d84 numeric(20,4) default 0.0 not null,
+ d85 numeric(20,4) default 0.0 not null,
+ d86 numeric(20,4) default 0.0 not null,
+ d87 numeric(20,4) default 0.0 not null,
+ d88 numeric(20,4) default 0.0 not null,
+ d54 numeric(20,4) default 0.0 not null,
+ d55 numeric(20,4) default 0.0 not null,
+ d56 numeric(20,4) default 0.0 not null,
+ d57 numeric(20,4) default 0.0 not null,
+ d61 numeric(20,4) default 0.0 not null,
+ d63 numeric(20,4) default 0.0 not null,
+ dxx numeric(20,4) default 0.0 not null,
+ d59 numeric(20,4) default 0.0 not null,
+ d62 numeric(20,4) default 0.0 not null,
+ d64 numeric(20,4) default 0.0 not null,
+ dyy numeric(20,4) default 0.0 not null,
+ d71 numeric(20,4) default 0.0 not null,
+ d72 numeric(20,4) default 0.0 not null,
+ d91 numeric(20,4) default 0.0 not null,
+ start_date date not null,
+ end_date date not null,
+ xml_oid oid,
+ periodicity char(1) not null,
+ name text,
+ num_tva text,
+ adress text,
+ country text,
+ date_decl date default now(),
+  CONSTRAINT declaration_amount_pkey PRIMARY KEY (da_id)
+ );
+EOF;
   }
   function create_table_parameter() {
 $sql=<<<EOF
@@ -60,25 +114,35 @@ EOF;
 $this->cn->exec_sql($sql);
 // load default value
 $array=array(
-	     'GRIL00'=>array('4514','70%,71%'),
-	     'GRIL01'=>array('4513','70%,71%,'),
-	     'GRIL02'=>array('4512','70%,71%'),
-	     'GRIL03'=>array('4511','70%,71%'),
-	     'GRIL44'=>array('45145','70%,71%'),
-	     'GRIL45'=>array('45144','70%,71%'),
-	     'GRIL46'=>array('45145','70%,71%'),
-	     'GRIL47'=>array('4514','701%'),
-	     'GRIL48'=>array('4514','7091'),
-	     'GRIL49'=>array('4511,4512,4513','7092'),
-	     'GRIL81'=>array('4111,4112,4113','60%'),
-	     'GRIL82'=>array('4111,4112,4113','61%'),
-	     'GRIL83'=>array('4111','21,22,23,24,25'),
-	     'GRIL84'=>array('','6096'),
-	     'GRIL85'=>array('','6097'),
-	     'GRIL86'=>array('45142','61%'),
-	     'GRIL87'=>array('451',''),
-	     'GRIL88'=>array('45145',''),
-	     'ATVA'=>array('4117',''));
+	     'GRIL00'=>array('6',''),
+	     'GRIL01'=>array('3',''),
+	     'GRIL02'=>array('2',''),
+	     'GRIL03'=>array('1',''),
+	     'GRIL44'=>array('',''),
+	     'GRIL45'=>array('',''),
+	     'GRIL46'=>array('5','70%,71%'),
+	     'GRIL47'=>array('',''),
+	     'GRIL48'=>array('','7091'),
+	     'GRIL49'=>array('','7092'),
+	     'GRIL81'=>array('1,2,3','60%'),
+	     'GRIL82'=>array('1,2,3','61%'),
+	     'GRIL83'=>array('1,2,3','22%,23%,24%,25%'),
+	     'GRIL84'=>array('1,2,3,4','6091'),
+	     'GRIL85'=>array('',''),
+	     'GRIL86'=>array('5','61%,22%,23%,24%,60%'),
+	     'GRIL87'=>array('',''),
+	     'GRIL88'=>array('',''),
+	     'GRIL54'=>array('1,2,3','7%'),
+	     'GRIL55'=>array('',''),
+	     'GRIL56'=>array('',''),
+	     'GRIL57'=>array('',''),
+	     'GRIL61'=>array('',''),
+	     'GRIL63'=>array('',''),
+	     'GRIL59'=>array('1,2,3','6%'),
+	     'GRIL62'=>array('',''),
+	     'GRIL64'=>array('',''),
+	     'ATVA'=>array('4117','')
+	     );
 
 foreach ($array as $code=>$value) {
   var_dump($value);
