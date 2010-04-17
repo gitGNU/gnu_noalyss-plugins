@@ -26,6 +26,25 @@
 
 require_once('tva_constant.php');
 require_once('class_own.php');
+/**
+ *@brief transform a string into an arrau without empty element and  duplicate
+ * the array is sorted 
+ *@param $p_string string containing a comma a separator
+ *@return array
+ *
+ */
+function get_array_nodup($p_string) {
+  $array=split(',',$p_string);
+  sort($array);
+  $array=array_unique($array);
+  $result=array();
+  foreach ($array as $val) {
+    if ( $val == '') continue;
+    $result[]=$val;
+  }
+  $r=join(',',$result);
+  return $result;
+}
 
 class Ext_Tva_Gen
 {
@@ -38,7 +57,7 @@ class Ext_Tva_Gen
       return $this->$idx;
     }
     else 
-      exit (__FILE__.":".__LINE__.'Erreur attribut inexistant');
+      throw new Exception (__FILE__.":".__LINE__.'Erreur attribut inexistant');
   }
   public function set_parameter($p_string,$p_value) {
     if ( array_key_exists($p_string,$this->variable) ) {
@@ -46,7 +65,7 @@ class Ext_Tva_Gen
       $this->$idx=$p_value;
     }
     else 
-      exit (__FILE__.":".__LINE__."Erreur attribut inexistant [$p_string] ");
+      throw new Exception (__FILE__.":".__LINE__.'Erreur attribut inexistant');
     
     
   }
@@ -94,7 +113,8 @@ class Ext_Tva_Gen
 
     $str_submit=HtmlInput::submit('decl',_('Afficher'));
     $str_hidden=HtmlInput::extension().dossier::hidden();
-    $str_hidden.=HtmlInput::hidden('sa',$_REQUEST['sa']);
+    if (isset($_REQUEST['sa']))
+      $str_hidden.=HtmlInput::hidden('sa',$_REQUEST['sa']);
     $str_byyear='';
     if ( $by_year == true ) {
       $yearly=new IRadio('periodic');
@@ -108,6 +128,53 @@ class Ext_Tva_Gen
     return $r;
   }
 
+  function blank($p_year,$p_periode,$p_flag_quaterly) {
+    // load parameter from myown
+    $own=new Own($this->db);
+    $this->set_parameter("name",$own->MY_NAME);
+    $this->set_parameter("num_tva",$own->MY_TVA);
+    $this->set_parameter('adress',$own->MY_STREET.",".$own->MY_NUMBER);
+    $this->set_parameter('country',$own->MY_COUNTRY." ".$own->MY_CP." ".$own->MY_COMMUNE);
+    $this->set_parameter('flag_periode',$p_flag_quaterly);
+    $this->set_parameter('periode_dec',$p_periode);
+    $this->set_parameter('exercice',$p_year);
+    try {
+      $this->verify() ;
+    } catch ( Exception $e) {
+      echo $e->getMessage();
+      throw $e;
+    }
+    // by month
+    if ( $p_flag_quaterly == 1) {
+      // start periode = 01 to 31, $p_periode contains the month
+      $per_start="01.".$p_periode.".".$p_year;
+      $day=31;
+      $per_end="31".".".$p_periode.".".$p_year;
+      while ( checkdate($p_periode,$day,$p_year) == false && $day > 25) {
+	$day--;
+	$per_end=$day.".".$p_periode.".".$p_year;
+      }
+      if ($day < 28 ) { echo __FILE__.__LINE__." Erreur de date $day"; exit;}
+    }
+
+    if ( $p_flag_quaterly == 2 ) {
+      // compute start periode
+      $per_start=$GLOBALS['quaterly_limit'][$p_periode][0].".".$p_year;
+      $per_end=$GLOBALS['quaterly_limit'][$p_periode][1].".".$p_year;
+
+    }
+    if ( $p_flag_quaterly == 3 ) {
+      // compute start periode
+      $per_start='01.01.'.$p_year;
+      $per_end='31.12.'.$p_year;
+    }
+
+    $this->set_parameter('start_periode',$per_start);
+    $this->set_parameter('end_periode',$per_end);
+
+    // compute amount from periode
+    var_dump($per_start." ".$per_end);
+  }
 
   /**
    *@brief display the information about the company

@@ -26,25 +26,7 @@
 require_once('class_ext_tvagen.php');
 require_once('class_tva_parameter.php');
 require_once('class_tva_amount.php');
-/**
- *@brief transform a string into an arrau without empty element and  duplicate
- * the array is sorted 
- *@param $p_string string containing a comma a separator
- *@return array
- *
- */
-function get_array_nodup($p_string) {
-  $array=split(',',$p_string);
-  sort($array);
-  $array=array_unique($array);
-  $result=array();
-  foreach ($array as $val) {
-    if ( $val == '') continue;
-    $result[]=$val;
-  }
-  $r=join(',',$result);
-  return $result;
-}
+require_once('class_html_input.php');
 class Ext_Tva extends Ext_Tva_Gen
 {
     protected   $variable=array(
@@ -91,7 +73,8 @@ class Ext_Tva extends Ext_Tva_Gen
 			   "adress"=>"adress",
 			   "country"=>"country",
 			   "flag_periode"=>"flag_periode",
-			   "exercice"=>"exercice"
+			   "exercice"=>"exercice",
+			   "periode_dec"=>"periode_dec"
 			   );
 
   /**
@@ -113,64 +96,19 @@ class Ext_Tva extends Ext_Tva_Gen
      $this->num_tva=$p_array['num_tva'];
      $this->adress=$p_array['adress'];
      $this->country=$p_array['country'];
+     $this->periode_dec=$p_array['periode_dec'];
    }
-  function blank($p_year,$p_periode,$p_flag_quaterly) {
-    // load parameter from myown
-    $own=new Own($this->db);
-    $this->set_parameter("name",$own->MY_NAME);
-    $this->set_parameter("num_tva",$own->MY_TVA);
-    $this->set_parameter('adress',$own->MY_STREET.",".$own->MY_NUMBER);
-    $this->set_parameter('country',$own->MY_COUNTRY." ".$own->MY_CP." ".$own->MY_COMMUNE);
-    $this->set_parameter('flag_periode',$p_flag_quaterly);
-    $this->set_parameter('exercice',$p_year);
-    try {
-      $this->verify() ;
-    } catch ( Exception $e) {
-      echo $e->getMessage();
-      throw $e;
-    }
-    // by month
-    if ( $p_flag_quaterly == 1) {
-      // start periode = 01 to 31, $p_periode contains the month
-      $per_start="01.".$p_periode.".".$p_year;
-      $day=31;
-      $per_end="31".".".$p_periode.".".$p_year;
-      while ( checkdate($p_periode,$day,$p_year) == false && $day > 25) {
-	$day--;
-	$per_end=$day.".".$p_periode.".".$p_year;
-      }
-      if ($day < 28 ) { echo __FILE__.__LINE__." Erreur de date $day"; exit;}
-    }
-    if ( $p_flag_quaterly == 2 ) {
-      // compute start periode
-      $per_start=$GLOBALS['quaterly_limit'][$p_periode][0].".".$p_year;
-      $per_end=$GLOBALS['quaterly_limit'][$p_periode][1].".".$p_year;
-
-    }
-    if ( $p_flag_quaterly == 3 ) {
-      // compute start periode
-      $per_start='01.01'.$p_year;
-      $per_end='31.12.'.$p_year;
-
-    }
-
-    $this->set_parameter('start_periode',$per_start);
-    $this->set_parameter('end_periode',$per_end);
-
-    // compute amount from periode
-    var_dump($per_start." ".$per_end);
-  }
   public function insert() {
     if ( $this->verify() != 0 ) return;
     $sql="INSERT INTO tva_belge.declaration_amount(
              d00, d01, d02, d03, d44, d45, d46, d47, d48, d49, d81, 
             d82, d83, d84, d85, d86, d87, d88, d54, d55, d56, d57, d61, d63, 
             dxx, d59, d62, d64, dyy, d71, d72, d91, start_date, end_date, 
-             periodicity,tva_name,num_tva,adress,country)
+             periodicity,tva_name,num_tva,adress,country,periode_dec)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 
             $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, 
             $26, $27, $28, $29, $30, $31, $32, to_date($33,'DD.MM.YYYY'), to_date($34,'DD.MM.YYYY'), $35,$36,
-            $37,$38,$39) 
+            $37,$38,$39,$40) 
              returning da_id;";
       $this->da_id=$this->db->get_value($sql,
 				     array($this->d00, /* 1 */
@@ -211,7 +149,9 @@ class Ext_Tva extends Ext_Tva_Gen
 					   $this->tva_name,	/* 36 */
 					   $this->num_tva,	/* 37 */
 					   $this->adress,	/* 38 */
-					   $this->country	/* 39 */
+					   $this->country,	/* 39 */
+					   $this->periode_dec,	/* 40 */
+
 					   ));
   }
 
@@ -306,7 +246,7 @@ class Ext_Tva extends Ext_Tva_Gen
 
     }
     // for intracom, we compute a false VAT, have to paid it and deduce
-    $this->d55=$this->d86*0.21+$this->d88*0.21;
+    $this->d55=round($this->d86*0.21+$this->d88*0.21,2);
     $this->d59+=$this->d55;
     /**
      *@todo
@@ -319,7 +259,7 @@ class Ext_Tva extends Ext_Tva_Gen
 
 
     // GRILYY
-    $this->dyy=$this->d59+$this->d62+$this->d64;
+    $this->dyy=round($this->d59+$this->d62+$this->d64,2);
 
     
     //Fram VI
@@ -376,6 +316,7 @@ class Ext_Tva extends Ext_Tva_Gen
      require_once('form_decl.php');
      $r=ob_get_contents();
      ob_clean();
+     $r.=HtmlInput::hidden('periode_dec',$this->periode_dec);
      return $r;
 
    }
