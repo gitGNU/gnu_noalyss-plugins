@@ -57,7 +57,16 @@ class Install_Plugin
 CREATE TABLE tva_belge.intracomm
 (
   i_id serial NOT NULL,
-  i_date date NOT NULL,
+  start_date date not null,
+  end_date date not null,
+  xml_oid oid,
+  periodicity char(1) not null,
+  tva_name text,
+  num_tva text,
+  adress text,
+  country text,
+  date_decl date default now(),
+  periode_dec integer,
   CONSTRAINT intracom_pk PRIMARY KEY (i_id)
 )
 EOF;
@@ -69,11 +78,13 @@ $sql=<<<EOF
 CREATE TABLE tva_belge.intracomm_chld
 (
   ic_id serial,
-   i_id bigint, 
+  i_id bigint, 
   ic_tvanum text NOT NULL,
   ic_amount numeric(20,4) NOT NULL,
   ic_code character varying(1) NOT NULL,
   ic_periode character varying(6) NOT NULL,
+  ic_qcode text not null,
+  ic_name text not null,
   CONSTRAINT intracom_chld_pk PRIMARY KEY (ic_id),
  CONSTRAINT intracom_fk FOREIGN KEY (i_id)
       REFERENCES tva_belge.intracomm (i_id) MATCH SIMPLE
@@ -131,6 +142,7 @@ $this->cn->exec_sql($sql);
  adress text,
  country text,
  date_decl date default now(),
+ periode_dec integer,
   CONSTRAINT declaration_amount_pkey PRIMARY KEY (da_id)
  );
 EOF;
@@ -165,7 +177,7 @@ $array=array(
 	     'GRIL83'=>array('1,2,3','22%,23%,24%,25%'),
 	     'GRIL84'=>array('1,2,3,4','6091'),
 	     'GRIL85'=>array('',''),
-	     'GRIL86'=>array('5','61%,22%,23%,24%,60%'),
+	     'GRIL86'=>array('5','61%,22%,23%,24%,25%,60%'),
 	     'GRIL87'=>array('',''),
 	     'GRIL88'=>array('',''),
 	     'GRIL54'=>array('1,2,3','7%'),
@@ -174,7 +186,7 @@ $array=array(
 	     'GRIL57'=>array('',''),
 	     'GRIL61'=>array('',''),
 	     'GRIL63'=>array('',''),
-	     'GRIL59'=>array('1,2,3','6%'),
+	     'GRIL59'=>array('1,2,3','6%,22%,23%,24%,25%'),
 	     'GRIL62'=>array('',''),
 	     'GRIL64'=>array('',''),
 	     'ATVA'=>array('4117','')

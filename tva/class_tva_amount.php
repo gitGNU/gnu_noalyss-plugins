@@ -106,9 +106,9 @@ class Tva_Amount
       $aAccount=array($account);
     for ($i=0;$i<count($aVat_code);$i++) {
       for ($j=0;$j<count($aAccount);$j++)
-	$result+=$this->get_amount_filter($aVat_code[$i],$aAccount[$j]);
+	$result+=round($this->get_amount_filter($aVat_code[$i],$aAccount[$j]),2);
     }
-    return $result;
+    return round($result,2);
 
 
   }
@@ -131,9 +131,9 @@ class Tva_Amount
       $aAccount=array($account);
     for ($i=0;$i<count($aVat_code);$i++) {
       for ($j=0;$j<count($aAccount);$j++)
-	$result+=$this->get_vat_filter($aVat_code[$i],$aAccount[$j]);
+	$result+=round($this->get_vat_filter($aVat_code[$i],$aAccount[$j]),2);
     }
-    return $result;
+    return round($result,2);
 
 
   }

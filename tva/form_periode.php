@@ -10,7 +10,7 @@
 <?php
 if (isset ($by_year) && $by_year == true ) :
 ?>
-<?=$str_byyear?><?=_('Par année')?><br/>
+<?=_('Par année')?> <?=$str_byyear?><br/>
 <?php
 endif;
 ?>

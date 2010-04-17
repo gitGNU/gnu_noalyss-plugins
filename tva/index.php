@@ -75,6 +75,19 @@ if ($def==1) {
   require_once('decl_tva.inc.php');
   exit();
 }
+
+/* Listing of all */
+if ($def==4) {
+  require_once('list_tva.inc.php');
+  exit();
+}
+/* listing intracomm */
+if ($def==2) {
+  require_once('list_intra.inc.php');
+  exit();
+}
+
+/* setting */
 if ( $def==5) {
   require_once('tva_param.inc.php');
   exit();
