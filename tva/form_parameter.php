@@ -115,7 +115,7 @@ function show_account($p_res,$p_code,$p_desc) {
 <?=_('Vous pouvez mettre plusieurs postes comptables séparés par une virgule dans une grille')?>
 </span>
 
-<fieldset> <legend><?=_("Opération à l'entrée");?></legend>
+<fieldset> <legend><?=_("Opération à la sortie");?></legend>
 <TABLE class="result">
 <TR>
 	<TH><?=_("code")?></TH>
@@ -156,7 +156,7 @@ function show_account($p_res,$p_code,$p_desc) {
 </TABLE>
 </fieldset>
 
-<fieldset><legend> <?=_("Opération à la sortie");?></legend>
+<fieldset><legend> <?=_("Opération à l'entrée");?></legend>
 <TABLE class="result">
 <TR>
 	<TH><?=_("code")?></TH>
