@@ -43,15 +43,49 @@ class Install_Plugin
     // create table + put default values
     $this->create_table_parameter();
     $this->create_table_declaration_amount();
+    $this->create_table_intra();
+    $this->create_table_intra_child();
+
     $this->cn->commit();
   }
   function create_schema() {
     $this->cn->exec_sql('create schema tva_belge');
   }
+  function create_table_intra() {
+    $sql=<<<EOF
+
+CREATE TABLE tva_belge.intracomm
+(
+  i_id serial NOT NULL,
+  i_date date NOT NULL,
+  CONSTRAINT intracom_pk PRIMARY KEY (i_id)
+)
+EOF;
+    $this->cn->exec_sql($sql);
+  }
+  function create_table_intra_child() {
+$sql=<<<EOF
+
+CREATE TABLE tva_belge.intracomm_chld
+(
+  ic_id serial,
+   i_id bigint, 
+  ic_tvanum text NOT NULL,
+  ic_amount numeric(20,4) NOT NULL,
+  ic_code character varying(1) NOT NULL,
+  ic_periode character varying(6) NOT NULL,
+  CONSTRAINT intracom_chld_pk PRIMARY KEY (ic_id),
+ CONSTRAINT intracom_fk FOREIGN KEY (i_id)
+      REFERENCES tva_belge.intracomm (i_id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE
+)
+EOF;
+$this->cn->exec_sql($sql);
+  }
   /**
    *@brief create the table tva_belge.declaration_amount
    */
-  function create_declaration_amount() {
+  function create_table_declaration_amount() {
     $sql=<<<EOF
       create table tva_belge.declaration_amount
 (
@@ -92,7 +126,7 @@ class Install_Plugin
  end_date date not null,
  xml_oid oid,
  periodicity char(1) not null,
- name text,
+ tva_name text,
  num_tva text,
  adress text,
  country text,
@@ -100,6 +134,8 @@ class Install_Plugin
   CONSTRAINT declaration_amount_pkey PRIMARY KEY (da_id)
  );
 EOF;
+$this->cn->exec_sql($sql);
+
   }
   function create_table_parameter() {
 $sql=<<<EOF
@@ -145,7 +181,6 @@ $array=array(
 	     );
 
 foreach ($array as $code=>$value) {
-  var_dump($value);
   $this->cn->exec_sql('insert into tva_belge.parameter(pcode,pvalue,paccount) values ($1,$2,$3)',
 		      array($code,$value[0],$value[1]));
   }

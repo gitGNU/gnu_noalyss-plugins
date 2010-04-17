@@ -81,7 +81,7 @@ class Ext_Tva extends Ext_Tva_Gen
 			   "d87"=>"d87",
 			   "d88"=>"d88",
 			   "d91"=>"d91",
-			   "id"=>"tva_id",
+			   "id"=>"da_id",
 			   "date_decl"=>"date_decl",
 			   "start_periode"=>"start_periode",
 			   "end_periode"=>"end_periode",
@@ -114,19 +114,65 @@ class Ext_Tva extends Ext_Tva_Gen
      $this->adress=$p_array['adress'];
      $this->country=$p_array['country'];
    }
+  function blank($p_year,$p_periode,$p_flag_quaterly) {
+    // load parameter from myown
+    $own=new Own($this->db);
+    $this->set_parameter("name",$own->MY_NAME);
+    $this->set_parameter("num_tva",$own->MY_TVA);
+    $this->set_parameter('adress',$own->MY_STREET.",".$own->MY_NUMBER);
+    $this->set_parameter('country',$own->MY_COUNTRY." ".$own->MY_CP." ".$own->MY_COMMUNE);
+    $this->set_parameter('flag_periode',$p_flag_quaterly);
+    $this->set_parameter('exercice',$p_year);
+    try {
+      $this->verify() ;
+    } catch ( Exception $e) {
+      echo $e->getMessage();
+      throw $e;
+    }
+    // by month
+    if ( $p_flag_quaterly == 1) {
+      // start periode = 01 to 31, $p_periode contains the month
+      $per_start="01.".$p_periode.".".$p_year;
+      $day=31;
+      $per_end="31".".".$p_periode.".".$p_year;
+      while ( checkdate($p_periode,$day,$p_year) == false && $day > 25) {
+	$day--;
+	$per_end=$day.".".$p_periode.".".$p_year;
+      }
+      if ($day < 28 ) { echo __FILE__.__LINE__." Erreur de date $day"; exit;}
+    }
+    if ( $p_flag_quaterly == 2 ) {
+      // compute start periode
+      $per_start=$GLOBALS['quaterly_limit'][$p_periode][0].".".$p_year;
+      $per_end=$GLOBALS['quaterly_limit'][$p_periode][1].".".$p_year;
+
+    }
+    if ( $p_flag_quaterly == 3 ) {
+      // compute start periode
+      $per_start='01.01'.$p_year;
+      $per_end='31.12.'.$p_year;
+
+    }
+
+    $this->set_parameter('start_periode',$per_start);
+    $this->set_parameter('end_periode',$per_end);
+
+    // compute amount from periode
+    var_dump($per_start." ".$per_end);
+  }
   public function insert() {
     if ( $this->verify() != 0 ) return;
     $sql="INSERT INTO tva_belge.declaration_amount(
              d00, d01, d02, d03, d44, d45, d46, d47, d48, d49, d81, 
             d82, d83, d84, d85, d86, d87, d88, d54, d55, d56, d57, d61, d63, 
             dxx, d59, d62, d64, dyy, d71, d72, d91, start_date, end_date, 
-             periodicity,name,num_tva,adress,country)
+             periodicity,tva_name,num_tva,adress,country)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 
             $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, 
             $26, $27, $28, $29, $30, $31, $32, to_date($33,'DD.MM.YYYY'), to_date($34,'DD.MM.YYYY'), $35,$36,
             $37,$38,$39) 
              returning da_id;";
-      $this->id=$this->db->get_value($sql,
+      $this->da_id=$this->db->get_value($sql,
 				     array($this->d00, /* 1 */
 					   $this->d01, /* 2 */
 					   $this->d02, /* 3 */
@@ -176,15 +222,14 @@ class Ext_Tva extends Ext_Tva_Gen
 
   public function load() {
 
-   $sql="select tva_label,tva_rate, tva_comment,tva_poste from tva_rate where tva_id=$1"; 
-   /* please adapt */
-    $res=$this->cn->get_array(
-		 $sql,
-		 array($this->tva_id)
-		 );
-		 
-    if ( Database::num_row($res) == 0 ) return;
-    foreach ($res as $idx=>$value) { $this->$idx=$value; }
+   $sql="select * from tva_belge.declaration_amount where da_id=$1"; 
+
+   $res=$this->db->get_array(
+			    $sql,
+			    array($this->da_id)
+			    );
+   if ( $this->db->count() == 0 ) return;
+   foreach ($res[0] as $idx=>$value) { $this->$idx=$value; }
   }
   public function delete() {
 /*    $sql="delete from tva_rate where tva_id=$1"; 
@@ -201,59 +246,7 @@ class Ext_Tva extends Ext_Tva_Gen
      */
     return 0;
   }
-  function blank($p_year,$p_periode,$p_flag_quaterly) {
-    // load parameter from myown
-    $own=new Own($this->db);
-    $this->set_parameter("name",$own->MY_NAME);
-    $this->set_parameter("num_tva",$own->MY_TVA);
-    $this->set_parameter('adress',$own->MY_STREET.",".$own->MY_NUMBER);
-    $this->set_parameter('country',$own->MY_COUNTRY." ".$own->MY_CP." ".$own->MY_COMMUNE);
-    $this->set_parameter('flag_periode',$p_flag_quaterly);
-    $this->set_parameter('exercice',$p_year);
-    try {
-      $this->verify() ;
-    } catch ( Exception $e) {
-      echo $e->getMessage();
-      throw $e;
-    }
-    // by month
-    if ( $p_flag_quaterly == 1) {
-      // start periode = 01 to 31, $p_periode contains the month
-      $per_start="01.".$p_periode.".".$p_year;
-      $day=31;
-      $per_end="31".".".$p_periode.".".$p_year;
-      while ( checkdate($p_periode,$day,$p_year) == false && $day > 25) {
-	$day--;
-	$per_end=$day.".".$p_periode.".".$p_year;
-      }
-      if ($day < 28 ) { echo __FILE__.__LINE__." Erreur de date $day"; exit;}
-    }
-    if ( $p_flag_quaterly == 2 ) {
-      // compute start periode
-      $per_start=$GLOBALS['quaterly_limit'][$p_periode][0].".".$p_year;
-      $per_end=$GLOBALS['quaterly_limit'][$p_periode][1].".".$p_year;
 
-    }
-    $this->set_parameter('start_periode',$per_start);
-    $this->set_parameter('end_periode',$per_end);
-    // compute amount from periode
-    var_dump($per_start." ".$per_end);
-  }
-
-  /**
-   *@brief display the information about the company
-   */
-  function display_info(){
-    $itva=new IText('num_tva',$this->num_tva);$str_tva=$itva->input();
-    $iname=new IText('name',$this->tva_name); $str_name=$iname->input();
-    $iadress=new IText('adress',$this->adress);$str_adress=$iadress->input();
-    $icountry=new IText('country',$this->country);$str_country=$icountry->input();
-    ob_start();
-    require_once('form_decl_info.php');
-    $r=ob_get_contents();
-    ob_clean();
-    return $r;
-  }
   /**
    *@brief compute the amount
    */

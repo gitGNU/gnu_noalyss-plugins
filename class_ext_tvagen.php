@@ -59,7 +59,8 @@ class Ext_Tva_Gen
     else
       $this->update();
   }
-  static function choose_periode() {
+
+  static function choose_periode($by_year=false) {
     require_once('class_iradio.php');
     $monthly=new IRadio('periodic');
     $monthly->value=1;
@@ -90,19 +91,37 @@ class Ext_Tva_Gen
     $quaterly->value=2;
     $str_quaterly=$quaterly->input();
     $str_quater=$quater->input();
+
     $str_submit=HtmlInput::submit('decl',_('Afficher'));
     $str_hidden=HtmlInput::extension().dossier::hidden();
+    $str_hidden.=HtmlInput::hidden('sa',$_REQUEST['sa']);
+    $str_byyear='';
+    if ( $by_year == true ) {
+      $yearly=new IRadio('periodic');
+      $yearly->value=3;
+      $str_byyear=$yearly->input();
+    }
     ob_start();
     require_once('form_periode.php');
     $r=ob_get_contents();
     ob_clean();
     return $r;
   }
+
+
+  /**
+   *@brief display the information about the company
+   */
   function display_info(){
+    $itva=new IText('num_tva',$this->num_tva);$str_tva=$itva->input();
+    $iname=new IText('name',$this->tva_name); $str_name=$iname->input();
+    $iadress=new IText('adress',$this->adress);$str_adress=$iadress->input();
+    $icountry=new IText('country',$this->country);$str_country=$icountry->input();
     ob_start();
     require_once('form_decl_info.php');
     $r=ob_get_contents();
     ob_clean();
     return $r;
   }
+
 }
