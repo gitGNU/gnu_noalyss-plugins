@@ -87,6 +87,33 @@ class Ext_List_Intra extends Listing {
      return $r;
   }
   function load() {
+    $sql="select * from tva_belge.intracomm where i_id=$1";
+
+   $res=$this->db->get_array(
+			    $sql,
+			    array($this->i_id)
+			    );
+   if ( $this->db->count() == 0 ) return 0;
+   foreach ($res[0] as $idx=>$value) { $this->$idx=$value; }
+   // load child
+   $sql="select * from tva_belge.intracomm_chld where i_id=$1";
+   $res=$this->db->get_array(
+			    $sql,
+			    array($this->i_id)
+			    );
+   $nb=$this->db->count();
+   $array=array();
+   // retrieve missing and compute an array
+   for ($i=0;$i<$nb;$i++){
+     $child=new Ext_List_Intra_Child($this->db);	
+     foreach ($res[0] as $idx=>$value){
+       $child->$idx=$value;
+     }	
+     $array[]=$child;
+   }//end for			    
+   $this->aChild=$array;
+
+   return 1;
   }
   function verify() {
     return 0;
@@ -188,8 +215,8 @@ EOF;
     $res= '<table id="tb_dsp" class="result" style="width:80%;margin-left:5%">';
     $clean=new IButton();
     $clean->label='Efface ligne';
-    $res.=create_script('function deleteRow(tb,idx) { if (confirm('."'".'Confirmez effacement'."'".')) { $(tb).deleteRow(idx);}}');
-
+    $clean->javascript="deleteRow('tb_dsp',this);";
+	
     $r='';
     $r.=th('QuickCode');
     $r.=th('Name');
@@ -198,26 +225,35 @@ EOF;
     $r.=th('montant');
     $r.=th('periode');
     $r.=th('');
+    $amount=0;
     $res.=tr($r);
     for ($i=0;$i<count($this->aChild);$i++) {
       $a=new IText('qcode[]',$this->aChild[$i]->get_parameter('qcode'));
       $b=new IText('name_child[]',$this->aChild[$i]->get_parameter('name_child'));
       $c=new IText('tva_num_child[]',$this->aChild[$i]->get_parameter('tva_num_child'));
       $d=new IText('code[]',$this->aChild[$i]->get_parameter('code'));
-      $e=new IText('amount[]',$this->aChild[$i]->get_parameter('amount'));
+      $e=new INum('amount[]',$this->aChild[$i]->get_parameter('amount'));
       $f=new IText('periode[]',$this->aChild[$i]->get_parameter('periode'));
 
+      $amount+=round($this->aChild[$i]->get_parameter('amount'),2);
       $r=td($a->input());
       $r.=td($b->input());
       $r.=td($c->input());
       $r.=td($d->input());
       $r.=td($e->input());
       $r.=td($f->input());
-      $clean->javascript="deleteRow('tb_dsp',".($i+1).");";
       $r.=td($clean->input());
       $res.=tr($r);
 
     }
+    $r=td('');
+    $r.=td('');
+    $r.=td('');
+    $r.=td('Total');
+    $r.=td(sprintf('%.02f',$amount));
+    $r.=td('');
+    $r.=td('');
+    $res.=tr($r);
     $res.='</table>';
     return $res;
   }
