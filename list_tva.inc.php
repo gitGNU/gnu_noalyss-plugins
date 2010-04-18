@@ -65,7 +65,11 @@ when periodicity = '3' then 'Annuel'
 end as fmt_periodicity,
 periode_dec
 from tva_belge.intracomm
-
+union all
+select a_id as id, 'Listing assujetti' as type_title, 2 as type_decl, to_char(date_decl,'DD.MM.YYYY') as date_fmt,date_decl,
+ 'Annuel' as fmt_periodicity,
+periode_dec
+from tva_belge.assujetti
 
 order by date_decl desc
 ";
@@ -83,6 +87,15 @@ periode_dec
 from tva_belge.declaration_amount order by date_decl desc
 ";
   break;
+case 2:
+$sql="
+select a_id as id, 'Listing assujetti' as type_title, 2 as type_decl, to_char(date_decl,'DD.MM.YYYY') as date_fmt,date_decl,
+ 'Annuel' as fmt_periodicity,
+periode_dec
+from tva_belge.assujetti
+order by date_decl desc
+";
+break;
 case 3:
 $sql="
 select i_id as id, 'Listing Intracom' as type_title, 3 as type_decl, to_char(date_decl,'DD.MM.YYYY') as date_fmt,date_decl,
@@ -95,6 +108,7 @@ from tva_belge.intracomm
 order by date_decl desc
 ";
   break;
+
 }
 $res=$cn->get_array($sql);
 echo '<table class="result" style="margin-left:25%;width:50%">';

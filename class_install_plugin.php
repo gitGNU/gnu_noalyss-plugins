@@ -45,11 +45,51 @@ class Install_Plugin
     $this->create_table_declaration_amount();
     $this->create_table_intra();
     $this->create_table_intra_child();
+    $this->create_table_assujetti();
+    $this->create_table_assujetti_child();
 
     $this->cn->commit();
   }
   function create_schema() {
     $this->cn->exec_sql('create schema tva_belge');
+  }
+  function create_table_assujetti() {
+    $sql="
+CREATE TABLE tva_belge.assujetti
+(
+  a_id serial NOT NULL,
+  start_date date NOT NULL,
+  end_date date NOT NULL,
+  xml_oid oid,
+  periodicity character(1) NOT NULL,
+  tva_name text,
+  num_tva text,
+  adress text,
+  country text,
+  date_decl date DEFAULT now(),
+  periode_dec integer,
+  CONSTRAINT assujetti_pk PRIMARY KEY (a_id)
+)
+";
+  }
+  function create_table_assujetti_child() {
+   $sql="
+CREATE TABLE tva_belge.assujetti_chld
+(
+  ac_id serial NOT NULL,
+  a_id bigint,
+  ac_tvanum text NOT NULL,
+  ac_amount numeric(20,4) NOT NULL,
+  ac_vat numeric(20,4) NOT NULL,
+  ac_periode character varying(6) NOT NULL,
+  ac_qcode text NOT NULL,
+  ac_name text NOT NULL,
+  CONSTRAINT assujetti_chld_pk PRIMARY KEY (ac_id),
+  CONSTRAINT assujetti_fk FOREIGN KEY (a_id)
+      REFERENCES tva_belge.assujetti (a_id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE CASCADE
+)
+";
   }
   function create_table_intra() {
     $sql=<<<EOF

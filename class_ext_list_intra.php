@@ -52,7 +52,7 @@ class Ext_List_Intra extends Listing {
      $tva_num=$p_array['tva_num_child'];
      $amount=$p_array['amount'];
      $periode=$p_array['periode'];
-
+     $array=array();
     // retrieve missing and compute an array
     for ($i=0;$i<count($name);$i++){
       $child=new Ext_List_Intra_Child($this->db);
@@ -61,7 +61,7 @@ class Ext_List_Intra extends Listing {
       $child->set_parameter('qcode',$qcode[$i]);
       $child->set_parameter('code',$code[$i]);
       $child->set_parameter('name_child',$name[$i]);
-      $child->set_parameter('tva_num_child',$tva_num[$i]);
+      $child->set_parameter('tva_num',$tva_num[$i]);
 
       $array[]=$child;
     }//end for			    
@@ -106,7 +106,7 @@ class Ext_List_Intra extends Listing {
    // retrieve missing and compute an array
    for ($i=0;$i<$nb;$i++){
      $child=new Ext_List_Intra_Child($this->db);	
-     foreach ($res[0] as $idx=>$value){
+     foreach ($res[$i] as $idx=>$value){
        $child->$idx=$value;
      }	
      $array[]=$child;
@@ -156,7 +156,8 @@ for ($e=0;$e<count($this->aChild);$e++){
     $code_customer=new Acc_Parm_Code($this->db);
     $code_customer->p_code='CUSTOMER';
     $code_customer->load();
-    $a=$this->find_tva_code();
+    $a=$this->find_tva_code(array('GRIL44','GRIL46'));
+
     if (trim($a)=='') $a=-1;
     $sql=<<<EOF
       select sum(j_montant) as amount,j_qcode
@@ -199,7 +200,7 @@ EOF;
       $num_tva=$fiche->strAttribut(ATTR_DEF_NUMTVA);
 
       if ( strpos($num_tva,'BE') === 0) { echo "pas bon";continue;}
-      $child->set_parameter('tva_num_child',$num_tva);
+      $child->set_parameter('tva_num',$num_tva);
       
       $child->set_parameter('name_child',$fiche->strAttribut(ATTR_DEF_NAME));
       $child->set_parameter('code','L');
@@ -212,7 +213,9 @@ EOF;
    *@todo finish it
    */
   function display_declaration_amount() {
-    $res= '<table id="tb_dsp" class="result" style="width:80%;margin-left:5%">';
+    $res='<fieldset><legend>Listing</legend>';
+
+    $res.= '<table id="tb_dsp" class="result" style="width:80%;margin-left:5%">';
     $clean=new IButton();
     $clean->label='Efface ligne';
     $clean->javascript="deleteRow('tb_dsp',this);";
@@ -230,7 +233,7 @@ EOF;
     for ($i=0;$i<count($this->aChild);$i++) {
       $a=new IText('qcode[]',$this->aChild[$i]->get_parameter('qcode'));
       $b=new IText('name_child[]',$this->aChild[$i]->get_parameter('name_child'));
-      $c=new IText('tva_num_child[]',$this->aChild[$i]->get_parameter('tva_num_child'));
+      $c=new IText('tva_num_child[]',$this->aChild[$i]->get_parameter('tva_num'));
       $d=new IText('code[]',$this->aChild[$i]->get_parameter('code'));
       $e=new INum('amount[]',$this->aChild[$i]->get_parameter('amount'));
       $f=new IText('periode[]',$this->aChild[$i]->get_parameter('periode'));
@@ -249,12 +252,13 @@ EOF;
     $r=td('');
     $r.=td('');
     $r.=td('');
-    $r.=td('Total');
-    $r.=td(sprintf('%.02f',$amount));
+    $r.=td(hb('Total'));
+    $r.=td(hb(sprintf('%.02f',$amount)));
     $r.=td('');
     $r.=td('');
     $res.=tr($r);
     $res.='</table>';
+    $res.='</fieldset>';
     return $res;
   }
 }
@@ -262,7 +266,7 @@ EOF;
 class Ext_List_Intra_Child extends Ext_List_Intra {
   protected $variable=array(
 			    "id"=>"ic_id",
-			    "tva_num_child"=>"ic_tvanum",
+			    "tva_num"=>"ic_tvanum",
 			    "amount"=>"ic_amount",
 			    "code"=>"ic_code",
 			    "periode"=>"ic_periode",

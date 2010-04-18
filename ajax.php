@@ -3,6 +3,7 @@ require_once('class_database.php');
 require_once('class_ext_tva.php');
 require_once('class_ibutton.php');
 require_once ('class_ext_list_intra.php');
+require_once ('class_ext_list_assujetti.php');
 
 extract($_GET);
 $cn=new Database($gDossier);
@@ -25,6 +26,15 @@ case 'dsp_decl':
   if ( $type == 3) {
     /* display the declaration of amount */
     $decl=new Ext_List_Intra($cn);
+    $decl->set_parameter('id',$id);
+    $decl->load();
+    $r=$button->input();
+    $r.=$decl->display();
+    $r.=$button->input();
+  }
+  if ( $type == 2) {
+    /* display the declaration of amount */
+    $decl=new Ext_List_Assujetti($cn);
     $decl->set_parameter('id',$id);
     $decl->load();
     $r=$button->input();
