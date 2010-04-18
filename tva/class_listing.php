@@ -26,13 +26,12 @@
 require_once('class_ext_tvagen.php');
 require_once('class_acc_parm_code.php');
 class Listing extends Ext_Tva_Gen {
-  function find_tva_code() {
-    $array=array('GRIL44','GRIL46');
+  function find_tva_code($p_array) {
     $a='';$and='';
-    for ($e=0;$e<count($array);$e++){
+    for ($e=0;$e<count($p_array);$e++){
       $tva_parameter=new Tva_Parameter($this->db);
-      if ( $tva_parameter->set_parameter('code',$array[$e]) == -1 )
-	throw new Exception ("code : $array[$e] non trouve");
+      if ( $tva_parameter->set_parameter('code',$p_array[$e]) == -1 )
+	throw new Exception ("code : $p_array[$e] non trouve");
       $tva_parameter->load();
       if ( ($c=$tva_parameter->get_parameter('value')) != ''){
 	$a=$and.$c;$and=',';

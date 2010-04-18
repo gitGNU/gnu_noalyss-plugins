@@ -86,6 +86,11 @@ if ($def==2) {
   require_once('list_intra.inc.php');
   exit();
 }
+/* listing assujetti */
+if ($def==3) {
+  require_once('list_assujetti.inc.php');
+  exit();
+}
 
 /* setting */
 if ( $def==5) {
