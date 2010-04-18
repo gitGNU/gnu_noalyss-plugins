@@ -2,6 +2,7 @@
 require_once('class_database.php');
 require_once('class_ext_tva.php');
 require_once('class_ibutton.php');
+require_once ('class_ext_list_intra.php');
 
 extract($_GET);
 $cn=new Database($gDossier);
@@ -12,14 +13,25 @@ case 'dsp_decl':
   $button=new IButton('hide');
   $button->label=_('Retour');
   $button->javascript="$('detail').hide();$('main').show();";
+  if ( $type == 1) {
+    /* display the declaration of amount */
+    $decl=new Ext_Tva($cn);
+    $decl->set_parameter('id',$id);
+    $decl->load();
+    $r=$button->input();
+    $r.=$decl->display();
+    $r.=$button->input();
+  }
+  if ( $type == 3) {
+    /* display the declaration of amount */
+    $decl=new Ext_List_Intra($cn);
+    $decl->set_parameter('id',$id);
+    $decl->load();
+    $r=$button->input();
+    $r.=$decl->display();
+    $r.=$button->input();
+  }
 
-  /* display the declaration of amount */
-  $decl=new Ext_Tva($cn);
-  $decl->set_parameter('id',$id);
-  $decl->load();
-  $r=$button->input();
-  $r.=$decl->display();
-  $r.=$button->input();
   break;
 }
 

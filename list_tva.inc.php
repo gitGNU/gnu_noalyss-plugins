@@ -50,26 +50,61 @@ echo $choice->input();
 echo '</form>';
 switch($choice->selected) {
 case 0:
-  $sql="select da_id as id, 'Déclaration trim/mens' as type_title,1 as type_decl,to_char(date_decl,'DD.MM.YYYY') as date_fmt 
-from tva_belge.declaration_amount order by date_decl desc";
-  break;
-case 1:
-  $sql="select da_id as id, 'Déclaration trim/mens' as type_title,1 as type_decl, to_char(date_decl,'DD.MM.YYYY') as date_fmt 
-from  tva_belge.declaration_amount order by date_decl desc";
-  break;
-case 2:
+ $sql="
+select da_id as id, 'Déclaration trim/mens' as type_title,1 as type_decl,to_char(date_decl,'DD.MM.YYYY') as date_fmt,date_decl,
+case when periodicity ='1' then 'Mensuel'  
+when periodicity = '2' then 'Trimestriel'
+end as fmt_periodicity,
+periode_dec
+from tva_belge.declaration_amount 
+union all
+select i_id as id, 'Listing Intracom' as type_title, 3 as type_decl, to_char(date_decl,'DD.MM.YYYY') as date_fmt,date_decl,
+case when periodicity ='1' then 'Mensuel'  
+when periodicity = '2' then 'Trimestriel'
+when periodicity = '3' then 'Annuel'
+end as fmt_periodicity,
+periode_dec
+from tva_belge.intracomm
+
+
+order by date_decl desc
+";
 
   break;
+
+case 1:
+ 
+  $sql="
+select da_id as id, 'Déclaration trim/mens' as type_title,1 as type_decl,to_char(date_decl,'DD.MM.YYYY') as date_fmt,
+case when periodicity ='1' then 'Mensuel'  
+when periodicity = '2' then 'Trimestriel'
+end as fmt_periodicity,
+periode_dec
+from tva_belge.declaration_amount order by date_decl desc
+";
+  break;
 case 3:
+$sql="
+select i_id as id, 'Listing Intracom' as type_title, 3 as type_decl, to_char(date_decl,'DD.MM.YYYY') as date_fmt,date_decl,
+case when periodicity ='1' then 'Mensuel'  
+when periodicity = '2' then 'Trimestriel'
+when periodicity = '3' then 'Annuel'
+end as fmt_periodicity,
+periode_dec
+from tva_belge.intracomm
+order by date_decl desc
+";
   break;
 }
 $res=$cn->get_array($sql);
 echo '<table class="result" style="margin-left:25%;width:50%">';
-echo tr(th('Type de déclaration').th('Date'));
+echo tr(th('Type de déclaration').th('Periodicité').th('Mois/année').th('Date'));
 for ($i=0;$i<count($res);$i++){
   $aref=sprintf('<a href="javascript:void(0)" onclick="show_declaration(\'%s\',\'%s\')">',
 		$res[$i]['type_decl'],$res[$i]['id']);
   $row=td($aref.$res[$i]['type_title'].'</a>');
+  $row.=td($aref.$res[$i]['fmt_periodicity'].'</a>');
+  $row.=td($aref.$res[$i]['periode_dec'].'</a>');
   $row.=td($aref.$res[$i]['date_fmt'].'</a>');
   echo tr($row);
 }
