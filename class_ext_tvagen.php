@@ -172,8 +172,6 @@ class Ext_Tva_Gen
     $this->set_parameter('start_periode',$per_start);
     $this->set_parameter('end_periode',$per_end);
 
-    // compute amount from periode
-    var_dump($per_start." ".$per_end);
   }
 
   /**
