@@ -71,6 +71,7 @@ CREATE TABLE tva_belge.assujetti
   CONSTRAINT assujetti_pk PRIMARY KEY (a_id)
 )
 ";
+    $this->cn->exec_sql($sql);
   }
   function create_table_assujetti_child() {
    $sql="
@@ -90,6 +91,7 @@ CREATE TABLE tva_belge.assujetti_chld
       ON UPDATE NO ACTION ON DELETE CASCADE
 )
 ";
+    $this->cn->exec_sql($sql);
   }
   function create_table_intra() {
     $sql=<<<EOF
