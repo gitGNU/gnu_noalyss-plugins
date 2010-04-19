@@ -97,8 +97,7 @@ function show_account($p_res,$p_code,$p_desc) {
 
 			}
 		}else
-//var_dump(trim($p_res[$i]['paccount']) != '',strpos("%",$p_res[$i]['paccount']) == false ,$tvap->exist_pcmn($p_res[$i]['paccount'])==0);
-			if ( trim($p_res[$i]['paccount']) != '' && strpos("%",$p_res[$i]['paccount']) == false && $tvap->exist_pcmn($p_res[$i]['paccount']) ==0 ) {
+		if ( trim($p_res[$i]['paccount']) != '' && strpos("%",$p_res[$i]['paccount']) == false && $tvap->exist_pcmn($p_res[$i]['paccount']) ==0 ) {
 			$msg.='<span class="notice">'.$p_res[$i]['paccount']._(" n'existe pas dans PCMN")."</span>";
 		}
 		echo '</td>';

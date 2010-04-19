@@ -70,7 +70,6 @@ if ($_REQUEST['periodic'] == 2) {
   $str_hidden='';$str_submit='';$str_monthly='';
   $tva->blank($_REQUEST['year'],$_GET['byquaterly'],2);
 }
-  xdebug_disable();
 try {
   $r=$tva->compute();
 } catch (Exception $e) {
@@ -78,7 +77,6 @@ try {
   echo Ext_Tva::choose_periode();
   exit();
   }
-xdebug_enable();
 require_once('form_periode.php');
 echo '<div class="content">';
 echo '<form method="post">';
