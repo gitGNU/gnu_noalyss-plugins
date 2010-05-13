@@ -27,7 +27,7 @@ require_once('class_tva_parameter.php');
 
 // save all the parameters
 if ( isset ($_REQUEST['RECORD']))  {
-  $aCode=$_POST['code'];
+  $aCode=$_POST['tvacode'];
   $aValue=$_POST['value'];
   $aAccount=$_POST['account'];
   for ($i=0;$i<count($aCode);$i++) {

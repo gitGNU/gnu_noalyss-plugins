@@ -3,8 +3,8 @@ function show_declaration(p_type,p_id) {
 	$('detail').innerHTML='<image src="image/loading.gif" border="0" alt="Chargement...">';
 	$('detail').show();
 	$('main').hide();
-	var gDossier=$('gDossier').value; var code=$('code').value;
-	var queryString='?act=dsp_decl&gDossier='+gDossier+'&code='+code;
+	var gDossier=$('gDossier').value; var code=$('plugin_code').value;
+	var queryString='?act=dsp_decl&gDossier='+gDossier+'&plugin_code='+code;
 	queryString+='&type='+p_type+'&id='+p_id;
 	var action=new Ajax.Request ( 'ajax.php',
 				  {
