@@ -85,7 +85,7 @@ class Ext_Tva extends Ext_Tva_Gen
    }
    public function from_array($p_array) {
      $val=$p_array['val'];
-     $code=$p_array['code'];
+     $code=$p_array['tvacode'];
      for ($i=0;$i<count($val);$i++) {
        $this->$code[$i]=$val[$i];
      }
@@ -277,39 +277,39 @@ class Ext_Tva extends Ext_Tva_Gen
    */
 
    function display_declaration_amount() {
-     $itext_00=new INum('val[]',$this->get_parameter('d00')); $str_00=$itext_00->input().HtmlInput::hidden('code[]','d00');
-     $itext_01=new INum('val[]',$this->get_parameter('d01')); $str_01=$itext_01->input().HtmlInput::hidden('code[]','d01');
-     $itext_02=new INum('val[]',$this->get_parameter('d02')); $str_02=$itext_02->input().HtmlInput::hidden('code[]','d02');
-     $itext_03=new INum('val[]',$this->get_parameter('d03')); $str_03=$itext_03->input().HtmlInput::hidden('code[]','d03');
-     $itext_44=new INum('val[]',$this->get_parameter('d44')); $str_44=$itext_44->input().HtmlInput::hidden('code[]','d44');
-     $itext_45=new INum('val[]',$this->get_parameter('d45')); $str_45=$itext_45->input().HtmlInput::hidden('code[]','d45');
-     $itext_46=new INum('val[]',$this->get_parameter('d46')); $str_46=$itext_46->input().HtmlInput::hidden('code[]','d46');
-     $itext_47=new INum('val[]',$this->get_parameter('d47')); $str_47=$itext_47->input().HtmlInput::hidden('code[]','d47');
-     $itext_48=new INum('val[]',$this->get_parameter('d48')); $str_48=$itext_48->input().HtmlInput::hidden('code[]','d48');
-     $itext_49=new INum('val[]',$this->get_parameter('d49')); $str_49=$itext_49->input().HtmlInput::hidden('code[]','d49');
-     $itext_81=new INum('val[]',$this->get_parameter('d81')); $str_81=$itext_81->input().HtmlInput::hidden('code[]','d81');
-     $itext_82=new INum('val[]',$this->get_parameter('d82')); $str_82=$itext_82->input().HtmlInput::hidden('code[]','d82');
-     $itext_83=new INum('val[]',$this->get_parameter('d83')); $str_83=$itext_83->input().HtmlInput::hidden('code[]','d83');
-     $itext_84=new INum('val[]',$this->get_parameter('d84')); $str_84=$itext_84->input().HtmlInput::hidden('code[]','d84');
-     $itext_85=new INum('val[]',$this->get_parameter('d85')); $str_85=$itext_85->input().HtmlInput::hidden('code[]','d85');
-     $itext_86=new INum('val[]',$this->get_parameter('d86')); $str_86=$itext_86->input().HtmlInput::hidden('code[]','d86');
-     $itext_87=new INum('val[]',$this->get_parameter('d87')); $str_87=$itext_87->input().HtmlInput::hidden('code[]','d87');
-     $itext_88=new INum('val[]',$this->get_parameter('d88')); $str_88=$itext_88->input().HtmlInput::hidden('code[]','d88');
+     $itext_00=new INum('val[]',$this->get_parameter('d00')); $str_00=$itext_00->input().HtmlInput::hidden('tvacode[]','d00');
+     $itext_01=new INum('val[]',$this->get_parameter('d01')); $str_01=$itext_01->input().HtmlInput::hidden('tvacode[]','d01');
+     $itext_02=new INum('val[]',$this->get_parameter('d02')); $str_02=$itext_02->input().HtmlInput::hidden('tvacode[]','d02');
+     $itext_03=new INum('val[]',$this->get_parameter('d03')); $str_03=$itext_03->input().HtmlInput::hidden('tvacode[]','d03');
+     $itext_44=new INum('val[]',$this->get_parameter('d44')); $str_44=$itext_44->input().HtmlInput::hidden('tvacode[]','d44');
+     $itext_45=new INum('val[]',$this->get_parameter('d45')); $str_45=$itext_45->input().HtmlInput::hidden('tvacode[]','d45');
+     $itext_46=new INum('val[]',$this->get_parameter('d46')); $str_46=$itext_46->input().HtmlInput::hidden('tvacode[]','d46');
+     $itext_47=new INum('val[]',$this->get_parameter('d47')); $str_47=$itext_47->input().HtmlInput::hidden('tvacode[]','d47');
+     $itext_48=new INum('val[]',$this->get_parameter('d48')); $str_48=$itext_48->input().HtmlInput::hidden('tvacode[]','d48');
+     $itext_49=new INum('val[]',$this->get_parameter('d49')); $str_49=$itext_49->input().HtmlInput::hidden('tvacode[]','d49');
+     $itext_81=new INum('val[]',$this->get_parameter('d81')); $str_81=$itext_81->input().HtmlInput::hidden('tvacode[]','d81');
+     $itext_82=new INum('val[]',$this->get_parameter('d82')); $str_82=$itext_82->input().HtmlInput::hidden('tvacode[]','d82');
+     $itext_83=new INum('val[]',$this->get_parameter('d83')); $str_83=$itext_83->input().HtmlInput::hidden('tvacode[]','d83');
+     $itext_84=new INum('val[]',$this->get_parameter('d84')); $str_84=$itext_84->input().HtmlInput::hidden('tvacode[]','d84');
+     $itext_85=new INum('val[]',$this->get_parameter('d85')); $str_85=$itext_85->input().HtmlInput::hidden('tvacode[]','d85');
+     $itext_86=new INum('val[]',$this->get_parameter('d86')); $str_86=$itext_86->input().HtmlInput::hidden('tvacode[]','d86');
+     $itext_87=new INum('val[]',$this->get_parameter('d87')); $str_87=$itext_87->input().HtmlInput::hidden('tvacode[]','d87');
+     $itext_88=new INum('val[]',$this->get_parameter('d88')); $str_88=$itext_88->input().HtmlInput::hidden('tvacode[]','d88');
 
-     $itext_54=new INum('val[]',$this->get_parameter('d54')); $str_54=$itext_54->input().HtmlInput::hidden('code[]','d54');
-     $itext_55=new INum('val[]',$this->get_parameter('d55')); $str_55=$itext_55->input().HtmlInput::hidden('code[]','d55');
-     $itext_56=new INum('val[]',$this->get_parameter('d56')); $str_56=$itext_56->input().HtmlInput::hidden('code[]','d56');
-     $itext_57=new INum('val[]',$this->get_parameter('d57')); $str_57=$itext_57->input().HtmlInput::hidden('code[]','d57');
-     $itext_63=new INum('val[]',$this->get_parameter('d63')); $str_63=$itext_63->input().HtmlInput::hidden('code[]','d63');
-     $itext_61=new INum('val[]',$this->get_parameter('d61')); $str_61=$itext_61->input().HtmlInput::hidden('code[]','d61');
-     $itext_xx=new INum('val[]',$this->get_parameter('dxx')); $str_xx=$itext_xx->input().HtmlInput::hidden('code[]','dxx');
-     $itext_59=new INum('val[]',$this->get_parameter('d59')); $str_59=$itext_59->input().HtmlInput::hidden('code[]','d59');
-     $itext_62=new INum('val[]',$this->get_parameter('d62')); $str_62=$itext_62->input().HtmlInput::hidden('code[]','d62');
-     $itext_64=new INum('val[]',$this->get_parameter('d64')); $str_64=$itext_64->input().HtmlInput::hidden('code[]','d64');
-     $itext_yy=new INum('val[]',$this->get_parameter('dyy')); $str_yy=$itext_yy->input().HtmlInput::hidden('code[]','dyy');
-     $itext_71=new INum('val[]',$this->get_parameter('d71')); $str_71=$itext_71->input().HtmlInput::hidden('code[]','d71');
-     $itext_72=new INum('val[]',$this->get_parameter('d72')); $str_72=$itext_72->input().HtmlInput::hidden('code[]','d72');
-     $itext_91=new INum('val[]',$this->get_parameter('d91')); $str_91=$itext_91->input().HtmlInput::hidden('code[]','d91');
+     $itext_54=new INum('val[]',$this->get_parameter('d54')); $str_54=$itext_54->input().HtmlInput::hidden('tvacode[]','d54');
+     $itext_55=new INum('val[]',$this->get_parameter('d55')); $str_55=$itext_55->input().HtmlInput::hidden('tvacode[]','d55');
+     $itext_56=new INum('val[]',$this->get_parameter('d56')); $str_56=$itext_56->input().HtmlInput::hidden('tvacode[]','d56');
+     $itext_57=new INum('val[]',$this->get_parameter('d57')); $str_57=$itext_57->input().HtmlInput::hidden('tvacode[]','d57');
+     $itext_63=new INum('val[]',$this->get_parameter('d63')); $str_63=$itext_63->input().HtmlInput::hidden('tvacode[]','d63');
+     $itext_61=new INum('val[]',$this->get_parameter('d61')); $str_61=$itext_61->input().HtmlInput::hidden('tvacode[]','d61');
+     $itext_xx=new INum('val[]',$this->get_parameter('dxx')); $str_xx=$itext_xx->input().HtmlInput::hidden('tvacode[]','dxx');
+     $itext_59=new INum('val[]',$this->get_parameter('d59')); $str_59=$itext_59->input().HtmlInput::hidden('tvacode[]','d59');
+     $itext_62=new INum('val[]',$this->get_parameter('d62')); $str_62=$itext_62->input().HtmlInput::hidden('tvacode[]','d62');
+     $itext_64=new INum('val[]',$this->get_parameter('d64')); $str_64=$itext_64->input().HtmlInput::hidden('tvacode[]','d64');
+     $itext_yy=new INum('val[]',$this->get_parameter('dyy')); $str_yy=$itext_yy->input().HtmlInput::hidden('tvacode[]','dyy');
+     $itext_71=new INum('val[]',$this->get_parameter('d71')); $str_71=$itext_71->input().HtmlInput::hidden('tvacode[]','d71');
+     $itext_72=new INum('val[]',$this->get_parameter('d72')); $str_72=$itext_72->input().HtmlInput::hidden('tvacode[]','d72');
+     $itext_91=new INum('val[]',$this->get_parameter('d91')); $str_91=$itext_91->input().HtmlInput::hidden('tvacode[]','d91');
 
 
      ob_start();

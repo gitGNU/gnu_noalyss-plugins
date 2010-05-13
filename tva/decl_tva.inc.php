@@ -47,7 +47,7 @@ if (isset($_POST['save'] )) {
   /**
    *@todo add a div for the button generate, get_xml, create ODS, print...
    */
-   echo '<div style="position:absolute;z-index:14;top:25%;right:30" class="noprint">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>';
+//   echo '<div style="position:absolute;z-index:14;top:25%;right:30" class="noprint">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>';
   exit;
 }
 
@@ -82,7 +82,6 @@ echo '<div class="content">';
 echo '<form method="post">';
 echo dossier::hidden();
 echo HtmlInput::extension();
-echo HtmlInput::phpsessid();
 echo HtmlInput::hidden('start_periode',$tva->start_periode);
 echo HtmlInput::hidden('end_periode',$tva->end_periode);
 echo HtmlInput::hidden('flag_periode',$tva->flag_periode);
