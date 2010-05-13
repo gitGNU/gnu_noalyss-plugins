@@ -82,7 +82,6 @@ CREATE TABLE tva_belge.assujetti_chld
   ac_tvanum text NOT NULL,
   ac_amount numeric(20,4) NOT NULL,
   ac_vat numeric(20,4) NOT NULL,
-  ac_periode character varying(6) NOT NULL,
   ac_qcode text NOT NULL,
   ac_name text NOT NULL,
   CONSTRAINT assujetti_chld_pk PRIMARY KEY (ac_id),

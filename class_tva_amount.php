@@ -96,12 +96,12 @@ class Tva_Amount
     $account=$this->param->get_parameter('account');
     // if vat code contains a "," then split it and recall get_amount
     if ( strpos($vat_code,',') == true ) {
-      $aVat_code=split(',',$vat_code);
+      $aVat_code=explode(',',$vat_code);
     }else {
       $aVat_code=array($vat_code);
     }
     if (strpos($account,',') == true) 
-      $aAccount=split(',',$account);
+      $aAccount=explode(',',$account);
     else
       $aAccount=array($account);
     for ($i=0;$i<count($aVat_code);$i++) {
@@ -121,12 +121,12 @@ class Tva_Amount
     $account=$this->param->get_parameter('account');
     // if vat code contains a "," then split it and recall get_amount
     if ( strpos($vat_code,',') == true ) {
-      $aVat_code=split(',',$vat_code);
+      $aVat_code=explode(',',$vat_code);
     }else {
       $aVat_code=array($vat_code);
     }
     if (strpos($account,',') == true) 
-      $aAccount=split(',',$account);
+      $aAccount=explode(',',$account);
     else
       $aAccount=array($account);
     for ($i=0;$i<count($aVat_code);$i++) {

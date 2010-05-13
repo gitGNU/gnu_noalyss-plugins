@@ -42,7 +42,6 @@ $choice->value=array(
 		     );
 $choice->selected=(isset($_REQUEST['type']))?$_REQUEST['type']:0;
 $choice->javascript=' onchange="submit(this)"';
-echo HtmlInput::phpsessid();
 echo HtmlInput::extension();
 echo HtmlInput::hidden('sa','ltva');
 echo dossier::hidden();

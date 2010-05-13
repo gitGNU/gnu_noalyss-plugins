@@ -8,7 +8,7 @@ $a++;
 	if ( $p_res[$i]['pcode']==$p_code ) {
 		$cn=new Database(dossier::id());
 		echo '<td>';
-		echo HtmlInput::hidden('code[]',$p_code);
+		echo HtmlInput::hidden('tvacode[]',$p_code);
 		echo "$p_code</td>";
 		echo "<td>";
 		if ($p_code != 'ATVA') {
@@ -33,12 +33,11 @@ $a++;
 		$text->value=$p_res[$i]['paccount'];
 		$text->set_attribute('ipopup','ipop_account');
 		$text->set_attribute('gDossier',Dossier::id());
-		$text->set_attribute('phpsessid',$_REQUEST['PHPSESSID']);
 		$text->set_attribute('jrn',0);
 		$text->set_attribute('account','account['.$i.']');
 		$tvap=new Tva_Parameter($cn);
 		if (strpos($p_res[$i]['paccount'],',') != 0 ) {
-			$aPoste=split(',',$p_res[$i]['paccount']);
+			$aPoste=explode(',',$p_res[$i]['paccount']);
 			foreach ($aPoste as $e) {
 				if ( $tvap->exist_pcmn($e) ==0 ) {
 					$msg='<span class="notice">'.$e._(" n'existe pas dans PCMN")."</span>";
@@ -69,7 +68,7 @@ function show_account($p_res,$p_code,$p_desc) {
  for ($i=0;$i<count($p_res);$i++) {
 	if ( $p_res[$i]['pcode']==$p_code ) {
 		echo '<td>';
-		echo HtmlInput::hidden('code[]',$p_code);
+		echo HtmlInput::hidden('tvacode[]',$p_code);
 		echo HtmlInput::hidden('value[]','');
 		echo "$p_code</td>";
 		echo "<td>";
@@ -79,7 +78,6 @@ function show_account($p_res,$p_code,$p_desc) {
 		$text->value=$p_res[$i]['paccount'];
 		$text->set_attribute('ipopup','ipop_account');
 		$text->set_attribute('gDossier',Dossier::id());
-		$text->set_attribute('phpsessid',$_REQUEST['PHPSESSID']);
 		$text->set_attribute('jrn',0);
 		$text->set_attribute('account','account['.$i.']');
 
@@ -88,7 +86,7 @@ function show_account($p_res,$p_code,$p_desc) {
 		$tvap=new Tva_Parameter($cn);
 		$msg='';
 		if (strpos($p_res[$i]['paccount'],',') != 0 ) {
-			$aPoste=split(',',$p_res[$i]['paccount']);
+			$aPoste=explode(',',$p_res[$i]['paccount']);
 			foreach ($aPoste as $e) {
 
 				if ( trim($e) != '' && strpos('%',$e) === false && $tvap->exist_pcmn($e) ==0 ) {

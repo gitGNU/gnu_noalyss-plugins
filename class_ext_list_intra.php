@@ -46,9 +46,10 @@ class Ext_List_Intra extends Listing {
   private $aChild=array();
 
   function from_array($p_array){
-     $name=$p_array['name_child'];
+    if( isset($p_array['name_child'])) {
+      $name=$p_array['name_child'];
      $qcode=$p_array['qcode'];
-     $code=$p_array['code'];
+     $code=$p_array['tvacode'];
      $tva_num=$p_array['tva_num_child'];
      $amount=$p_array['amount'];
      $periode=$p_array['periode'];
@@ -66,7 +67,8 @@ class Ext_List_Intra extends Listing {
       $array[]=$child;
     }//end for			    
     $this->aChild=$array;
-    
+    } else
+      $this->aChild=array();
     
     $this->start_periode=$p_array['start_periode'];
     $this->end_periode=$p_array['end_periode'];
@@ -234,7 +236,7 @@ EOF;
       $a=new IText('qcode[]',$this->aChild[$i]->get_parameter('qcode'));
       $b=new IText('name_child[]',$this->aChild[$i]->get_parameter('name_child'));
       $c=new IText('tva_num_child[]',$this->aChild[$i]->get_parameter('tva_num'));
-      $d=new IText('code[]',$this->aChild[$i]->get_parameter('code'));
+      $d=new IText('tvacode[]',$this->aChild[$i]->get_parameter('code'));
       $e=new INum('amount[]',$this->aChild[$i]->get_parameter('amount'));
       $f=new IText('periode[]',$this->aChild[$i]->get_parameter('periode'));
 

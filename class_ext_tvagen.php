@@ -34,7 +34,7 @@ require_once('class_own.php');
  *
  */
 function get_array_nodup($p_string) {
-  $array=split(',',$p_string);
+  $array=explode(',',$p_string);
   sort($array);
   $array=array_unique($array);
   $result=array();
