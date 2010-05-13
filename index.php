@@ -24,7 +24,7 @@
  * \brief main file for tva
  */
 
-$url='?'.dossier::get().'&code=tva';
+$url='?'.dossier::get().'&plugin_code=tva';
 $array=array (
 	array($url.'&sa=dec',_('Déclaration TVA'),_('Déclaration Trimestriel ou annuel de TVA'),1),
 	array($url.'&sa=li',_('Listing intracommunautaire'),_('Listing intracommunautaire trimestriel'),2),

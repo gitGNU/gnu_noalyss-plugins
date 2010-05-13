@@ -67,7 +67,7 @@ class Ext_List_Assujetti extends Listing {
     if ( isset($p_array['name_child'])) {
       $name=$p_array['name_child'];
       $qcode=$p_array['qcode'];
-      $code=$p_array['code'];
+      $code=$p_array['plugin_code'];
       $tva_num=$p_array['tva_num_child'];
       $amount=$p_array['amount'];
       $amount_vat=$p_array['amount_vat'];
