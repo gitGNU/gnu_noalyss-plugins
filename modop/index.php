@@ -26,6 +26,8 @@
 
 $str=new IText("jr_internal");
 $str->value=(isset($_GET['jr_internal']))?strtoupper($_GET['jr_internal']):'';
+$str->value=(isset($_GET['ext_jr_internal']))?strtoupper($_GET['ext_jr_internal']):$str->value;
+
 $search=new IButton('getjr');
 $js="openRecherche(".dossier::id().")";
 $search->label='Chercher dans les journaux';

@@ -29,45 +29,61 @@ require_once ('class_acc_ledger_sold.php');
 // ACH
 if ( $_GET['jrn_type'] == 'ACH') {
   $jrn=new Acc_Ledger_Purchase($cn,$_GET['p_jrn']);
+  try {
   echo '<FORM METHOD="GET">';
   echo HtmlInput::extension().dossier::hidden();
   echo HtmlInput::hidden('action','save');
   echo HtmlInput::hidden('ext_jr_id',$_GET['ext_jr_id']);
   echo HtmlInput::hidden('ext_jr_internal',
 			 $_GET['ext_jr_internal']);
-
   echo $jrn->confirm($_GET);
+
   echo HtmlInput::submit('save','Sauver');
   echo '</FORM>';
+  } catch (Exception $e) {
+    alert($e->getMessage());
+  }
 }
 //----------------------------------------------------------------------
 // VEN
 if ( $_GET['jrn_type'] == 'VEN') {
   $jrn=new Acc_Ledger_Sold($cn,$_GET['p_jrn']);
+  try {
+  $a=$jrn->confirm($_GET);
   echo '<FORM METHOD="GET">';
   echo HtmlInput::extension().dossier::hidden();
   echo HtmlInput::hidden('action','save');
   echo HtmlInput::hidden('ext_jr_id',$_GET['ext_jr_id']);
   echo HtmlInput::hidden('ext_jr_internal',
 			 $_GET['ext_jr_internal']);
+  echo $a;
 
-  echo $jrn->confirm($_GET);
   echo HtmlInput::submit('save','Sauver');
   echo '</FORM>';
+  } catch (Exception $e) {
+    alert($e->getMessage());
+  }
+
 }
 //----------------------------------------------------------------------
 // ODS
 if ( $_GET['jrn_type'] == 'ODS') {
   $jrn=new Acc_Ledger($cn,$_GET['p_jrn']);
   $jrn->with_concerned=false;
-  echo '<FORM METHOD="GET">';
-  echo HtmlInput::extension().dossier::hidden();
-  echo HtmlInput::hidden('action','save');
-  echo HtmlInput::hidden('ext_jr_id',$_GET['ext_jr_id']);
-  echo HtmlInput::hidden('ext_jr_internal',
+  try {
+    $a= $jrn->show_form($_GET,1);
+    echo '<FORM METHOD="GET">';
+    echo HtmlInput::extension().dossier::hidden();
+    echo HtmlInput::hidden('action','save');
+    echo HtmlInput::hidden('ext_jr_id',$_GET['ext_jr_id']);
+    echo HtmlInput::hidden('ext_jr_internal',
 			 $_GET['ext_jr_internal']);
+    
 
-  echo $jrn->show_form($_GET,1);
-  echo HtmlInput::submit('save','Sauver');
-  echo '</FORM>';
+    echo HtmlInput::submit('save','Sauver');
+    echo '</FORM>';
+  } catch (Exception $e) {
+    alert($e->getMessage());
+  }
+
 }

@@ -64,6 +64,7 @@ if ($op->ledger_type=='ACH') {
   echo HtmlInput::hidden('e_mp',0);
   echo HtmlInput::hidden('ext_jr_id',$op->jr_id);
   echo HtmlInput::hidden('ext_jr_internal',$op->jr_internal);
+
   echo '</form>';
   $op->activate_receipt();
 
