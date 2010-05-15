@@ -28,8 +28,28 @@ require_once('class_icard.php');
 require_once('class_ipopup.php');
 require_once ('class_acc_ledger_purchase.php');
 require_once ('class_acc_ledger_sold.php');
+require_once('class_periode.php');
 
 $cn=new Database(dossier::id());
+
+/*  we can't modify from a closed periode */
+/*  get periode */
+$sql="select jr_tech_per from jrn where jr_internal=$1";
+$periode=$cn->get_value($sql,array($_GET['jr_internal']));
+if ( $cn->count() == 0 ) {
+  alert('Opération non trouvée');
+  exit();
+}
+
+$oPeriode=new Periode($cn);
+$oPeriode->p_id=$periode;
+
+if ($oPeriode->is_closed() == 1) {
+  alert('On ne peut pas modifier dans une période fermée');
+  exit();
+}
+
+/* check if periode is closed */
 // retrieve jrn
 $op=new Modop_Operation($cn,$_GET['jr_internal']);
 try { $op->format();		/* load format the data into an array with by the class_acc_ledger... */

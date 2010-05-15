@@ -39,7 +39,8 @@ if ( $_GET['jrn_type'] == 'ACH') {
     $new_internal=$jrn->insert($_GET);
     $op->activate_receipt();
   } catch(Exception $e) {
-    var_dump($e);
+    alert($e->getMessage);
+    exit();
   }
   /* we delete the old operation */
   $cn->start();
@@ -75,7 +76,8 @@ if ( $_GET['jrn_type'] == 'VEN') {
     $new_internal=$jrn->insert($_GET);
     $op->activate_receipt();
   } catch(Exception $e) {
-    var_dump($e);
+    alert($e->getMessage);
+    exit();
   }
   /* we delete the old operation */
   $cn->start();
@@ -114,7 +116,8 @@ if ( $_GET['jrn_type'] == 'ODS') {
     $new_internal=$jrn->internal;
     $op->activate_receipt();
   } catch(Exception $e) {
-    var_dump($e);
+    alert($e->getMessage);
+    exit();
   }
   /* we delete the old operation */
   $cn->start();
