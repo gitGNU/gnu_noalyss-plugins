@@ -34,10 +34,12 @@ if ( $_GET['jrn_type'] == 'ACH') {
   try {
     $op=new Modop_Operation($cn,$_GET['ext_jr_internal']);
     $op->suspend_receipt();
+    $op->suspend_strict();
     $pj=$_GET['e_pj'];
     $_GET['e_pj']=microtime();
     $new_internal=$jrn->insert($_GET);
     $op->activate_receipt();
+    $op->activate_strict();
   } catch(Exception $e) {
     alert($e->getMessage);
     exit();
@@ -71,10 +73,12 @@ if ( $_GET['jrn_type'] == 'VEN') {
   try {
     $op=new Modop_Operation($cn,$_GET['ext_jr_internal']);
     $op->suspend_receipt();
+    $op->suspend_strict();
     $pj=$_GET['e_pj'];
     $_GET['e_pj']=microtime();
     $new_internal=$jrn->insert($_GET);
     $op->activate_receipt();
+    $op->activate_strict();
   } catch(Exception $e) {
     alert($e->getMessage);
     exit();
@@ -110,11 +114,13 @@ if ( $_GET['jrn_type'] == 'ODS') {
   try {
     $op=new Modop_Operation($cn,$_GET['ext_jr_internal']);
     $op->suspend_receipt();
+    $op->suspend_strict();
     $pj=$_GET['e_pj'];
     $_GET['e_pj']=microtime();
     $jrn->save($_GET);
     $new_internal=$jrn->internal;
     $op->activate_receipt();
+    $op->activate_strict();
   } catch(Exception $e) {
     alert($e->getMessage);
     exit();

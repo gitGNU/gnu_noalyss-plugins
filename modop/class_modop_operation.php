@@ -164,7 +164,30 @@ class Modop_Operation
       throw new Exception('Pour les opérations financières vous pouvez simplement effacer l\'opération et la recommencer');
 
   } // end function format()
+ /**
+   *@brief deactivate the strict mode 
+   */
+  function suspend_strict() {
+    $owner=new Own($this->db);
+    if ( $owner->MY_STRICT == 'Y') {
+      $owner->MY_STRICT='N';
+      $owner->save('MY_STRICT');
+      $this->strict=true;
+  } else 
+      $this->strict=false;
+  }
   /**
+   *@brief activate strict mode, only if $this->strict=true
+   *@see suspend_receipt
+   */
+  function activate_strict() {
+    if ($this->strict==true) {
+      $owner=new Own($this->db);
+      $owner->MY_STRICT='Y';
+      $owner->save('MY_STRICT');
+    }
+  }
+ /**
    *@brief deactivate the suggest mode for the receipt number, if 
    */
   function suspend_receipt() {

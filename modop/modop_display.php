@@ -30,12 +30,24 @@ require_once ('class_acc_ledger_purchase.php');
 require_once ('class_acc_ledger_sold.php');
 require_once('class_periode.php');
 
+require_once ('class_ipopup.php');
+//----------------------------------------------------------------------
+// create compute button
+$compute=new IPopup('compute');
+$compute->value=JS_CALC_LINE;
+//$compute->title="Calculatrice";
+$compute->drag=true; 
+$compute->blocking=false;
+$compute->set_height("350");
+$compute->set_width("500");
+echo $compute->input();
+
 $cn=new Database(dossier::id());
 
 /*  we can't modify from a closed periode */
 /*  get periode */
 $sql="select jr_tech_per from jrn where jr_internal=$1";
-$periode=$cn->get_value($sql,array($_GET['jr_internal']));
+$periode=$cn->get_value($sql,array(trim($_GET['jr_internal'])));
 if ( $cn->count() == 0 ) {
   alert('Opération non trouvée');
   exit();
@@ -138,33 +150,6 @@ if ($op->ledger_type=='ODS') {
 
   echo '<FORM METHOD="GET">';
   echo $jrn->show_form($op->array);
-  $op->activate_receipt();
-
-  echo HtmlInput::extension().dossier::hidden();
-  echo HtmlInput::hidden('action','confirm');
-  echo HtmlInput::submit('save','Sauve');
-  echo HtmlInput::hidden('ext_jr_id',$op->jr_id);
-  echo HtmlInput::hidden('ext_jr_internal',$op->jr_internal);
-  echo '</form>';
-
-}
-/* ---------------------------------------------------------------------- */
-// FINANCIAL
-/* ---------------------------------------------------------------------- */
-if ($op->ledger_type=='ODS') {
-
-  $jrn=new Acc_Ledger($cn,$op->array['p_jrn']);
-  echo ICard::ipopup('ipopcard');
-  echo ICard::ipopup('ipop_newcard');
-  echo IPoste::ipopup('ipop_account');
-  $search_card=new IPopup('ipop_card');
-  $search_card->title=_('Recherche de fiche');
-  $search_card->value='';
-  echo $search_card->input();
-  $op->suspend_receipt();
-
-  echo '<FORM METHOD="GET">';
-  echo $jrn->input($op->array);
   $op->activate_receipt();
 
   echo HtmlInput::extension().dossier::hidden();

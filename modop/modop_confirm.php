@@ -25,6 +25,10 @@
  */
 require_once ('class_acc_ledger_purchase.php');
 require_once ('class_acc_ledger_sold.php');
+require_once ('class_modop_operation.php');
+
+$act=new Modop_Operation($cn,'');
+$act->suspend_strict();
 //----------------------------------------------------------------------
 // ACH
 if ( $_GET['jrn_type'] == 'ACH') {
@@ -78,7 +82,7 @@ if ( $_GET['jrn_type'] == 'ODS') {
     echo HtmlInput::hidden('ext_jr_id',$_GET['ext_jr_id']);
     echo HtmlInput::hidden('ext_jr_internal',
 			 $_GET['ext_jr_internal']);
-    
+    echo $a;    
 
     echo HtmlInput::submit('save','Sauver');
     echo '</FORM>';
@@ -87,3 +91,4 @@ if ( $_GET['jrn_type'] == 'ODS') {
   }
 
 }
+$act->activate_strict();
