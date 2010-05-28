@@ -88,7 +88,7 @@ class Modop_Operation
 
 
       } // for each item
-
+      $this->array['nb_item']=count($qp);
     } // ledger ACH
     /* ---------------------------------------------------------------------- */
     // VEN
@@ -133,6 +133,8 @@ class Modop_Operation
 
 
       } // for each item
+      $this->array['nb_item']=count($qp);
+
     } // ledger VEN
     /* ---------------------------------------------------------------------- */
     // MISC
@@ -159,6 +161,8 @@ class Modop_Operation
 	$this->array['amount'.$e]=$ods[$e]['j_montant'];
 
       }
+      $this->array['nb_item']=count($ods);
+
     } // ledger MISC
     if ($this->ledger_type=='FIN') 
       throw new Exception('Pour les opérations financières vous pouvez simplement effacer l\'opération et la recommencer');

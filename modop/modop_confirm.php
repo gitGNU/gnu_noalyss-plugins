@@ -75,6 +75,7 @@ if ( $_GET['jrn_type'] == 'ODS') {
   $jrn=new Acc_Ledger($cn,$_GET['p_jrn']);
   $jrn->with_concerned=false;
   try {
+    $jrn->verify($_GET);
     $a= $jrn->show_form($_GET,1);
     echo '<FORM METHOD="GET">';
     echo HtmlInput::extension().dossier::hidden();

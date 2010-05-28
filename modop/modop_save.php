@@ -41,7 +41,7 @@ if ( $_GET['jrn_type'] == 'ACH') {
     $op->activate_receipt();
     $op->activate_strict();
   } catch(Exception $e) {
-    alert($e->getMessage);
+    alert($e->getMessage());
     exit();
   }
   /* we delete the old operation */
@@ -80,7 +80,7 @@ if ( $_GET['jrn_type'] == 'VEN') {
     $op->activate_receipt();
     $op->activate_strict();
   } catch(Exception $e) {
-    alert($e->getMessage);
+    alert($e->getMessage());
     exit();
   }
   /* we delete the old operation */
@@ -122,7 +122,7 @@ if ( $_GET['jrn_type'] == 'ODS') {
     $op->activate_receipt();
     $op->activate_strict();
   } catch(Exception $e) {
-    alert($e->getMessage);
+    alert($e->getMessage());
     exit();
   }
   /* we delete the old operation */

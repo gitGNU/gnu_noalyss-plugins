@@ -29,7 +29,7 @@ require_once('class_ipopup.php');
 require_once ('class_acc_ledger_purchase.php');
 require_once ('class_acc_ledger_sold.php');
 require_once('class_periode.php');
-
+echo js_include('acc_ledger.js');
 require_once ('class_ipopup.php');
 //----------------------------------------------------------------------
 // create compute button
@@ -96,7 +96,7 @@ if ($op->ledger_type=='ACH') {
   echo HtmlInput::hidden('e_mp',0);
   echo HtmlInput::hidden('ext_jr_id',$op->jr_id);
   echo HtmlInput::hidden('ext_jr_internal',$op->jr_internal);
-
+  echo HtmlInput::button('add_item',_('Ajout article'),      ' onClick="ledger_add_row()"');
   echo '</form>';
   $op->activate_receipt();
 
@@ -130,6 +130,7 @@ if ($op->ledger_type=='VEN') {
   echo HtmlInput::hidden('e_mp',0);
   echo HtmlInput::hidden('ext_jr_id',$op->jr_id);
   echo HtmlInput::hidden('ext_jr_internal',$op->jr_internal);
+  echo HtmlInput::button('add_item',_('Ajout article'),      ' onClick="ledger_add_row()"');
   echo '</form>';
 
 }
@@ -157,6 +158,14 @@ if ($op->ledger_type=='ODS') {
   echo HtmlInput::submit('save','Sauve');
   echo HtmlInput::hidden('ext_jr_id',$op->jr_id);
   echo HtmlInput::hidden('ext_jr_internal',$op->jr_internal);
+  echo HtmlInput::button('add',_('Ajout d\'une ligne'),'onClick="quick_writing_add_row()"');
   echo '</form>';
+  echo '<div class="info">'.
+    _('Débit').' = <span id="totalDeb"></span>'.
+    _('Crédit').' = <span id="totalCred"></span>'.
+    _('Difference').' = <span id="totalDiff"></span></div> ';
+  echo "<script>checkTotalDirect();</script>";
+  echo '</div>';
+
 
 }
