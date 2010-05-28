@@ -159,7 +159,7 @@ class Modop_Operation
 	if ( $ods[$e]['j_debit']=='t' )
 	  $this->array['ck'.$e]=true;
 	$this->array['amount'.$e]=$ods[$e]['j_montant'];
-
+	$this->array['ld'.$e]=$ods[$e]['j_text'];
       }
       $this->array['nb_item']=count($ods);
 
