@@ -222,16 +222,18 @@ if ( $_GET['jrn_type'] == 'FIN') {
     $fother->get_by_qcode($e_other);
     $post_other=$fother->strAttribut(ATTR_DEF_ACCOUNT);
     if ($e_other_amount > 0 ) {
-      $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=false',array($post_other,$e_other));
-      $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=true',array($post_bank,$e_bank_account));
+      $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=false and j_grpt in (select jr_grpt_id from jrn where jr_id=$3)',array($post_other,$e_other,$ext_jr_id));
+      $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=true  and j_grpt in (select jr_grpt_id from jrn where jr_id=$3)',array($post_bank,$e_bank_account,$ext_jr_id));
     } else {
-      $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=false',array($post_bank,$e_bank_account));
-      $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=true',array($post_other,$e_other));
+      $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=false  and j_grpt in (select jr_grpt_id from jrn where jr_id=$3)',array($post_bank,$e_bank_account,$ext_jr_id));
+      $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=true  and j_grpt in (select jr_grpt_id from jrn where jr_id=$3)',array($post_other,$e_other,$ext_jr_id));
     }
-    $cn->exec_sql('update quant_fin set qf_bank=$1,qf_amount=$3,qf_other=$2',array($fbank->id,$fother->id,$e_other_amount));
+    $cn->exec_sql('update quant_fin set qf_bank=$1,qf_amount=$3,qf_other=$2 where jr_id=$4',array($fbank->id,$fother->id,$e_other_amount,$ext_jr_id));
     $cn->commit();
   } catch (Exception $e) {
     $cn->rollback();
     echo $e->getMessage();
+    exit();
   }
+  echo h2info('Opération sauvée');
 }

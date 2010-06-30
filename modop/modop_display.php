@@ -200,25 +200,7 @@ if ($op->ledger_type=='FIN'){
   echo '<FORM METHOD="GET">';
   $Date=new IDate("e_date",$op->array['e_date']);
   $f_date=$Date->input();
-  // Periode 
-  //--
-  $l_user_per=(isset($periode))?$periode:$user->get_periode();
-  $period=new IPeriod();
-  $period->cn=$cn;
-  $period->type=OPEN;
-  $period->value=$l_user_per;
-  $period->user=$user;
-  $period->name='periode';
-  try {
-    $l_form_per=$period->input();
-  } catch (Exception $e) {
-    if ($e->getCode() == 1 ) { 
-      echo "Aucune période ouverte";
-      exit();
-    }
-  }
   $label=HtmlInput::infobulle(3);
-  $f_period="Période comptable $label".$l_form_per;
   
   // Ledger (p_jrn)
   //--
