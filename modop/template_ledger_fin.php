@@ -9,6 +9,7 @@
 <legend><?=$f_legend_detail?></legend>
    <fieldset><legend><?=_('Extrait de compte')?></legend>
    <?=_('Numéro extrait')?> <?=$f_extrait?>
+<input type="text" disabled  id="first_sold"></span>
 </fieldset>
 <?=$str_add_button?><?=$str_cal_button?>
    <fieldset><legend><?=_('Opérations')?></legend>
