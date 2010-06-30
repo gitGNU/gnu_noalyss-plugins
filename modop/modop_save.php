@@ -206,7 +206,7 @@ if ( $_GET['jrn_type'] == 'FIN') {
       throw new Exception ('Période fermée');
 
     /* update amount */
-    $cn->exec_sql('update jrnx set j_montant=$1 where j_grpt in (select jr_grpt_id from jrn where jr_id=$2)',array(abs($e_other_amount),$ext_jr_id));
+    $cn->exec_sql('update jrnx set j_montant=$1,j_jrn_def=$3 where j_grpt in (select jr_grpt_id from jrn where jr_id=$2)',array(abs($e_other_amount),$ext_jr_id,$p_jrn));
 
 
     /* in jrn */
