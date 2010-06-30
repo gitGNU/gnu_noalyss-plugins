@@ -60,7 +60,7 @@ class Modop_Operation
       $this->array['e_comm']=$jrn[0]['jr_comment'];
       $this->array['e_pj']=$jrn[0]['jr_pj_number'];
       $this->array['p_jrn']=$jrn[0]['jr_def_id'];
-      $this->array['period']=$jrn[0]['jr_tech_per'];
+      $this->array['periode']=$jrn[0]['jr_tech_per'];
       
       /* retrieve from jrn_info */
       $this->array['bon_comm']=$this->db->get_value("select ji_value from jrn_info where jr_id=$1 and id_type='BON_COMMANDE'",
@@ -105,7 +105,7 @@ class Modop_Operation
       $this->array['e_comm']=$jrn[0]['jr_comment'];
       $this->array['e_pj']=$jrn[0]['jr_pj_number'];
       $this->array['p_jrn']=$jrn[0]['jr_def_id'];
-      $this->array['period']=$jrn[0]['jr_tech_per'];
+      $this->array['periode']=$jrn[0]['jr_tech_per'];
       
       /* retrieve from jrn_info */
       $this->array['bon_comm']=$this->db->get_value("select ji_value from jrn_info where jr_id=$1 and id_type='BON_COMMANDE'",
@@ -150,7 +150,7 @@ class Modop_Operation
       $this->array['desc']=$jrn[0]['jr_comment'];
       $this->array['e_pj']=$jrn[0]['jr_pj_number'];
       $this->array['p_jrn']=$jrn[0]['jr_def_id'];
-      $this->array['period']=$jrn[0]['jr_tech_per'];
+      $this->array['periode']=$jrn[0]['jr_tech_per'];
       $ods=$this->db->get_array('select j_qcode,j_poste,j_text,j_montant,j_debit from jrnx where j_grpt = (select jr_grpt_id from jrn where jr_internal=$1)',
 			       array($this->jr_internal));
       for ($e=0;$e<count($ods);$e++){
@@ -164,9 +164,32 @@ class Modop_Operation
       $this->array['nb_item']=count($ods);
 
     } // ledger MISC
-    if ($this->ledger_type=='FIN') 
-      throw new Exception('Pour les opérations financières vous pouvez simplement effacer l\'opération et la recommencer');
-
+///////////////////////////////////////////////////////////////////////////
+// FIN
+///////////////////////////////////////////////////////////////////////////
+    if ( $this->ledger_type=="FIN") {
+     $jrn=$this->db->get_array("select jr_id,to_char(jr_date,'DD.MM.YYYY') as date_fmt,to_char(jrn_ech,'DD.MM.YYYY') as ech_fmt,jr_comment,jr_pj_number, jr_tech_per,jr_Def_id from jrn where jr_internal=$1",
+			       array($this->jr_internal));
+      /*  retrieve from jrn */
+      $this->jr_id=$jrn[0]['jr_id'];
+      $this->array['e_date']=$jrn[0]['date_fmt'];
+      $this->array['e_comm']=$jrn[0]['jr_comment'];
+      $this->array['e_pj']=$jrn[0]['jr_pj_number'];
+      $this->array['p_jrn']=$jrn[0]['jr_def_id'];
+      $this->array['period']=$jrn[0]['jr_tech_per'];
+      /* retrieve from quant_purchase */
+      $qp=$this->db->get_array("select * from quant_fin  where jr_id =$1",array($this->jr_id));
+      /* check if "quick writing" was  used */
+      if ( count($qp) == 0)
+	throw new Exception('Désolé cette opération ne peut être corrigée');
+      /* bank */
+      $fcard=new Fiche($this->db,$qp[0]['qf_bank']);
+      $this->array['e_bank']=$fcard->get_quick_code();
+      /* other */
+      $fcard=new Fiche($this->db,$qp[0]['qf_other']);
+      $this->array['e_other']=$fcard->get_quick_code();
+      $this->array['e_amount']=$qp[0]['qf_amount'];
+    }
   } // end function format()
  /**
    *@brief deactivate the strict mode 

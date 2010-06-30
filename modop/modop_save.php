@@ -100,9 +100,6 @@ if ( $_GET['jrn_type'] == 'VEN') {
   $cn->exec_sql('delete from jrnx where j_grpt in (select jr_grpt_id from jrn where jr_id=$1)',
 		array($_GET['ext_jr_id']));
 		
-  /**
-   *todo save the attached document
-   */
   /* in jrn */
   $attach=$cn->get_array('select jr_pj,jr_pj_name,jr_pj_type from jrn where jr_id=$1',
 		 array($_GET['ext_jr_id']));
@@ -149,9 +146,6 @@ if ( $_GET['jrn_type'] == 'ODS') {
 		array($_GET['ext_jr_id']));
 		
   /* in jrn */
-  /**
-   *todo save the attached document
-   */
   $attach=$cn->get_array('select jr_pj,jr_pj_name,jr_pj_type from jrn where jr_id=$1',
 		 array($_GET['ext_jr_id']));
   $cn->exec_sql('delete from jrn where jr_id=$1',array($_GET['ext_jr_id']));
@@ -166,3 +160,78 @@ if ( $_GET['jrn_type'] == 'ODS') {
 
 }
 
+/* ---------------------------------------------------------------------- */
+// Purchase
+/* ---------------------------------------------------------------------- */
+if ( $_GET['jrn_type'] == 'FIN') {
+  extract ($_GET);
+  $user=new User($cn);
+  try {
+    /*  verify if the card can be used in this ledger */
+    if ( $user->check_jrn($p_jrn) != 'W' )
+      throw new Exception (_('Accès interdit'),20);
+    /* check if there is a customer */
+    if ( strlen(trim($e_bank_account)) == 0 ) 
+      throw new Exception(_('Vous n\'avez pas donné de banque'),11);
+  
+  /*  check if the date is valid */
+  if ( isDate($e_date) == null ) {
+    throw new Exception('Date invalide', 2);
+    }
+  $fiche=new fiche($cn);
+  $fiche->get_by_qcode($e_bank_account);
+  if ( $fiche->empty_attribute(ATTR_DEF_ACCOUNT) == true)
+    throw new Exception('La fiche '.$e_bank_account.'n\'a pas de poste comptable',8);
+  if ( $fiche->belong_ledger($p_jrn,'deb') !=1 )
+    throw new Exception('La fiche '.$e_bank_account.'n\'est pas accessible à ce journal',10);
+  $fiche=new fiche($cn);
+  $fiche->get_by_qcode($e_other);
+  if ( $fiche->empty_attribute(ATTR_DEF_ACCOUNT) == true)
+    throw new Exception('La fiche '.$e_other.'n\'a pas de poste comptable',8);
+  if ( $fiche->belong_ledger($p_jrn,'deb') !=1 )
+	throw new Exception('La fiche '.$e_other.'n\'est pas accessible à ce journal',10);
+   if ( isNumber(${'e_other_amount'}) == 0 )
+	throw new Exception('La fiche '.$e_other.'a un montant invalide ['.$e_other_amount.']',6);
+  } catch (Exception $e) {
+    echo $e->getMessage();
+    exit();
+  }
+
+  try {
+    $cn->start();
+    /* find periode thanks the date */
+    $periode=new Periode($cn);
+    $periode->find_periode($e_date);
+    if ($periode->is_closed()) 
+      throw new Exception ('Période fermée');
+
+    /* update amount */
+    $cn->exec_sql('update jrnx set j_montant=$1 where j_grpt in (select jr_grpt_id from jrn where jr_id=$2)',array(abs($e_other_amount),$ext_jr_id));
+
+
+    /* in jrn */
+    $cn->exec_sql("update jrn set jr_montant=$1,jr_comment=$2,jr_date=to_date($3,'DD.MM.YYYY'),jr_def_id=$4,jr_tech_per=$5,jr_pj_number=$6 where jr_id=$7",
+		  array(abs($e_other_amount),$e_other_comment,$e_date,$p_jrn,$periode->p_id,$e_pj,$ext_jr_id));    
+  /* in quant_fin */
+    /* find the f_id of the bank */
+    $fbank=new Fiche($cn);
+    $fbank->get_by_qcode($e_bank_account);
+    $post_bank=$fbank->strAttribut(ATTR_DEF_ACCOUNT);
+
+    $fother=new Fiche($cn);
+    $fother->get_by_qcode($e_other);
+    $post_other=$fother->strAttribut(ATTR_DEF_ACCOUNT);
+    if ($e_other_amount > 0 ) {
+      $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=false',array($post_other,$e_other));
+      $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=true',array($post_bank,$e_bank_account));
+    } else {
+      $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=false',array($post_bank,$e_bank_account));
+      $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=true',array($post_other,$e_other));
+    }
+    $cn->exec_sql('update quant_fin set qf_bank=$1,qf_amount=$3,qf_other=$2',array($fbank->id,$fother->id,$e_other_amount));
+    $cn->commit();
+  } catch (Exception $e) {
+    $cn->rollback();
+    echo $e->getMessage();
+  }
+}
