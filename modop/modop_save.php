@@ -54,13 +54,16 @@ if ( $_GET['jrn_type'] == 'ACH') {
   $cn->exec_sql('delete from jrnx where j_grpt in (select jr_grpt_id from jrn where jr_id=$1)',
 		array($_GET['ext_jr_id']));
 		
-  /**
-   *todo save the attached document
-   */
   /* in jrn */
+  $attach=$cn->get_array('select jr_pj,jr_pj_name,jr_pj_type from jrn where jr_id=$1',
+		 array($_GET['ext_jr_id']));
   $cn->exec_sql('delete from jrn where jr_id=$1',array($_GET['ext_jr_id']));
   $cn->exec_sql('update jrn set jr_id=$1,jr_internal=$2,jr_pj_number=$3 where jr_internal=$4',
 		array($_GET['ext_jr_id'],$_GET['ext_jr_internal'],$pj,$new_internal));
+  if ( $attach[0]['jr_pj_name'] != '') {
+      $cn->exec_sql('update jrn set jr_pj=$1,jr_pj_type=$2,jr_pj_name=$3 where jr_id=$4',
+		    array($attach[0]['jr_pj'],$attach[0]['jr_pj_type'],$attach[0]['jr_pj_name'],$_GET['ext_jr_id']));
+  }
   /* in quant_purchase */
   $cn->exec_sql('delete from quant_purchase where qp_internal=$1',array($_GET['ext_jr_internal']));
   $cn->exec_sql('update quant_purchase set qp_internal=$1 where qp_internal=$2',
@@ -101,9 +104,16 @@ if ( $_GET['jrn_type'] == 'VEN') {
    *todo save the attached document
    */
   /* in jrn */
+  $attach=$cn->get_array('select jr_pj,jr_pj_name,jr_pj_type from jrn where jr_id=$1',
+		 array($_GET['ext_jr_id']));
+
   $cn->exec_sql('delete from jrn where jr_id=$1',array($_GET['ext_jr_id']));
   $cn->exec_sql('update jrn set jr_id=$1,jr_internal=$2,jr_pj_number=$3 where jr_internal=$4',
 		array($_GET['ext_jr_id'],$_GET['ext_jr_internal'],$pj,$new_internal));
+  if ( $attach[0]['jr_pj_name'] != '') {
+      $cn->exec_sql('update jrn set jr_pj=$1,jr_pj_type=$2,jr_pj_name=$3 where jr_id=$4',
+		    array($attach[0]['jr_pj'],$attach[0]['jr_pj_type'],$attach[0]['jr_pj_name'],$_GET['ext_jr_id']));
+  }
 
   /* in quant_sold */
   $cn->exec_sql('delete from quant_sold where qs_internal=$1',array($_GET['ext_jr_internal']));
@@ -113,7 +123,7 @@ if ( $_GET['jrn_type'] == 'VEN') {
 
 }
 /* ---------------------------------------------------------------------- */
-// OLD
+// ODS
 /* ---------------------------------------------------------------------- */
 if ( $_GET['jrn_type'] == 'ODS') {
   $jrn=new Acc_Ledger($cn,$_GET['p_jrn']);
@@ -142,9 +152,15 @@ if ( $_GET['jrn_type'] == 'ODS') {
   /**
    *todo save the attached document
    */
+  $attach=$cn->get_array('select jr_pj,jr_pj_name,jr_pj_type from jrn where jr_id=$1',
+		 array($_GET['ext_jr_id']));
   $cn->exec_sql('delete from jrn where jr_id=$1',array($_GET['ext_jr_id']));
   $cn->exec_sql('update jrn set jr_id=$1,jr_internal=$2,jr_pj_number=$3 where jr_internal=$4',
 		array($_GET['ext_jr_id'],$_GET['ext_jr_internal'],$pj,$new_internal));
+  if ( $attach[0]['jr_pj_name'] != '') {
+      $cn->exec_sql('update jrn set jr_pj=$1,jr_pj_type=$2,jr_pj_name=$3 where jr_id=$4',
+		    array($attach[0]['jr_pj'],$attach[0]['jr_pj_type'],$attach[0]['jr_pj_name'],$_GET['ext_jr_id']));
+  }
 
   $cn->commit();
 
