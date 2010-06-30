@@ -206,11 +206,11 @@ if ( $_GET['jrn_type'] == 'FIN') {
       throw new Exception ('Période fermée');
 
     /* update amount */
-    $cn->exec_sql('update jrnx set j_montant=$1,j_jrn_def=$3 where j_grpt in (select jr_grpt_id from jrn where jr_id=$2)',array(abs($e_other_amount),$ext_jr_id,$p_jrn));
+    $cn->exec_sql("update jrnx set j_montant=$1,j_jrn_def=$3,j_date=to_date($4,'DD.MM.YYYY'),j_tech_per=$5,j_tech_date=now() where j_grpt in (select jr_grpt_id from jrn where jr_id=$2)",array(abs($e_other_amount),$ext_jr_id,$p_jrn,$e_date,$periode->p_id));
 
 
     /* in jrn */
-    $cn->exec_sql("update jrn set jr_montant=$1,jr_comment=$2,jr_date=to_date($3,'DD.MM.YYYY'),jr_def_id=$4,jr_tech_per=$5,jr_pj_number=$6 where jr_id=$7",
+    $cn->exec_sql("update jrn set jr_montant=$1,jr_comment=$2,jr_date=to_date($3,'DD.MM.YYYY'),jr_def_id=$4,jr_tech_per=$5,jr_pj_number=$6,jr_tech_date=now() where jr_id=$7",
 		  array(abs($e_other_amount),$e_other_comment,$e_date,$p_jrn,$periode->p_id,$e_pj,$ext_jr_id));    
   /* in quant_fin */
     /* find the f_id of the bank */
