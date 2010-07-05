@@ -97,18 +97,21 @@ class Ext_Tva extends Ext_Tva_Gen
      $this->adress=$p_array['adress'];
      $this->country=$p_array['country'];
      $this->periode_dec=$p_array['periode_dec'];
+     $this->exercice=$p_array['exercice'];
+
    }
   public function insert() {
+
     if ( $this->verify() != 0 ) return;
     $sql="INSERT INTO tva_belge.declaration_amount(
              d00, d01, d02, d03, d44, d45, d46, d47, d48, d49, d81, 
             d82, d83, d84, d85, d86, d87, d88, d54, d55, d56, d57, d61, d63, 
             dxx, d59, d62, d64, dyy, d71, d72, d91, start_date, end_date, 
-             periodicity,tva_name,num_tva,adress,country,periode_dec)
+             periodicity,tva_name,num_tva,adress,country,periode_dec,exercice)
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 
             $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, 
             $26, $27, $28, $29, $30, $31, $32, to_date($33,'DD.MM.YYYY'), to_date($34,'DD.MM.YYYY'), $35,$36,
-            $37,$38,$39,$40) 
+            $37,$38,$39,$40,$41) 
              returning da_id;";
       $this->da_id=$this->db->get_value($sql,
 				     array($this->d00, /* 1 */
@@ -151,6 +154,7 @@ class Ext_Tva extends Ext_Tva_Gen
 					   $this->adress,	/* 38 */
 					   $this->country,	/* 39 */
 					   $this->periode_dec,	/* 40 */
+					   $this->exercice,	/* 41 */
 
 					   ));
   }

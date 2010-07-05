@@ -95,7 +95,7 @@ class Ext_List_Assujetti extends Listing {
     $this->adress=$p_array['adress'];
     $this->country=$p_array['country'];
     $this->periode_dec=$p_array['periode_dec'];
-    
+    $this->exercice=$p_array['exercice'];
   }
   function display() {
     $r= '<form id="readonly">';
@@ -144,19 +144,20 @@ class Ext_List_Assujetti extends Listing {
     $sql=<<<EOF
       INSERT INTO tva_belge.assujetti(
 				      start_date, end_date,  periodicity, tva_name, 
-				      num_tva, adress, country,  periode_dec)
-      VALUES (to_date($1,'DD.MM.YYYY'),to_date($2,'DD.MM.YYYY'),$3,$4,$5,$6,$7,$8) returning a_id;
+				      num_tva, adress, country,  periode_dec,exercice)
+      VALUES (to_date($1,'DD.MM.YYYY'),to_date($2,'DD.MM.YYYY'),$3,$4,$5,$6,$7,$8,$9) returning a_id;
 EOF;
     $this->a_id=$this->db->get_value($sql,
 				     array(
-					   $this->start_periode,
+					   $this->start_periode, /* 1 */
 					   $this->end_periode,
-					   $this->flag_periode,
+					   $this->flag_periode, /* 3 */
 					   $this->tva_name,
-					   $this->num_tva,
+					   $this->num_tva, /* 5 */
 					   $this->adress,
-					   $this->country,
-					   $this->periode_dec
+					   $this->country, /* 7 */
+					   $this->periode_dec,
+					   $this->exercice /* 9 */
 					   )
 				     );
     /* insert into the child table */
@@ -296,11 +297,12 @@ class Ext_List_Assujetti_Child extends Ext_List_Assujetti {
 			    "name_child"=>'ac_name'
 			    );
   function insert() {
+
     $sql=<<<EOF
       INSERT INTO tva_belge.assujetti_chld(
 					   a_id, ac_tvanum, ac_amount, ac_vat,  ac_qcode, 
-					   ac_name,ac_periode)
-      VALUES ($1, $2, $3, $4, $5, $6,'') returning ac_id; 
+					   ac_name)
+      VALUES ($1, $2, $3, $4, $5, $6) returning ac_id; 
 EOF;
     $this->ic_id=$this->db->get_value($sql,array(
 						 $this->a_id,
@@ -308,7 +310,8 @@ EOF;
 						 $this->ac_amount,
 						 $this->ac_vat,
 						 $this->ac_qcode,
-						 $this->ac_name));
+						 $this->ac_name
+						 ));
   }
 
 }

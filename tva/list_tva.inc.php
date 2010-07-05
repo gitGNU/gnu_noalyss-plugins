@@ -54,7 +54,7 @@ select da_id as id, 'Déclaration trim/mens' as type_title,1 as type_decl,to_cha
 case when periodicity ='1' then 'Mensuel'  
 when periodicity = '2' then 'Trimestriel'
 end as fmt_periodicity,
-periode_dec
+periode_dec,exercice 
 from tva_belge.declaration_amount 
 union all
 select i_id as id, 'Listing Intracom' as type_title, 3 as type_decl, to_char(date_decl,'DD.MM.YYYY') as date_fmt,date_decl,
@@ -62,12 +62,12 @@ case when periodicity ='1' then 'Mensuel'
 when periodicity = '2' then 'Trimestriel'
 when periodicity = '3' then 'Annuel'
 end as fmt_periodicity,
-periode_dec
+periode_dec,exercice
 from tva_belge.intracomm
 union all
 select a_id as id, 'Listing assujetti' as type_title, 2 as type_decl, to_char(date_decl,'DD.MM.YYYY') as date_fmt,date_decl,
  'Annuel' as fmt_periodicity,
-periode_dec
+periode_dec,exercice 
 from tva_belge.assujetti
 
 order by date_decl desc
@@ -82,7 +82,7 @@ select da_id as id, 'Déclaration trim/mens' as type_title,1 as type_decl,to_cha
 case when periodicity ='1' then 'Mensuel'  
 when periodicity = '2' then 'Trimestriel'
 end as fmt_periodicity,
-periode_dec
+periode_dec,exercice
 from tva_belge.declaration_amount order by date_decl desc
 ";
   break;
@@ -90,7 +90,7 @@ case 2:
 $sql="
 select a_id as id, 'Listing assujetti' as type_title, 2 as type_decl, to_char(date_decl,'DD.MM.YYYY') as date_fmt,date_decl,
  'Annuel' as fmt_periodicity,
-periode_dec
+periode_dec,exercice
 from tva_belge.assujetti
 order by date_decl desc
 ";
@@ -102,7 +102,7 @@ case when periodicity ='1' then 'Mensuel'
 when periodicity = '2' then 'Trimestriel'
 when periodicity = '3' then 'Annuel'
 end as fmt_periodicity,
-periode_dec
+periode_dec,exercice
 from tva_belge.intracomm
 order by date_decl desc
 ";
@@ -111,7 +111,7 @@ order by date_decl desc
 }
 $res=$cn->get_array($sql);
 echo '<table class="result" style="margin-left:25%;width:50%">';
-echo tr(th('Type de déclaration').th('Periodicité').th('Mois/année').th('Date'));
+echo tr(th('Type de déclaration').th('Periodicité').th('Mois/année').th('Date').th('Année'));
 for ($i=0;$i<count($res);$i++){
   $aref=sprintf('<a href="javascript:void(0)" onclick="show_declaration(\'%s\',\'%s\')">',
 		$res[$i]['type_decl'],$res[$i]['id']);
@@ -119,6 +119,8 @@ for ($i=0;$i<count($res);$i++){
   $row.=td($aref.$res[$i]['fmt_periodicity'].'</a>');
   $row.=td($aref.$res[$i]['periode_dec'].'</a>');
   $row.=td($aref.$res[$i]['date_fmt'].'</a>');
+  $row.=td($aref.$res[$i]['exercice'].'</a>');
+
   echo tr($row);
 }
 echo '</table>';

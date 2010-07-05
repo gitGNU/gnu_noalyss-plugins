@@ -89,7 +89,7 @@ echo HtmlInput::hidden('name',$tva->tva_name);
 echo HtmlInput::hidden('num_tva',$tva->num_tva);
 echo HtmlInput::hidden('adress',$tva->adress);
 echo HtmlInput::hidden('country',$tva->country);
-
+echo HtmlInput::hidden('exercice',$tva->exercice);
 
 
 

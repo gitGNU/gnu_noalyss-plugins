@@ -86,6 +86,7 @@ echo HtmlInput::hidden('num_tva',$tva->num_tva);
 echo HtmlInput::hidden('adress',$tva->adress);
 echo HtmlInput::hidden('country',$tva->country);
 echo HtmlInput::hidden('periode_dec',$tva->periode_dec);
+echo HtmlInput::hidden('exercice',$tva->exercice);
 echo $tva->display_info();
 echo $r;
 echo $tva->display_declaration_amount();
