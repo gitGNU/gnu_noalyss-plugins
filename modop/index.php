@@ -23,6 +23,11 @@
 /*!\file
  * \brief modify a operation
  */
+if ( ! isset ($version_phpcompta) || $version_phpcompta < 3428 ) {
+	alert('Cette extension ne fonctionne pas sur cett version de PhpCompta'.
+	' Veuillez mettre votre programme a jour');
+	exit();
+}
 
 $str=new IText("jr_internal");
 $str->value=(isset($_GET['jr_internal']))?strtoupper($_GET['jr_internal']):'';
