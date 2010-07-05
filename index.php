@@ -66,6 +66,26 @@ if ( $cn->exist_schema('tva_belge') == false) {
   echo_warning(_("L'extension est installée, pourriez-vous en vérifier le paramètrage ?"));
   $def=5;
 }
+// check schema
+$a=$cn->exist_column('assujetti_chld','ac_periode','tva_belge');
+if ( $a == false) 
+  $cn->exec_sql("alter table tva_belge.assujetti_chld add ac_periode text");
+
+$a=$cn->exist_column('assujetti_chld','exercice','tva_belge');
+if ( $a == false) 
+  $cn->exec_sql("alter table tva_belge.assujetti_chld add exercice text");
+
+$a=$cn->exist_column('declaration_amount','exercice','tva_belge');
+if ( $a == false) 
+  $cn->exec_sql("alter table tva_belge.declaration_amount add exercice text");
+
+$a=$cn->exist_column('intracomm','exercice','tva_belge');
+if ( $a == false) 
+  $cn->exec_sql("alter table tva_belge.intracomm add exercice text");
+
+$a=$cn->exist_column('assujetti','exercice','tva_belge');
+if ( $a == false) 
+  $cn->exec_sql("alter table tva_belge.assujetti add exercice text");
 
 // show menu
 echo ShowItem($array,'H',"mtitle","mtitle",$def,' width="100%" ');

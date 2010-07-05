@@ -78,6 +78,7 @@ class Ext_List_Intra extends Listing {
     $this->adress=$p_array['adress'];
     $this->country=$p_array['country'];
     $this->periode_dec=$p_array['periode_dec'];
+    $this->exercice=$p_array['exercice'];
     
   }
   function display() {
@@ -127,8 +128,8 @@ class Ext_List_Intra extends Listing {
     $sql=<<<EOF
 INSERT INTO tva_belge.intracomm(
             start_date, end_date,  periodicity, tva_name, 
-            num_tva, adress, country,  periode_dec)
-      VALUES (to_date($1,'DD.MM.YYYY'),to_date($2,'DD.MM.YYYY'),$3,$4,$5,$6,$7,$8) returning i_id;
+            num_tva, adress, country,  periode_dec,exercice)
+      VALUES (to_date($1,'DD.MM.YYYY'),to_date($2,'DD.MM.YYYY'),$3,$4,$5,$6,$7,$8,$9) returning i_id;
 EOF;
 $this->i_id=$this->db->get_value($sql,
 		     array(
@@ -139,7 +140,8 @@ $this->i_id=$this->db->get_value($sql,
 			   $this->num_tva,
 			   $this->adress,
 			   $this->country,
-			   $this->periode_dec
+			   $this->periode_dec,
+			   $this->exercice
 			   )
 		     );
 /* insert into the child table */

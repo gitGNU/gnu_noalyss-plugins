@@ -138,6 +138,7 @@ class Ext_Tva_Gen
     $this->set_parameter('flag_periode',$p_flag_quaterly);
     $this->set_parameter('periode_dec',$p_periode);
     $this->set_parameter('exercice',$p_year);
+
     try {
       $this->verify() ;
     } catch ( Exception $e) {
@@ -182,6 +183,7 @@ class Ext_Tva_Gen
     $iname=new IText('name',$this->tva_name); $str_name=$iname->input();
     $iadress=new IText('adress',$this->adress);$str_adress=$iadress->input();
     $icountry=new IText('country',$this->country);$str_country=$icountry->input();
+    $ianne=$this->exercice;
     ob_start();
     require_once('form_decl_info.php');
     $r=ob_get_contents();
