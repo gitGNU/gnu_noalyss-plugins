@@ -23,6 +23,7 @@
 /*!\file
  * \brief main file for tva
  */
+Extension::check_version(3432);
 
 $url='?'.dossier::get().'&plugin_code=tva';
 $array=array (
