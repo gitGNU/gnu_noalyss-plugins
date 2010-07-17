@@ -65,7 +65,6 @@ if ( $_GET['jrn_type'] == 'ACH') {
 		    array($attach[0]['jr_pj'],$attach[0]['jr_pj_type'],$attach[0]['jr_pj_name'],$_GET['ext_jr_id']));
   }
   /* in quant_purchase */
-  $cn->exec_sql('delete from quant_purchase where qp_internal=$1',array($_GET['ext_jr_internal']));
   $cn->exec_sql('update quant_purchase set qp_internal=$1 where qp_internal=$2',
 		array($_GET['ext_jr_internal'],$new_internal));
   
@@ -113,9 +112,9 @@ if ( $_GET['jrn_type'] == 'VEN') {
   }
 
   /* in quant_sold */
-  $cn->exec_sql('delete from quant_sold where qs_internal=$1',array($_GET['ext_jr_internal']));
   $cn->exec_sql('update quant_sold set qs_internal=$1 where qs_internal=$2',
 		array($_GET['ext_jr_internal'],$new_internal));
+
   $cn->commit();
 
 }
