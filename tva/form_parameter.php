@@ -20,7 +20,7 @@ $a++;
 			$text->with_button(true);
 			echo $text->input();
 		} else {
-		echo HtmlInput::hidden('value['.$i.']','');
+		  echo HtmlInput::hidden('value['.$i.']','');
 		}
 		$msg="";
 
@@ -254,6 +254,13 @@ function show_account($p_res,$p_code,$p_desc) {
 <TR>
 <?=show_account($res,"ATVA",_("Poste comptable utilisé pour les avances faites à la TVA"))?>
 </tr>
+<TR>
+<?=show_account($res,"CRTVA",_("Poste comptable utilisé pour les créances sur la  TVA"))?>
+</tr>
+<TR>
+<?=show_account($res,"DTTVA",_("Poste comptable utilisé pour les dettes envers la TVA"))?>
+</tr>
+
 </TABLE>
 </fieldset>
 <fieldset><legend><?=_('Aide')?></legend>

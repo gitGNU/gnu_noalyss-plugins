@@ -324,8 +324,219 @@ class Ext_Tva extends Ext_Tva_Gen
      return $r;
 
    }
+   function menu() {
+     $r='';
+     $js_record=sprintf("onclick=\"record_writing('%s',%d,%d)\"",
+			$_REQUEST['plugin_code'],
+			dossier::id(),
+			$this->da_id);
+     $array=array (
+		   array("javascript:void(0)",_("Ecriture comptable"),_("Création de l'écriture comptable"),1,$js_record),
+		   array("javascript:void(0)",_("Générer fichier"),_("Création du fichier xml"),2)
+		   );
+     $r.=ShowItem($array,'V',"mtitle","mtitle");
+     return $r;
+
+   }
+   function propose_form() {
+     $r='';
+
+     /* take all the vat code */
+     $array=$this->db->get_array("select tva_poste from tva_rate");
+     if ( empty($array)) return 'aucun compte pour la tva';
+     $max=count($array);
+     $periode=new Periode($this->db);
+     $per=$periode->limit_year($this->exercice);
+     $periode->p_id=$per['start'];
+
+     $first_day=$periode->first_day();
+     $idx=0;
+     $amount_vat=0;
+     $r.='<table class="result">';
+     for ( $i=0;$i<$max;$i++){
+       /* for each rate explode the accounting */
+       list($deb,$cred)=explode(',',$array[$i]['tva_poste']);
+
+       /* get saldo for DEBIT*/
+       $saldo=new Acc_Account_Ledger($this->db,$deb);
+       /* get label */
+       $lib=$this->db->get_value('select pcm_lib from tmp_pcmn where pcm_val=$1',array($deb));
+				
+       $cond=sprintf(" j_date >=to_date('%s','DD.MM.YYYY') and j_date <= '%s'",
+		     $first_day,
+		     $this->end_date);
+       $result=$saldo->get_solde_detail($cond);
+       if ( $result['solde']==0) continue;
+
+       $account=new IText('account['.$idx.']');
+       $account->value=$deb;
+       $amount=new INum('amount['.$idx.']');
+       $amount->value=abs($result['solde']);
+
+       $ICheckBox=new ICheckBox('deb['.$idx.']');
+       if ( $result['debit'] < $result['credit'] ) {$amount_vat-=$result['solde'];	 $ICheckBox->selected=true;} 
+       else {$amount_vat+=$result['solde'];	 $ICheckBox->selected=false;
+}
+       $idx++;
+       /* display row */
+       $r.=tr(td($account->input()).td($lib).td($amount->input()).td($ICheckBox->input()));
+       
+       /* get saldo for CREDIT*/
+       $saldo=new Acc_Account_Ledger($this->db,$cred);
+       /* get label */
+       $lib=$this->db->get_value('select pcm_lib from tmp_pcmn where pcm_val=$1',array($cred));
+				
+       $cond=sprintf(" j_date >=to_date('%s','DD.MM.YYYY') and j_date <= '%s'",
+		     $first_day,
+		     $this->end_date);
+       $result=$saldo->get_solde_detail($cond);
+       if ( $result['solde']==0) continue;
+
+       $account=new IText('account['.$idx.']');
+       $account->value=$cred;
+       $amount=new INum('amount['.$idx.']');
+       $amount->value=abs($result['solde']);
+
+       $ICheckBox=new ICheckBox('deb['.$idx.']');
+       if ( $result['debit'] < $result['credit'] ) {$amount_vat-=$result['solde'];	 $ICheckBox->selected=true;}
+       else {	 $ICheckBox->selected=false;
+	 $amount_vat+=$result['solde'];}
+       
+       /* display row */
+       $r.=tr(td($account->input()).td($lib).td($amount->input()).td($ICheckBox->input()));
+       $idx++;
+       
+     }
+     /* ATVA */
+     $atva=$this->db->get_value("select paccount from tva_belge.parameter where pcode='ATVA'");
+     if ( $atva != ''  ) {
+       /* get saldo */
+       $saldo=new Acc_Account_Ledger($this->db,$atva);
+       /* get label */
+       $lib=$this->db->get_value('select pcm_lib from tmp_pcmn where pcm_val=$1',array($atva));
+				
+       $cond=sprintf(" j_date >=to_date('%s','DD.MM.YYYY') and j_date <= '%s'",
+		     $first_day,
+		     $this->end_date);
+       $result=$saldo->get_solde_detail($cond);
+       $ICheckBox=new ICheckBox('atva_ic');
+       $account=new IText('atva');
+       $account->value=$atva;
+       $amount=new INum('atva_amount');
+       $amount->value=abs($result['solde']);
+
+       if ( $result['debit'] < $result['credit'] ) {$amount_vat-=$result['solde'];	 $ICheckBox->selected=true;}
+       else {       
+	 $ICheckBox->selected=false;
+	 $amount_vat+=$result['solde'];
+       }
+       /* display row */
+       if ( $result['solde'] != 0)       $r.=tr(td($account->input()).td('Avance TVA').td($amount->input()).td($ICheckBox->input()));
+
+     }
+     /* creance sur tva*/
+     /* CRTVA */
+     $crtva=$this->db->get_value("select paccount from tva_belge.parameter where pcode='CRTVA'");
+     if ( $crtva != ''  ) {
+       /* get saldo */
+       $saldo=new Acc_Account_Ledger($this->db,$crtva);
+       /* get label */
+       $lib=$this->db->get_value('select pcm_lib from tmp_pcmn where pcm_val=$1',array($crtva));
+				
+       $cond=sprintf(" j_date >=to_date('%s','DD.MM.YYYY') and j_date <= '%s'",
+		     $first_day,
+		     $this->end_date);
+       $result=$saldo->get_solde_detail($cond);
+       $ICheckBox=new ICheckBox('crtva_ic');
+       $account=new IText('crtva');
+       $account->value=$crtva;
+       $amount=new INum('crtva_amount');
+       $amount->value=abs($result['solde']);
+
+       if ( $result['debit'] > $result['credit']) {
+	 $amount_vat-=$result['solde'];
+	 $ICheckBox->selected=true;
+       } else {
+	 $amount_vat+=$result['solde'];
+	 $ICheckBox->selected=false;
+
+       }
+       /* display row */
+       if ( $result['solde'] != 0)  $r.=tr(td($account->input()).td('Créance compte TVA').td($amount->input()).td($ICheckBox->input()));
+
+     }
+     /* dette tva */
+     $dttva=$this->db->get_value("select paccount from tva_belge.parameter where pcode='DTTVA'");
+     if ( $dttva != ''  ) {
+       /* get saldo */
+       $saldo=new Acc_Account_Ledger($this->db,$dttva);
+       /* get label */
+       $lib=$this->db->get_value('select pcm_lib from tmp_pcmn where pcm_val=$1',array($dttva));
+				
+       $cond=sprintf(" j_date >=to_date('%s','DD.MM.YYYY') and j_date <= '%s'",
+		     $first_day,
+		     $this->end_date);
+       $result=$saldo->get_solde_detail($cond);
+       $ICheckBox=new ICheckBox('dttva_ic');
+       $account=new IText('dttva');
+       $account->value=$dttva;
+       $amount=new INum('dttva_amount');
+       $amount->value=abs($result['solde']);
+
+       if ( $result['debit'] > $result['credit'] ) {
+	 $amount_vat-=$result['solde'];
+	 $ICheckBox->selected=true;
+       } else {
+	 $ICheckBox->selected=false;
+	 $amount_vat+=$result['solde'];
+       }
+       /* display row */
+       if ( $result['solde'] != 0)       $r.=tr(td($account->input()).td('Dette Compte TVA').td($amount->input()).td($ICheckBox->input()));
+
+     }
+     /* if amount_vat > 0 then we have to pay */
+     if ( $amount_vat < 0 ) {
+       /* dette tva */
+       if ( $dttva != ''  ) {
+	 /* get label */
+	 $lib=$this->db->get_value('select pcm_lib from tmp_pcmn where pcm_val=$1',array($dttva));
+				
+	 $ICheckBox=new ICheckBox('solde_ic');
+	 $ICheckBox->selected=false;
+	 $account=new IText('solde');
+	 $account->value=$dttva;
+	 $amount=new INum('solde_amount');
+	 $amount->value=abs($amount_vat);
+
+	 /* display row */
+	 $r.=tr(td($account->input()).td('Dette Compte TVA').td($amount->input()).td($ICheckBox->input()));
+       }
+     }else {
+       /* creance tva */
+       if ( $crtva != ''  ) {
+	 /* get label */
+	 $lib=$this->db->get_value('select pcm_lib from tmp_pcmn where pcm_val=$1',array($crtva));
+				
+	 $ICheckBox=new ICheckBox('solde_ic');
+	 $ICheckBox->selected=true;
+	 $account=new IText('solde');
+	 $account->value=$crtva;
+	 $amount=new INum('solde_amount');
+	 $amount->value=abs($amount_vat);
+
+	 /* display row */
+	 $r.=tr(td($account->input()).td('Créance Compte TVA').td($amount->input()).td($ICheckBox->input()));
+       }
+
+     }
+     $r.='</table>';
+     return $r;
+   }
    function display() {
      $r= '<form id="readonly">';
+     $r.='<div style="position:absolute;top:150;right:0;width:200;right-margin:3%">';
+     $r.=$this->menu();
+     $r.='</div>';
      $r.=$this->display_info();
      $r.=$this->display_declaration_amount();
      $r.='</form>';

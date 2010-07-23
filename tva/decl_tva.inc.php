@@ -25,16 +25,20 @@
  * 
  */
 require_once('class_ext_tva.php');
+echo '<div class="content" style="width:80%;margin-left:10%">';
+
 // verify the year
 if ( isset($_REQUEST['year']) && (trim(strlen($_REQUEST['year'])) < 4 || isNumber($_REQUEST['year'] ) == 0 ||$_REQUEST['year'] < 2000||$_REQUEST['year']>2100)) {
   alert(j(_('Année invalide'.' ['.$_REQUEST['year'].']')));
   echo Ext_Tva::choose_periode();
+  echo '</div>';
   exit;
 }
 
   // if the periode is not set we have to ask it
 if ( ! isset($_REQUEST['decl']) ){
   echo Ext_Tva::choose_periode();
+  echo '</div>';
   exit;
 }
 $cn=new Database(Dossier::id());
@@ -48,6 +52,7 @@ if (isset($_POST['save'] )) {
    *@todo add a div for the button generate, get_xml, create ODS, print...
    */
 //   echo '<div style="position:absolute;z-index:14;top:25%;right:30" class="noprint">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>';
+  echo '</div>';
   exit;
 }
 
@@ -74,11 +79,12 @@ try {
   $r=$tva->compute();
 } catch (Exception $e) {
 
+  echo '<div class="content" style="width:80%;margin-left:10%">';
   echo Ext_Tva::choose_periode();
+  echo '</div>';
   exit();
   }
 require_once('form_periode.php');
-echo '<div class="content">';
 echo '<form method="post">';
 echo dossier::hidden();
 echo HtmlInput::extension();

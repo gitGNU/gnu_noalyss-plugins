@@ -20,17 +20,15 @@
 
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
 require_once('class_iselect.php');
-echo '<script language="javascript">';
-require_once('js_scripts.js');
-echo '</script>';
 
-echo '<div id="detail" style="display:none">';
+echo '<div id="detail" style="display:none; width:80%;margin-left:10%">';
 echo '<image src="image/loading.gif" border="0" alt="Chargement...">';
 echo '</div>';
 /*!\file
  * \brief show all the declaration by date
  */
-echo '<div id="main" class="content">';
+
+echo '<div id="main" class="content" style="width:80%;margin-left:10%">';
 echo '<form method="get">';
 echo _('Filtrer par ');
 $choice=new ISelect('type');
@@ -110,7 +108,7 @@ order by date_decl desc
 
 }
 $res=$cn->get_array($sql);
-echo '<table class="result" style="margin-left:25%;width:50%">';
+echo '<table class="result" >';
 echo tr(th('Type de déclaration').th('Periodicité').th('Mois/année').th('Date').th('Année'));
 for ($i=0;$i<count($res);$i++){
   $aref=sprintf('<a href="javascript:void(0)" onclick="show_declaration(\'%s\',\'%s\')">',

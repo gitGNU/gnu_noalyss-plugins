@@ -121,6 +121,11 @@ class  Tva_Parameter
    *@brief show the content of the table tva_belge.parameter
    */
   public function display() {
+    if ( $this->cn->get_value("select pcode from tva_belge.parameter where pcode='CRTVA'")=='')
+	 $this->cn->exec_sql("insert into tva_belge.parameter(pcode,pvalue,paccount) values ('CRTVA','','4119')");
+    if ( $this->cn->get_value("select pcode from tva_belge.parameter where pcode='DTTVA'")=='')
+	 $this->cn->exec_sql("insert into tva_belge.parameter(pcode,pvalue,paccount) values ('DTTVA','','4519')");
+
     $res=$this->cn->get_array("select pcode,pvalue,paccount from tva_belge.parameter");
 
     ob_start();

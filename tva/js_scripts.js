@@ -31,3 +31,61 @@ function success_show_declaration(answer) {
 function error_show_declaration() {
     alert('error_show_declaration : ajax not supported');
 }
+function record_writing(plugin,dossier,p_id) {
+    // call ajax to fill with form
+    query='?gDossier='+dossier+'&plugin_code='+plugin+'&act=rw&p_id='+p_id;
+
+    // add a section
+    show_box({id:'record_write',html:loading(),cssclass:'op_detail',style:'position:absolute;top:0;left:0%;margin-top:10%;height:80%;margin-left:10%;width:80%;',js_error:null,js_success:success_record_writing,qs:query,fixed:1,callback:'ajax.php'});
+}
+
+function success_record_writing(req) {
+    try{
+	var answer=req.responseXML;
+	var a=answer.getElementsByTagName('ctl');
+	var html=answer.getElementsByTagName('html');
+	if ( a.length == 0 ) { var rec=req.responseText;alert ('erreur :'+rec);}
+	var name_ctl=a[0].firstChild.nodeValue;
+	var code_html=getNodeText(html[0]);
+	
+	code_html=unescape_xml(code_html);
+	g(name_ctl).innerHTML=code_html;
+    } 
+    catch (e) {
+	alert("success_box"+e.message);}
+    try{
+	code_html.evalScripts();}
+    catch(e){
+	alert("answer_box Impossible executer script de la reponse\n"+e.message);}
+}
+function save_write(obj) {
+    var query="?act=sw&"+$(obj).serialize();
+    var action=new Ajax.Request ( 'ajax.php',
+				  {
+				      method:'get',
+				      parameters:query,
+				      onFailure:null,
+				      onSuccess:success_save_write
+				  });
+    return false;
+}
+function success_save_write(req){
+
+    try{
+	var answer=req.responseXML;
+	var a=answer.getElementsByTagName('ctl');
+	var html=answer.getElementsByTagName('html');
+	if ( a.length == 0 ) { var rec=req.responseText;alert ('erreur :'+rec);}
+	var name_ctl=a[0].firstChild.nodeValue;
+	var code_html=getNodeText(html[0]);
+	
+	code_html=unescape_xml(code_html);
+	g(name_ctl).innerHTML=code_html;
+    } 
+    catch (e) {
+	alert("success_box"+e.message);}
+    try{
+	code_html.evalScripts();}
+    catch(e){
+	alert("answer_box Impossible executer script de la reponse\n"+e.message);}
+}
