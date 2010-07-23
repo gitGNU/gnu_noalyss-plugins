@@ -77,7 +77,6 @@ try {
   echo '</div>';
   exit();
   }
-xdebug_enable();
 require_once('form_periode.php');
 echo '<form method="post">';
 echo dossier::hidden();
