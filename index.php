@@ -23,9 +23,9 @@
 /*!\file
  * \brief main file for tva
  */
-Extension::check_version(3432);
+Extension::check_version(3544);
 
-$url='?'.dossier::get().'&plugin_code=tva';
+$url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'];
 $array=array (
 	array($url.'&sa=dec',_('Déclaration TVA'),_('Déclaration Trimestriel ou annuel de TVA'),1),
 	array($url.'&sa=li',_('Listing intracommunautaire'),_('Listing intracommunautaire trimestriel'),2),
@@ -33,6 +33,9 @@ $array=array (
 	array($url.'&sa=ltva',_('Liste des déclarations TVA'),_('Historique des déclarations TVA'),4),
 	array($url.'&sa=param',_('Paramètrage '),_('Paramètre pour la TVA'),5)
 	);
+echo '<script language="javascript">';
+require_once('js_scripts.js');
+echo '</script>';
 
 $sa=(isset($_REQUEST['sa']))?$_REQUEST['sa']:0;
 $def=0;
@@ -89,7 +92,7 @@ if ( $a == false)
   $cn->exec_sql("alter table tva_belge.assujetti add exercice text");
 
 // show menu
-echo ShowItem($array,'H',"mtitle","mtitle",$def,' width="100%" ');
+echo ShowItem($array,'H',"mtitle","mtitle",$def,' style="width:80%;margin-left:10%;border-spacing:5;" ');
 
 // include the right file
 if ($def==1) {

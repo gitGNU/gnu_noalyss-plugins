@@ -23,17 +23,20 @@
 /*!\file
  * \brief listing intracom
  */
+echo '<div class="content" style="width:80%;margin-left:10%">';
 require_once('class_ext_list_assujetti.php');
 // verify the year
 if ( isset($_REQUEST['year']) && (trim(strlen($_REQUEST['year'])) < 4 || isNumber($_REQUEST['year'] ) == 0 ||$_REQUEST['year'] < 2000||$_REQUEST['year']>2100)) {
   alert(j(_('Année invalide'.' ['.$_REQUEST['year'].']')));
   echo Ext_List_Assujetti::choose_periode();
+  echo '</div>';
   exit;
 }
 
 // if the periode is not set we have to ask it
 if ( ! isset($_REQUEST['decl']) ){
   echo Ext_List_Assujetti::choose_periode(true);
+  echo '</div>';
   exit;
 }
 
@@ -49,7 +52,8 @@ if (isset($_POST['save'] )) {
    *@todo add a div for the button generate, get_xml, create ODS, print...
    */
 //   echo '<div style="position:absolute;z-index:14;top:25%;right:30" class="noprint">aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>';
-   exit;
+  echo '</div>';
+  exit;
 }
 
 $tva=new Ext_List_Assujetti($cn);
@@ -70,11 +74,11 @@ try {
 } catch (Exception $e) {
 
   echo Ext_List_Assujetti::choose_periode();
+  echo '</div>';
   exit();
   }
 xdebug_enable();
 require_once('form_periode.php');
-echo '<div class="content">';
 echo '<form method="post">';
 echo dossier::hidden();
 echo HtmlInput::extension();
