@@ -244,7 +244,14 @@ class Tva_Amount
     return 0;
   }
 
+/**
+ *@brief
+ * record into the ledger the operation for purging the  
+ * the vat accouting
+ */
+function record_ledger() {
 
+}
 
   /*!\brief
    *\param
