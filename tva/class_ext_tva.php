@@ -454,11 +454,11 @@ class Ext_Tva extends Ext_Tva_Gen
        $amount->value=abs($result['solde']);
 
        if ( $result['debit'] > $result['credit']) {
-	 $amount_vat-=$result['solde'];
-	 $ICheckBox->selected=true;
-       } else {
 	 $amount_vat+=$result['solde'];
 	 $ICheckBox->selected=false;
+       } else {
+	 $amount_vat-=$result['solde'];
+	 $ICheckBox->selected=true;
 
        }
        /* display row */
@@ -483,7 +483,7 @@ class Ext_Tva extends Ext_Tva_Gen
        $amount=new INum('dttva_amount');
        $amount->value=abs($result['solde']);
 
-       if ( $result['debit'] > $result['credit'] ) {
+       if ( $result['credit'] > $result['debit'] ) {
 	 $amount_vat-=$result['solde'];
 	 $ICheckBox->selected=true;
        } else {
