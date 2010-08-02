@@ -42,6 +42,8 @@ $search->javascript=sprintf('%s',$js);
   <?=$search->input()?>
 <hr>
 <?php
+echo IButton::show_calc();
+
   if ( isset($_GET['seek'])) {
     /* retrieve and show the accounting */
     if ( trim($_GET['jr_internal'])=='') {
@@ -51,6 +53,7 @@ $search->javascript=sprintf('%s',$js);
     exit();
   }
 $action=(isset ($_GET['action']))?$_GET['action']:'end';
+
 /* we need to confirm it */
 if ( $action=='confirm' ) {
   require_once('modop_confirm.php');

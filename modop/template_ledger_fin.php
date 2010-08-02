@@ -11,7 +11,7 @@
    <?=_('Numéro extrait')?> <?=$f_extrait?>
 <input type="text" disabled  id="first_sold"></span>
 </fieldset>
-<?=$str_add_button?><?=$str_cal_button?>
+<?=$str_add_button?>
    <fieldset><legend><?=_('Opérations')?></legend>
 <table id="fin_item" width="100%" border="0">
 <tr>
