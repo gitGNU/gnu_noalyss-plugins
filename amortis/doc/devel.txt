@@ -52,6 +52,7 @@ ajax
 		genere table => act=inputtable
 		div  caché mis à jour (inputtable)
 		bouton génére table
+		incl. input_detail.php
 
 	act=inputtable
 		Montre une table avec le nbre d'année, le montant par an
@@ -68,6 +69,7 @@ ajax
 
 	act=displaycard
 		montre les détails d'une fiche
+		incl. input_detail.php
 		ceux de inputdetail + inputtable + historique amortissement
 		bouton sauve=updatecard
 
