@@ -1,0 +1,72 @@
+Fonction :
+	sa=format Définir un format d'import et le sauver
+	sa=imp Importer grâce au format d'import choisi
+	sa=transf Transfèrer les opérations
+	sa=val Valider les opérations (choix journal + fiche)
+	sa=histo historique des transfert et validation
+Ecran
+=====
+1. sa = format  : incl. format.inc.php
+--------------------------------------
+	sb = ''
+	presenter liste format: bouton pour effacer(sb=rm) ou pour ajouter (sb=new)
+	template format.php
+
+	sb = new
+	Demander le separateur de décimal + séparateur de champs + format date
+	Importer fichier
+	si post alors sb = defcol
+	template format_new.php
+	
+	sb = defcol
+	affichage du fichier dans table
+	tête de la table sont des selects : date, montant, message ( note : date+montant+message utilisable pour détecter doublon)
+	si sauve alors sb=save
+	demander nom format
+	template format_defcol.php
+
+	sb=save
+	le nom format ne peut pas être vide
+	insert table importbank.format
+	template format_save.php
+
+	sb=rm 
+	confirmation en js, 
+	delete table importbank.format
+
+2. sa=imp : incl.  imp.inc.php
+------------------------------
+	sb=''
+	choix : journal cible 
+		fichier a charger
+		format a utiliser
+		sb=display
+	template import.php
+	
+	sb=display
+		montrer donnéee dans tableau (form)
+		sb=save
+	
+	sb=save
+		insert table importbank.tranfert_file
+		insert table importbank.transfert
+
+3. sa=transf
+------------
+	sb=''
+		montrer les opérations actuellement non transfèrèes
+	
+	action AJAX 
+		act=S
+		transfère l'opération dans le journal (demande confirmation avant)
+		efface la ligne du tableau
+4. sa=histo
+-----------
+	liste des transfert effectués	
+		nom du format de transfert / date / nombre d'opérations chargéee / nombre opération sauvée
+	action AJAX
+		act=hd history display
+		montre les opérations transfèrèes
+
+	
+
