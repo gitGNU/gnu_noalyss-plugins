@@ -1,0 +1,82 @@
+Amortissement
+=============
+Fonction :
+	Ajout matériel à amortir
+	Enlever matériel à amortir
+	Modifier détail matériel à amortir
+	Liste matériel à amortir
+	Génération Ecriture comptable pour opération sélectionnée
+	Liste historique amortissement (lien vers l'opération)
+	Historique amortissement matériel
+	PDF pour amortissement par matériel ou par année
+Ecran
+	sa="" Liste materiel tout en ajax listing.inc.php
+
+		bouton ajout -> ajax = act=addcard
+		Fiche clickable, montre le détail ajax=displaycard, les détails sont modifiables
+		Bouton enlever : on peut enlever une fiche ajax=deletecard
+
+
+	sa="histo" Historique histo.inc.php
+		sb="year" par année -> + sc="pdf" export PDF 
+		sb="card" par fiche + sc="pdf" export PDF   
+
+	sa="compt" Comptabilité accountancy.inc.php
+		sb="" Liste & selection des fiches pour lesquelles on génére l'écriture, etape suivante sb=genwri
+
+		sb="genwri" génére l'écriture comptable  et input choix du journal + date
+			template accountancy_write.php
+			si on sauve => savewri
+
+		sb="savewri"
+			insert into jrn & jrnx (acc_ledger)
+			insert amort.histo
+			insert amort.histo_detail
+			si echec sa="compt"
+			si reussi => sb = '' et message opération réussie
+
+ajax 
+	act=addcard param = aucun
+		demande de choisir une fiche à ajouter
+		sauve js act=inputdetail
+
+	act=inputdetail param = f_id
+		montre un form
+		input :
+		Fiche 
+		Montant à amortir
+		date de d'achat
+		nbre d'année à amortir
+		method=progressif / linéaire
+		poste comptable de contrepartie
+		genere table => act=inputtable
+		div  caché mis à jour (inputtable)
+		bouton génére table
+		incl. input_detail.php
+
+	act=inputtable
+		Montre une table avec le nbre d'année, le montant par an
+		parametre : montant , 
+			    nombre d'année 
+			    méthode : p ou l
+		fait apparaitre le bouton save
+		bouton save act=savecard
+
+	act=savecard
+		insert table amort.fiche
+		insert table amort.table
+		message réussi/echec
+
+	act=displaycard
+		montre les détails d'une fiche
+		incl. input_detail.php
+		ceux de inputdetail + inputtable + historique amortissement
+		bouton sauve=updatecard
+
+	act=updatecard
+		update table amort.fiche
+		update table amort.table
+
+	act=deletecard
+		delete amort.fiche
+		message réussi/echec
