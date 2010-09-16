@@ -88,7 +88,7 @@ class Modop_Operation
 
 
       } // for each item
-      $this->array['nb_item']=count($qp);
+      $this->array['nb_item']=(count($qp)<9)?9:count($qp);
     } // ledger ACH
     /* ---------------------------------------------------------------------- */
     // VEN
@@ -133,7 +133,7 @@ class Modop_Operation
 
 
       } // for each item
-      $this->array['nb_item']=count($qp);
+      $this->array['nb_item']=(count($qp)<9)?9:count($qp);
 
     } // ledger VEN
     /* ---------------------------------------------------------------------- */
@@ -161,7 +161,7 @@ class Modop_Operation
 	$this->array['amount'.$e]=$ods[$e]['j_montant'];
 	$this->array['ld'.$e]=$ods[$e]['j_text'];
       }
-      $this->array['nb_item']=count($ods);
+      $this->array['nb_item']=(count($qp)<9)?9:count($qp);
 
     } // ledger MISC
 ///////////////////////////////////////////////////////////////////////////
