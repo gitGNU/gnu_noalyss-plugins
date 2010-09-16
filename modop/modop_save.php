@@ -29,210 +29,236 @@ require_once('class_modop_operation.php');
 /* ---------------------------------------------------------------------- */
 // Purchase
 /* ---------------------------------------------------------------------- */
-if ( $_GET['jrn_type'] == 'ACH') {
-  $jrn=new Acc_Ledger_Purchase($cn,$_GET['p_jrn']);
-  try {
-    $op=new Modop_Operation($cn,$_GET['ext_jr_internal']);
-    $op->suspend_receipt();
-    $op->suspend_strict();
-    $pj=$_GET['e_pj'];
-    $_GET['e_pj']=microtime();
-    $new_internal=$jrn->insert($_GET);
-    $op->activate_receipt();
-    $op->activate_strict();
-  } catch(Exception $e) {
-    alert($e->getMessage());
-    exit();
-  }
-  /* we delete the old operation */
-  $cn->start();
-  /* in stock_goods */
-  $cn->exec_sql('delete from stock_goods where j_id in (select j_id from jrnx join jrn on (j_grpt=jr_grpt_id) where jr_id=$1)',
-		array($_GET['ext_jr_id']));
+if ( $_GET['jrn_type'] == 'ACH')
+{
+    $jrn=new Acc_Ledger_Purchase($cn,$_GET['p_jrn']);
+    try
+    {
+        $op=new Modop_Operation($cn,$_GET['ext_jr_internal']);
+        $op->suspend_receipt();
+        $op->suspend_strict();
+        $pj=$_GET['e_pj'];
+        $_GET['e_pj']=microtime();
+        $new_internal=$jrn->insert($_GET);
+        $op->activate_receipt();
+        $op->activate_strict();
+    }
+    catch (Exception $e)
+    {
+        alert($e->getMessage());
+        exit();
+    }
+    /* we delete the old operation */
+    $cn->start();
+    /* in stock_goods */
+    $cn->exec_sql('delete from stock_goods where j_id in (select j_id from jrnx join jrn on (j_grpt=jr_grpt_id) where jr_id=$1)',
+                  array($_GET['ext_jr_id']));
 
-  /* in jrnx */
-  $cn->exec_sql('delete from jrnx where j_grpt in (select jr_grpt_id from jrn where jr_id=$1)',
-		array($_GET['ext_jr_id']));
-		
-  /* in jrn */
-  $attach=$cn->get_array('select jr_pj,jr_pj_name,jr_pj_type from jrn where jr_id=$1',
-		 array($_GET['ext_jr_id']));
-  $cn->exec_sql('delete from jrn where jr_id=$1',array($_GET['ext_jr_id']));
-  $cn->exec_sql('update jrn set jr_id=$1,jr_internal=$2,jr_pj_number=$3 where jr_internal=$4',
-		array($_GET['ext_jr_id'],$_GET['ext_jr_internal'],$pj,$new_internal));
-  if ( $attach[0]['jr_pj_name'] != '') {
-      $cn->exec_sql('update jrn set jr_pj=$1,jr_pj_type=$2,jr_pj_name=$3 where jr_id=$4',
-		    array($attach[0]['jr_pj'],$attach[0]['jr_pj_type'],$attach[0]['jr_pj_name'],$_GET['ext_jr_id']));
-  }
-  /* in quant_purchase */
-  $cn->exec_sql('update quant_purchase set qp_internal=$1 where qp_internal=$2',
-		array($_GET['ext_jr_internal'],$new_internal));
-  
-  $cn->commit();
+    /* in jrnx */
+    $cn->exec_sql('delete from jrnx where j_grpt in (select jr_grpt_id from jrn where jr_id=$1)',
+                  array($_GET['ext_jr_id']));
+
+    /* in jrn */
+    $attach=$cn->get_array('select jr_pj,jr_pj_name,jr_pj_type from jrn where jr_id=$1',
+                           array($_GET['ext_jr_id']));
+    $cn->exec_sql('delete from jrn where jr_id=$1',array($_GET['ext_jr_id']));
+    $cn->exec_sql('update jrn set jr_id=$1,jr_internal=$2,jr_pj_number=$3 where jr_internal=$4',
+                  array($_GET['ext_jr_id'],$_GET['ext_jr_internal'],$pj,$new_internal));
+    if ( $attach[0]['jr_pj_name'] != '')
+    {
+        $cn->exec_sql('update jrn set jr_pj=$1,jr_pj_type=$2,jr_pj_name=$3 where jr_id=$4',
+                      array($attach[0]['jr_pj'],$attach[0]['jr_pj_type'],$attach[0]['jr_pj_name'],$_GET['ext_jr_id']));
+    }
+    /* in quant_purchase */
+    $cn->exec_sql('update quant_purchase set qp_internal=$1 where qp_internal=$2',
+                  array($_GET['ext_jr_internal'],$new_internal));
+
+    $cn->commit();
 }
 /* ---------------------------------------------------------------------- */
 // SOLD
 /* ---------------------------------------------------------------------- */
-if ( $_GET['jrn_type'] == 'VEN') {
-  $jrn=new Acc_Ledger_Sold($cn,$_GET['p_jrn']);
-  try {
-    $op=new Modop_Operation($cn,$_GET['ext_jr_internal']);
-    $op->suspend_receipt();
-    $op->suspend_strict();
-    $pj=$_GET['e_pj'];
-    $_GET['e_pj']=microtime();
-    $new_internal=$jrn->insert($_GET);
-    $op->activate_receipt();
-    $op->activate_strict();
-  } catch(Exception $e) {
-    alert($e->getMessage());
-    exit();
-  }
-  /* we delete the old operation */
-  $cn->start();
+if ( $_GET['jrn_type'] == 'VEN')
+{
+    $jrn=new Acc_Ledger_Sold($cn,$_GET['p_jrn']);
+    try
+    {
+        $op=new Modop_Operation($cn,$_GET['ext_jr_internal']);
+        $op->suspend_receipt();
+        $op->suspend_strict();
+        $pj=$_GET['e_pj'];
+        $_GET['e_pj']=microtime();
+        $new_internal=$jrn->insert($_GET);
+        $op->activate_receipt();
+        $op->activate_strict();
+    }
+    catch (Exception $e)
+    {
+        alert($e->getMessage());
+        exit();
+    }
+    /* we delete the old operation */
+    $cn->start();
 
-  /* in stock_goods */
-  $cn->exec_sql('delete from stock_goods where j_id in (select j_id from jrnx join jrn on (j_grpt=jr_grpt_id) where jr_id=$1)',
-		array($_GET['ext_jr_id']));
+    /* in stock_goods */
+    $cn->exec_sql('delete from stock_goods where j_id in (select j_id from jrnx join jrn on (j_grpt=jr_grpt_id) where jr_id=$1)',
+                  array($_GET['ext_jr_id']));
 
-  /* in jrnx */
-  $cn->exec_sql('delete from jrnx where j_grpt in (select jr_grpt_id from jrn where jr_id=$1)',
-		array($_GET['ext_jr_id']));
-		
-  /* in jrn */
-  $attach=$cn->get_array('select jr_pj,jr_pj_name,jr_pj_type from jrn where jr_id=$1',
-		 array($_GET['ext_jr_id']));
+    /* in jrnx */
+    $cn->exec_sql('delete from jrnx where j_grpt in (select jr_grpt_id from jrn where jr_id=$1)',
+                  array($_GET['ext_jr_id']));
 
-  $cn->exec_sql('delete from jrn where jr_id=$1',array($_GET['ext_jr_id']));
-  $cn->exec_sql('update jrn set jr_id=$1,jr_internal=$2,jr_pj_number=$3 where jr_internal=$4',
-		array($_GET['ext_jr_id'],$_GET['ext_jr_internal'],$pj,$new_internal));
-  if ( $attach[0]['jr_pj_name'] != '') {
-      $cn->exec_sql('update jrn set jr_pj=$1,jr_pj_type=$2,jr_pj_name=$3 where jr_id=$4',
-		    array($attach[0]['jr_pj'],$attach[0]['jr_pj_type'],$attach[0]['jr_pj_name'],$_GET['ext_jr_id']));
-  }
+    /* in jrn */
+    $attach=$cn->get_array('select jr_pj,jr_pj_name,jr_pj_type from jrn where jr_id=$1',
+                           array($_GET['ext_jr_id']));
 
-  /* in quant_sold */
-  $cn->exec_sql('update quant_sold set qs_internal=$1 where qs_internal=$2',
-		array($_GET['ext_jr_internal'],$new_internal));
+    $cn->exec_sql('delete from jrn where jr_id=$1',array($_GET['ext_jr_id']));
+    $cn->exec_sql('update jrn set jr_id=$1,jr_internal=$2,jr_pj_number=$3 where jr_internal=$4',
+                  array($_GET['ext_jr_id'],$_GET['ext_jr_internal'],$pj,$new_internal));
+    if ( $attach[0]['jr_pj_name'] != '')
+    {
+        $cn->exec_sql('update jrn set jr_pj=$1,jr_pj_type=$2,jr_pj_name=$3 where jr_id=$4',
+                      array($attach[0]['jr_pj'],$attach[0]['jr_pj_type'],$attach[0]['jr_pj_name'],$_GET['ext_jr_id']));
+    }
 
-  $cn->commit();
+    /* in quant_sold */
+    $cn->exec_sql('update quant_sold set qs_internal=$1 where qs_internal=$2',
+                  array($_GET['ext_jr_internal'],$new_internal));
+
+    $cn->commit();
 
 }
 /* ---------------------------------------------------------------------- */
 // ODS
 /* ---------------------------------------------------------------------- */
-if ( $_GET['jrn_type'] == 'ODS') {
-  $jrn=new Acc_Ledger($cn,$_GET['p_jrn']);
-  try {
-    $op=new Modop_Operation($cn,$_GET['ext_jr_internal']);
-    $op->suspend_receipt();
-    $op->suspend_strict();
-    $pj=$_GET['e_pj'];
-    $_GET['e_pj']=microtime();
-    $jrn->save($_GET);
-    $new_internal=$jrn->internal;
-    $op->activate_receipt();
-    $op->activate_strict();
-  } catch(Exception $e) {
-    alert($e->getMessage());
-    exit();
-  }
-  /* we delete the old operation */
-  $cn->start();
+if ( $_GET['jrn_type'] == 'ODS')
+{
+    $jrn=new Acc_Ledger($cn,$_GET['p_jrn']);
+    try
+    {
+        $op=new Modop_Operation($cn,$_GET['ext_jr_internal']);
+        $op->suspend_receipt();
+        $op->suspend_strict();
+        $pj=$_GET['e_pj'];
+        $_GET['e_pj']=microtime();
+        $jrn->save($_GET);
+        $new_internal=$jrn->internal;
+        $op->activate_receipt();
+        $op->activate_strict();
+    }
+    catch (Exception $e)
+    {
+        alert($e->getMessage());
+        exit();
+    }
+    /* we delete the old operation */
+    $cn->start();
 
-  /* in jrnx */
-  $cn->exec_sql('delete from jrnx where j_grpt in (select jr_grpt_id from jrn where jr_id=$1)',
-		array($_GET['ext_jr_id']));
-		
-  /* in jrn */
-  $attach=$cn->get_array('select jr_pj,jr_pj_name,jr_pj_type from jrn where jr_id=$1',
-		 array($_GET['ext_jr_id']));
-  $cn->exec_sql('delete from jrn where jr_id=$1',array($_GET['ext_jr_id']));
-  $cn->exec_sql('update jrn set jr_id=$1,jr_internal=$2,jr_pj_number=$3 where jr_internal=$4',
-		array($_GET['ext_jr_id'],$_GET['ext_jr_internal'],$pj,$new_internal));
-  if ( $attach[0]['jr_pj_name'] != '') {
-      $cn->exec_sql('update jrn set jr_pj=$1,jr_pj_type=$2,jr_pj_name=$3 where jr_id=$4',
-		    array($attach[0]['jr_pj'],$attach[0]['jr_pj_type'],$attach[0]['jr_pj_name'],$_GET['ext_jr_id']));
-  }
+    /* in jrnx */
+    $cn->exec_sql('delete from jrnx where j_grpt in (select jr_grpt_id from jrn where jr_id=$1)',
+                  array($_GET['ext_jr_id']));
 
-  $cn->commit();
+    /* in jrn */
+    $attach=$cn->get_array('select jr_pj,jr_pj_name,jr_pj_type from jrn where jr_id=$1',
+                           array($_GET['ext_jr_id']));
+    $cn->exec_sql('delete from jrn where jr_id=$1',array($_GET['ext_jr_id']));
+    $cn->exec_sql('update jrn set jr_id=$1,jr_internal=$2,jr_pj_number=$3 where jr_internal=$4',
+                  array($_GET['ext_jr_id'],$_GET['ext_jr_internal'],$pj,$new_internal));
+    if ( $attach[0]['jr_pj_name'] != '')
+    {
+        $cn->exec_sql('update jrn set jr_pj=$1,jr_pj_type=$2,jr_pj_name=$3 where jr_id=$4',
+                      array($attach[0]['jr_pj'],$attach[0]['jr_pj_type'],$attach[0]['jr_pj_name'],$_GET['ext_jr_id']));
+    }
+
+    $cn->commit();
 
 }
 
 /* ---------------------------------------------------------------------- */
 // Purchase
 /* ---------------------------------------------------------------------- */
-if ( $_GET['jrn_type'] == 'FIN') {
-  extract ($_GET);
-  $user=new User($cn);
-  try {
-    /*  verify if the card can be used in this ledger */
-    if ( $user->check_jrn($p_jrn) != 'W' )
-      throw new Exception (_('Accès interdit'),20);
-    /* check if there is a customer */
-    if ( strlen(trim($e_bank_account)) == 0 ) 
-      throw new Exception(_('Vous n\'avez pas donné de banque'),11);
-  
-  /*  check if the date is valid */
-  if ( isDate($e_date) == null ) {
-    throw new Exception('Date invalide', 2);
+if ( $_GET['jrn_type'] == 'FIN')
+{
+    extract ($_GET);
+    $user=new User($cn);
+    try
+    {
+        /*  verify if the card can be used in this ledger */
+        if ( $user->check_jrn($p_jrn) != 'W' )
+            throw new Exception (_('Accès interdit'),20);
+        /* check if there is a customer */
+        if ( strlen(trim($e_bank_account)) == 0 )
+            throw new Exception(_('Vous n\'avez pas donné de banque'),11);
+
+        /*  check if the date is valid */
+        if ( isDate($e_date) == null )
+        {
+            throw new Exception('Date invalide', 2);
+        }
+        $fiche=new fiche($cn);
+        $fiche->get_by_qcode($e_bank_account);
+        if ( $fiche->empty_attribute(ATTR_DEF_ACCOUNT) == true)
+            throw new Exception('La fiche '.$e_bank_account.'n\'a pas de poste comptable',8);
+        if ( $fiche->belong_ledger($p_jrn,'deb') !=1 )
+            throw new Exception('La fiche '.$e_bank_account.'n\'est pas accessible à ce journal',10);
+        $fiche=new fiche($cn);
+        $fiche->get_by_qcode($e_other);
+        if ( $fiche->empty_attribute(ATTR_DEF_ACCOUNT) == true)
+            throw new Exception('La fiche '.$e_other.'n\'a pas de poste comptable',8);
+        if ( $fiche->belong_ledger($p_jrn,'deb') !=1 )
+            throw new Exception('La fiche '.$e_other.'n\'est pas accessible à ce journal',10);
+        if ( isNumber($ {'e_other_amount'}) == 0 )
+            throw new Exception('La fiche '.$e_other.'a un montant invalide ['.$e_other_amount.']',6);
     }
-  $fiche=new fiche($cn);
-  $fiche->get_by_qcode($e_bank_account);
-  if ( $fiche->empty_attribute(ATTR_DEF_ACCOUNT) == true)
-    throw new Exception('La fiche '.$e_bank_account.'n\'a pas de poste comptable',8);
-  if ( $fiche->belong_ledger($p_jrn,'deb') !=1 )
-    throw new Exception('La fiche '.$e_bank_account.'n\'est pas accessible à ce journal',10);
-  $fiche=new fiche($cn);
-  $fiche->get_by_qcode($e_other);
-  if ( $fiche->empty_attribute(ATTR_DEF_ACCOUNT) == true)
-    throw new Exception('La fiche '.$e_other.'n\'a pas de poste comptable',8);
-  if ( $fiche->belong_ledger($p_jrn,'deb') !=1 )
-	throw new Exception('La fiche '.$e_other.'n\'est pas accessible à ce journal',10);
-   if ( isNumber(${'e_other_amount'}) == 0 )
-	throw new Exception('La fiche '.$e_other.'a un montant invalide ['.$e_other_amount.']',6);
-  } catch (Exception $e) {
-    echo $e->getMessage();
-    exit();
-  }
-
-  try {
-    $cn->start();
-    /* find periode thanks the date */
-    $periode=new Periode($cn);
-    $periode->find_periode($e_date);
-    if ($periode->is_closed()) 
-      throw new Exception ('Période fermée');
-
-    /* update amount */
-    $cn->exec_sql("update jrnx set j_montant=$1,j_jrn_def=$3,j_date=to_date($4,'DD.MM.YYYY'),j_tech_per=$5,j_tech_date=now() where j_grpt in (select jr_grpt_id from jrn where jr_id=$2)",array(abs($e_other_amount),$ext_jr_id,$p_jrn,$e_date,$periode->p_id));
-
-
-    /* in jrn */
-    $cn->exec_sql("update jrn set jr_montant=$1,jr_comment=$2,jr_date=to_date($3,'DD.MM.YYYY'),jr_def_id=$4,jr_tech_per=$5,jr_pj_number=$6,jr_tech_date=now() where jr_id=$7",
-		  array(abs($e_other_amount),$e_other_comment,$e_date,$p_jrn,$periode->p_id,$e_pj,$ext_jr_id));    
-  /* in quant_fin */
-    /* find the f_id of the bank */
-    $fbank=new Fiche($cn);
-    $fbank->get_by_qcode($e_bank_account);
-    $post_bank=$fbank->strAttribut(ATTR_DEF_ACCOUNT);
-
-    $fother=new Fiche($cn);
-    $fother->get_by_qcode($e_other);
-    $post_other=$fother->strAttribut(ATTR_DEF_ACCOUNT);
-    if ($e_other_amount > 0 ) {
-      $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=false and j_grpt in (select jr_grpt_id from jrn where jr_id=$3)',array($post_other,$e_other,$ext_jr_id));
-      $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=true  and j_grpt in (select jr_grpt_id from jrn where jr_id=$3)',array($post_bank,$e_bank_account,$ext_jr_id));
-    } else {
-      $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=false  and j_grpt in (select jr_grpt_id from jrn where jr_id=$3)',array($post_bank,$e_bank_account,$ext_jr_id));
-      $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=true  and j_grpt in (select jr_grpt_id from jrn where jr_id=$3)',array($post_other,$e_other,$ext_jr_id));
+    catch (Exception $e)
+    {
+        echo $e->getMessage();
+        exit();
     }
-    $cn->exec_sql('update quant_fin set qf_bank=$1,qf_amount=$3,qf_other=$2 where jr_id=$4',array($fbank->id,$fother->id,$e_other_amount,$ext_jr_id));
-    $cn->commit();
-  } catch (Exception $e) {
-    $cn->rollback();
-    echo $e->getMessage();
-    exit();
-  }
-  echo h2info('Opération sauvée');
+
+    try
+    {
+        $cn->start();
+        /* find periode thanks the date */
+        $periode=new Periode($cn);
+        $periode->find_periode($e_date);
+        if ($periode->is_closed())
+            throw new Exception ('Période fermée');
+
+        /* update amount */
+        $cn->exec_sql("update jrnx set j_montant=$1,j_jrn_def=$3,j_date=to_date($4,'DD.MM.YYYY'),j_tech_per=$5,j_tech_date=now() where j_grpt in (select jr_grpt_id from jrn where jr_id=$2)",array(abs($e_other_amount),$ext_jr_id,$p_jrn,$e_date,$periode->p_id));
+
+
+        /* in jrn */
+        $cn->exec_sql("update jrn set jr_montant=$1,jr_comment=$2,jr_date=to_date($3,'DD.MM.YYYY'),jr_def_id=$4,jr_tech_per=$5,jr_pj_number=$6,jr_tech_date=now() where jr_id=$7",
+                      array(abs($e_other_amount),$e_other_comment,$e_date,$p_jrn,$periode->p_id,$e_pj,$ext_jr_id));
+        /* in quant_fin */
+        /* find the f_id of the bank */
+        $fbank=new Fiche($cn);
+        $fbank->get_by_qcode($e_bank_account);
+        $post_bank=$fbank->strAttribut(ATTR_DEF_ACCOUNT);
+
+        $fother=new Fiche($cn);
+        $fother->get_by_qcode($e_other);
+        $post_other=$fother->strAttribut(ATTR_DEF_ACCOUNT);
+        if ($e_other_amount > 0 )
+        {
+            $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=false and j_grpt in (select jr_grpt_id from jrn where jr_id=$3)',array($post_other,$e_other,$ext_jr_id));
+            $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=true  and j_grpt in (select jr_grpt_id from jrn where jr_id=$3)',array($post_bank,$e_bank_account,$ext_jr_id));
+        }
+        else
+        {
+            $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=false  and j_grpt in (select jr_grpt_id from jrn where jr_id=$3)',array($post_bank,$e_bank_account,$ext_jr_id));
+            $cn->exec_sql('update jrnx set j_poste=$1,j_qcode=$2 where j_debit=true  and j_grpt in (select jr_grpt_id from jrn where jr_id=$3)',array($post_other,$e_other,$ext_jr_id));
+        }
+        $cn->exec_sql('update quant_fin set qf_bank=$1,qf_amount=$3,qf_other=$2 where jr_id=$4',array($fbank->id,$fother->id,$e_other_amount,$ext_jr_id));
+        $cn->commit();
+    }
+    catch (Exception $e)
+    {
+        $cn->rollback();
+        echo $e->getMessage();
+        exit();
+    }
+    echo h2info('Opération sauvée');
 }
