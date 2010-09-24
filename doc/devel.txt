@@ -1,0 +1,6 @@
+1. Déplacer des opérations d'un journal vers un autre, obligatoirement de
+même type
+2. Rénuméroter des pj pour un journal, selection une plage de date, un journal, un préfixe et un nombre de début.
+3. Changement poste comptable dans opération, limite date
+3. Changement fiche dans opération, limite date
+
