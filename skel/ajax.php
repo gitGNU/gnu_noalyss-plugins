@@ -1,4 +1,5 @@
 <?php
+require_once('skel_constant.php');
 require_once('class_database.php');
 require_once('class_ext_tva.php');
 require_once('class_ibutton.php');
@@ -6,54 +7,27 @@ require_once ('class_ext_list_intra.php');
 require_once ('class_ext_list_assujetti.php');
 
 extract($_GET);
-$cn=new Database($gDossier);
+global $cn;
 $html='';$extra='';$ctl='';
+ob_start();
 switch($act) {
 case 'dsp_decl':
   /* the hide button */
-  $button=new IButton('hide');
-  $button->label=_('Retour');
-  $button->javascript="$('detail').hide();$('main').show();";
-  if ( $type == 1) {
-    /* display the declaration of amount */
-    $decl=new Ext_Tva($cn);
-    $decl->set_parameter('id',$id);
-    $decl->load();
-    $r=$button->input();
-    $r.=$decl->display();
-    $r.=$button->input();
-  }
-  if ( $type == 3) {
-    /* display the declaration of amount */
-    $decl=new Ext_List_Intra($cn);
-    $decl->set_parameter('id',$id);
-    $decl->load();
-    $r=$button->input();
-    $r.=$decl->display();
-    $r.=$button->input();
-  }
-  if ( $type == 2) {
-    /* display the declaration of amount */
-    $decl=new Ext_List_Assujetti($cn);
-    $decl->set_parameter('id',$id);
-    $decl->load();
-    $r=$button->input();
-    $r.=$decl->display();
-    $r.=$button->input();
-  }
-
+  require_once('include/ajax_dsp.php');
   break;
 }
 
-$html=escape_xml($r);
+$html=ob_get_contents();
+
+ob_clean();
+
+$html=escape_xml($html);
 
 header('Content-type: text/xml; charset=UTF-8');
-echo <<<EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<data>
-<ctl>$ctl</ctl>
-<html>$html</html>
-<extra>$extra</extra>
-</data>
-EOF;
+echo '<?xml version="1.0" encoding="UTF-8"?>';
+echo '<data>';
+echo "<ctl>$ctl</ctl>";
+echo "<html>$html</html>";
+echo "<extra>$extra</extra>";
+eco "</data>";
 ?>
