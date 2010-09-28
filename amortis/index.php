@@ -30,46 +30,51 @@ $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'];
 
 $cn=new Database (dossier::id());
 
-if ( $cn->exist_schema('amort') ==false ){
-  require_once('class_install_plugin.php');
-  $plugin=new Install_Plugin($cn);
-  $plugin->install();
-}
+if ( $cn->exist_schema('amort') ==false )
+  {
+    require_once('class_install_plugin.php');
+    $plugin=new Install_Plugin($cn);
+    $plugin->install();
+  }
 
 $menu=array(
-	    array($url.'&sa=card','Biens amortissables','Liste des biens amortissables',1),
-	    array($url.'&sa=report','Rapport','rapport et  tableaux sur les biens amortissables',2),
-	    array($url.'&sa=util','Utilitaire','Génération écriture comptable',3)
-	    );
-	    
+        array($url.'&sa=card','Biens amortissables','Liste des biens amortissables',1),
+        array($url.'&sa=report','Rapport','rapport et  tableaux sur les biens amortissables',2),
+        array($url.'&sa=util','Utilitaire','Génération écriture comptable',3)
+      );
+
 
 $sa=(isset($_REQUEST['sa']))?$_REQUEST['sa']:0;
 $def=0;
 
-switch($sa) {
-case 'card':
-  $def=1;
-  break;
-case 'report':
-  $def=2;
-  break;
-case 'util':
-  $def=3;
-  break;
-}
+switch($sa)
+  {
+  case 'card':
+    $def=1;
+    break;
+  case 'report':
+    $def=2;
+    break;
+  case 'util':
+    $def=3;
+    break;
+  }
 
 /* List + add and modify card */
-if ($def==1) {
-  require_once('am_card.php');
-  exit();
-}
+if ($def==1)
+  {
+    require_once('include/am_card.php');
+    exit();
+  }
 /* report */
-if ( $def==2) {
-  require_once('am_print.php');
-  exit();
-}
+if ( $def==2)
+  {
+    require_once('include/am_print.php');
+    exit();
+  }
 /* Utility : write in accountancy */
-if ( $def==3) {
-  require_once('am_util.php');
-  exit();
-}
+if ( $def==3)
+  {
+    require_once('include/am_util.php');
+    exit();
+  }
