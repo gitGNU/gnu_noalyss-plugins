@@ -55,7 +55,7 @@ class Ext_List_Assujetti extends Listing {
     $str_hidden=HtmlInput::extension().dossier::hidden();
     if (isset($_REQUEST['sa']))
       $str_hidden.=HtmlInput::hidden('sa',$_REQUEST['sa']);
-    $r='<form method="get">';
+    $r='<form class="print" method="get">';
     $r.="Année :".$str_year;
     $r.=$str_submit;
     $r.=$str_hidden;

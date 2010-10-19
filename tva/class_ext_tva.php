@@ -533,7 +533,7 @@ class Ext_Tva extends Ext_Tva_Gen
      return $r;
    }
    function display() {
-     $r= '<form id="readonly">';
+     $r= '<form class="print" id="readonly">';
      $r.='<div style="position:absolute;top:150;right:0;width:200;right-margin:3%">';
      $r.=$this->menu();
      $r.='</div>';

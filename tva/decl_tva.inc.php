@@ -85,7 +85,7 @@ try {
   exit();
   }
 require_once('form_periode.php');
-echo '<form method="post">';
+echo '<form class="print" method="post">';
 echo dossier::hidden();
 echo HtmlInput::extension();
 echo HtmlInput::hidden('start_periode',$tva->start_periode);
