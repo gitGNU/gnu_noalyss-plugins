@@ -98,7 +98,7 @@ class Ext_List_Assujetti extends Listing {
     $this->exercice=$p_array['exercice'];
   }
   function display() {
-    $r= '<form id="readonly">';
+    $r= '<form class="print" id="readonly">';
     $r.=$this->display_info();
     $r.=$this->display_declaration_amount();
     $r.='</form>';
