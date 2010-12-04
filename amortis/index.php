@@ -23,14 +23,23 @@
 /*!\file
  * \brief main entry
  */
-
+require_once('amortis_constant.php');
 require_once('class_database.php');
 require_once('class_dossier.php');
+/*
+ * load javascript
+ */
+ob_start();
+require_once('amortize_javascript.js');
+$j=ob_get_contents();
+ob_clean();
+echo create_script($j);
+
 $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'];
 
 $cn=new Database (dossier::id());
 
-if ( $cn->exist_schema('amort') ==false )
+if ( $cn->exist_schema('amortissement') ==false )
   {
     require_once('class_install_plugin.php');
     $plugin=new Install_Plugin($cn);
@@ -59,6 +68,8 @@ switch($sa)
     $def=3;
     break;
   }
+
+echo ShowItem($menu,'H','mtitle ','mtitle ',$def,' style="width:80%;margin-left:10%;border-collapse: separate;border-spacing:  5px;"');
 
 /* List + add and modify card */
 if ($def==1)

@@ -27,3 +27,5 @@
  * - ...
  */
 
+echo '<div class="content" style="width:80%;margin-left:10%">';
+echo '</div>';

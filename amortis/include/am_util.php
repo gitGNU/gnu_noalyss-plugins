@@ -24,3 +24,6 @@
  * \brief let you generate the accounting for the paid off for a selected
  *  year
  */
+
+echo '<div class="content" style="width:80%;margin-left:10%">';
+echo '</div>';

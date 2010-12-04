@@ -21,19 +21,40 @@
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
 
 /*!\file
- * \brief display a list of card to be paid off, let modify, remove or add
- * included from index.php
+ * \brief let you add all the materiel you need to amortize
  */
-require_once('class_am_card.php');
+require_once('class_amortissement_sql.php');
 
-$good=new Am_Card();
-/* show simply the listing, in the top, there is a button to add
- * a card, if we click on a card, we get the details and the table of
- * report
- */
-$but= $good->add_card();
-echo '<div class="content" style="width:80%;margin-left:10%">';
-echo $but->input();
-echo $good->listing();
-echo $but->input();
-echo '</div>';
+class Am_Card
+{
+  function __construct()
+  {
+  }
+  /**
+   *@brief display the list of material
+   */
+  public function  listing()
+  {
+    global $cn;
+    $amort=new Amortissement_Sql($cn);
+    $ret=$amort->seek();
+    for ( $i=0;$i<0;$i++)
+      {
+	$a=$amort->fetch($ret,$i);
+	
+      }
+  }
+  /**
+   *@brief display a button to add a material
+   */
+  public function add_card()
+  {
+    $add=new IButton('add_card');
+    $add->label="Ajout d'un bien à amortir";
+    $add->javascript=sprintf("add_material(%d,'%s','bx_mat')",
+			     dossier::id(),
+			     $_REQUEST['plugin_code']
+			     );
+    return $add;
+  }
+}
