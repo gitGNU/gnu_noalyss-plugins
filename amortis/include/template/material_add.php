@@ -1,9 +1,10 @@
 <h2 class="info">Ajout de matériel</h2>
 <form method="get" onsubmit="save_new_material(this)">
+<span style="text-align:center;display:block;font-size:2em" id="p_card_label"  >Nouveau matériel</span>
 <table>
 <tr>
 	<td>Fiche</td>
-	<td><?=$p_card->input()?></td>
+	<td><?=$p_card->input()?><?=$p_card->search()?></td>
 </tr>
 <tr>
 	<td>Montant à amortir</td>
@@ -41,6 +42,11 @@
 	<td></td>
 </tr>
 </table>
+<?
+	echo HtmlInput::button('close','Annuler',"onclick=\"removeDiv('$t')\"");
+	echo HtmlInput::submit('sauver','sauver');
+	echo HtmlInput::extension();
+	echo dossier::hidden();
 
-
+?>
 </form>

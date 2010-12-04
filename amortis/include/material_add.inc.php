@@ -27,8 +27,14 @@ $date=new IDate('p_date');
 $p_year=new INum('p_year');
 $p_number=new INum('p_number');
 $p_card=new ICard('p_card');
-$p_card->size=50;
-$p_card->typecard=7;
+$p_card->size=25;
+$p_card->set_attribute('typecard',7);
+$p_card->set_attribute('label','p_card_label');
+$p_card->javascript=sprintf(' onchange="fill_data_onchange(\'%s\');" ',
+            $p_card->name);
+$p_card->set_function('fill_data');
+$p_card->set_dblclick("fill_ipopcard(this);");
+
 $p_deb=new IPoste('p_deb');
 $p_deb->set_attribute('jrn',0);
 $p_deb->set_attribute('account','p_deb');
