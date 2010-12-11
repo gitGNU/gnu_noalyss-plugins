@@ -1,7 +1,7 @@
 <?php
   /**
    *@file
-   *@brief Manage the table amortissement.amortissement
+   *@brief Manage the table amortissement.amortissement_detail
    *
    *
    Example
@@ -14,29 +14,27 @@ require_once('ac_common.php');
 
 
 /**
- *@brief Manage the table amortissement.amortissement
+ *@brief Manage the table amortissement.amortissement_detail
  */
-class Amortissement_Sql
+class Amortissement_Detail_Sql
 {
   /* example private $variable=array("easy_name"=>column_name,"email"=>"column_name_email","val3"=>0); */
 
-  protected $variable=array("a_id"=>"a_id","f_id"=>"f_id"
-			    ,"account_deb"=>"account_deb"
-			    ,"account_cred"=>"account_cred"
-			    ,"a_start"=>"a_start"
-			    ,"a_amount"=>"a_amount"
-			    ,"a_nb_year"=>"a_nb_year"
+  protected $variable=array("ad_id"=>"ad_id","ad_percentage"=>"ad_percentage"
+			    ,"ad_year"=>"ad_year"
+			    ,"ad_amount"=>"ad_amount"
+			    ,"a_id"=>"a_id"
 			    );
   function __construct ( & $p_cn,$p_id=-1)
   {
     $this->cn=$p_cn;
-    $this->a_id=$p_id;
+    $this->ad_id=$p_id;
 
     if ( $p_id == -1 )
       {
 	/* Initialize an empty object */
 	foreach ($this->variable as $key=>$value) $this->$value='';
-	$this->a_id=$p_id;
+	$this->ad_id=$p_id;
       }
     else
       {
@@ -73,21 +71,19 @@ class Amortissement_Sql
   {
     // Verify that the elt we want to add is correct
     /* verify only the datatype */
-    if ( settype($this->f_id,'float') == false )
-      throw new Exception('DATATYPE f_id $this->f_id non numerique');
-    if ( settype($this->a_start,'float') == false )
-      throw new Exception('DATATYPE a_start $this->a_start non numerique');
-    if ( settype($this->a_amount,'float') == false )
-      throw new Exception('DATATYPE a_amount $this->a_amount non numerique');
-    if ( settype($this->a_nb_year,'float') == false )
-      throw new Exception('DATATYPE a_nb_year $this->a_nb_year non numerique');
+    if ( settype($this->ad_year,'float') == false )
+      throw new Exception('DATATYPE ad_year $this->ad_year non numerique');
+    if ( settype($this->ad_amount,'float') == false )
+      throw new Exception('DATATYPE ad_amount $this->ad_amount non numerique');
+    if ( settype($this->a_id,'float') == false )
+      throw new Exception('DATATYPE a_id $this->a_id non numerique');
 
 
   }
   public function save()
   {
     /* please adapt */
-    if (  $this->a_id == -1 )
+    if (  $this->ad_id == -1 )
       $this->insert();
     else
       $this->update();
@@ -102,7 +98,7 @@ class Amortissement_Sql
    */
   public function seek($cond='',$p_array=null)
   {
-    $sql="select * from amortissement.amortissement  $cond";
+    $sql="select * from amortissement.amortissement_detail  $cond";
     $aobj=array();
     $array= $this->cn->get_array($sql,$p_array);
     // map each row in a object
@@ -110,7 +106,7 @@ class Amortissement_Sql
     if ( $size == 0 ) return $aobj;
     for ($i=0; $i<$size; $i++)
       {
-	$oobj=new Amortissement_Sql ($this->cn);
+	$oobj=new Amortissement_Detail_Sql ($this->cn);
 	foreach ($array[$i] as $idx=>$value)
 	  {
 	    $oobj->$idx=$value;
@@ -122,61 +118,49 @@ class Amortissement_Sql
   public function insert()
   {
     if ( $this->verify() != 0 ) return;
-    if ( $this->a_id==-1 )
+    if ( $this->ad_id==-1 )
       {
 	/*  please adapt */
-	$sql="insert into amortissement.amortissement(f_id
-                     ,account_deb
-                     ,account_cred
-                     ,a_start
-                     ,a_amount
-                     ,a_nb_year
+	$sql="insert into amortissement.amortissement_detail(ad_percentage
+                     ,ad_year
+                     ,ad_amount
+                     ,a_id
                      ) values ($1
                      ,$2
                      ,$3
                      ,$4
-                     ,$5
-                     ,$6
-                     ) returning a_id";
+                     ) returning ad_id";
 
-	$this->a_id=$this->cn->get_value(
-					 $sql,
-					 array( $this->f_id
-						,$this->account_deb
-						,$this->account_cred
-						,$this->a_start
-						,$this->a_amount
-						,$this->a_nb_year
-						)
-					 );
+	$this->ad_id=$this->cn->get_value(
+					  $sql,
+					  array( $this->ad_percentage
+						 ,$this->ad_year
+						 ,$this->ad_amount
+						 ,$this->a_id
+						 )
+					  );
       }
     else
       {
-	$sql="insert into amortissement.amortissement(f_id
-                     ,account_deb
-                     ,account_cred
-                     ,a_start
-                     ,a_amount
-                     ,a_nb_year
-                     ,a_id) values ($1
+	$sql="insert into amortissement.amortissement_detail(ad_percentage
+                     ,ad_year
+                     ,ad_amount
+                     ,a_id
+                     ,ad_id) values ($1
                      ,$2
                      ,$3
                      ,$4
                      ,$5
-                     ,$6
-                     ,$7
-                     ) returning a_id";
+                     ) returning ad_id";
 
-	$this->a_id=$this->cn->get_value(
-					 $sql,
-					 array( $this->f_id
-						,$this->account_deb
-						,$this->account_cred
-						,$this->a_start
-						,$this->a_amount
-						,$this->a_nb_year
-						,$this->a_id)
-					 );
+	$this->ad_id=$this->cn->get_value(
+					  $sql,
+					  array( $this->ad_percentage
+						 ,$this->ad_year
+						 ,$this->ad_amount
+						 ,$this->a_id
+						 ,$this->ad_id)
+					  );
 
       }
 
@@ -186,22 +170,18 @@ class Amortissement_Sql
   {
     if ( $this->verify() != 0 ) return;
     /*   please adapt */
-    $sql=" update amortissement.amortissement set f_id = $1
-                 ,account_deb = $2
-                 ,account_cred = $3
-                 ,a_start = $4
-                 ,a_amount = $5
-                 ,a_nb_year = $6
-                 where a_id= $7";
+    $sql=" update amortissement.amortissement_detail set ad_percentage = $1
+                 ,ad_year = $2
+                 ,ad_amount = $3
+                 ,a_id = $4
+                 where ad_id= $5";
     $res=$this->cn->exec_sql(
 			     $sql,
-			     array($this->f_id
-				   ,$this->account_deb
-				   ,$this->account_cred
-				   ,$this->a_start
-				   ,$this->a_amount
-				   ,$this->a_nb_year
-				   ,$this->a_id)
+			     array($this->ad_percentage
+				   ,$this->ad_year
+				   ,$this->ad_amount
+				   ,$this->a_id
+				   ,$this->ad_id)
 			     );
 
   }
@@ -212,17 +192,15 @@ class Amortissement_Sql
   public function load()
   {
 
-    $sql="select f_id
-                 ,account_deb
-                 ,account_cred
-                 ,a_start
-                 ,a_amount
-                 ,a_nb_year
-                 from amortissement.amortissement where a_id=$1";
+    $sql="select ad_percentage
+                 ,ad_year
+                 ,ad_amount
+                 ,a_id
+                 from amortissement.amortissement_detail where ad_id=$1";
     /* please adapt */
     $res=$this->cn->get_array(
 			      $sql,
-			      array($this->a_id)
+			      array($this->ad_id)
 			      );
 
     if ( count($res) == 0 )
@@ -241,16 +219,17 @@ class Amortissement_Sql
 
   public function delete()
   {
-    $sql="delete from amortissement.amortissement where a_id=$1";
-    $res=$this->cn->exec_sql($sql,array($this->a_id));
+    $sql="delete from amortissement.amortissement_detail where ad_id=$1";
+    $res=$this->cn->exec_sql($sql,array($this->ad_id));
   }
   /**
    * Unit test for the class
    */
   static function test_me()
   {
+
   }
 
 }
-// Amortissement_Sql::test_me();
+// Amortissement_Detail_Sql::test_me();
 ?>

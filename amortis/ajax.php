@@ -37,10 +37,23 @@ $close.='</div>';
 $html=$close.$html;
 switch($op)
   {
+    /*
+     * Show a form to add new material
+     */
   case 'add_mat':
     ob_start();
     echo $close;
     require_once('include/material_add.inc.php');
+    $html=ob_get_contents();
+    ob_clean();
+    break;
+    /*
+     * save the new material
+     */
+  case 'save_new_material':
+    ob_start();
+    echo $close;
+    require_once('include/material_new.inc.php');
     $html=ob_get_contents();
     ob_clean();
     break;

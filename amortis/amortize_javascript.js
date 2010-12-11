@@ -36,10 +36,6 @@ function add_material(dossier_id,plugin_code,target)
 }
 function success_add_material(req)
 {
-    var answer=req.responseXML;
-    var a=answer.getElementsByTagName('ctl');
-    var name_ctl=a[0].firstChild.nodeValue;
-
     fill_box(req);
 
 }
@@ -53,14 +49,15 @@ function error_ajax() {
 function save_new_material(obj)
 {
 
-    var querystring="?"+$(obj).serialize()+'&op=save_new_material';
+    var querystring="?"+$(obj).serialize()+'&op=save_new_material&t=bx_mat';
+
     // Create a ajax request to get all the person
     var action = new Ajax.Request ('ajax.php',
 				   {
-				       method:			 'get',
-				       parameters:			 querystring,
-				       onFailure:			 error_ajax,
-				       onSuccess:			 success_save_new_material
+				       method: 'post',
+				       parameters: querystring,
+				       onFailure: error_ajax,
+				       onSuccess: success_save_new_material
 				   }
                                   );
 
@@ -69,23 +66,6 @@ function save_new_material(obj)
 
 function success_save_new_material(req)
 {
-    try{
-	var answer=req.responseXML;
-	var a=answer.getElementsByTagName('ctl');
-	var html=answer.getElementsByTagName('code');
-	if ( a.length == 0 ) { var rec=req.responseText;alert ('erreur :'+rec);}
-	var name_ctl=a[0].firstChild.nodeValue;
-	var code_html=getNodeText(html[0]); // Firefox ne prend que les 4096 car.
-	code_html=unescape_xml(code_html);
-	$(name_ctl).innerHTML=code_html;
-    } 
-    catch (e) {
-	alert(e.message);}
-    try{
-	code_html.evalScripts();}
-    catch(e){
-	alert("Impossible executer script de la reponse\n"+e.message);
-    }
-
-
+    fill_box(req);
+    $('bx_mat').style.height='auto';
 }

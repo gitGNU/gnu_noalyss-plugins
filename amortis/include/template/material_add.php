@@ -1,5 +1,5 @@
 <h2 class="info">Ajout de matériel</h2>
-<form method="get" onsubmit="save_new_material(this)">
+<form method="POST" onsubmit="save_new_material(this);return false;">
 <span style="text-align:center;display:block;font-size:2em" id="p_card_label"  >Nouveau matériel</span>
 <table>
 <tr>
