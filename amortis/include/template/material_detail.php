@@ -1,5 +1,7 @@
 <h2 class="info">Modification de matériel</h2>
-
+<form onsubmit="save_modify(this);return false">
+<?=$p_card?>
+<?=$a_id?>
 <span style="text-align:center;display:block;font-size:2em" id="p_card_label"  ><?= $card->strAttribut(ATTR_DEF_NAME)?></span>
 <table>
 <tr>
@@ -14,7 +16,7 @@
 
 <tr>
 	<td>Année comptable d'achat</td>
-	<td> <?=$p_year->input();?></td>
+	<td> <? echo $p_year->input();?></td>
 </tr>
 <tr>
 	<td>Poste de charge dotations amortissement (débit)</td>
@@ -27,12 +29,12 @@
 	<td><?=$cred_span->input();?></td>
 </tr>
 <tr>
-	<td>Nombre d'années amortissement</td>
-	<td><?=$p_number->input()?></td>
+	<td>Nombre d'années amortissement (non modifiable)</td>
+	<td><? echo $p_number->input()?></td>
 </tr>
 <tr>
-	<td></td>
-	<td></td>
+	<td>Visible <span class="notice">Y pour oui ou N pour non</span></td>
+	<td><? echo $p_visible->input();?></td>
 </tr>
 <tr>
 	<td></td>
@@ -53,10 +55,13 @@ echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
 echo dossier::hidden();
 $annuite=0;
 for ($i=0;$i<count($array);$i++):
-
+	       $pct=new INum('pct[]');
+	       $pct->value=$array[$i]->ad_percentage;
+               $year=new INum('ad_year[]');
+               $year->value=$array[$i]->ad_year;
 ?>
 <tr>
-	<td><?=$array[$i]->ad_year?>
+	<td><?=$year->input()?>
 	</td>
 	<td>
 	<?
@@ -64,18 +69,13 @@ for ($i=0;$i<count($array);$i++):
 	$amount=new INum("amount[]");
 	$amount->value=$array[$i]->ad_amount;
 	echo $amount->input();	
-?>
+        ?>
 
 </td>
 	<?
 	$annuite=bcadd($annuite,$array[$i]->ad_amount);
-	/*
-	* COMPUTE PERCENTAGE
-	*/
-	bcscale(4);
-	$total=bcdiv($array[$i]->ad_amount,$p_amount->value);
-	$total=bcmul($total,100);
-	echo td($total." %" );
+
+	echo td($pct->input() );
 	?>
 </tr>
 
@@ -92,3 +92,9 @@ if ( $annuite !=  $p_amount->value)
  }
  ?>
 </fieldset> 
+<?
+   echo HtmlInput::submit('sauver','Sauver',"onclick=\"return confirm('Vous confirmez ?')\" ");
+   $rm=sprintf("remove_mat(%d,'%s',%d)",dossier::id(),$_REQUEST['plugin_code'],$value_a_id);
+   echo HtmlInput::button('remove','Effacer',"onclick=\"$rm\" ");
+?>
+</FORM>

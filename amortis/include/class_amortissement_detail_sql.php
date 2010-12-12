@@ -71,6 +71,8 @@ class Amortissement_Detail_Sql
   {
     // Verify that the elt we want to add is correct
     /* verify only the datatype */
+    if ( settype($this->ad_percentage,'float') == false )
+      throw new Exception('DATATYPE ad_percentage $this->ad_percentage non numerique');
     if ( settype($this->ad_year,'float') == false )
       throw new Exception('DATATYPE ad_year $this->ad_year non numerique');
     if ( settype($this->ad_amount,'float') == false )

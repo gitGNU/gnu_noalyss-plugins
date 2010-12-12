@@ -44,7 +44,7 @@
 </table>
 <?
 	echo HtmlInput::button('close','Annuler',"onclick=\"removeDiv('$t')\"");
-	echo HtmlInput::submit('sauver','sauver');
+	echo HtmlInput::submit('sauver','Sauver',"onclick=\"return confirm('Vous confirmez ?')\" ");
 	echo HtmlInput::extension();
 	echo dossier::hidden();
 

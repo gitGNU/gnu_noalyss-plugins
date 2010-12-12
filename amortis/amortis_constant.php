@@ -11,4 +11,11 @@ require_once ('class_database.php');
 
 global $cn;
 $cn=new Database (dossier::id());
+
+function detail_material($f_id,$p_label)
+{
+  $href=sprintf('<A class="detail" style="text-decoration:underline" href="javascript:display_material(%d,%d,\'%s\',\'bxmat\')">%s</A>',
+		dossier::id(),$f_id,$_REQUEST['plugin_code'],$p_label);
+  return $href;
+}
 ?>

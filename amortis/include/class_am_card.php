@@ -34,11 +34,15 @@ class Am_Card
   /**
    *@brief display the list of material
    */
-  public function  listing()
+  public function  listing($p_all=false)
   {
     global $cn;
     $amort=new Amortissement_Sql($cn);
-    $ret=$amort->seek();
+    if ( $p_all==true)
+      $ret=$amort->seek();
+    else
+      $ret=$amort->seek(" where a_visible = 'Y'");
+
     require_once('template/material_listing.php');
 
   }
@@ -49,7 +53,7 @@ class Am_Card
   {
     $add=new IButton('add_card');
     $add->label="Ajout d'un bien à amortir";
-    $add->javascript=sprintf("add_material(%d,'%s','bx_mat')",
+    $add->javascript=sprintf("add_material(%d,'%s','bxmat')",
 			     dossier::id(),
 			     $_REQUEST['plugin_code']
 			     );
@@ -67,20 +71,32 @@ class Am_Card
     $this->amortissement=new Amortissement_Sql($cn);
     $fiche=new Fiche($cn);
     $fiche->get_by_qcode($p_array['p_card']);
-    $this->amortissement->a_id=-1;
+    $this->amortissement->a_id=(isset($p_array['a_id']))?$p_array['a_id']:-1;
     $this->amortissement->f_id=$fiche->id;
     $this->amortissement->account_deb=$p_array['p_deb'];
     $this->amortissement->account_cred=$p_array['p_cred'];
     $this->amortissement->a_start=$p_array['p_year'];
     $this->amortissement->a_amount=$p_array['p_amount'];
     $this->amortissement->a_nb_year=$p_array['p_number'];
+    $this->amortissement->a_visible=(isset($p_array['p_visible']))?$p_array['p_visible']:'Y';
     /*
      * if details then load them
      */
-    $this->amortissement_detail=new Amortissement_Detail_Sql($cn);
+
     if ( isset($p_array['ad_id']))
       {
-	$e=1;
+	for ($i=0;$i<count($p_array['ad_id']);$i++)
+	  {
+	    $am=new Amortissement_Detail_Sql($cn);
+	    $am->ad_id=$p_array['ad_id'][$i];
+	    $am->ad_amount=$p_array['amount'][$i];
+	    $am->ad_amount=$p_array['amount'][$i];
+	    $am->a_id=$this->amortissement->a_id;
+	    $am->ad_percentage=$p_array['pct'][$i];
+	    $am->ad_year=$p_array['ad_year'][$i];
+
+	    $this->amortissement_detail[]=clone($am);
+	  }
       }
   }
   /**
@@ -90,15 +106,22 @@ class Am_Card
   {
     global $cn;
     $this->amortissement->load();
+    $this->amortissement_detail=new Amortissement_Detail_Sql($cn);
     $array=$this->amortissement_detail->seek(' where a_id=$1 order by ad_year asc',array($this->amortissement->a_id));
+    $a_id=HtmlInput::hidden('a_id',$this->amortissement->a_id);
+    $value_a_id=$this->amortissement->a_id;
 
     $p_year=new INum('p_year');
     $p_year->value=$this->amortissement->a_start;
     $p_number=new INum('p_number');
     $p_number->value=$this->amortissement->a_nb_year;
 
+    $p_visible=new IText('p_visible');
+    $p_visible->size=2;
+    $p_visible->value=$this->amortissement->a_visible;
     $card=new Fiche($cn,$this->amortissement->f_id);
 
+    $p_card=HtmlInput::hidden('p_card',$card->strAttribut(ATTR_DEF_QUICKCODE));
 
 
     $p_deb=new IPoste('p_deb');
@@ -127,6 +150,11 @@ class Am_Card
    */
   public function update()
   {
+    $this->amortissement->update();
+    for ( $i=0;$i< count($this->amortissement_detail);$i++)
+      {
+	$this->amortissement_detail[$i]->update();
+      }
   }
   /**
    *  we save into the two tables 
@@ -137,5 +165,13 @@ class Am_Card
   public function add()
   {
       $this->amortissement->save();
+  }
+  public function set_material($f)
+  {
+    global $cn;
+    $this->amortissement=new Amortissement_Sql($cn);
+    $this->amortissement_detail=new Amortissement_Detail_Sql($cn);
+    $this->amortissement->a_id=$cn->get_value("select a_id from amortissement.amortissement where f_id=$1",
+					      array($f));
   }
 }

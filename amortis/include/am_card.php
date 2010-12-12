@@ -33,7 +33,17 @@ $good=new Am_Card();
  */
 $but= $good->add_card();
 echo '<div class="content" style="width:80%;margin-left:10%">';
+echo '<form method="GET">';
+echo dossier::hidden();
+echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
+echo HtmlInput::hidden('sa',$_REQUEST['sa']);
+$ck=new ICheckBox('all');
+$ck->selected=(isset ($_GET['all']))?true:false;
+echo '<p> Tous les biens y compris ceux qui sont complétement amortis '.$ck->input();
+echo HtmlInput::submit('look','Recherche').'</p>';
+echo '</form>';
 echo $but->input();
-echo $good->listing();
+echo $good->listing($ck->selected);
+
 echo $but->input();
 echo '</div>';

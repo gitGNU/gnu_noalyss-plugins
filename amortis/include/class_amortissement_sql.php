@@ -26,6 +26,7 @@ class Amortissement_Sql
 			    ,"a_start"=>"a_start"
 			    ,"a_amount"=>"a_amount"
 			    ,"a_nb_year"=>"a_nb_year"
+			    ,"a_visible"=>"a_visible"
 			    );
   function __construct ( & $p_cn,$p_id=-1)
   {
@@ -131,34 +132,8 @@ class Amortissement_Sql
                      ,a_start
                      ,a_amount
                      ,a_nb_year
+                     ,a_visible
                      ) values ($1
-                     ,$2
-                     ,$3
-                     ,$4
-                     ,$5
-                     ,$6
-                     ) returning a_id";
-
-	$this->a_id=$this->cn->get_value(
-					 $sql,
-					 array( $this->f_id
-						,$this->account_deb
-						,$this->account_cred
-						,$this->a_start
-						,$this->a_amount
-						,$this->a_nb_year
-						)
-					 );
-      }
-    else
-      {
-	$sql="insert into amortissement.amortissement(f_id
-                     ,account_deb
-                     ,account_cred
-                     ,a_start
-                     ,a_amount
-                     ,a_nb_year
-                     ,a_id) values ($1
                      ,$2
                      ,$3
                      ,$4
@@ -175,6 +150,38 @@ class Amortissement_Sql
 						,$this->a_start
 						,$this->a_amount
 						,$this->a_nb_year
+						,$this->a_visible
+						)
+					 );
+      }
+    else
+      {
+	$sql="insert into amortissement.amortissement(f_id
+                     ,account_deb
+                     ,account_cred
+                     ,a_start
+                     ,a_amount
+                     ,a_nb_year
+                     ,a_visible
+                     ,a_id) values ($1
+                     ,$2
+                     ,$3
+                     ,$4
+                     ,$5
+                     ,$6
+                     ,$7
+                     ,$8
+                     ) returning a_id";
+
+	$this->a_id=$this->cn->get_value(
+					 $sql,
+					 array( $this->f_id
+						,$this->account_deb
+						,$this->account_cred
+						,$this->a_start
+						,$this->a_amount
+						,$this->a_nb_year
+						,$this->a_visible
 						,$this->a_id)
 					 );
 
@@ -192,7 +199,8 @@ class Amortissement_Sql
                  ,a_start = $4
                  ,a_amount = $5
                  ,a_nb_year = $6
-                 where a_id= $7";
+                 ,a_visible = $7
+                 where a_id= $8";
     $res=$this->cn->exec_sql(
 			     $sql,
 			     array($this->f_id
@@ -201,6 +209,7 @@ class Amortissement_Sql
 				   ,$this->a_start
 				   ,$this->a_amount
 				   ,$this->a_nb_year
+				   ,$this->a_visible
 				   ,$this->a_id)
 			     );
 
@@ -218,6 +227,7 @@ class Amortissement_Sql
                  ,a_start
                  ,a_amount
                  ,a_nb_year
+                 ,a_visible
                  from amortissement.amortissement where a_id=$1";
     /* please adapt */
     $res=$this->cn->get_array(
@@ -249,6 +259,7 @@ class Amortissement_Sql
    */
   static function test_me()
   {
+
   }
 
 }

@@ -57,6 +57,26 @@ switch($op)
     $html=ob_get_contents();
     ob_clean();
     break;
+  case 'display_modify':
+    ob_start();
+    require_once('include/material_modify.inc.php');
+    $html=ob_get_contents();
+    ob_clean();
+    break;
+
+  case 'save_modify':
+    ob_start();
+    require_once('include/material_save.inc.php');
+    $html=ob_get_contents();
+    ob_clean();
+    break;
+  case 'rm':
+    ob_start();
+    require_once('include/material_delete.inc.php');
+    $html=ob_get_contents();
+    ob_clean();
+    break;
+    
   }
 
 $html=escape_xml($html);
