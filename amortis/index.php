@@ -54,6 +54,7 @@ $menu=array(
 
 
 $sa=(isset($_REQUEST['sa']))?$_REQUEST['sa']:0;
+$_REQUEST['sa']=$sa;
 $def=0;
 
 switch($sa)

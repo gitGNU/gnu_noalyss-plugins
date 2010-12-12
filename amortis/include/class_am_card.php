@@ -144,16 +144,45 @@ class Am_Card
     require_once('template/material_detail.php');
   }
   /**
-   *  we save into the two tables 
+   *Verify that all data are correct
+   */
+  function verify_post()
+  {
+    global $cn;
+    $error_msg='';
+    if ( isNumber($_POST['p_year']) == null || $_POST['p_year']<1900||$_POST['p_year'] > 3000 ) $error_msg.=_('Année invalide')."\n";
+    if ( isNumber($_POST['p_number']) == null || $_POST['p_number']==0)$error_msg.=_ ('Nombre annuités invalide')."\n";
+    if ( isNumber($_POST['p_amount']) == null || $_POST['p_amount']==0) $error_msg.=_ ('Montant invalide')."\n";
+    if ( $_POST['p_visible'] != 'Y' && $_POST['p_visible'] != 'N') $error_msg.="Visible Y ou N\n";
+    if ( $cn->get_value('select count(*) from tmp_pcmn where pcm_val=$1',array($_POST['p_deb'])) == 0) $error_msg.=" Poste de charge incorrect"."\n";
+    if ( $cn->get_value('select count(*) from tmp_pcmn where pcm_val=$1',array($_POST['p_cred'])) == 0) $error_msg.=" Poste à créditer incorrect"."\n";
+    return $error_msg;
+  }
+  /**
+-   *  we save into the two tables 
    * amortissement and amortissement_detail
    *@see from_array
    */
   public function update()
   {
-    $this->amortissement->update();
-    for ( $i=0;$i< count($this->amortissement_detail);$i++)
+    global $cn;
+
+    try 
       {
-	$this->amortissement_detail[$i]->update();
+	$this->amortissement->update();
+	for ( $i=0;$i< count($this->amortissement_detail);$i++)
+	  {
+	    $this->amortissement_detail[$i]->update();
+	  }
+	/*
+	 * remove row from amortissement_detail if ad_amount=0
+	 */
+	$cn->exec_sql('delete from amortissement.amortissement_detail where ad_amount=0');
+
+      }
+    catch (Exception $e)
+      {
+	echo $e->getMessage();
       }
   }
   /**

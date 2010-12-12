@@ -66,7 +66,11 @@ switch($op)
 
   case 'save_modify':
     ob_start();
+    echo '<span id="result" style="float:left;background:red;color:white">Sauvé</span>';
+
     require_once('include/material_save.inc.php');
+    $f=$cn->get_value("select f_id from fiche join fiche_detail using (f_id) where ad_id=23 and ad_value=$1",array($_POST['p_card']));
+    require_once('include/material_modify.inc.php');
     $html=ob_get_contents();
     ob_clean();
     break;

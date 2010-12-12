@@ -27,4 +27,8 @@
 require_once ('class_am_card.php');
 $mat=new Am_Card();
 $mat->from_array($_POST);
-$mat->update();
+$error_msg=$mat->verify_post();
+if ( $error_msg != '')
+  echo alert($error_msg);
+else
+  $mat->update();

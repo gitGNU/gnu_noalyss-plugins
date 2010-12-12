@@ -112,12 +112,17 @@ function save_modify(obj)
 				       method: 'post',
 				       parameters: querystring,
 				       onFailure: error_ajax,
-				       onSuccess: function (req) { removeDiv('bxmat');}
+				       onSuccess: success_save_modify
 				   }
                                   );
 
     return false;   
    
+}
+function success_save_modify(req)
+{
+    fill_box(req);
+
 }
 function remove_mat(g_dossier,plugin_code,a_id)
 {

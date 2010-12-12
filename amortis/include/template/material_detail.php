@@ -37,7 +37,7 @@
 	<td><? echo $p_visible->input();?></td>
 </tr>
 <tr>
-	<td></td>
+	<td> </td>
 	<td></td>
 </tr>
 <tr>
@@ -45,6 +45,7 @@
 	<td></td>
 </tr>
 </table>
+<span class="notice"> En changeant le montant à amortir, l'année ou le nombre d'années, les annuités seront recalculées</span>
 <fieldset><legend>Annuités</legend>
 <table class="result">
 <th>Année</th>
@@ -84,11 +85,13 @@ for ($i=0;$i<count($array);$i++):
 endfor;
 ?>
 </table>
-Total = <?=nbm($annuite)?>
+<span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic">Total = <?=nbm($annuite)?></span>
 <?
 if ( $annuite !=  $p_amount->value)
  {
- 	echo '<h2 class="error">Différence entre le montant à amortir et le montant amorti</h2>';
+ 	echo '<h2 class="error">Différence entre le montant à amortir et le montant amorti =';
+	echo nbm($annuite - $p_amount->value);
+	echo '<h2>';
  }
  ?>
 </fieldset> 
@@ -96,5 +99,7 @@ if ( $annuite !=  $p_amount->value)
    echo HtmlInput::submit('sauver','Sauver',"onclick=\"return confirm('Vous confirmez ?')\" ");
    $rm=sprintf("remove_mat(%d,'%s',%d)",dossier::id(),$_REQUEST['plugin_code'],$value_a_id);
    echo HtmlInput::button('remove','Effacer',"onclick=\"$rm\" ");
+   echo HtmlInput::button('close','Fermer',"onclick=\"removeDiv('bxmat');refresh_window()\" ");
+
 ?>
 </FORM>
