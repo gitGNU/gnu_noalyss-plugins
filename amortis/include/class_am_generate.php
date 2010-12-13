@@ -23,6 +23,7 @@
 /*!\file
  * \brief generate writing of amortize
  */
+require_once('class_amortissement_histo_sql.php');
 
 class Am_Generate
 {
@@ -138,6 +139,19 @@ array
     echo '<form method="POST" style="display:inline">';
     echo $ledger->show_form($array,true);
     echo HtmlInput::submit('save','Sauver');
+    echo HtmlInput::hidden('sa',$p_array['sa']);
+    echo HtmlInput::hidden('sb',$p_array['sb']);
+    echo HtmlInput::hidden('p_year',$p_array['p_year']);
+    echo HtmlInput::hidden('p_date',$p_array['p_date']);
+    echo HtmlInput::hidden('p_jrn',$p_array['p_jrn']);
+    echo HtmlInput::hidden('plugin_code',$p_array['plugin_code']);
+    for ($i=0;$i<count($p_array['a_id']);$i++)
+      {
+	echo HtmlInput::hidden('a_id[]',$p_array['a_id'][$i]);
+	if ( isset($p_array['p_ck'.$i]))
+	  echo HtmlInput::hidden('p_ck'.$i,'1');
+      }
+
     echo '</form>';
     /*
      * correct
@@ -145,6 +159,7 @@ array
     echo '<form method="POST" style="display:inline">';
     echo dossier::hidden();
     echo HtmlInput::hidden('sa',$p_array['sa']);
+    echo HtmlInput::hidden('sb',$p_array['sb']);
     echo HtmlInput::hidden('p_year',$p_array['p_year']);
     echo HtmlInput::hidden('p_date',$p_array['p_date']);
     echo HtmlInput::hidden('p_jrn',$p_array['p_jrn']);
@@ -159,5 +174,66 @@ array
     echo '</form>';
     echo '</div>';
     return true;		 
+  }
+  /**
+   * save into amortissement_histo
+@code
+array
+  'plugin_code' => string 'AMORT' (length=5)
+  'sa' => string 'util' (length=4)
+  'gDossier' => string '48' (length=2)
+  'p_year' => string '' (length=0)
+  'p_jrn' => string '4' (length=1)
+  'p_date' => string '' (length=0)
+  'a_id' => 
+    array
+      0 => string '86' (length=2)
+      1 => string '85' (length=2)
+  'p_ck1' => string '' (length=0)
+
+@endcode
+   */
+  function save($p_array,$jr_internal)
+  {
+    global $cn;
+    $msg='';
+    for ( $i=0;$i<count($p_array['a_id']);$i++)
+      {
+	if ( isset($p_array['p_ck'.$i]))
+	  {
+	    /*
+	     * Check if already encoded
+	     */
+	    if ( $cn->get_value ("select count (*) from amortissement.amortissement_histo where h_year=$1 and a_id=$2",
+				 array($p_array['p_year'],$p_array['a_id'][$i])) != 0)
+	      {
+		/*
+		 * Already encoded : continue an exception will be thrown to rollback it
+		 */
+		$f_id=$cn->get_value("select f_id from amortissement.amortissement where a_id=$1",
+				     array($p_array['a_id'][$i]));
+		$fiche=new Fiche ($cn,$f_id);
+		$msg.="Fiche ".$fiche->strAttribut(ATTR_DEF_QUICKCODE)." déja amortie \n";
+	      }
+	    else
+	      {
+		/*
+		 * Do not exist we insert into amortissement.amortissement_histo
+		 */
+		$n=new Amortissement_Histo_Sql($cn);
+		$val=$cn->get_value("select ad_amount from amortissement.amortissement_detail ".
+				    " where a_id = $1 and ad_year=$2",
+				    array($p_array['a_id'][$i],$p_array['p_year']));
+		$val=($val=='')?0:$val;
+
+		$n->h_amount=$val;
+		$n->h_year=$p_array['p_year'];
+		$n->jr_internal=$jr_internal;
+		$n->a_id=$p_array['a_id'][$i];
+		$n->insert();
+	      }
+	  }
+      }
+    return $msg;
   }
 }

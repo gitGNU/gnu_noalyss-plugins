@@ -22,51 +22,42 @@
 
 /*!\file
  * \brief let you generate the accounting for the paid off for a selected
- *  year
+ *  year history and remove
  */
-require_once('class_am_generate.php');
-require_once('class_amortissement_sql.php');
-global $cn;
+$url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&sa=util';
 
-$am=new Am_Generate();
+$menu=array(
+	    array($url.'&sb=generate','Génére écriture',' Génération écriture comptable ',1),
+	    array($url.'&sb=histo','Historique','Historique des opérations',3)
+	    );
 
-if (isset( $_POST['generate'] ))
+
+$sb=(isset($_REQUEST['sb']))?$_REQUEST['sb']:0;
+$_REQUEST['sb']=$sb;
+$def=0;
+
+switch($sb)
   {
-    /*
-     * propose writing
-     */
-    if ( $am->propose_writing($_POST) == false )
-      {
-	echo '<div class="content" style="width:80%;margin-left:10%">';
-	echo $am->input($_POST );
-	echo '</div>';
-      }
+  case 'generate':
+    $def=1;
+    break;
+  case 'histo':
+    $def=3;
+    break;
+  }
+
+echo ShowItem($menu,'H','mtitle ','mtitle ',$def,' style="width:80%;margin-left:10%;border-collapse: separate;border-spacing:  5px;"');
+
+/* List + add and modify card */
+if ($def==1)
+  {
+    require_once('am_generate.inc.php');
     exit();
   }
 
-if (isset($_POST['save']))
+/* histo */
+if ( $def==3)
   {
-    $ledger=new Acc_Ledger($cn,$_POST['p_jrn']);
-    try 
-      {
-	$ledger->save($_POST);
-
-	$jr_id=$cn->get_value("select jr_id from jrn where jr_internal=$1",array($ledger->internal));
-	echo '<div class="content" style="width:80%;margin-left:10%">';
-
-	echo HtmlInput::detail_op($jr_id,"Opération sauvée : ".$ledger->internal);	
-	echo '</div>';
-
-	exit();
-      }
-    catch (Exception $e)
-      {
-	echo alert($e->getMessage());
-      }
+    require_once('am_histo.inc.php');
+    exit();
   }
-
-echo '<div class="content" style="width:80%;margin-left:10%">';
-echo $am->input($_POST );
-
-
-echo '</div>';

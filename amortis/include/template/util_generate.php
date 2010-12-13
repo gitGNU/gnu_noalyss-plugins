@@ -27,6 +27,7 @@
 <form method="post">
 <?=HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);?>
 <?=HtmlInput::hidden('sa',$_REQUEST['sa']);?>
+<?=HtmlInput::hidden('sb',$_REQUEST['sb']);?>
 <?=dossier::hidden()?>
 
 <table>
