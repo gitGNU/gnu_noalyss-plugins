@@ -46,7 +46,7 @@ switch($sb)
     break;
   }
 
-echo ShowItem($menu,'H','mtitle ','mtitle ',$def,' style="width:80%;margin-left:10%;border-collapse: separate;border-spacing:  5px;"');
+echo ShowItem($menu,'H','mtitle ','mtitle ',$def,' style="width:40%;margin-left:10%;border-collapse: separate;border-spacing:  5px;"');
 
 /* List + add and modify card */
 if ($def==1)

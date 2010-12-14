@@ -44,19 +44,18 @@
 <td><?=$p_date->input()?></td>
 </tr>
 <tr>
-<td></td>
-<td></td>
+<td>Pièce</td>
+<td><?=$pj->input()?></td>
 </tr>
 </table>
 
 Cochez ce qu'il faut amortir 
-<table>
+<table class="result">
 <tr>
 	<th>Selection</th>
 	<th>Quick Code</th>
 	<th>Nom</th>
 	<th>Description</th>
-	<th>Montant à amortir</th>
 </tr>
 <?
 /*
@@ -73,9 +72,11 @@ for ( $i =0;$i<count($array);$i++):
 <tr>
 <?
 if ( isset($_POST['p_ck'.$i])) $ck->selected=true;else $ck->selected=false;
+$view_history= sprintf('<A class="detail" style="text-decoration:underline" HREF="javascript:view_history_card(\'%s\',\'%s\')" >%s</A>',
+                        $fiche->id, dossier::id(), $fiche->get_quick_code());
 ?>
 	<td><?=$ck->input()?></td>
-	<td><?=$fiche->strAttribut(ATTR_DEF_QUICKCODE)?></td>
+	<td><?=$view_history?></td>
 	<td><?=$fiche->strAttribut(ATTR_DEF_NAME)?></td>
 	<td>	<?=$fiche->strAttribut(9)?></td>
 	<td></td>

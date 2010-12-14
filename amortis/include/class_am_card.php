@@ -1,30 +1,31 @@
 <?php
-/*
- *   This file is part of PhpCompta.
- *
- *   PhpCompta is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 2 of the License, or
- *   (at your option) any later version.
- *
- *   PhpCompta is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with PhpCompta; if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-/* $Revision$ */
+  /*
+   *   This file is part of PhpCompta.
+   *
+   *   PhpCompta is free software; you can redistribute it and/or modify
+   *   it under the terms of the GNU General Public License as published by
+   *   the Free Software Foundation; either version 2 of the License, or
+   *   (at your option) any later version.
+   *
+   *   PhpCompta is distributed in the hope that it will be useful,
+   *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   *   GNU General Public License for more details.
+   *
+   *   You should have received a copy of the GNU General Public License
+   *   along with PhpCompta; if not, write to the Free Software
+   *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+   */
+  /* $Revision$ */
 
-// Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
+  // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
 
-/*!\file
- * \brief let you add all the materiel you need to amortize
- */
+  /*!\file
+   * \brief let you add all the materiel you need to amortize
+   */
 require_once('class_amortissement_sql.php');
 require_once('class_amortissement_detail_sql.php');
+require_once('class_amortissement_histo_sql.php');
 
 class Am_Card
 {
@@ -98,6 +99,23 @@ class Am_Card
 	    $this->amortissement_detail[]=clone($am);
 	  }
       }
+    /* save detail from amortissement_histo 
+     * p_pj[]
+     * p_histo[]
+     * h[]
+     */
+    if ( isset ($p_array['h'])) 
+      {
+	for ($i=0;$i<count($p_array['h']);$i++)
+	  {
+	    $am=new Amortissement_Histo_Sql($cn,$p_array['h'][$i]);
+	    $am->load();
+	    $am->h_amount=$p_array['p_histo'][$i];
+	    $am->h_pj=$p_array['p_pj'][$i];
+
+	    $this->amortissement_histo[]=clone($am);
+	  }
+      }
   }
   /**
    * show a form to modify data
@@ -108,6 +126,8 @@ class Am_Card
     $this->amortissement->load();
     $this->amortissement_detail=new Amortissement_Detail_Sql($cn);
     $array=$this->amortissement_detail->seek(' where a_id=$1 order by ad_year asc',array($this->amortissement->a_id));
+
+
     $a_id=HtmlInput::hidden('a_id',$this->amortissement->a_id);
     $value_a_id=$this->amortissement->a_id;
 
@@ -159,10 +179,10 @@ class Am_Card
     return $error_msg;
   }
   /**
--   *  we save into the two tables 
-   * amortissement and amortissement_detail
-   *@see from_array
-   */
+     -   *  we save into the two tables 
+     * amortissement and amortissement_detail
+     *@see from_array
+     */
   public function update()
   {
     global $cn;
@@ -173,6 +193,8 @@ class Am_Card
 	for ( $i=0;$i< count($this->amortissement_detail);$i++)
 	  {
 	    $this->amortissement_detail[$i]->update();
+	    $this->amortissement_histo[$i]->update();
+
 	  }
 	/*
 	 * remove row from amortissement_detail if ad_amount=0
@@ -193,7 +215,7 @@ class Am_Card
    */
   public function add()
   {
-      $this->amortissement->save();
+    $this->amortissement->save();
   }
   public function set_material($f)
   {

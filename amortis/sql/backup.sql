@@ -4,7 +4,7 @@
 
 -- Dumped from database version 8.4.5
 -- Dumped by pg_dump version 9.0.1
--- Started on 2010-12-13 21:25:44 CET
+-- Started on 2010-12-14 22:19:02 CET
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -27,7 +27,7 @@ SET search_path = amortissement, pg_catalog;
 
 --
 -- TOC entry 87 (class 1255 OID 6039987)
--- Dependencies: 708 9
+-- Dependencies: 9 708
 -- Name: amortissement_ins(); Type: FUNCTION; Schema: amortissement; Owner: dany
 --
 
@@ -43,6 +43,7 @@ total numeric(20,2);
 last_ad_id bigint;
 begin
 	i :=0;
+	total := 0;
 	loop
 	   
 	   if i = NEW.a_nb_year then
@@ -58,6 +59,7 @@ begin
 	   end if;
 
            insert into amortissement.amortissement_detail(ad_year,ad_amount,a_id) values (nyear,n_ad_amount,NEW.a_id) returning ad_id into last_ad_id;
+           insert into amortissement.amortissement_histo(a_id,h_amount,h_year) values (NEW.a_id,0,nyear);
 	   i := i+1;
 	end loop;
 	if total < NEW.a_amount then
@@ -72,7 +74,7 @@ $$;
 ALTER FUNCTION amortissement.amortissement_ins() OWNER TO dany;
 
 --
--- TOC entry 2396 (class 0 OID 0)
+-- TOC entry 2397 (class 0 OID 0)
 -- Dependencies: 87
 -- Name: FUNCTION amortissement_ins(); Type: COMMENT; Schema: amortissement; Owner: dany
 --
@@ -82,7 +84,7 @@ COMMENT ON FUNCTION amortissement_ins() IS 'Fill the table amortissement_detail 
 
 --
 -- TOC entry 89 (class 1255 OID 6040043)
--- Dependencies: 9 708
+-- Dependencies: 708 9
 -- Name: amortissement_up(); Type: FUNCTION; Schema: amortissement; Owner: dany
 --
 
@@ -140,7 +142,7 @@ SET default_with_oids = false;
 
 --
 -- TOC entry 2080 (class 1259 OID 5578174)
--- Dependencies: 2372 2373 2374 9 373 373
+-- Dependencies: 2372 2373 2374 373 373 9
 -- Name: amortissement; Type: TABLE; Schema: amortissement; Owner: dany; Tablespace: 
 --
 
@@ -175,7 +177,7 @@ CREATE SEQUENCE amortissement_a_id_seq
 ALTER TABLE amortissement.amortissement_a_id_seq OWNER TO dany;
 
 --
--- TOC entry 2397 (class 0 OID 0)
+-- TOC entry 2398 (class 0 OID 0)
 -- Dependencies: 2079
 -- Name: amortissement_a_id_seq; Type: SEQUENCE OWNED BY; Schema: amortissement; Owner: dany
 --
@@ -217,7 +219,7 @@ CREATE SEQUENCE amortissement_detail_ad_id_seq
 ALTER TABLE amortissement.amortissement_detail_ad_id_seq OWNER TO dany;
 
 --
--- TOC entry 2398 (class 0 OID 0)
+-- TOC entry 2399 (class 0 OID 0)
 -- Dependencies: 2081
 -- Name: amortissement_detail_ad_id_seq; Type: SEQUENCE OWNED BY; Schema: amortissement; Owner: dany
 --
@@ -235,8 +237,9 @@ CREATE TABLE amortissement_histo (
     ha_id integer NOT NULL,
     a_id bigint,
     h_amount numeric(20,4) NOT NULL,
-    jr_internal text NOT NULL,
-    h_year integer NOT NULL
+    jr_internal text,
+    h_year integer NOT NULL,
+    h_pj text
 );
 
 
@@ -244,7 +247,7 @@ ALTER TABLE amortissement.amortissement_histo OWNER TO dany;
 
 --
 -- TOC entry 2085 (class 1259 OID 6040045)
--- Dependencies: 2086 9
+-- Dependencies: 9 2086
 -- Name: amortissement_histo_ha_id_seq; Type: SEQUENCE; Schema: amortissement; Owner: dany
 --
 
@@ -259,7 +262,7 @@ CREATE SEQUENCE amortissement_histo_ha_id_seq
 ALTER TABLE amortissement.amortissement_histo_ha_id_seq OWNER TO dany;
 
 --
--- TOC entry 2399 (class 0 OID 0)
+-- TOC entry 2400 (class 0 OID 0)
 -- Dependencies: 2085
 -- Name: amortissement_histo_ha_id_seq; Type: SEQUENCE OWNED BY; Schema: amortissement; Owner: dany
 --
@@ -269,7 +272,7 @@ ALTER SEQUENCE amortissement_histo_ha_id_seq OWNED BY amortissement_histo.ha_id;
 
 --
 -- TOC entry 2371 (class 2604 OID 5578177)
--- Dependencies: 2080 2079 2080
+-- Dependencies: 2079 2080 2080
 -- Name: a_id; Type: DEFAULT; Schema: amortissement; Owner: dany
 --
 
@@ -278,7 +281,7 @@ ALTER TABLE amortissement ALTER COLUMN a_id SET DEFAULT nextval('amortissement_a
 
 --
 -- TOC entry 2375 (class 2604 OID 5578203)
--- Dependencies: 2082 2081 2082
+-- Dependencies: 2081 2082 2082
 -- Name: ad_id; Type: DEFAULT; Schema: amortissement; Owner: dany
 --
 
@@ -335,24 +338,21 @@ ALTER TABLE ONLY amortissement
 
 
 --
+-- TOC entry 2387 (class 1259 OID 6040168)
+-- Dependencies: 2086 2086
+-- Name: amortissement_histo_uq; Type: INDEX; Schema: amortissement; Owner: dany; Tablespace: 
+--
+
+CREATE UNIQUE INDEX amortissement_histo_uq ON amortissement_histo USING btree (h_year, a_id);
+
+
+--
 -- TOC entry 2384 (class 1259 OID 6039977)
 -- Dependencies: 2082
 -- Name: fki_amortissement; Type: INDEX; Schema: amortissement; Owner: dany; Tablespace: 
 --
 
 CREATE INDEX fki_amortissement ON amortissement_detail USING btree (a_id);
-
-
---
--- TOC entry 2392 (class 2620 OID 6040044)
--- Dependencies: 89 2080
--- Name: amortissement; Type: TRIGGER; Schema: amortissement; Owner: dany
---
-
-CREATE TRIGGER amortissement
-    BEFORE UPDATE ON amortissement
-    FOR EACH ROW
-    EXECUTE PROCEDURE amortissement_up();
 
 
 --
@@ -368,8 +368,20 @@ CREATE TRIGGER amortissement_after_ins
 
 
 --
--- TOC entry 2389 (class 2606 OID 5578193)
--- Dependencies: 2051 2080
+-- TOC entry 2394 (class 2620 OID 6040169)
+-- Dependencies: 89 2080
+-- Name: amortissement_after_up; Type: TRIGGER; Schema: amortissement; Owner: dany
+--
+
+CREATE TRIGGER amortissement_after_up
+    AFTER UPDATE ON amortissement
+    FOR EACH ROW
+    EXECUTE PROCEDURE amortissement_up();
+
+
+--
+-- TOC entry 2390 (class 2606 OID 5578193)
+-- Dependencies: 2080 2051
 -- Name: amortissement_account_cred_fkey; Type: FK CONSTRAINT; Schema: amortissement; Owner: dany
 --
 
@@ -378,8 +390,8 @@ ALTER TABLE ONLY amortissement
 
 
 --
--- TOC entry 2388 (class 2606 OID 5578188)
--- Dependencies: 2080 2051
+-- TOC entry 2389 (class 2606 OID 5578188)
+-- Dependencies: 2051 2080
 -- Name: amortissement_account_deb_fkey; Type: FK CONSTRAINT; Schema: amortissement; Owner: dany
 --
 
@@ -388,8 +400,8 @@ ALTER TABLE ONLY amortissement
 
 
 --
--- TOC entry 2390 (class 2606 OID 6039972)
--- Dependencies: 2380 2080 2082
+-- TOC entry 2391 (class 2606 OID 6039972)
+-- Dependencies: 2380 2082 2080
 -- Name: amortissement_detail_a_id_fkey; Type: FK CONSTRAINT; Schema: amortissement; Owner: dany
 --
 
@@ -398,7 +410,7 @@ ALTER TABLE ONLY amortissement_detail
 
 
 --
--- TOC entry 2387 (class 2606 OID 5578183)
+-- TOC entry 2388 (class 2606 OID 5578183)
 -- Dependencies: 1922 2080
 -- Name: amortissement_f_id_fkey; Type: FK CONSTRAINT; Schema: amortissement; Owner: dany
 --
@@ -408,8 +420,8 @@ ALTER TABLE ONLY amortissement
 
 
 --
--- TOC entry 2391 (class 2606 OID 6040056)
--- Dependencies: 2080 2086 2380
+-- TOC entry 2392 (class 2606 OID 6040056)
+-- Dependencies: 2086 2080 2380
 -- Name: amortissement_histo_a_id_fkey; Type: FK CONSTRAINT; Schema: amortissement; Owner: dany
 --
 
@@ -417,7 +429,7 @@ ALTER TABLE ONLY amortissement_histo
     ADD CONSTRAINT amortissement_histo_a_id_fkey FOREIGN KEY (a_id) REFERENCES amortissement(a_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2010-12-13 21:25:44 CET
+-- Completed on 2010-12-14 22:19:03 CET
 
 --
 -- PostgreSQL database dump complete

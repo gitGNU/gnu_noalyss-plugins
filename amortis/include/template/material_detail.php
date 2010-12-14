@@ -50,19 +50,26 @@
 <table class="result">
 <th>Année</th>
 <th>Montant</th>
+<th>Amortissement acté</th>
+<th>Pièce </th>
+<th>n°  interne</th>
+
+
 <th>Pourcent</th>
+
 <?
+bcscale(2);
 echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
 echo dossier::hidden();
 $annuite=0;
+$done=0;
 for ($i=0;$i<count($array);$i++):
 	       $pct=new INum('pct[]');
 	       $pct->value=$array[$i]->ad_percentage;
-               $year=new INum('ad_year[]');
-               $year->value=$array[$i]->ad_year;
 ?>
 <tr>
-	<td><?=$year->input()?>
+	<td><?=HtmlInput::hidden('ad_year[]',$array[$i]->ad_year)?>
+	  <?=$array[$i]->ad_year?>
 	</td>
 	<td>
 	<?
@@ -76,6 +83,28 @@ for ($i=0;$i<count($array);$i++):
 	<?
 	$annuite=bcadd($annuite,$array[$i]->ad_amount);
 
+	$x=$cn->get_array('select ha_id,h_pj,jr_internal,h_amount from amortissement.amortissement_histo where a_id=$1 and h_year=$2',
+	                   array($value_a_id,$array[$i]->ad_year));
+	if ( count ($x) == 1) 
+	{
+	echo HtmlInput::hidden('h[]',$x[0]['ha_id']);
+	
+	$done=bcadd($done,$x[0]['h_amount']);
+	$acte=new INum('p_histo[]');
+        $acte->value=$x[0]['h_amount'];
+	echo td($acte->input());
+
+	$pj=new IText('p_pj[]');
+	$pj->value=$x[0]['h_pj'];
+	echo td($pj->input());
+
+	if ( $x[0]['jr_internal'] != '' ) { 
+	$jr_id=$cn->get_value('select jr_id from jrn where jr_internal=$1',array($x[0]['jr_internal']));
+	echo td(HtmlInput::detail_op($jr_id,$x[0]['jr_internal']));
+	} else {
+	echo td();
+	}
+	}
 	echo td($pct->input() );
 	?>
 </tr>
@@ -85,7 +114,10 @@ for ($i=0;$i<count($array);$i++):
 endfor;
 ?>
 </table>
-<span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic">Total = <?=nbm($annuite)?></span>
+<span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%">Total = <?=nbm($annuite)?></span>
+<span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%">Amorti = <?=nbm($done)?></span>
+<span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%">Reste = <?=nbm($p_amount->value-$done)?></span>
+
 <?
 if ( $annuite !=  $p_amount->value)
  {

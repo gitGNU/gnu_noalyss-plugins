@@ -24,6 +24,7 @@ class Amortissement_Histo_Sql
 			    ,"h_amount"=>"h_amount"
 			    ,"jr_internal"=>"jr_internal"
 			    ,"h_year"=>"h_year"
+			    ,"h_pj"=>"h_pj"
 			    );
   function __construct ( & $p_cn,$p_id=-1)
   {
@@ -125,28 +126,8 @@ class Amortissement_Histo_Sql
                      ,h_amount
                      ,jr_internal
                      ,h_year
+                     ,h_pj
                      ) values ($1
-                     ,$2
-                     ,$3
-                     ,$4
-                     ) returning ha_id";
-
-	$this->ha_id=$this->cn->get_value(
-					  $sql,
-					  array( $this->a_id
-						 ,$this->h_amount
-						 ,$this->jr_internal
-						 ,$this->h_year
-						 )
-					  );
-      }
-    else
-      {
-	$sql="insert into amortissement.amortissement_histo(a_id
-                     ,h_amount
-                     ,jr_internal
-                     ,h_year
-                     ,ha_id) values ($1
                      ,$2
                      ,$3
                      ,$4
@@ -159,6 +140,32 @@ class Amortissement_Histo_Sql
 						 ,$this->h_amount
 						 ,$this->jr_internal
 						 ,$this->h_year
+						 ,$this->h_pj
+						 )
+					  );
+      }
+    else
+      {
+	$sql="insert into amortissement.amortissement_histo(a_id
+                     ,h_amount
+                     ,jr_internal
+                     ,h_year
+                     ,h_pj
+                     ,ha_id) values ($1
+                     ,$2
+                     ,$3
+                     ,$4
+                     ,$5
+                     ,$6
+                     ) returning ha_id";
+
+	$this->ha_id=$this->cn->get_value(
+					  $sql,
+					  array( $this->a_id
+						 ,$this->h_amount
+						 ,$this->jr_internal
+						 ,$this->h_year
+						 ,$this->h_pj
 						 ,$this->ha_id)
 					  );
 
@@ -174,13 +181,15 @@ class Amortissement_Histo_Sql
                  ,h_amount = $2
                  ,jr_internal = $3
                  ,h_year = $4
-                 where ha_id= $5";
+                 ,h_pj = $5
+                 where ha_id= $6";
     $res=$this->cn->exec_sql(
 			     $sql,
 			     array($this->a_id
 				   ,$this->h_amount
 				   ,$this->jr_internal
 				   ,$this->h_year
+				   ,$this->h_pj
 				   ,$this->ha_id)
 			     );
 
@@ -196,6 +205,7 @@ class Amortissement_Histo_Sql
                  ,h_amount
                  ,jr_internal
                  ,h_year
+                 ,h_pj
                  from amortissement.amortissement_histo where ha_id=$1";
     /* please adapt */
     $res=$this->cn->get_array(
@@ -227,6 +237,7 @@ class Amortissement_Histo_Sql
    */
   static function test_me()
   {
+
   }
 
 }

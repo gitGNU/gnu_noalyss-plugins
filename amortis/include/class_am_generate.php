@@ -59,6 +59,11 @@ class Am_Generate
     $year->value=(isset($p_array['p_year']))?$p_array['p_year']:date('Y');
 
     /*
+     * PJ
+     */
+    $pj=new IText('p_pj');
+    $pj->size=10;
+    /*
      * show all the visible material
      */
     require_once('template/util_generate.php');
@@ -98,8 +103,8 @@ array
 		 'e_date' => $p_array['p_date'],
 		 'periode' => 0,
 		 'desc' => 'Amortissement '.$p_array['p_year'],
-		 'e_pj' => '',
-		 'e_pj_suggest' => '',
+		 'e_pj' => $p_array['p_pj'],
+		 'e_pj_suggest' => $p_array['p_pj'] ,
 
 		 );
     $idx=0;
@@ -202,36 +207,21 @@ array
 	if ( isset($p_array['p_ck'.$i]))
 	  {
 	    /*
-	     * Check if already encoded
+	     * Do not exist we insert into amortissement.amortissement_histo
 	     */
-	    if ( $cn->get_value ("select count (*) from amortissement.amortissement_histo where h_year=$1 and a_id=$2",
-				 array($p_array['p_year'],$p_array['a_id'][$i])) != 0)
-	      {
-		/*
-		 * Already encoded : continue an exception will be thrown to rollback it
-		 */
-		$f_id=$cn->get_value("select f_id from amortissement.amortissement where a_id=$1",
-				     array($p_array['a_id'][$i]));
-		$fiche=new Fiche ($cn,$f_id);
-		$msg.="Fiche ".$fiche->strAttribut(ATTR_DEF_QUICKCODE)." déja amortie \n";
-	      }
-	    else
-	      {
-		/*
-		 * Do not exist we insert into amortissement.amortissement_histo
-		 */
-		$n=new Amortissement_Histo_Sql($cn);
-		$val=$cn->get_value("select ad_amount from amortissement.amortissement_detail ".
-				    " where a_id = $1 and ad_year=$2",
-				    array($p_array['a_id'][$i],$p_array['p_year']));
-		$val=($val=='')?0:$val;
-
-		$n->h_amount=$val;
-		$n->h_year=$p_array['p_year'];
-		$n->jr_internal=$jr_internal;
-		$n->a_id=$p_array['a_id'][$i];
-		$n->insert();
-	      }
+	    $n=new Amortissement_Histo_Sql($cn);
+	    $val=$cn->get_value("select ad_amount from amortissement.amortissement_detail ".
+				" where a_id = $1 and ad_year=$2",
+				array($p_array['a_id'][$i],$p_array['p_year']));
+	    $val=($val=='')?0:$val;
+	    $h=$cn->get_value('select ha_id from amortissement.amortissement_histo where a_id=$1 and h_year=$2',
+			      array($p_array['a_id'][$i],$p_array['p_year']));
+	    $n->ha_id=$h;
+	    $n->load();
+	    $n->h_amount=$val;
+	    $n->h_year=$p_array['p_year'];
+	    $n->jr_internal=$jr_internal;
+	    $n->update();
 	  }
       }
     return $msg;
