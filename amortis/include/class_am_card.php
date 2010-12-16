@@ -225,4 +225,35 @@ class Am_Card
     $this->amortissement->a_id=$cn->get_value("select a_id from amortissement.amortissement where f_id=$1",
 					      array($f));
   }
+  /**
+   *Display the detail of a card
+   */
+  public function print_detail($p_code)
+  {
+    global $cn;
+    $card=new Fiche($cn);
+    $card->get_by_qcode($p_code);
+    $amort=new Amortissement_Sql($cn);
+    $amort->a_id=$cn->get_value('select a_id from amortissement.amortissement where f_id=$1',array($card->id));
+
+    if ( $amort->a_id =='') 
+      {
+	echo '<h2 class="error">Non trouvé</h2>';
+	exit();
+      }
+    $amort->load();
+    $p_amount=$amort->a_amount;
+    $p_year=$amort->a_start;
+    $p_deb=$amort->account_deb;
+    $deb_span=$cn->get_value('select pcm_lib from tmp_pcmn where pcm_val=$1',
+			     array($p_deb));
+    $p_cred=$amort->account_cred;
+    $cred_span=$cn->get_value('select pcm_lib from tmp_pcmn where pcm_val=$1',
+			     array($p_cred));
+    $p_number=$amort->a_nb_year;
+    $a=new Amortissement_Detail_Sql($cn);
+
+    $array=$a->seek(' where a_id=$1 order by ad_year asc',array($amort->a_id));
+    require_once('template/material_display.php');
+  }
 }

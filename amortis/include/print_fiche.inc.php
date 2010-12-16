@@ -19,8 +19,41 @@
 /* $Revision$ */
 
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
-
+require_once('class_am_card.php');
 /*!\file
- * \brief
+ * \brief print detail of a card
  */
+echo '<div class="content" style="width:80%;margin-left:10%">';
+echo '<FORM METHOD="GET">';
+echo HtmlInput::hidden('sa',$_REQUEST['sa']);
+echo HtmlInput::hidden('sb',$_REQUEST['sb']);
+echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
+echo dossier::hidden();
 
+$p_card=new ICard('p_card');
+$p_card->size=25;
+$p_card->set_attribute('typecard',7);
+$p_card->set_attribute('label','p_card_label');
+$p_card->javascript=sprintf(' onchange="fill_data_onchange(\'%s\');" ',
+            $p_card->name);
+$p_card->set_function('fill_data');
+$p_card->set_dblclick("fill_ipopcard(this);");
+$msg="Fiche";
+if ( isset($_GET['p_card']))
+  {
+    /* search the card */
+    $fiche=new Fiche($cn);
+    $fiche->get_by_qcode($_GET['p_card']);
+    $msg=$fiche->strAttribut(ATTR_DEF_NAME);
+    $p_card->value=$_GET['p_card'];
+  }
+echo '<span style="text-align:left;display:block;font-size:2em" id="p_card_label"  >'.$msg.'</span>';
+echo "Fiche ".$p_card->input().$p_card->search();
+echo HtmlInput::submit('search','Accepter');
+echo '</form>';
+if ( isset($_GET['search']))
+  {
+    $a=new Am_Card();
+    echo $a->print_detail($_GET['p_card']);
+  }
+echo '</div>';
