@@ -21,14 +21,21 @@
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
 
 /*!\file
- * \brief print all the card
+ * \brief print all 
  */
-require_once('class_am_card.php');
-$a=new Am_Card();
-echo $a->listing();
-echo '<div class="content" style="width:80%;margin-left:10%">';
-echo '<hr>';
-echo date('d.m.Y');
-echo '<br>';
-echo HtmlInput::print_window();
-echo '</div>';
+$sql="select quick_code,a_id,ha_id,h_amount,jr_internal,h_year,h_pj,vw_name from amortissement.amortissement join amortissement.amortissement_histo using (a_id) join vw_fiche_attr using(f_id) where h_amount > 0 order by vw_name";
+
+$array=$cn->get_array($sql);
+if ( isset($_POST['remove']))
+  {
+    for ($i=0;$i<count($_POST['h']);$i++)
+      {
+	if ( isset($_POST['p_sel'][$i]))
+	  {
+	    $cn->exec_sql("update amortissement.amortissement_histo set h_amount=0,h_pj='',jr_internal='' where ha_id=$1",
+			  array($_POST['h'][$i]));
+	  }
+      }
+  }
+require_once('template/listing_histo.php');
+

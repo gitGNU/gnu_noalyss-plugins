@@ -21,14 +21,27 @@
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
 
 /*!\file
- * \brief print all the card
+ * \brief print for a specific year
  */
-require_once('class_am_card.php');
-$a=new Am_Card();
-echo $a->listing();
+
 echo '<div class="content" style="width:80%;margin-left:10%">';
-echo '<hr>';
-echo date('d.m.Y');
-echo '<br>';
-echo HtmlInput::print_window();
+echo '<FORM METHOD="GET">';
+echo HtmlInput::hidden('sa',$_REQUEST['sa']);
+echo HtmlInput::hidden('sb',$_REQUEST['sb']);
+echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
+echo dossier::hidden();
+$year=new INum('p_year');
+$year->value=(isset($_GET['p_year']))?$_GET['p_year']:'';
+echo "Année ".$year->input();
+echo HtmlInput::submit('search','Accepter');
+echo '</form>';
+/* display for year */
+if ( isset($_GET['search'])&& $_GET['p_year'] != '' &&isNumber($_GET['p_year'])==1)
+  {
+    $year=$_GET['p_year'];
+    $sql="select * from amortissement.amortissement where a_id
+         in (select a_id from amortissement.amortissement_detail where ad_year=$1)";
+    $array=$cn->get_array($sql,array($_GET['p_year']));
+    require_once('template/listing_year.php');
+  }
 echo '</div>';
