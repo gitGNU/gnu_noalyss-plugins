@@ -45,6 +45,6 @@ endfor;
 ?>
 
 </table>
-<? echo HtmlInput::submit('remove','Effacer la sélection')?>
+<? echo HtmlInput::submit('remove','Effacer la sélection','onclick="confirm(\'Confirmez Effacement ?\')"')?>
 </form>
 </div>
