@@ -35,7 +35,7 @@ $menu=array(
 	    );
 
 
-$sb=(isset($_REQUEST['sb']))?$_REQUEST['sb']:0;
+$sb=(isset($_REQUEST['sb']))?$_REQUEST['sb']:-1;
 $_REQUEST['sb']=$sb;
 $def=0;
 

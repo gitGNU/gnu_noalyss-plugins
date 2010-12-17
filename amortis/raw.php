@@ -21,43 +21,22 @@
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
 
 /*!\file
- * \brief let you generate the accounting for the paid off for a selected
- *  year history and remove
+ * \brief raw file for PDF
  */
-$url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&sa=util';
+require_once('amortis_constant.php');
 
-$menu=array(
-	    array($url.'&sb=generate','Génére écriture',' Génération écriture comptable ',1),
-	    array($url.'&sb=histo','Historique','Historique des opérations',3)
-	    );
+extract ($_REQUEST);
 
-
-$sb=(isset($_REQUEST['sb']))?$_REQUEST['sb']:-1;
-$_REQUEST['sb']=$sb;
-$def=0;
-
-switch($sb)
+/* export all cards in PDF */
+if ( isset($_REQUEST['pdf_all']))
   {
-  case 'generate':
-    $def=1;
-    break;
-  case 'histo':
-    $def=3;
-    break;
-  }
-
-echo ShowItem($menu,'H','mtitle ','mtitle ',$def,' style="width:40%;margin-left:10%;border-collapse: separate;border-spacing:  5px;"');
-
-/* List + add and modify card */
-if ($def==1)
-  {
-    require_once('am_generate.inc.php');
+    require_once('include/class_pdf_card.php');
+    global $cn;
+    $a=new Pdf_Card($cn);
+    $a->setDossierInfo(dossier::id());
+    $a->AliasNbPages('{nb}');
+    $a->AddPage();
+    $a->export();
     exit();
   }
-
-/* histo */
-if ( $def==3)
-  {
-    require_once('am_histo.inc.php');
-    exit();
-  }
+?>

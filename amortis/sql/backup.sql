@@ -4,7 +4,7 @@
 
 -- Dumped from database version 8.4.5
 -- Dumped by pg_dump version 9.0.1
--- Started on 2010-12-14 22:19:02 CET
+-- Started on 2010-12-17 23:37:49 CET
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -74,7 +74,7 @@ $$;
 ALTER FUNCTION amortissement.amortissement_ins() OWNER TO dany;
 
 --
--- TOC entry 2397 (class 0 OID 0)
+-- TOC entry 2400 (class 0 OID 0)
 -- Dependencies: 87
 -- Name: FUNCTION amortissement_ins(); Type: COMMENT; Schema: amortissement; Owner: dany
 --
@@ -177,12 +177,21 @@ CREATE SEQUENCE amortissement_a_id_seq
 ALTER TABLE amortissement.amortissement_a_id_seq OWNER TO dany;
 
 --
--- TOC entry 2398 (class 0 OID 0)
+-- TOC entry 2401 (class 0 OID 0)
 -- Dependencies: 2079
 -- Name: amortissement_a_id_seq; Type: SEQUENCE OWNED BY; Schema: amortissement; Owner: dany
 --
 
 ALTER SEQUENCE amortissement_a_id_seq OWNED BY amortissement.a_id;
+
+
+--
+-- TOC entry 2402 (class 0 OID 0)
+-- Dependencies: 2079
+-- Name: amortissement_a_id_seq; Type: SEQUENCE SET; Schema: amortissement; Owner: dany
+--
+
+SELECT pg_catalog.setval('amortissement_a_id_seq', 98, true);
 
 
 --
@@ -219,12 +228,21 @@ CREATE SEQUENCE amortissement_detail_ad_id_seq
 ALTER TABLE amortissement.amortissement_detail_ad_id_seq OWNER TO dany;
 
 --
--- TOC entry 2399 (class 0 OID 0)
+-- TOC entry 2403 (class 0 OID 0)
 -- Dependencies: 2081
 -- Name: amortissement_detail_ad_id_seq; Type: SEQUENCE OWNED BY; Schema: amortissement; Owner: dany
 --
 
 ALTER SEQUENCE amortissement_detail_ad_id_seq OWNED BY amortissement_detail.ad_id;
+
+
+--
+-- TOC entry 2404 (class 0 OID 0)
+-- Dependencies: 2081
+-- Name: amortissement_detail_ad_id_seq; Type: SEQUENCE SET; Schema: amortissement; Owner: dany
+--
+
+SELECT pg_catalog.setval('amortissement_detail_ad_id_seq', 1028, true);
 
 
 --
@@ -262,12 +280,21 @@ CREATE SEQUENCE amortissement_histo_ha_id_seq
 ALTER TABLE amortissement.amortissement_histo_ha_id_seq OWNER TO dany;
 
 --
--- TOC entry 2400 (class 0 OID 0)
+-- TOC entry 2405 (class 0 OID 0)
 -- Dependencies: 2085
 -- Name: amortissement_histo_ha_id_seq; Type: SEQUENCE OWNED BY; Schema: amortissement; Owner: dany
 --
 
 ALTER SEQUENCE amortissement_histo_ha_id_seq OWNED BY amortissement_histo.ha_id;
+
+
+--
+-- TOC entry 2406 (class 0 OID 0)
+-- Dependencies: 2085
+-- Name: amortissement_histo_ha_id_seq; Type: SEQUENCE SET; Schema: amortissement; Owner: dany
+--
+
+SELECT pg_catalog.setval('amortissement_histo_ha_id_seq', 55, true);
 
 
 --
@@ -295,6 +322,36 @@ ALTER TABLE amortissement_detail ALTER COLUMN ad_id SET DEFAULT nextval('amortis
 --
 
 ALTER TABLE amortissement_histo ALTER COLUMN ha_id SET DEFAULT nextval('amortissement_histo_ha_id_seq'::regclass);
+
+
+--
+-- TOC entry 2395 (class 0 OID 5578174)
+-- Dependencies: 2080
+-- Data for Name: amortissement; Type: TABLE DATA; Schema: amortissement; Owner: dany
+--
+
+COPY amortissement (a_id, f_id, account_deb, account_cred, a_amount, a_nb_year, a_start, a_visible) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2396 (class 0 OID 5578200)
+-- Dependencies: 2082
+-- Data for Name: amortissement_detail; Type: TABLE DATA; Schema: amortissement; Owner: dany
+--
+
+COPY amortissement_detail (ad_id, ad_amount, a_id, ad_year, ad_percentage) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2397 (class 0 OID 6040047)
+-- Dependencies: 2086
+-- Data for Name: amortissement_histo; Type: TABLE DATA; Schema: amortissement; Owner: dany
+--
+
+COPY amortissement_histo (ha_id, a_id, h_amount, jr_internal, h_year, h_pj) FROM stdin;
+\.
 
 
 --
@@ -429,7 +486,7 @@ ALTER TABLE ONLY amortissement_histo
     ADD CONSTRAINT amortissement_histo_a_id_fkey FOREIGN KEY (a_id) REFERENCES amortissement(a_id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2010-12-14 22:19:03 CET
+-- Completed on 2010-12-17 23:37:49 CET
 
 --
 -- PostgreSQL database dump complete

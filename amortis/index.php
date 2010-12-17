@@ -41,7 +41,7 @@ $cn=new Database (dossier::id());
 
 if ( $cn->exist_schema('amortissement') ==false )
   {
-    require_once('class_install_plugin.php');
+    require_once('include/class_install_plugin.php');
     $plugin=new Install_Plugin($cn);
     $plugin->install();
   }
@@ -53,7 +53,7 @@ $menu=array(
       );
 
 
-$sa=(isset($_REQUEST['sa']))?$_REQUEST['sa']:0;
+$sa=(isset($_REQUEST['sa']))?$_REQUEST['sa']:'card';
 $_REQUEST['sa']=$sa;
 $def=0;
 

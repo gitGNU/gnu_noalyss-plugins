@@ -51,6 +51,15 @@ echo '<span style="text-align:left;display:block;font-size:2em" id="p_card_label
 echo "Fiche ".$p_card->input().$p_card->search();
 echo HtmlInput::submit('search','Accepter');
 echo '</form>';
+
+echo '<FORM METHOD="GET" ACTION="extension.raw.php">';
+echo HtmlInput::hidden('sa',$_REQUEST['sa']);
+echo HtmlInput::hidden('sb',$_REQUEST['sb']);
+echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
+echo dossier::hidden();
+echo HtmlInput::submit('pdf_all','Toutes les fiches en PDF');
+echo '</form>';
+
 if ( isset($_GET['search']))
   {
     $a=new Am_Card();
