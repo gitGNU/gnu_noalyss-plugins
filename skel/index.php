@@ -24,6 +24,15 @@
  * \brief main file for tva
  */
 
+/*
+ * load javascript
+ */
+ob_start();
+require_once('skel_javascript.js');
+$j=ob_get_contents();
+ob_clean();
+echo create_script($j);
+
 $url='?'.dossier::get().'&code=tva';
 $array=array (
          array($url.'&sa=dec',_('Déclaration TVA'),_('Déclaration Trimestriel ou annuel de TVA'),1),
@@ -70,7 +79,8 @@ if ( $cn->exist_schema('tva_belge') == false)
   }
 
 // show menu
-echo ShowItem($array,'H',"mtitle","mtitle",$def,' width="100%" ');
+
+echo ShowItem($menu,'H','mtitle ','mtitle ',$def,' style="width:80%;margin-left:10%;border-collapse: separate;border-spacing:  5px;"');
 
 // include the right file
 if ($def==1)
