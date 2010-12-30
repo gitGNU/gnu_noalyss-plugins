@@ -140,3 +140,19 @@ function remove_mat(g_dossier,plugin_code,a_id)
 
    
 }
+
+function list_csv(obj)
+{
+    alert ("dossier = "+obj.dossier+" plugin :"+obj.plugin+" year "+obj.year);
+    var qs="?gDossier="+obj.dossier+"&plugin_code="+obj.plugin+"&list_year=1"+"&year="+obj.year;
+    var action=new Ajax.Request ( 'extension.raw.php',
+				  {
+				      method:'get',
+				      parameters:qs,
+				      onFailure:null,
+				      onSuccess:null
+				  }
+				);
+ 
+
+}

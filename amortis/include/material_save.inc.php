@@ -32,3 +32,4 @@ if ( $error_msg != '')
   echo alert($error_msg);
 else
   $mat->update();
+?>

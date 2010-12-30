@@ -7,6 +7,11 @@
 	<td><?=$p_card->input()?><?=$p_card->search()?></td>
 </tr>
 <tr>
+	<td>Date d'acquisition</td>
+	<td><?=$p_date->input()?></td>
+</tr>
+
+<tr>
 	<td>Montant à amortir</td>
 	<td><?=$p_amount->input()?></td>
 </tr>

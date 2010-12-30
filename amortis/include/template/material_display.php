@@ -7,6 +7,11 @@
 </tr>
 
 <tr>
+	<td>Date d'acquisition</td>
+	<td><?=$p_date?></td>
+</tr>
+
+<tr>
 	<td>Montant à amortir</td>
 	<td><?=$p_amount?></td>
 </tr>

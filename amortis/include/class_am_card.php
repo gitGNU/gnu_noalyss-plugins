@@ -79,6 +79,7 @@ class Am_Card
     $this->amortissement->a_start=$p_array['p_year'];
     $this->amortissement->a_amount=$p_array['p_amount'];
     $this->amortissement->a_nb_year=$p_array['p_number'];
+    $this->amortissement->a_date=$p_array['p_date'];
     $this->amortissement->a_visible=(isset($p_array['p_visible']))?$p_array['p_visible']:'Y';
     /*
      * if details then load them
@@ -135,6 +136,9 @@ class Am_Card
     $p_year->value=$this->amortissement->a_start;
     $p_number=new INum('p_number');
     $p_number->value=$this->amortissement->a_nb_year;
+
+    $p_date=new IDate('p_date');
+    $p_date->value=$this->amortissement->a_date;
 
     $p_visible=new IText('p_visible');
     $p_visible->size=2;
@@ -252,7 +256,7 @@ class Am_Card
 			     array($p_cred));
     $p_number=$amort->a_nb_year;
     $a=new Amortissement_Detail_Sql($cn);
-
+    $p_date=$amort->a_date;
     $array=$a->seek(' where a_id=$1 order by ad_year asc',array($amort->a_id));
     require_once('template/material_display.php');
   }

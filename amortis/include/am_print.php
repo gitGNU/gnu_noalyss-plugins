@@ -31,7 +31,7 @@ $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&sa=report';
 $menu=array(
 	    array($url.'&sb=dfiche','Détail fiche',' Détail fiche ',1),
 	    array($url.'&sb=dall','Listing','',2),
-	    array($url.'&sb=tabyear','Tableau / année','Tableau amortissement par année')
+	    array($url.'&sb=tabyear','Tableau / année','Tableau amortissement par année',3)
 	    );
 
 

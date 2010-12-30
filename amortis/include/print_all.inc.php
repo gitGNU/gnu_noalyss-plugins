@@ -31,4 +31,11 @@ echo '<hr>';
 echo date('d.m.Y');
 echo '<br>';
 echo HtmlInput::print_window();
-echo '</div>';
+?>
+<form method="GET" action="extension.raw.php" style="display:inline">
+<?=dossier::hidden()?>
+<?=HtmlInput::hidden('material','1');?>
+<?=HtmlInput::extension()?>
+<?=HtmlInput::submit('csv','Export CSV');?>
+</form>
+</div>

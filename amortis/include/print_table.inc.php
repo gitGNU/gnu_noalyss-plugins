@@ -43,5 +43,7 @@ if ( isset($_GET['search'])&& $_GET['p_year'] != '' &&isNumber($_GET['p_year'])=
          in (select a_id from amortissement.amortissement_detail where ad_year=$1)";
     $array=$cn->get_array($sql,array($_GET['p_year']));
     require_once('template/listing_year.php');
+    $d=dossier::id();$plugin=$_REQUEST['plugin_code'];$y=$_GET['p_year'];
+
   }
 echo '</div>';

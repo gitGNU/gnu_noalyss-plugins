@@ -27,6 +27,7 @@ class Amortissement_Sql
 			    ,"a_amount"=>"a_amount"
 			    ,"a_nb_year"=>"a_nb_year"
 			    ,"a_visible"=>"a_visible"
+			    ,"a_date"=>"a_date"
 			    );
   function __construct ( & $p_cn,$p_id=-1)
   {
@@ -133,6 +134,7 @@ class Amortissement_Sql
                      ,a_amount
                      ,a_nb_year
                      ,a_visible
+		     ,a_date
                      ) values ($1
                      ,$2
                      ,$3
@@ -140,6 +142,7 @@ class Amortissement_Sql
                      ,$5
                      ,$6
                      ,$7
+		     ,to_date($8,'DD.MM.YYYY')
                      ) returning a_id";
 
 	$this->a_id=$this->cn->get_value(
@@ -151,6 +154,7 @@ class Amortissement_Sql
 						,$this->a_amount
 						,$this->a_nb_year
 						,$this->a_visible
+						,$this->a_date
 						)
 					 );
       }
@@ -163,7 +167,8 @@ class Amortissement_Sql
                      ,a_amount
                      ,a_nb_year
                      ,a_visible
-                     ,a_id) values ($1
+                     ,a_id
+		     ,a_date) values ($1
                      ,$2
                      ,$3
                      ,$4
@@ -171,6 +176,7 @@ class Amortissement_Sql
                      ,$6
                      ,$7
                      ,$8
+		     ,to_date($9,'DD.MM.YYYY')
                      ) returning a_id";
 
 	$this->a_id=$this->cn->get_value(
@@ -182,7 +188,8 @@ class Amortissement_Sql
 						,$this->a_amount
 						,$this->a_nb_year
 						,$this->a_visible
-						,$this->a_id)
+						,$this->a_id
+						,$this->a_date)
 					 );
 
       }
@@ -200,7 +207,8 @@ class Amortissement_Sql
                  ,a_amount = $5
                  ,a_nb_year = $6
                  ,a_visible = $7
-                 where a_id= $8";
+		 ,a_date=to_date($8,'DD.MM.YYYY')
+                 where a_id= $9";
     $res=$this->cn->exec_sql(
 			     $sql,
 			     array($this->f_id
@@ -210,6 +218,7 @@ class Amortissement_Sql
 				   ,$this->a_amount
 				   ,$this->a_nb_year
 				   ,$this->a_visible
+				   ,$this->a_date
 				   ,$this->a_id)
 			     );
 
@@ -228,6 +237,7 @@ class Amortissement_Sql
                  ,a_amount
                  ,a_nb_year
                  ,a_visible
+		 ,to_char(a_date,'DD.MM.YYYY') as a_date
                  from amortissement.amortissement where a_id=$1";
     /* please adapt */
     $res=$this->cn->get_array(

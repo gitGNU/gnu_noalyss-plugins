@@ -10,6 +10,10 @@
 </tr>
 
 <tr>
+	<td>Date Acquisition</td>
+	<td><?=$p_date->input()?></td>
+</tr>
+<tr>
 	<td>Montant à amortir</td>
 	<td><?=$p_amount->input()?></td>
 </tr>
@@ -45,7 +49,7 @@
 	<td></td>
 </tr>
 </table>
-<span class="notice"> En changeant le montant à amortir, l'année ou le nombre d'années, les annuités seront recalculées</span>
+<span class="notice"> En changeant le montant à amortir, l'année ou le nombre d'années, les annuités seront recalculées et l'historique effacé</span>
 <fieldset><legend>Annuités</legend>
 <table class="result">
 <th>Année</th>

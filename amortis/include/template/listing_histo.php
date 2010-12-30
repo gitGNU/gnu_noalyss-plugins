@@ -11,8 +11,8 @@ echo dossier::hidden();
 <tr>
 <th>Quick Code</th>
 <th>Nom</th>
-<th>Montant</th>
-<th>Année</th>
+<th style="text-align:right">Montant</th>
+<th style="text-align:center">Année</th>
 <th>N°</th>
 <th>Opération</th>
 
@@ -23,8 +23,8 @@ for ($i=0;$i<count($array);$i++) :
 	echo '<tr>';
 	echo td($array[$i]['quick_code']);
 	echo td($array[$i]['vw_name']);
-	echo td($array[$i]['h_amount']);
-	echo td($array[$i]['h_year']);
+	echo td(nbm($array[$i]['h_amount']), 'align="right"');
+	echo td($array[$i]['h_year'],'align="center"');
 				 
 	echo td($array[$i]['h_pj']);
 	$msg='';

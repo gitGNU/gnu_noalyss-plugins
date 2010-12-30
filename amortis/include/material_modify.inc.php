@@ -14,8 +14,8 @@
  *
  *   You should have received a copy of the GNU General Public License
  *   along with PhpCompta; if not, write to the Free Software
- *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *   02111-1307 USA /
 /* $Revision$ */
 
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
@@ -32,8 +32,20 @@ array
 \endverb
  */
 require_once ('class_am_card.php');
-$mat=new Am_Card();
-$mat->set_material($f);
-echo HtmlInput::button_close($t);
-$mat->input();
-
+$a=$cn->get_value("select a_id from amortissement.amortissement where f_id=$1",
+		  array($f));
+if ( $cn->count() == 0 )
+  {
+    echo HtmlInput::button_close($t);
+    echo '<h2 class="info">Détail de matériel</h2>';
+    echo "<h2 class=\"error\"> Bien à amortir effacé </h2>";
+    echo HtmlInput::button('close','Fermer',"onclick=\"removeDiv('bxmat');refresh_window()\" ");
+  }
+else
+  {
+    $mat=new Am_Card();
+    $mat->set_material($f);
+    echo HtmlInput::button_close($t);
+    $mat->input();
+  }
+?>

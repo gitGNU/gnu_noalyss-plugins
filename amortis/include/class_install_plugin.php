@@ -61,6 +61,7 @@ class Install_Plugin
   a_amount numeric(20,2) NOT NULL DEFAULT 0,
   a_nb_year numeric(4,2) NOT NULL DEFAULT 0,
   a_start integer,
+  a_date date,
   a_visible character(1) DEFAULT 'Y'::bpchar,
   CONSTRAINT amortissement_pkey PRIMARY KEY (a_id),
   CONSTRAINT amortissement_account_cred_fkey FOREIGN KEY (account_cred)
@@ -130,7 +131,6 @@ CREATE TABLE amortissement.amortissement_histo
     $fct="CREATE OR REPLACE FUNCTION amortissement.amortissement_ins()
   RETURNS trigger AS
 \$BODY\$
-
 declare 
 i int;
 nyear int;
@@ -151,10 +151,10 @@ begin
            total := total + n_ad_amount;
 
            if total > NEW.a_amount then
-		n_ad_amount := NEW.a_amount -  total - n_ad_amount;
+		n_ad_amount := n_ad_amount - total + NEW.a_amount ;
 	   end if;
 
-           insert into amortissement.amortissement_detail(ad_year,ad_amount,a_id) values (nyear,n_ad_amount,NEW.a_id) returning ad_id into last_ad_id;
+           insert into amortissement.amortissement_detail(ad_year,ad_amount,a_id,ad_percentage) values (nyear,n_ad_amount,NEW.a_id,1/NEW.a_nb_year) returning ad_id into last_ad_id;
            insert into amortissement.amortissement_histo(a_id,h_amount,h_year) values (NEW.a_id,0,nyear);
 	   i := i+1;
 	end loop;
@@ -164,6 +164,8 @@ begin
 	end if;
 	return NEW;
 end;
+
+
 \$BODY\$
   LANGUAGE 'plpgsql'";
 
@@ -184,13 +186,16 @@ n_ad_amount numeric(20,2);
 total numeric(20,2);
 last_ad_id bigint;
 n_pct numeric(5,2);
+lha_id bigint;
 begin
 	i :=0;
-	if NEW.a_nb_year != OLD.a_nb_year or NEW.a_start != OLD.a_start then
+	if NEW.a_nb_year != OLD.a_nb_year or NEW.a_start != OLD.a_start or NEW.a_amount != OLD.a_amount then
 	   delete from amortissement.amortissement_detail where a_id=NEW.a_id;
-
+	   delete from amortissement.amortissement_histo where a_id=NEW.a_id and
+	   	       					 (h_year < NEW.a_start or h_year > NEW.a_start+NEW.a_nb_year-1);
+						
            n_ad_amount := round(NEW.a_amount/NEW.a_nb_year,2);
-	   n_pct := round(NEW.a_amount / n_ad_amount,2);
+	   n_pct := round(n_ad_amount / NEW.a_amount ,2);
 	 loop
 	   
 	   if i = NEW.a_nb_year then
@@ -198,17 +203,20 @@ begin
 	   end if;
            nyear :=  NEW.a_start +i;
 
+	   select ha_id into lha_id from amortissement.amortissement_histo where a_id=NEW.a_id and h_year = nyear;
+
+	   if NOT FOUND then 
+	      insert into amortissement.amortissement_histo(a_id,h_year,h_amount) values (NEW.a_id,nyear,0);
+	   end if;
 
            total := round(total + n_ad_amount,2);
 
            if total > NEW.a_amount then
 		n_ad_amount := NEW.a_amount -  total - n_ad_amount;
 	   end if;
-raise notice 'ad_amount % total %s n_pct %',n_ad_amount,total,n_pct;	
-           insert into amortissement.amortissement_detail(ad_year,ad_amount,ad_percentage,a_id) values (nyear,n_ad_amount,n_pct,NEW.a_id) returning ad_id into last_ad_id;
+           insert into amortissement.amortissement_detail(ad_year,ad_amount,ad_percentage,a_id) values (nyear,n_ad_amount,1/NEW.a_nb_year,NEW.a_id) returning ad_id into last_ad_id;
 	   i := i+1;
 	end loop;
-raise notice 'Total %',total;
 	if total < NEW.a_amount then
 		n_ad_amount := n_ad_amount+NEW.a_amount-total;
 		update amortissement.amortissement_detail set ad_amount=n_ad_amount where ad_id=last_ad_id;
@@ -216,6 +224,7 @@ raise notice 'Total %',total;
    end if;
    return NEW;
 end;
+
 \$BODY\$
   LANGUAGE 'plpgsql' ";
 

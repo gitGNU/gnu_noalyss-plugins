@@ -27,6 +27,7 @@ $date=new IDate('p_date');
 $p_year=new INum('p_year');
 $p_number=new INum('p_number');
 $p_card=new ICard('p_card');
+$p_date=new IDate('p_date');
 $p_card->size=25;
 $p_card->set_attribute('typecard',7);
 $p_card->set_attribute('label','p_card_label');
