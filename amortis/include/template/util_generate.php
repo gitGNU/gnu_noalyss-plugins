@@ -24,7 +24,7 @@
  * \brief select the mat. to amortize, the ledger and the year 
  */
  ?>
-<form method="post">
+<form id="gen_amort" method="post">
 <?=HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);?>
 <?=HtmlInput::hidden('sa',$_REQUEST['sa']);?>
 <?=HtmlInput::hidden('sb',$_REQUEST['sb']);?>
@@ -87,3 +87,5 @@ endfor;
 </table>
 <?=HtmlInput::submit('generate',"Générer l'écriture");?>
 </form>
+<?=HtmlInput::button('check_all','Sélectionner tout',' onclick="select_checkbox(\'gen_amort\')"');?>
+<?=HtmlInput::button('check_none','Tout Désélectionner ',' onclick="unselect_checkbox(\'gen_amort\')"');?>
