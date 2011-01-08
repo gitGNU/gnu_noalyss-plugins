@@ -44,11 +44,11 @@ if ( isset($_REQUEST['pdf_all']))
  */
 if ( isset ($_REQUEST['list_year']))
 {
-  $name="export-".$_REQUEST['list_year'];
+  $name="amortis-export-".$_REQUEST['list_year'];
   header('Pragma: public');
   header('Content-type: application/csv');
   header('Content-Disposition: attachment;filename="'.$name.'.csv"',FALSE);
-  print "\"Code\";\"Description\";\"Année Achat\";\"Montant Achat\";\"Nombre annuités\";\"Montant à amortir\";\"Amortissement\";\"Reste\"\r\n";
+  print "\"Code\";\"Description\";\"Date acquisition\";\"Année Achat\";\"Montant Achat\";\"Nombre annuités\";\"Montant à amortir\";\"Amortissement\";\"Reste\"\r\n";
   $year=$_REQUEST['list_year'];
   $sql="select * from amortissement.amortissement where a_id
          in (select a_id from amortissement.amortissement_detail where ad_year=$1)";
