@@ -42,7 +42,7 @@ class Am_Card
     if ( $p_all==true)
       $ret=$amort->seek();
     else
-      $ret=$amort->seek(" where a_visible = 'Y'");
+      $ret=$amort->seek(" join fiche_detail using(f_id) where a_visible = 'Y' and ad_id=1 order by ad_value");
 
     require_once('template/material_listing.php');
 
