@@ -50,12 +50,13 @@ class Pdf_Card extends PDF
     function export()
     {
         // take all material from 
-      $array=$this->cn->get_array('select a_id , f_id , vw_name,vw_description,
+      $array=$this->cn->get_array("select a_id , f_id , vw_name,vw_description,
 				account_deb , account_cred , a_amount ,
 				a_nb_year , a_start
 				from  amortissement.amortissement
 			       left join vw_fiche_attr using(f_id)
-			       order by vw_name	');
+			       where a_visible='Y'
+			       order by vw_name	");
 
       $this->total_page=count($array);
       $this->SetFont('DejaVu','BI',7);
