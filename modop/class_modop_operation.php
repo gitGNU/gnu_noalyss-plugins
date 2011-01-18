@@ -169,7 +169,7 @@ class Modop_Operation
                 $this->array['amount'.$e]=$ods[$e]['j_montant'];
                 $this->array['ld'.$e]=$ods[$e]['j_text'];
             }
-            $this->array['nb_item']=(count($qp)<9)?9:count($qp);
+            $this->array['nb_item']=(count($ods)<9)?9:count($ods);
 
         } // ledger MISC
 ///////////////////////////////////////////////////////////////////////////
