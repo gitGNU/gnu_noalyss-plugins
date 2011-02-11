@@ -183,6 +183,18 @@ class Ext_Tva_Gen
     $iname=new IText('name',$this->tva_name); $str_name=$iname->input();
     $iadress=new IText('adress',$this->adress);$str_adress=$iadress->input();
     $icountry=new IText('country',$this->country);$str_country=$icountry->input();
+
+    /* date */
+
+    if (isset($this->date_decl)) { $idate=new IText('date',format_date($this->date_decl));$str_date=$idate->input();}
+
+    /* periode */
+
+    if ( isset($this->start_date) ){
+      $str_start=format_date($this->start_date);
+      $str_end=format_date($this->end_date);
+
+    }
     $ianne=$this->exercice;
     ob_start();
     require_once('form_decl_info.php');

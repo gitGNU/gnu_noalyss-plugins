@@ -64,9 +64,6 @@ if ( $cn->exist_schema('tva_belge') == false) {
 
   $iplugn=new Install_Plugin($cn);
   $iplugn->install();
-  /**
-   *@todo améliorer le message, peu cosmétique
-   */
   echo_warning(_("L'extension est installée, pourriez-vous en vérifier le paramètrage ?"));
   $def=5;
 }
