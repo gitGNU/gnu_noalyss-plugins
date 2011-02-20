@@ -94,7 +94,7 @@ if ($op->ledger_type=='ACH')
     $pop_tva->value='';
     echo $pop_tva->input();
 
-    echo '<FORM METHOD="GET">';
+    echo '<FORM METHOD="GET" class="print">';
     $op->suspend_receipt();
     echo $jrn->input($op->array);
     echo HtmlInput::extension().dossier::hidden();
@@ -128,7 +128,7 @@ if ($op->ledger_type=='VEN')
     echo $pop_tva->input();
     $op->suspend_receipt();
 
-    echo '<FORM METHOD="GET">';
+    echo '<FORM METHOD="GET" class="print">';
     echo $jrn->input($op->array);
     $op->activate_receipt();
 
@@ -158,7 +158,7 @@ if ($op->ledger_type=='ODS')
     echo $search_card->input();
     $op->suspend_receipt();
 
-    echo '<FORM METHOD="GET">';
+    echo '<FORM METHOD="GET" class="print">';
     echo $jrn->show_form($op->array);
     $op->activate_receipt();
 
@@ -200,7 +200,7 @@ if ($op->ledger_type=='FIN')
     $f_add_button->set_attribute('filter',$jrn->get_all_fiche_def ());
     $f_add_button->javascript=" select_card_type(this);";
     $str_add_button=$f_add_button->input();
-    echo '<FORM METHOD="GET">';
+    echo '<FORM METHOD="GET" class="print">';
     $Date=new IDate("e_date",$op->array['e_date']);
     $f_date=$Date->input();
     $label=HtmlInput::infobulle(3);
