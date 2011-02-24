@@ -30,25 +30,33 @@ $p_card=new ICard('p_card');
 $p_date=new IDate('p_date');
 $p_card->size=25;
 $list=$cn->make_list('select fd_id from fiche_def where frd_id=7');
-$p_card->set_attribute('typecard',$list);
-$p_card->set_attribute('label','p_card_label');
-$p_card->javascript=sprintf(' onchange="fill_data_onchange(\'%s\');" ',
-            $p_card->name);
-$p_card->set_function('fill_data');
-$p_card->set_dblclick("fill_ipopcard(this);");
+if ( $list == '') 
+  {
+    echo alert(_('Attention pas de catégorie de fiche à amortir'));
+  }
+else 
+  {
 
-$p_deb=new IPoste('p_deb');
-$p_deb->set_attribute('jrn',0);
-$p_deb->set_attribute('account','p_deb');
-$p_deb->set_attribute('label','p_deb_label');
-$deb_span=new ISpan('p_deb_label');
-
-$p_cred=new IPoste('p_cred');
-$p_cred->set_attribute('jrn',0);
-$p_cred->set_attribute('account','p_cred');
-$p_cred->set_attribute('label','p_cred_label');
-$cred_span=new ISpan('p_cred_label');
-
-$p_amount=new INum('p_amount');
-
-require_once ('template/material_add.php');
+    $p_card->set_attribute('typecard',$list);
+    $p_card->set_attribute('label','p_card_label');
+    $p_card->javascript=sprintf(' onchange="fill_data_onchange(\'%s\');" ',
+			       $p_card->name);
+    $p_card->set_function('fill_data');
+    $p_card->set_dblclick("fill_ipopcard(this);");
+    
+    $p_deb=new IPoste('p_deb');
+    $p_deb->set_attribute('jrn',0);
+    $p_deb->set_attribute('account','p_deb');
+    $p_deb->set_attribute('label','p_deb_label');
+    $deb_span=new ISpan('p_deb_label');
+    
+    $p_cred=new IPoste('p_cred');
+    $p_cred->set_attribute('jrn',0);
+    $p_cred->set_attribute('account','p_cred');
+    $p_cred->set_attribute('label','p_cred_label');
+    $cred_span=new ISpan('p_cred_label');
+    
+    $p_amount=new INum('p_amount');
+    
+    require_once ('template/material_add.php');
+  }

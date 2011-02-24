@@ -30,40 +30,46 @@ echo HtmlInput::hidden('sb',$_REQUEST['sb']);
 echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
 echo dossier::hidden();
 $list=$cn->make_list('select fd_id from fiche_def where frd_id=7');
-
-$p_card=new ICard('p_card');
-$p_card->size=25;
-$p_card->set_attribute('typecard',$list);
-$p_card->set_attribute('label','p_card_label');
-$p_card->javascript=sprintf(' onchange="fill_data_onchange(\'%s\');" ',
-            $p_card->name);
-$p_card->set_function('fill_data');
-$p_card->set_dblclick("fill_ipopcard(this);");
-$msg="Fiche";
-if ( isset($_GET['p_card']))
+if ( $list !='')
   {
-    /* search the card */
-    $fiche=new Fiche($cn);
-    $fiche->get_by_qcode($_GET['p_card']);
-    $msg=$fiche->strAttribut(ATTR_DEF_NAME);
-    $p_card->value=$_GET['p_card'];
+    $p_card=new ICard('p_card');
+    $p_card->size=25;
+    $p_card->set_attribute('typecard',$list);
+    $p_card->set_attribute('label','p_card_label');
+    $p_card->javascript=sprintf(' onchange="fill_data_onchange(\'%s\');" ',
+				$p_card->name);
+    $p_card->set_function('fill_data');
+    $p_card->set_dblclick("fill_ipopcard(this);");
+    $msg="Fiche";
+    if ( isset($_GET['p_card']))
+      {
+	/* search the card */
+	$fiche=new Fiche($cn);
+	$fiche->get_by_qcode($_GET['p_card']);
+	$msg=$fiche->strAttribut(ATTR_DEF_NAME);
+	$p_card->value=$_GET['p_card'];
+      }
+    echo '<span style="text-align:left;display:block;font-size:2em" id="p_card_label"  >'.$msg.'</span>';
+    echo "Fiche ".$p_card->input().$p_card->search();
+    echo HtmlInput::submit('search','Accepter');
+    echo '</form>';
+    
+    echo '<FORM METHOD="GET" ACTION="extension.raw.php">';
+    echo HtmlInput::hidden('sa',$_REQUEST['sa']);
+    echo HtmlInput::hidden('sb',$_REQUEST['sb']);
+    echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
+    echo dossier::hidden();
+    echo HtmlInput::submit('pdf_all','Toutes les fiches en PDF');
+    echo '</form>';
+    
+    if ( isset($_GET['search']))
+      {
+	$a=new Am_Card();
+	echo $a->print_detail($_GET['p_card']);
+      }
   }
-echo '<span style="text-align:left;display:block;font-size:2em" id="p_card_label"  >'.$msg.'</span>';
-echo "Fiche ".$p_card->input().$p_card->search();
-echo HtmlInput::submit('search','Accepter');
-echo '</form>';
-
-echo '<FORM METHOD="GET" ACTION="extension.raw.php">';
-echo HtmlInput::hidden('sa',$_REQUEST['sa']);
-echo HtmlInput::hidden('sb',$_REQUEST['sb']);
-echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
-echo dossier::hidden();
-echo HtmlInput::submit('pdf_all','Toutes les fiches en PDF');
-echo '</form>';
-
-if ( isset($_GET['search']))
+else
   {
-    $a=new Am_Card();
-    echo $a->print_detail($_GET['p_card']);
+    echo alert(_('Attention pas de catégorie de fiche à amortir'));
   }
 echo '</div>';
