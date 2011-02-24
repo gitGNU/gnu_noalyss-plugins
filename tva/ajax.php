@@ -50,6 +50,8 @@ case 'rw':
   $ctl='record_write';
   $ledger=new Acc_ledger($cn,0);
   $sel_ledger=$ledger->select_ledger('ODS',1);
+  $r.=h2info('Génération écriture');
+
   $r.='<form onsubmit="save_write(this);return false;">';
   $decl=new Ext_Tva($cn);
   $decl->set_parameter('id',$_GET['p_id']);

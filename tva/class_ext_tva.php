@@ -340,7 +340,6 @@ class Ext_Tva extends Ext_Tva_Gen
    }
    function propose_form() {
      $r='';
-
      /* take all the vat code */
      $array=$this->db->get_array("select tva_poste from tva_rate");
      if ( empty($array)) return 'aucun compte pour la tva';
@@ -374,9 +373,11 @@ class Ext_Tva extends Ext_Tva_Gen
        $amount->value=abs($result['solde']);
 
        $ICheckBox=new ICheckBox('deb['.$idx.']');
-       if ( $result['debit'] < $result['credit'] ) {$amount_vat-=$result['solde'];	 $ICheckBox->selected=true;} 
-       else {$amount_vat+=$result['solde'];	 $ICheckBox->selected=false;
-}
+       if ( $result['debit'] < $result['credit'] ) {
+	 $amount_vat-=$result['solde'];	 $ICheckBox->selected=true;} 
+       else {
+	 $amount_vat+=$result['solde'];	 $ICheckBox->selected=false;
+       }
        $idx++;
        /* display row */
        $r.=tr(td($account->input()).td($lib).td($amount->input()).td($ICheckBox->input()));
@@ -425,7 +426,8 @@ class Ext_Tva extends Ext_Tva_Gen
        $amount=new INum('atva_amount');
        $amount->value=abs($result['solde']);
 
-       if ( $result['debit'] < $result['credit'] ) {$amount_vat-=$result['solde'];	 $ICheckBox->selected=true;}
+       if ( $result['debit'] < $result['credit'] ) {
+	 $amount_vat-=$result['solde'];	 $ICheckBox->selected=true;}
        else {       
 	 $ICheckBox->selected=false;
 	 $amount_vat+=$result['solde'];
@@ -530,6 +532,7 @@ class Ext_Tva extends Ext_Tva_Gen
 
      }
      $r.='</table>';
+
      return $r;
    }
    function display() {
