@@ -29,10 +29,11 @@ echo HtmlInput::hidden('sa',$_REQUEST['sa']);
 echo HtmlInput::hidden('sb',$_REQUEST['sb']);
 echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
 echo dossier::hidden();
+$list=$cn->make_list('select fd_id from fiche_def where frd_id=7');
 
 $p_card=new ICard('p_card');
 $p_card->size=25;
-$p_card->set_attribute('typecard',7);
+$p_card->set_attribute('typecard',$list);
 $p_card->set_attribute('label','p_card_label');
 $p_card->javascript=sprintf(' onchange="fill_data_onchange(\'%s\');" ',
             $p_card->name);

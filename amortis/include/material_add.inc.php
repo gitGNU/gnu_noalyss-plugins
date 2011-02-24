@@ -29,7 +29,8 @@ $p_number=new INum('p_number');
 $p_card=new ICard('p_card');
 $p_date=new IDate('p_date');
 $p_card->size=25;
-$p_card->set_attribute('typecard',7);
+$list=$cn->make_list('select fd_id from fiche_def where frd_id=7');
+$p_card->set_attribute('typecard',$list);
 $p_card->set_attribute('label','p_card_label');
 $p_card->javascript=sprintf(' onchange="fill_data_onchange(\'%s\');" ',
             $p_card->name);
