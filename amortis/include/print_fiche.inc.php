@@ -70,6 +70,7 @@ if ( $list !='')
   }
 else
   {
-    echo alert(_('Attention pas de catégorie de fiche à amortir'));
+    echo h2info(_('Matériel à amortir'));
+    echo h2(_('Attention pas de catégorie de fiche à amortir'),'class="error"');
   }
 echo '</div>';

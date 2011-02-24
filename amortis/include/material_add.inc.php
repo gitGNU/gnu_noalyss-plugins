@@ -32,7 +32,9 @@ $p_card->size=25;
 $list=$cn->make_list('select fd_id from fiche_def where frd_id=7');
 if ( $list == '') 
   {
-    echo alert(_('Attention pas de catégorie de fiche à amortir'));
+    
+    echo h2info(_('Matériel à amortir'));
+    echo h2(_('Attention pas de catégorie de fiche à amortir'),'class="error"');
   }
 else 
   {
