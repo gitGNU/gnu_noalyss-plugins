@@ -4,17 +4,30 @@
 echo _('Importation de données');
 ?>
 </h2>
-<? var_dump($_POST);?>
+
 <p>Pour importer des données, c'est-à-dire transformer des fichiers CSV (Valeur séparé par des virgules) en des fiches. Vous devez choisir, un fichier et donner une catégorie de fiche existante. Ensuite, il suffit d'indiquer quelles colonnes correspondent à quelle attribut. 
 </p>
 
 <form method="POST" >
 <?=$hidden?>
-Délimiteur = <? echo $_POST['rdelimiter']?>
-Fichier à charger <? echo $_FILES['csv_file']['name']?>
-Catégorie de fiche <? echo $file_cat;?>
-Encodage  <? echo $encoding?>
-Texte entouré par <? echo $_POST['rsurround'];?>
+<table>
+<tr>
+<td>Délimiteur </td>
+<td> <? echo $_POST['rdelimiter']?></td>
+</tr>
+<tr>
+<td>Fichier à charger</td><td> <? echo $_FILES['csv_file']['name']?></td>
+</tr>
+<tr>
+<td>Catégorie de fiche</td><td> <? echo $file_cat;?></td>
+</tr>
+<tr>
+<td>Encodage </td><td> <? echo $encoding?></td>
+</tr>
+<tr>
+<td>Texte entouré par</td><td> <? echo $_POST['rsurround'];?></td>
+</tr>
+</table>
 <?
 foreach (array('rfichedef','rdelimiter','encodage') as $e)
 {

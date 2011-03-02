@@ -78,7 +78,7 @@ class Import_Card
       }
     $filename=tempnam($_ENV['TMP'],'upload_');
     move_uploaded_file($_FILES["csv_file"]["tmp_name"],$filename);
-    echo $filename;
+
     $file_cat=$cn->get_value('select fd_label from fiche_def where fd_id=$1',array($_POST['rfichedef']));
     $encoding=(isset ($_REQUEST['encodage']))?'Unicode':'latin1';
     require_once('template/test_file.php');
@@ -151,10 +151,12 @@ array
     /*
      * read the file and record card
      */
-    var_dump($_POST);
+
     $row_count=0;
+
     echo '<table>';
-    xdebug_start_trace();
+
+    ob_start();
     while (($row=fgetcsv($fd,0,$_POST['rdelimiter'],$_POST['rsurround'])) !== false)
       {
 	$fiche=new Fiche($cn);
@@ -163,10 +165,14 @@ array
 	echo '<tr style="border:solid 1px black">';
 	echo td($row_count);
 	$count_col=count($row);
-
+	$col_count=0;
 	for ($i=0;$i<$count_col;$i++)
 	  {
 	    if ( $head_col[$i]==-1) continue;
+
+	    $header[$col_count]=$head_col[$i];
+	    $col_count++;
+
 	    echo td ($row[$i]);
 	    $attr=sprintf('av_text%d',$head_col[$i]);
 	    $array[$attr]=$row[$i];
@@ -190,8 +196,23 @@ array
 	$fiche->insert($rfichedef,$array);
 	echo '</tr>';
       }
+    $table_content=ob_get_contents();
+    ob_clean();
+    echo '<tr>';
+    echo th('');
+    for ($e=0;$e<count($header);$e++)
+      {
+	$name=$cn->get_value('select ad_text from attr_def where ad_id=$1',array($header[$e]));
+	echo th($name);
+      }
+    echo '</tr>';
+    echo $table_content;
+
     echo '</table>';
-    xdebug_stop_trace();
+    $name=$cn->get_value('select fd_label from fiche_def where fd_id=$1',array($rfichedef));
+    echo '<span class="notice">';
+    echo $row_count.' fiches sont insérées dans la catégorie '.$name;
+    echo '</span>';
     return 0;
   }
 }

@@ -11,11 +11,23 @@ echo _('Importation de données');
 </p>
 <form method="POST" enctype="multipart/form-data">
 <?=$hidden?>
-Délimiteur = <? echo $delimiter->input()?>
-Fichier à charger <? echo $file->input()?>
-Catégorie de fiche <? echo $fd->input();?>
-Encodage unicode <? echo $encodage->input()?>
-  Texte entouré du signe <input type="text" name="rsurround" value='"' size="1">
+<table>
+<tr>
+<td>Délimiteur </td><TD> <? echo $delimiter->input()?></td>
+</tr>
+<tr>
+<td>Fichier à charger</td><TD> <? echo $file->input()?></td>
+</tr>
+<tr>
+<td>Catégorie de fiche</td><TD> <? echo $fd->input();?></td>
+</tr>
+<tr>
+<td>Encodage unicode</td><TD> <? echo $encodage->input()?></td>
+</tr>
+<tr>
+<td>  Texte entouré du signe </td><TD><input type="text" name="rsurround" value='"' size="1"></td>
+</tr>
+</table>
 <? echo HtmlInput::submit('test_import','Valider');?>
 
 </form>
