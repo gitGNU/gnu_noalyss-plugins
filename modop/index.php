@@ -32,6 +32,7 @@ $search=new IButton('getjr');
 $js="openRecherche(".dossier::id().")";
 $search->label='Chercher dans les journaux';
 $search->javascript=sprintf('%s',$js);
+
 ?>
 <FORM METHOD="GET">
   <? echo HtmlInput::extension().dossier::hidden();?>

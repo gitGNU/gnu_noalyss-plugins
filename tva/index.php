@@ -88,7 +88,7 @@ $a=$cn->exist_column('assujetti','exercice','tva_belge');
 if ( $a == false) 
   $cn->exec_sql("alter table tva_belge.assujetti add exercice text");
 
-echo '<div style="float:right"><a class="mtitle" style="font-size:120%" href="http://wiki.phpcompta.eu/doku.php?id=tva" target="_blank">Aide</a></div>';
+echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=tva" target="_blank">Aide</a></div>';
 // show menu
 echo ShowItem($array,'H',"mtitle","mtitle",$def,' style="width:80%;margin-left:10%;border-spacing:5;" ');
 

@@ -29,7 +29,7 @@
  */
 require_once('include/class_import_card.php');
 global $cn;
-
+echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=importation_de_fiche" target="_blank">Aide</a></div>';
 $cn=new Database(dossier::id());
 if ( ! isset($_REQUEST['sa']))
   {
