@@ -210,6 +210,7 @@ array
 
     echo '</table>';
     $name=$cn->get_value('select fd_label from fiche_def where fd_id=$1',array($rfichedef));
+    $cn->get_value('select comptaproc.fiche_attribut_synchro($1)',array($rfichedef));
     echo '<span class="notice">';
     echo $row_count.' fiches sont insérées dans la catégorie '.$name;
     echo '</span>';
