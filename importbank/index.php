@@ -27,26 +27,29 @@
 /*
  * load javascript
  */
-require_once('include/class_import_card.php');
+require_once('include/class_import_bank.php');
 global $cn;
-echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=importation_de_fiche" target="_blank">Aide</a></div>';
+echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=importation_de_banque" target="_blank">Aide</a></div>';
 $cn=new Database(dossier::id());
+/*
+ *Menu : import bank, reconciliation operation, purge temporary table
+ */
 if ( ! isset($_REQUEST['sa']))
   {
-    Import_Card::new_import();
+    Import_Bank::new_import();
     exit();
   }
 
 if ( $_REQUEST['sa']=='test')
   {
-    if (Import_Card::test_import() == 0 )    exit();
-    Import_Card::new_import();
+    if (Import_Bank::test_import() == 0 )    exit();
+    Import_Bank::new_import();
     exit();
 
   }
 
 if($_REQUEST['sa'] == 'record')
   {
-    if (Import_Card::record_import() ==0 )     exit();
-    Import_Card::new_import();
+    if (Import_Bank::record_import() ==0 )     exit();
+    Import_Bank::new_import();
   }
