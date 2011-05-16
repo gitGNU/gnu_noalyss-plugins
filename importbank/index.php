@@ -31,25 +31,47 @@ require_once('include/class_import_bank.php');
 global $cn;
 echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=importation_de_banque" target="_blank">Aide</a></div>';
 $cn=new Database(dossier::id());
+
+/*
+ * Menu
+ */
+global $cn;
+
+$url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'];
+
+$array=array (
+	array($url.'&sa=import',_('Importation'),_('Importation de nouveaux fichiers'),1),
+	array($url.'&sa=reconc',_('Reconciliation'),_('Réconciliation entre les opérations importées'),2),
+	array($url.'&sa=transfer',_('Transfert'),_('Transfert vers la comptabilité des op. importées'),3),
+	array($url.'&sa=purge',_('Purge '),_('Vide les imports effectués'),5)
+	);
+
+$sa=(isset($_REQUEST['sa']))?$_REQUEST['sa']:1;
+
+echo ShowItem($array,'H','mtitle','mtitle',$sa,' style="width:80%;margin-left:10%"');
 /*
  *Menu : import bank, reconciliation operation, purge temporary table
  */
 if ( ! isset($_REQUEST['sa']))
   {
-    Import_Bank::new_import();
+    require_once('include/import_bank.php');
+    exit();
+  }
+/*
+ * Import file
+ */
+if ( $_REQUEST['sa']=='import')
+  {
+    require_once('include/import_bank.php');
     exit();
   }
 
-if ( $_REQUEST['sa']=='test')
+if($_REQUEST['sa'] == 'reconc')
   {
-    if (Import_Bank::test_import() == 0 )    exit();
-    Import_Bank::new_import();
-    exit();
-
+    Import_Bank::reconciliation();
   }
 
-if($_REQUEST['sa'] == 'record')
+if($_REQUEST['sa'] == 'transfer')
   {
-    if (Import_Bank::record_import() ==0 )     exit();
-    Import_Bank::new_import();
+    Import_Bank::transfert();
   }

@@ -23,8 +23,10 @@
 /*!\file
  * \brief Manage import
  */
+require_once('class_format_bank_sql.php');
 
-class Import_Card 
+
+class Import_Bank
 {
   /**
    *@brief for the form we have here all the hidden variables
