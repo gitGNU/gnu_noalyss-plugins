@@ -31,6 +31,7 @@ class Format_Bank_sql
 				  ,"sep_field"=>"sep_field"
 				  ,"format_date"=>"format_date"
 				  ,"nb_col"=>"nb_col"
+				  ,"skip"=>"skip"
                                  );
         function __construct ( & $p_cn,$p_id=-1)
             {
@@ -154,6 +155,7 @@ class Format_Bank_sql
                      ,sep_field
                      ,format_date
                      ,nb_col
+		     ,skip
                      ) values ($1
                      ,$2
                      ,$3
@@ -165,6 +167,7 @@ class Format_Bank_sql
                      ,$9
                      ,$10
                      ,$11
+		     ,$12
                      ) returning id";
 
                 $this->id=$this->cn->get_value(
@@ -180,6 +183,7 @@ class Format_Bank_sql
                                      ,$this->sep_field
                                      ,$this->format_date
                                      ,$this->nb_col
+				     ,$this->skip
                                    )
                           );
                 }
@@ -196,7 +200,9 @@ class Format_Bank_sql
                      ,sep_field
                      ,format_date
                      ,nb_col
-                     ,id) values ($1
+                     ,id
+		     ,skip
+		     ) values ($1
                      ,$2
                      ,$3
                      ,$4
@@ -208,6 +214,7 @@ class Format_Bank_sql
                      ,$10
                      ,$11
                      ,$12
+		     ,$13
                      ) returning id";
 
                 $this->id=$this->cn->get_value(
@@ -223,7 +230,9 @@ class Format_Bank_sql
                                      ,$this->sep_field
                                      ,$this->format_date
                                      ,$this->nb_col
-                                     ,$this->id)
+                                     ,$this->id
+				     ,$this->skip
+				     )
                           );
 
                 }
@@ -245,7 +254,8 @@ class Format_Bank_sql
                  ,sep_field = $9
                  ,format_date = $10
                  ,nb_col = $11
-                 where id= $12";
+		 ,skip=$12
+                 where id= $13";
             $res=$this->cn->exec_sql(
                      $sql,
                      array($this->format_name
@@ -259,6 +269,7 @@ class Format_Bank_sql
                            ,$this->sep_field
                            ,$this->format_date
                            ,$this->nb_col
+			   ,$this->skip
                            ,$this->id)
                  );
 
@@ -281,6 +292,7 @@ class Format_Bank_sql
                  ,sep_field
                  ,format_date
                  ,nb_col
+		 ,skip
                  from importbank.format_bank where id=$1";
             /* please adapt */
             $res=$this->cn->get_array(
@@ -312,34 +324,6 @@ class Format_Bank_sql
          */
         static function test_me()
             {
-            $cn=new Database(25);
-            $cn->start();
-            echo h2info('Test object vide');
-            $obj=new Format_Bank_sql($cn);
-            var_dump($obj);
-
-            echo h2info('Test object NON vide');
-            $obj->set_parameter('j_id',3);
-            $obj->load();
-            var_dump($obj);
-
-            echo h2info('Update');
-            $obj->set_parameter('j_qcode','NOUVEAU CODE');
-            $obj->save();
-            $obj->load();
-            var_dump($obj);
-
-            echo h2info('Insert');
-            $obj->set_parameter('j_id',0);
-            $obj->save();
-            $obj->load();
-            var_dump($obj);
-
-            echo h2info('Delete');
-            $obj->delete();
-            echo (($obj->load()==0)?'Trouve':'non trouve');
-            var_dump($obj);
-            $cn->rollback();
 
             }
 

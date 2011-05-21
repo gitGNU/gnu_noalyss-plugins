@@ -1,4 +1,5 @@
 <?php
+xdebug_start_trace();
 $cn->start();
 $row_count=0;$max=0;
 switch ($sep_field->selected)
@@ -13,17 +14,25 @@ switch ($sep_field->selected)
 	  echo "Séparateur de champs inconnu";
 	  exit();
 }
+
+$str_date=$format_date->display();
+
+
+$id=$cn->get_value('insert into importbank.import(format_bank_id) values ($1) returning id',
+		  array($format_bank->id));
 ob_start();
 echo '<table>';
 while( ($row=fgets($fbank)) !== false)
 {
 	$row_count++;
-	echo '<tr style="border:solid 1px black">';
-	echo td($row_count); 
 	$array_row=explode($sp,$row);
 	$count_col=count($array_row);
+	if ( $row_count<=$_POST['skip']) continue;
 	if ( $count_col==$_POST['nb_col'])
 	  {
+	    echo '<tr style="border:solid 1px black">';
+	    echo td($row_count); 
+
 	    $tp_date=$amount=$libelle=$operation_nb='';
 	    $status='N';   
 	   for ($i=0;$i<$count_col;$i++)
@@ -47,30 +56,29 @@ while( ($row=fgets($fbank)) !== false)
 		 {
 		   echo td(utf8_encode($array_row[$i]),'style="border:solid 1px black;color:green"');
 		 }
-	 /* insert into importbank.temp_bank 
-	    Check for duplicate, valid date, amount ....
-	 */     
 	     }
-	   /*$cn->exec_Sql('insert into importbank.temp_bank(tp_date,jrn_def_id,libelle,amount,ref_operation,status)'.
-			 ' values (to_date($1,\''.$format_bank->format_date.'\'),$2,$3,$4,$5,$6)',
-			 array($tp_date,$format_bank->jrn_def_id,$libelle,$amount,$operation_nb,$status));
+	   /* insert into importbank.temp_bank 
+	      Check for duplicate, valid date, amount ....
+	   */     
+	   if ( $format_bank->sep_thousand != '')
+	     $amount=str_replace($format_bank->sep_thousand,'',$amount);
+	   if ( $format_bank->sep_decimal <> '.')
+	     $amount=str_replace($format_bank->sep_decimal,'.',$amount);
+
+	   $cn->exec_Sql('insert into importbank.temp_bank(tp_date,jrn_def_id,libelle,amount,ref_operation,status,import_id)'.
+			 ' values (to_date($1,\''.$str_date.'\'),$2,$3,$4,$5,$6,$7)',
+			 array($tp_date,$format_bank->jrn_def_id,$libelle,$amount,$operation_nb,$status,$id));
+	   
+	   /*	       printf('insert into importbank.temp_bank(tp_date,jrn_def_id,libelle,amount,ref_operation,status)'.
+		      ' values (to_date(%s,\''.$str_date.'\'),%s,%s,%s,%s,%s,%s)<br/>',
+		      $tp_date,$format_bank->jrn_def_id,$libelle,$amount,$operation_nb,$status,$id);
 	   */
-
-	   printf('insert into importbank.temp_bank(tp_date,jrn_def_id,libelle,amount,ref_operation,status)'.
-		      ' values (to_date(%s,\''.$format_bank->format_date.'\'),%s,%s,%s,%s,%s)<br/>',
-		      $tp_date,$format_bank->jrn_def_id,$libelle,$amount,$operation_nb,$status);
-
-	   /**
-	    *@todo
-	    * Transform data to insert them into importbank.temp_bank
-	    */				     
-
-      
 	  } // end if
 
     
       echo '</tr>';
 }
+
 echo '</table>';
 $table=ob_get_contents();
 ob_clean();
@@ -134,6 +142,15 @@ Format de date
 </tr>
 <tr>
 	<td>
+	Ligne d en-tête à ne pas prendre en considération
+	</td>
+	<td>
+	<?=$skip->input()?>
+	</td>
+</tr>
+
+<tr>
+	<td>
 	Les lignes ayant ce nombre de colonnes sont valides
 	</td>
 	<td>
@@ -147,10 +164,6 @@ Format de date
 
 </table>
 
-<?php
-echo HtmlInput::post_to_hidden(array('gDossier','plugin_code','sa','format'));
-echo HtmlInput::submit('transfer_submit','Valider');
-?>
 <table>
 <tr>
 <?php

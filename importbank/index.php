@@ -47,8 +47,24 @@ $array=array (
 	);
 
 $sa=(isset($_REQUEST['sa']))?$_REQUEST['sa']:1;
-
-echo ShowItem($array,'H','mtitle','mtitle',$sa,' style="width:80%;margin-left:10%"');
+switch($sa)
+  {
+  case 'import':
+    $default=1;
+    break;
+  case 'reconc':
+    $default=2;
+    break;
+  case 'transfer':
+    $default=3;
+    break;
+  case 'purge':
+    $default=5;
+    break;
+  default:
+    $default=0;
+  }
+echo ShowItem($array,'H','mtitle','mtitle',$default,' style="width:80%;margin-left:10%"');
 /*
  *Menu : import bank, reconciliation operation, purge temporary table
  */

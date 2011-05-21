@@ -92,6 +92,14 @@ Format de date
 </tr>
 <tr>
 	<td>
+	Ligne d'en-tête à ne pas prendre en considération
+	</td>
+	<td>
+	<?=$skip->input()?>
+	</td>
+</tr>
+<tr>
+	<td>
 	Les lignes ayant ce nombre de colonnes sont valides
 	</td>
 	<td>
