@@ -60,6 +60,12 @@ while( ($row=fgets($fbank)) !== false)
 	   /* insert into importbank.temp_bank 
 	      Check for duplicate, valid date, amount ....
 	   */     
+	   // replace + sign
+	   $amount=str_replace('+','',$amount);
+
+	   // remove space
+	   $amount=str_replace(' ','',$amount);
+
 	   if ( $format_bank->sep_thousand != '')
 	     $amount=str_replace($format_bank->sep_thousand,'',$amount);
 	   if ( $format_bank->sep_decimal <> '.')
