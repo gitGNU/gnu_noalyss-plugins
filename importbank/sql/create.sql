@@ -42,7 +42,8 @@ create table importbank.temp_bank
        amount numeric(20,4),
        ref_operation text,
        status char default 'N',
-       import_id bigint 
+       import_id bigint,
+       f_id bigint default NULL 
        );
 alter table importbank.temp_bank 
       add constraint fk_jrn_temp_bank foreign key (jrn_def_id) references public.jrn_def(jrn_def_id)  on delete set null on update cascade;
