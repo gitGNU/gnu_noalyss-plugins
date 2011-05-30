@@ -199,7 +199,7 @@ if ( $_GET['jrn_type'] == 'FIN')
         $fiche->get_by_qcode($e_bank_account);
         if ( $fiche->empty_attribute(ATTR_DEF_ACCOUNT) == true)
             throw new Exception('La fiche '.$e_bank_account.'n\'a pas de poste comptable',8);
-        if ( $fiche->belong_ledger($p_jrn,'deb') !=1 )
+        if ( $fiche->belong_ledger($p_jrn,'cred') !=1 && $fiche->belong_ledger($p_jrn,'deb') !=1 )
             throw new Exception('La fiche '.$e_bank_account.'n\'est pas accessible à ce journal',10);
         $fiche=new fiche($cn);
         $fiche->get_by_qcode($e_other);
