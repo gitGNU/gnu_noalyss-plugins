@@ -28,6 +28,7 @@
  * load javascript
  */
 require_once('include/class_import_bank.php');
+require_once('bank_constant.php');
 global $cn;
 echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=importation_de_banque" target="_blank">Aide</a></div>';
 $cn=new Database(dossier::id());

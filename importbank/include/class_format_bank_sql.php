@@ -26,6 +26,8 @@ class Format_Bank_sql
 				  ,"pos_amount"=>"pos_amount"
 				  ,"pos_date"=>"pos_date"
 				  ,"pos_operation_nb"=>"pos_operation_nb"
+				  ,"pos_third"=>"pos_third"
+				  ,"pos_extra"=>"pos_extra"
 				  ,"sep_decimal"=>"sep_decimal"
 				  ,"sep_thousand"=>"sep_thousand"
 				  ,"sep_field"=>"sep_field"
@@ -41,7 +43,7 @@ class Format_Bank_sql
             if ( $p_id == -1 )
                 {
                 /* Initialize an empty object */
-                foreach ($this->variable as $key=>$value) $this->$value='DEFAULT';
+                foreach ($this->variable as $key=>$value) $this->$value=NULL;
                 $this->id=$p_id;
                 }
             else
@@ -79,19 +81,18 @@ class Format_Bank_sql
             {
             // Verify that the elt we want to add is correct
             /* verify only the datatype */
-            if ( settype($this->jrn_def_id,'float') == false )
+	      if ( $this->jrn_def_id !==null && settype($this->jrn_def_id,'float') == false )
                 throw new Exception('DATATYPE jrn_def_id $this->jrn_def_id non numerique');
-            if ( settype($this->pos_lib,'float') == false )
+	      if ( $this->pos_lib !== null && settype($this->pos_lib,'float') == false )
                 throw new Exception('DATATYPE pos_lib $this->pos_lib non numerique');
-            if ( settype($this->pos_amount,'float') == false )
+            if ( $this->pos_amount !== null && settype($this->pos_amount,'float') == false )
                 throw new Exception('DATATYPE pos_amount $this->pos_amount non numerique');
-            if ( settype($this->pos_date,'float') == false )
+            if ( $this->pos_date !== null && settype($this->pos_date,'float') == false )
                 throw new Exception('DATATYPE pos_date $this->pos_date non numerique');
-            if ( settype($this->pos_operation_nb,'float') == false )
+            if ( $this->pos_operation_nb !== null && settype($this->pos_operation_nb,'float') == false )
                 throw new Exception('DATATYPE pos_operation_nb $this->pos_operation_nb non numerique');
-            if ( settype($this->nb_col,'float') == false )
+            if ($this->nb_col !== null &&  settype($this->nb_col,'float') == false )
                 throw new Exception('DATATYPE nb_col $this->nb_col non numerique');
-
 
             }
         public function save()
@@ -141,6 +142,7 @@ class Format_Bank_sql
         public function insert()
             {
             if ( $this->verify() != 0 ) return;
+	    var_dump($this);
             if ( $this->id==-1 )
                 {
                 /*  please adapt */
@@ -150,6 +152,8 @@ class Format_Bank_sql
                      ,pos_amount
                      ,pos_date
                      ,pos_operation_nb
+                     ,pos_third
+		     ,pos_extra
                      ,sep_decimal
                      ,sep_thousand
                      ,sep_field
@@ -168,6 +172,8 @@ class Format_Bank_sql
                      ,$10
                      ,$11
 		     ,$12
+		     ,$13
+		     ,$14
                      ) returning id";
 
                 $this->id=$this->cn->get_value(
@@ -178,6 +184,8 @@ class Format_Bank_sql
                                      ,$this->pos_amount
                                      ,$this->pos_date
                                      ,$this->pos_operation_nb
+				     ,$this->pos_third
+				     ,$this->pos_extra
                                      ,$this->sep_decimal
                                      ,$this->sep_thousand
                                      ,$this->sep_field
@@ -195,6 +203,8 @@ class Format_Bank_sql
                      ,pos_amount
                      ,pos_date
                      ,pos_operation_nb
+                     ,pos_third
+		     ,pos_extra
                      ,sep_decimal
                      ,sep_thousand
                      ,sep_field
@@ -215,6 +225,8 @@ class Format_Bank_sql
                      ,$11
                      ,$12
 		     ,$13
+		     ,$14
+		     ,$15
                      ) returning id";
 
                 $this->id=$this->cn->get_value(
@@ -225,6 +237,8 @@ class Format_Bank_sql
                                      ,$this->pos_amount
                                      ,$this->pos_date
                                      ,$this->pos_operation_nb
+				     ,$this->pos_third
+				     ,$this->pos_extra
                                      ,$this->sep_decimal
                                      ,$this->sep_thousand
                                      ,$this->sep_field
@@ -249,13 +263,15 @@ class Format_Bank_sql
                  ,pos_amount = $4
                  ,pos_date = $5
                  ,pos_operation_nb = $6
-                 ,sep_decimal = $7
-                 ,sep_thousand = $8
-                 ,sep_field = $9
-                 ,format_date = $10
-                 ,nb_col = $11
-		 ,skip=$12
-                 where id= $13";
+		 ,pos_third = $7
+		 ,pos_extra=$8
+                 ,sep_decimal = $9
+                 ,sep_thousand = $10
+                 ,sep_field = $11
+                 ,format_date = $12
+                 ,nb_col = $13
+		 ,skip=$14
+                 where id= $15";
             $res=$this->cn->exec_sql(
                      $sql,
                      array($this->format_name
@@ -264,6 +280,8 @@ class Format_Bank_sql
                            ,$this->pos_amount
                            ,$this->pos_date
                            ,$this->pos_operation_nb
+			   ,$this->pos_third
+			   ,$this->pos_extra
                            ,$this->sep_decimal
                            ,$this->sep_thousand
                            ,$this->sep_field
@@ -287,6 +305,8 @@ class Format_Bank_sql
                  ,pos_amount
                  ,pos_date
                  ,pos_operation_nb
+		 ,pos_third
+		 ,pos_extra
                  ,sep_decimal
                  ,sep_thousand
                  ,sep_field

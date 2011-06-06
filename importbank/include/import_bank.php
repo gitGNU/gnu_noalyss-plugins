@@ -18,6 +18,7 @@ if ( ! isset ($_REQUEST ['sb']))
     echo '</div>';
     exit();
   }
+
 /*
  * Initialize all the fields
  */
@@ -25,35 +26,18 @@ $format=new IText('format_name');
 $jrn_def=new ISelect('jrn_def');
 $jrn_def->value=$cn->make_array('select jrn_def_id,jrn_def_name from jrn_def where '.$user->get_ledger_sql('FIN',3).' order by jrn_def_name');
 $sep_decimal=new ISelect('sep_dec');
-$sep_decimal->value=array(
-			  array ('value'=>0,'label'=>' '),
-			  array ('value'=>1,'label'=>','),
-			  array ('value'=>2,'label'=>'.')
-			  );
+$sep_decimal->value=$adecimal;
     
 $sep_thousand=new ISelect('sep_thous');
-$sep_thousand->value=array(
-			   array ('value'=>0,'label'=>' '),
-			   array ('value'=>1,'label'=>','),
-			   array ('value'=>2,'label'=>'.')
-			   );
+$sep_thousand->value=$athousand;
     
 $sep_field=new ISelect('sep_field');
-$sep_field->value=array(
-			array ('value'=>1,'label'=>','),
-			array ('value'=>2,'label'=>';')
-			);
+$sep_field->value=$aseparator;
+
 $col_valid=new INum('col_valid');
     
 $format_date=new ISelect('format_date');
-$format_date->value=array(
-			array ('value'=>1,'label'=>'DD.MM.YYYY'),
-			array ('value'=>2,'label'=>'DD/MM/YYYY'),
-			array ('value'=>3,'label'=>'DD-MM-YYYY'),
-			array ('value'=>4,'label'=>'DD.MM.YY'),
-			array ('value'=>5,'label'=>'DD/MM/YY'),
-			array ('value'=>6,'label'=>'DD-MM-YY')
-			);
+$format_date->value=$aformat_date;
     
 $file=new IFile('import_file');
 $skip=new INum('skip');
@@ -97,41 +81,81 @@ if ( $_REQUEST ['sb'] == 'select_form')
  */
 if ( $_POST['sb']=='upload_file')
   {
-    var_dump($_POST);
-    $format->value=$_POST['format_name'];
-    $jrn_def->selected=$_POST['jrn_def'];
-    $sep_field->selected=$_POST['sep_field'];
-    $sep_thousand->selected=$_POST['sep_thous'];
-    $sep_decimal->selected=$_POST['sep_dec'];
-    $format_date->selected=$_POST['format_date'];
-    $nb_col->value=$_POST['nb_col'];
-    $skip->value=$_POST['skip'];
-
-    if ( trim($_FILES['import_file']['name']) == '')
+    /*
+     * First time or the format is not corrected
+     */
+    if ( ! isset($_POST['correct_format']))
       {
-	alert('Pas de fichier donné');
-	return -1;
-      }
-    $filename=tempnam($_ENV['TMP'],'upload_');
-    move_uploaded_file($_FILES["import_file"]["tmp_name"],$filename);
-    $fbank=fopen($filename,'r');
-    $pos_date=$pos_amount=$pos_lib=$pos_operation_nb=-1;
+	var_dump($_POST);
+	$format->value=$_POST['format_name'];
+	$jrn_def->selected=$_POST['jrn_def'];
+	$sep_field->selected=$_POST['sep_field'];
+	$sep_thousand->selected=$_POST['sep_thous'];
+	$sep_decimal->selected=$_POST['sep_dec'];
+	$format_date->selected=$_POST['format_date'];
+	$nb_col->value=$_POST['nb_col'];
+	$skip->value=$_POST['skip'];
 
-    // Load the order of the header
-    if ( $_POST['format'] != 0)
+	if ( trim($_FILES['import_file']['name']) == '')
+	  {
+	    alert('Pas de fichier donné');
+	    return -1;
+	  }
+	$filename=tempnam($_ENV['TMP'],'upload_');
+	move_uploaded_file($_FILES["import_file"]["tmp_name"],$filename);
+	$fbank=fopen($filename,'r');
+	$pos_date=$pos_amount=$pos_lib=$pos_operation_nb=-1;
+
+	// Load the order of the header
+	if ( $_POST['format'] != 0)
+	  {
+	    $format_bank=new Format_Bank_Sql($cn,$_POST ['format']);
+	    $pos_date=$format_bank->pos_date;
+	    $pos_amount=$format_bank->pos_amount;
+	    $pos_lib=$format_bank->pos_lib;
+	    $pos_operation_nb=$format_bank->pos_operation_nb;
+	  }
+
+	echo '<div class="content" style="width:80%;margin-left:10%">';
+	$sb='confirm';
+	require_once ('template/confirm_transfer.php');
+	echo '</div>';
+	exit();
+      }
+    else
       {
-	$format_bank=new Format_Bank_Sql($cn,$_POST ['format']);
-	$pos_date=$format_bank->pos_date;
-	$pos_amount=$format_bank->pos_amount;
-	$pos_lib=$format_bank->pos_lib;
-	$pos_operation_nb=$format_bank->pos_operation_nb;
-      }
+	var_dump($_POST);
+	$format->value=$_POST['format_name'];
+	$jrn_def->selected=$_POST['jrn_def'];
+	$sep_field->selected=$_POST['sep_field'];
+	$sep_thousand->selected=$_POST['sep_thous'];
+	$sep_decimal->selected=$_POST['sep_dec'];
+	$format_date->selected=$_POST['format_date'];
+	$nb_col->value=$_POST['nb_col'];
+	$skip->value=$_POST['skip'];
 
-    echo '<div class="content" style="width:80%;margin-left:10%">';
-    $sb='confirm';
-    require_once ('template/confirm_transfer.php');
-    echo '</div>';
-    exit();
+	
+	$filename=$_POST['filename'];
+
+	$fbank=fopen($filename,'r');
+	$pos_date=$pos_amount=$pos_lib=$pos_operation_nb=-1;
+
+	// Load the order of the header
+	if ( $_POST['format'] != 0)
+	  {
+	    $format_bank=new Format_Bank_Sql($cn,$_POST ['format']);
+	    $pos_date=$format_bank->pos_date;
+	    $pos_amount=$format_bank->pos_amount;
+	    $pos_lib=$format_bank->pos_lib;
+	    $pos_operation_nb=$format_bank->pos_operation_nb;
+	  }
+
+	echo '<div class="content" style="width:80%;margin-left:10%">';
+	$sb='confirm';
+	require_once ('template/confirm_transfer.php');
+	echo '</div>';
+	exit();
+      }
   }
 /*
  * Step 4
@@ -155,12 +179,13 @@ if ( $_POST['sb'] == 'confirm')
     $format_bank=new Format_Bank_Sql($cn,$id);
     $format_bank->format_name=$_POST['format_name'];
     $format_bank->jrn_def_id=$_POST['jrn_def'];
-    $format_bank->sep_field=$sep_field->display();
-    $format_bank->sep_thousand=$sep_thousand->display();
-    $format_bank->sep_decimal=$sep_decimal->display();
-    $format_bank->format_date=$format_date->display();
+    $format_bank->sep_field=$_POST['sep_field'];
+    $format_bank->sep_thousand=$_POST['sep_thous'];
+    $format_bank->sep_decimal=$_POST['sep_dec'];
+    $format_bank->format_date=$_POST['format_date'];
     $format_bank->nb_col=$_POST['nb_col'];
     $format_bank->skip=$_POST['skip'];
+var_dump($_POST);
 
     /*
      * save the column position for the date, amount,...

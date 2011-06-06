@@ -115,21 +115,29 @@ Format de date
 
 <?php
 echo HtmlInput::post_to_hidden(array('gDossier','plugin_code','sa','format'));
-echo HtmlInput::hidden('sb',$sb);
+echo HtmlInput::hidden('sb','upload_file');
 echo HtmlInput::hidden('filename',$filename);
-echo HtmlInput::submit('transfer_submit','Valider');
+echo HtmlInput::submit('correct_format','Changer format');
+echo '</form>';
+?>
+
+<form method="POST"   enctype="multipart/form-data">
+
+<?php
+
+echo HtmlInput::post_to_hidden(array('format','gDossier','plugin_code','sa','format','jrn_def','format_name','format_date','sep_field','sep_thous','sep_dec','skip'));
+echo HtmlInput::hidden('sb',$sb);
+echo HtmlInput::hidden('nb_col',$nb_col->value);
+
+echo HtmlInput::hidden('filename',$filename);
+echo HtmlInput::submit('transfer_submit','Enregistrer les opérations');
 ?>
 <table>
 <tr>
 <?php
 $header=new ISelect('header[]');
-$header->value=array(
-		     array('value'=>-1,'label'=>'-- Non utilisé --'),
-		     array('value'=>0,'label'=>'Date'),
-		     array('value'=>1,'label'=>'Montant'),
-		     array('value'=>2,'label'=>'Libelle'),
-		     array('value'=>3,'label'=>'Numéro opération')
-		     );
+$header->value=$aheader;
+
 echo th('Ligne n°');
 echo th('Nbre de colonnes');
 
@@ -153,14 +161,14 @@ for ( $i=0;$i<$max;$i++)
 		case $pos_operation_nb:
 		  $header->selected=3;
 		  break;
-	}			
+	}
 	echo '<th>'.$header->input()."</th>";
-	
+
 }
-echo '</tr>'; 
+echo '</tr>';
 echo $table;
 
 ?>
 </table>
-
+<?=HtmlInput::submit('transfer_submit','Enregistrer les opérations')?>
 </form>

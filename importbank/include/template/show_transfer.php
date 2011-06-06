@@ -1,5 +1,5 @@
 <?php
-xdebug_start_trace();
+var_dump($_POST);
 $cn->start();
 $row_count=0;$max=0;
 switch ($sep_field->selected)
@@ -31,10 +31,10 @@ while( ($row=fgets($fbank)) !== false)
 	if ( $count_col==$_POST['nb_col'])
 	  {
 	    echo '<tr style="border:solid 1px black">';
-	    echo td($row_count); 
+	    echo td($row_count);
 
 	    $tp_date=$amount=$libelle=$operation_nb='';
-	    $status='N';   
+	    $status='N';
 	   for ($i=0;$i<$count_col;$i++)
 	     {
 	       switch($_POST['header'][$i])
@@ -51,15 +51,15 @@ while( ($row=fgets($fbank)) !== false)
 		 case 3:
       			$operation_nb=$array_row[$i];
       			break;
-		 }    			
+		 }
 	       if ($_POST['header'][$i] != '-1')
 		 {
 		   echo td(utf8_encode($array_row[$i]),'style="border:solid 1px black;color:green"');
 		 }
 	     }
-	   /* insert into importbank.temp_bank 
+	   /* insert into importbank.temp_bank
 	      Check for duplicate, valid date, amount ....
-	   */     
+	   */
 	   // replace + sign
 	   $amount=str_replace('+','',$amount);
 
@@ -67,21 +67,21 @@ while( ($row=fgets($fbank)) !== false)
 	   $amount=str_replace(' ','',$amount);
 
 	   if ( $format_bank->sep_thousand != '')
-	     $amount=str_replace($format_bank->sep_thousand,'',$amount);
-	   if ( $format_bank->sep_decimal <> '.')
-	     $amount=str_replace($format_bank->sep_decimal,'.',$amount);
+	     $amount=str_replace($athousand[$format_bank->sep_thousand]['label'],'',$amount);
+	   if ( $adecimal[$format_bank->sep_decimal] <> '.')
+	     $amount=str_replace($adecimal[$format_bank->sep_decimal]['label'],'.',$amount);
 
 	   $cn->exec_Sql('insert into importbank.temp_bank(tp_date,jrn_def_id,libelle,amount,ref_operation,status,import_id)'.
 			 ' values (to_date($1,\''.$str_date.'\'),$2,$3,$4,$5,$6,$7)',
 			 array($tp_date,$format_bank->jrn_def_id,$libelle,$amount,$operation_nb,$status,$id));
-	   
+
 	   /*	       printf('insert into importbank.temp_bank(tp_date,jrn_def_id,libelle,amount,ref_operation,status)'.
 		      ' values (to_date(%s,\''.$str_date.'\'),%s,%s,%s,%s,%s,%s)<br/>',
 		      $tp_date,$format_bank->jrn_def_id,$libelle,$amount,$operation_nb,$status,$id);
 	   */
 	  } // end if
 
-    
+
       echo '</tr>';
 }
 
@@ -174,13 +174,8 @@ Format de date
 <tr>
 <?php
 $header=new ISelect('header[]');
-$header->value=array(
-		     array('value'=>-1,'label'=>'-- Non utilisé --'),
-		     array('value'=>0,'label'=>'Date'),
-		     array('value'=>1,'label'=>'Montant'),
-		     array('value'=>2,'label'=>'Libelle'),
-		     array('value'=>3,'label'=>'Numéro opération')
-		     );
+$header->value=$aheader;
+
 echo th('Ligne n°');
 echo th('Nbre de colonnes');
 for ( $i=0;$i<$max;$i++)
@@ -203,11 +198,11 @@ for ( $i=0;$i<$max;$i++)
 	case $pos_operation_nb:
 	  $header->selected=3;
 	  break;
-	}			
+	}
 	echo '<th>'.$header->input()."</th>";
-	
+
 }
-echo '</tr>'; 
+echo '</tr>';
 
 ?>
 </table>
