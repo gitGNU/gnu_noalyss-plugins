@@ -196,7 +196,7 @@ class Ext_Tva extends Ext_Tva_Gen
    */
   function compute() {
     // check that this exercice exist
-    $exist=$this->db->get_value('select count(*) from jrn join parm_periode on (p_id=jr_tech_per) where p_exercice=$1',array($this->exercice));
+    $exist=$this->db->get_value('select count(*) from jrn join parm_periode on (p_id=jr_tech_per) where date_part(\'year\',p_start)=$1',array($this->exercice));
     if ( $exist==0 ) { alert(_("Cette exercice comptable n'est pas dans ce dossier")); throw  new Exception('INVALYEAR',1 ) ;}
 
     // set default value 0 for all
