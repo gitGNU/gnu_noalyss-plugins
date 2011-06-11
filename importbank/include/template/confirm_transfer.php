@@ -161,6 +161,12 @@ for ( $i=0;$i<$max;$i++)
 		case $pos_operation_nb:
 		  $header->selected=3;
 		  break;
+		case $pos_third:
+		  $header->selected=4;
+		  break;
+		case $pos_extra:
+		  $header->selected=5;
+		  break;
 	}
 	echo '<th>'.$header->input()."</th>";
 

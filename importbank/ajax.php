@@ -1,48 +1,59 @@
 <?php
 require_once('class_database.php');
-require_once('class_ext_tva.php');
-require_once('class_ibutton.php');
-require_once ('class_ext_list_intra.php');
-require_once ('class_ext_list_assujetti.php');
+require_once('include/class_bank_item.php');
+require_once('bank_constant.php');
 
 extract($_GET);
 $cn=new Database($gDossier);
 $html='';$extra='';$ctl='';
 switch($act) {
-case 'dsp_decl':
-  /* the hide button */
-  $button=new IButton('hide');
-  $button->label=_('Retour');
-  $button->javascript="$('detail').hide();$('main').show();";
-  if ( $type == 1) {
-    /* display the declaration of amount */
-    $decl=new Ext_Tva($cn);
-    $decl->set_parameter('id',$id);
-    $decl->load();
-    $r=$button->input();
-    $r.=$decl->display();
-    $r.=$button->input();
-  }
-  if ( $type == 3) {
-    /* display the declaration of amount */
-    $decl=new Ext_List_Intra($cn);
-    $decl->set_parameter('id',$id);
-    $decl->load();
-    $r=$button->input();
-    $r.=$decl->display();
-    $r.=$button->input();
-  }
-  if ( $type == 2) {
-    /* display the declaration of amount */
-    $decl=new Ext_List_Assujetti($cn);
-    $decl->set_parameter('id',$id);
-    $decl->load();
-    $r=$button->input();
-    $r.=$decl->display();
-    $r.=$button->input();
-  }
+case 'show':
+  /*
+   * Show detail operation and let you save it or remove it
+   *array (
+	  'gDossier' => '77',
+	  'plugin_code' => 'IMPBANK',
+	  'act' => 'show',
+          'id' => '15967',
+	  'ctl' => 'div15967',
+	  )
+   */
+  ob_start();
+  $ctl=$_GET['ctl'];
+  $bi=new Bank_Item($id);
+  $r='';
+  global $msg;
+  $msg='';
 
-  break;
+  if (  isset($_GET['remove'] ))
+    {
+      $msg="Opération effacée";
+      $bi->show_delete($ctl);
+
+      $bi_sql=new Temp_Bank_Sql($cn,$id);
+      if ($bi_sql->id != '')       $bi_sql->delete();
+
+    }
+    else 
+      if (isset($_GET['save']))
+	{
+	  if ($_GET['fiche'] != '')
+	    {
+	      $f_id=$cn->get_value('select f_id from fiche_Detail
+					where
+					ad_value=upper($1) and ad_id=23',array($_GET['fiche']));
+
+	      if ($f_id == '') $f_id=null;
+	      $bi->f_id=$f_id;
+	      $bi->update();
+	    }
+	  $msg="Opération sauvée";
+	  $bi->show_item($ctl);
+	}
+      else
+	$bi->show_item($ctl);
+  $r=ob_get_contents();
+  ob_clean();
 }
 
 $html=escape_xml($r);
@@ -52,7 +63,7 @@ echo <<<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
 <ctl>$ctl</ctl>
-<html>$html</html>
+<code>$html</code>
 <extra>$extra</extra>
 </data>
 EOF;

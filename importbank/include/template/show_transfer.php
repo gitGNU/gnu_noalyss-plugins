@@ -1,5 +1,4 @@
 <?php
-var_dump($_POST);
 $cn->start();
 $row_count=0;$max=0;
 switch ($sep_field->selected)
@@ -33,7 +32,7 @@ while( ($row=fgets($fbank)) !== false)
 	    echo '<tr style="border:solid 1px black">';
 	    echo td($row_count);
 
-	    $tp_date=$amount=$libelle=$operation_nb='';
+	    $tp_date=$amount=$libelle=$operation_nb=$third=$extra=null;
 	    $status='N';
 	   for ($i=0;$i<$count_col;$i++)
 	     {
@@ -51,6 +50,13 @@ while( ($row=fgets($fbank)) !== false)
 		 case 3:
       			$operation_nb=$array_row[$i];
       			break;
+		 case 4:
+			$third=utf8_encode($array_row[$i]);
+			break;
+		 case 5:
+			$extra=utf8_encode($array_row[$i]);
+			break;
+
 		 }
 	       if ($_POST['header'][$i] != '-1')
 		 {
@@ -71,9 +77,9 @@ while( ($row=fgets($fbank)) !== false)
 	   if ( $adecimal[$format_bank->sep_decimal] <> '.')
 	     $amount=str_replace($adecimal[$format_bank->sep_decimal]['label'],'.',$amount);
 
-	   $cn->exec_Sql('insert into importbank.temp_bank(tp_date,jrn_def_id,libelle,amount,ref_operation,status,import_id)'.
-			 ' values (to_date($1,\''.$str_date.'\'),$2,$3,$4,$5,$6,$7)',
-			 array($tp_date,$format_bank->jrn_def_id,$libelle,$amount,$operation_nb,$status,$id));
+	   $cn->exec_Sql('insert into importbank.temp_bank(tp_date,jrn_def_id,libelle,amount,ref_operation,status,import_id,tp_third,tp_extra)'.
+			 ' values (to_date($1,\''.$str_date.'\'),$2,$3,$4,$5,$6,$7,$8,$9)',
+			 array($tp_date,$format_bank->jrn_def_id,$libelle,$amount,$operation_nb,$status,$id,$third,$extra));
 
 	   /*	       printf('insert into importbank.temp_bank(tp_date,jrn_def_id,libelle,amount,ref_operation,status)'.
 		      ' values (to_date(%s,\''.$str_date.'\'),%s,%s,%s,%s,%s,%s)<br/>',
@@ -198,6 +204,13 @@ for ( $i=0;$i<$max;$i++)
 	case $pos_operation_nb:
 	  $header->selected=3;
 	  break;
+	 case 4:
+	 $third=utf8_encode($array_row[$i]);
+	 break;
+	 case 5:
+	  $extra=utf8_encode($array_row[$i]);
+	 break;
+
 	}
 	echo '<th>'.$header->input()."</th>";
 

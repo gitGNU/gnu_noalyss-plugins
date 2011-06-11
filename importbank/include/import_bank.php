@@ -86,7 +86,6 @@ if ( $_POST['sb']=='upload_file')
      */
     if ( ! isset($_POST['correct_format']))
       {
-	var_dump($_POST);
 	$format->value=$_POST['format_name'];
 	$jrn_def->selected=$_POST['jrn_def'];
 	$sep_field->selected=$_POST['sep_field'];
@@ -104,7 +103,7 @@ if ( $_POST['sb']=='upload_file')
 	$filename=tempnam($_ENV['TMP'],'upload_');
 	move_uploaded_file($_FILES["import_file"]["tmp_name"],$filename);
 	$fbank=fopen($filename,'r');
-	$pos_date=$pos_amount=$pos_lib=$pos_operation_nb=-1;
+	$pos_date=$pos_amount=$pos_lib=$pos_operation_nb=$pos_third=$pos_extra=-1;
 
 	// Load the order of the header
 	if ( $_POST['format'] != 0)
@@ -114,6 +113,9 @@ if ( $_POST['sb']=='upload_file')
 	    $pos_amount=$format_bank->pos_amount;
 	    $pos_lib=$format_bank->pos_lib;
 	    $pos_operation_nb=$format_bank->pos_operation_nb;
+	    $pos_third=$format_bank->pos_third;
+	    $pos_extra=$format_bank->pos_extra;
+
 	  }
 
 	echo '<div class="content" style="width:80%;margin-left:10%">';
@@ -124,7 +126,6 @@ if ( $_POST['sb']=='upload_file')
       }
     else
       {
-	var_dump($_POST);
 	$format->value=$_POST['format_name'];
 	$jrn_def->selected=$_POST['jrn_def'];
 	$sep_field->selected=$_POST['sep_field'];
@@ -140,6 +141,8 @@ if ( $_POST['sb']=='upload_file')
 	$fbank=fopen($filename,'r');
 	$pos_date=$pos_amount=$pos_lib=$pos_operation_nb=-1;
 
+	$pos_date=$pos_amount=$pos_lib=$pos_operation_nb=$pos_third=$pos_extra=-1;
+
 	// Load the order of the header
 	if ( $_POST['format'] != 0)
 	  {
@@ -148,8 +151,11 @@ if ( $_POST['sb']=='upload_file')
 	    $pos_amount=$format_bank->pos_amount;
 	    $pos_lib=$format_bank->pos_lib;
 	    $pos_operation_nb=$format_bank->pos_operation_nb;
-	  }
+	    $pos_third=$format_bank->pos_third;
+	    $pos_extra=$format_bank->pos_extra;
 
+	  }
+ 
 	echo '<div class="content" style="width:80%;margin-left:10%">';
 	$sb='confirm';
 	require_once ('template/confirm_transfer.php');
@@ -165,7 +171,6 @@ if ( $_POST['sb']=='upload_file')
 if ( $_POST['sb'] == 'confirm')
   {
     $id=($_POST['format'] == 0)?-1:$_POST['format'];
-
 
     $format->value=$_POST['format_name'];
     $jrn_def->selected=$_POST['jrn_def'];
@@ -185,7 +190,39 @@ if ( $_POST['sb'] == 'confirm')
     $format_bank->format_date=$_POST['format_date'];
     $format_bank->nb_col=$_POST['nb_col'];
     $format_bank->skip=$_POST['skip'];
-var_dump($_POST);
+    /*
+     * Verify that we have at least date + amount, and not duplicate
+     */
+    $check=Import_Bank::is_valid_header($_POST['header']);
+    if ( $check != '' )
+      {
+	alert($check);
+	/*
+	 * Back to step 3 !
+	 */
+	$filename=$_POST['filename'];
+
+	$fbank=fopen($filename,'r');
+	$pos_date=$pos_amount=$pos_lib=$pos_operation_nb=-1;
+
+	// Load the order of the header
+	if ( $_POST['format'] != 0)
+	  {
+	    $format_bank=new Format_Bank_Sql($cn,$_POST ['format']);
+	    $pos_date=$format_bank->pos_date;
+	    $pos_amount=$format_bank->pos_amount;
+	    $pos_lib=$format_bank->pos_lib;
+	    $pos_operation_nb=$format_bank->pos_operation_nb;
+	    $pos_third=$format_bank->pos_third;
+	    $pos_extra=$format_bank->pos_extra;
+	  }
+
+	echo '<div class="content" style="width:80%;margin-left:10%">';
+	$sb='confirm';
+	require_once ('template/confirm_transfer.php');
+	echo '</div>';
+	exit();
+      }
 
     /*
      * save the column position for the date, amount,...
@@ -205,6 +242,12 @@ var_dump($_POST);
 	    break;
 	  case 3:
 	    $format_bank->pos_operation_nb=$i;
+	    break;
+	  case 4:
+	    $format_bank->pos_third=$i;
+	    break;
+	  case 5:
+	    $format_bank->pos_extra=$i;
 	    break;
 	  }
       }

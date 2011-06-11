@@ -218,4 +218,118 @@ array
     echo '</span>';
     return 0;
   }
+  /**
+   *@brief check that there is no duplicate among header and we have at least the date
+   * and the amount
+   *@param array of header
+   *@return empty string if valid, otherwise error message
+   */
+  static function is_valid_header($array)
+  {
+    global $aheader;
+    $check=$aheader;
+    $error='';$amount=$date=false;
+    for ($i = 0; $i<count($array);$i++)
+      {
+	$idx=$array[$i];
+
+	if ( $idx == -1) continue;
+
+	if ( $idx == 0 ) $date=true;
+	if ($idx== 1 ) $amount=true;
+	if ( isset(	$check[$idx+1]['count']))
+	  {
+	    $check[$idx+1]['count']++;
+	  }
+	else
+	  {
+	    $check[$idx+1]['count']=1;
+	  }
+      }
+    if ( ! $date )
+      $error.="Il manque la colonne pour les  dates \n";
+    if (! $amount )
+      $error.=" Il manque la colonne pour les  montants \n";
+
+    foreach ($check as $row)
+      {
+	if ( $row['value'] == -1 ) continue;
+	if (isset ($row['count']) && $row['count'] > 1 ) 
+	  $error.=$row['label']." a été donné ".$row['count']." fois\n" ;
+      }
+    return $error;
+  }
+  /**
+   *@brief show the different import
+   */
+  static function show_import()
+  {
+    global $cn;
+
+    $ret=$cn->exec_sql('select a.id,to_char(i_date,\'DD.MM.YYYY HH24:MI\') as i_date,format_name
+				from importbank.import as a
+				join importbank.format_bank as b on (format_bank_id=b.id)
+				order by i_date desc');
+    $link='?'.Dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&sb=list&sa='.$_REQUEST['sa'];
+
+
+    require_once('template/show_import.php');
+  }
+  /**
+   *Delete all the selected import
+   */
+  static function delete ($p_array)
+  {
+    global $cn;
+
+    $a=$p_array['s_del'];
+    for ($i=0;$i<count($a);$i++)
+      {
+	$cn->exec_sql('delete from importbank.import where id=$1',array($a[$i]));
+      }
+  }
+  /**
+   *Show detail
+   */
+  static function list_record($p_id)
+  {
+    global $cn;
+    $filter=new ISelect('fil_status');
+    $filter->value=array(
+			 array('value'=>0,'label'=>'Tous'),
+			 array('value'=>1,'label'=>'Nouveau'),
+			 array('value'=>2,'label'=>'Transfèrés'),
+			 array('value'=>3,'label'=>'Réconciliés'));
+    $filter->javascript=' onchange="submit(this)"';
+
+    $filter->selected=HtmlInput::default_value('fil_status',0,$_GET);
+    $sql_filter='';
+    switch( $filter->selected)
+      {
+      case 1:
+	$sql_filter= " and status='N' ";
+	break;
+      case 2:
+	$sql_filter=" and status='T'";
+	break;
+      case 3:
+	$sql_filter=" and status='W'";
+	break;
+      }
+    $array=$cn->get_array('select a.id as id,to_char(i_date,\'DD.MM.YYYY HH24:MI\') as i_date,format_name
+				from importbank.import as a
+				join importbank.format_bank as b on (format_bank_id=b.id)
+			    where a.id=$1',array($p_id));
+    echo h2($array[0]['id']." ".$array[0]['i_date']." ".$array[0]['format_name'],'');
+    $ret=$cn->exec_sql(" SELECT id ,ref_operation,tp_date, amount, 
+				case when status='N' then 'Nouveau' when status='T' then 'Transfèré' when status='W' then 'En attente' end as f_status, 
+				libelle, 
+		       		tp_third, tp_extra
+			  FROM importbank.temp_bank
+			  where import_id=$1 $sql_filter
+			  order by tp_date",array($p_id));
+    require_once('template/show_list.php');
+
+
+  }
 }

@@ -24,7 +24,7 @@
  * \brief contains all the constant for this plugin
  */
 
-global $adecimal,$athousand,$aseparator,$aformat_date;
+global $adecimal,$athousand,$aseparator,$aformat_date,$aheader;
 $adecimal=array(
 		array ('value'=>0,'label'=>' '),
 		array ('value'=>1,'label'=>','),
