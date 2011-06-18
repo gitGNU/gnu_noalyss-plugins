@@ -30,6 +30,7 @@ class Temp_Bank_sql
 				  ,"tp_third"=>"tp_third"
 				  ,"tp_extra"=>"tp_extra"
 				  ,"f_id"=>"f_id"
+				  ,"tp_rec"=>"tp_rec"
                                  );
         function __construct ( & $p_cn,$p_id=-1)
             {
@@ -158,6 +159,7 @@ class Temp_Bank_sql
                      ,tp_third
                      ,tp_extra
                      ,f_id
+		     ,tp_rec
                      ) values (to_date($1,'DD.MM.YYYY')
                      ,$2
                      ,$3
@@ -168,6 +170,7 @@ class Temp_Bank_sql
                      ,$8
                      ,$9
                      ,$10
+		     ,$11
                      ) returning id";
 
                 $this->id=$this->cn->get_value(
@@ -182,6 +185,7 @@ class Temp_Bank_sql
                                      ,$this->tp_third
                                      ,$this->tp_extra
                                      ,$this->f_id
+				     ,$this->tp_rec
                                    )
                           );
                 }
@@ -208,6 +212,7 @@ class Temp_Bank_sql
                      ,$9
                      ,$10
                      ,$11
+		     ,$12
                      ) returning id";
 
                 $this->id=$this->cn->get_value(
@@ -222,7 +227,8 @@ class Temp_Bank_sql
                                      ,$this->tp_third
                                      ,$this->tp_extra
                                      ,$this->f_id
-                                     ,$this->id)
+                                     ,$this->id
+				     ,$this->tp_rec)
                           );
 
                 }
@@ -243,7 +249,8 @@ class Temp_Bank_sql
                  ,tp_third = $8
                  ,tp_extra = $9
                  ,f_id = $10
-                 where id= $11";
+		 ,tp_rec=$11
+                 where id= $12";
             $res=$this->cn->exec_sql(
                      $sql,
                      array($this->tp_date
@@ -256,6 +263,7 @@ class Temp_Bank_sql
                            ,$this->tp_third
                            ,$this->tp_extra
                            ,$this->f_id
+			   ,$this->tp_rec
                            ,$this->id)
                  );
 
@@ -277,6 +285,7 @@ class Temp_Bank_sql
                  ,tp_third
                  ,tp_extra
                  ,f_id
+		 ,tp_rec
                  from importbank.temp_bank where id=$1";
             /* please adapt */
             $res=$this->cn->get_array(

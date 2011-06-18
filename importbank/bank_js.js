@@ -44,4 +44,3 @@ function save_bank_info(obj)
     
     return false;
 }
-//http://localhost/phpcompta/rel560/html/extension.php?id=18567&ctl=div18567&gDossier=77&plugin_code=IMPBANK&act=show&p_jrn=1&fiche=&e_concerned=&save=Sauve

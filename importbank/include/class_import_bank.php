@@ -299,7 +299,10 @@ array
 			 array('value'=>0,'label'=>'Tous'),
 			 array('value'=>1,'label'=>'Nouveau'),
 			 array('value'=>2,'label'=>'Transfèrés'),
-			 array('value'=>3,'label'=>'Réconciliés'));
+			 array('value'=>3,'label'=>'Réconciliés'),
+			 array('value'=>4,'label'=>'Erreur'),
+			 array('value'=>5,'label'=>'A effacer')
+			 );
     $filter->javascript=' onchange="submit(this)"';
 
     $filter->selected=HtmlInput::default_value('fil_status',0,$_GET);
@@ -315,6 +318,15 @@ array
       case 3:
 	$sql_filter=" and status='W'";
 	break;
+      case 4:
+	$sql_filter=" and status='E'";
+	break;
+      case 5:
+	$sql_filter=" and status='D'";
+	break;
+
+
+
       }
     $array=$cn->get_array('select a.id as id,to_char(i_date,\'DD.MM.YYYY HH24:MI\') as i_date,format_name
 				from importbank.import as a
@@ -322,12 +334,18 @@ array
 			    where a.id=$1',array($p_id));
     echo h2($array[0]['id']." ".$array[0]['i_date']." ".$array[0]['format_name'],'');
     $ret=$cn->exec_sql(" SELECT id ,ref_operation,tp_date, amount, 
-				case when status='N' then 'Nouveau' when status='T' then 'Transfèré' when status='W' then 'En attente' end as f_status, 
+				case when status='N' then 'Nouveau'
+				when status='T' then 'Transfèré'
+				when status='W' then 'En attente'
+				when status='E' then 'ERREUR'
+				when status='D' then 'A effacer'
+
+				end as f_status, 
 				libelle, 
 		       		tp_third, tp_extra
 			  FROM importbank.temp_bank
 			  where import_id=$1 $sql_filter
-			  order by tp_date",array($p_id));
+			  order by tp_date,ref_operation,amount",array($p_id));
     require_once('template/show_list.php');
 
 

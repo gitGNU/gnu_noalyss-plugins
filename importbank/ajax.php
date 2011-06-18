@@ -27,28 +27,43 @@ case 'show':
 
   if (  isset($_GET['remove'] ))
     {
-      $msg="Opération effacée";
+      $msg="Opération a effacer";
       $bi->show_delete($ctl);
 
       $bi_sql=new Temp_Bank_Sql($cn,$id);
-      if ($bi_sql->id != '')       $bi_sql->delete();
+      $bi_sql->status='D';
+      $bi_sql->update();
 
     }
+  else   if (  isset($_GET['recup'] ))
+    {
+      $msg="Opération récupérée";
+      $bi_sql=new Temp_Bank_Sql($cn,$id);
+      $bi_sql->status='N';
+      $bi_sql->update();
+      $bi->show_item($ctl);
+    }
+
     else 
       if (isset($_GET['save']))
 	{
-	  if ($_GET['fiche'] != '')
+	  
+	  if ($_GET['fiche'.$id] != '')
 	    {
 	      $f_id=$cn->get_value('select f_id from fiche_Detail
 					where
-					ad_value=upper($1) and ad_id=23',array($_GET['fiche']));
+					ad_value=upper(trim($1)) and ad_id=23',array($_GET['fiche'.$id]));
 
 	      if ($f_id == '') $f_id=null;
 	      $bi->f_id=$f_id;
+	      $rec=$_GET['e_concerned'.$id];
+	      $bi->tp_rec=(trim($rec) != '')?trim($rec):null;
+	      $bi->status='W';
 	      $bi->update();
 	    }
 	  $msg="Opération sauvée";
 	  $bi->show_item($ctl);
+	  $extra=$id;
 	}
       else
 	$bi->show_item($ctl);

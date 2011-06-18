@@ -54,7 +54,7 @@ echo HtmlInput::hidden('p_jrn',$bi->jrn_def_id);
 <tr>
 	<TD>Contrepartie
 	</TD>
-	<td><?=$w->input()?><?=$w->search()?><span id="e_third"></span>
+	<td><?=$w->input()?><?=$w->search()?><span id="e_third"><?=h($name)?></span>
 	</td>
 </tr>
 <tr>
@@ -63,9 +63,25 @@ echo HtmlInput::hidden('p_jrn',$bi->jrn_def_id);
 	<td><?=$wConcerned->input();?>
 	</td>
 </tr>
+<tr>
+	<TD>statut</TD>
+	<td><?=$status?></td>
+</tr>
+<? if ($bi->status != 'D') : ?>
+<tr>
+	<TD>A effacer</TD>
+	<td><?=$remove->input();?>
+</td>
+</tr>
+<? else :?>
+<tr>
+	<TD>A ne pas effacer</TD>
+	<td><?=$recup->input();?>
+</td>
+</tr>
+<? endif; ?>
 </table>
 <?=HtmlInput::submit('save','Sauve');?>
-<?=HtmlInput::submit('remove','Efface');?>
 
 </form>
 </div>

@@ -45,7 +45,7 @@ class Bank_Item
 			    array($bi->jrn_def_id));
 	$w=new ICard();
 	$w->jrn=$bi->jrn_def_id;
-	$w->name='fiche';
+	$w->name='fiche'.$id;
 	$w->extra='filter';
 	$w->typecard='deb';
 	$w->set_dblclick("fill_ipopcard(this);");
@@ -57,18 +57,42 @@ class Bank_Item
 	$w->set_attribute('inp','fiche');
 
 	$wConcerned=new IConcerned();
-	$wConcerned->name="e_concerned";
+	$wConcerned->name="e_concerned".$id;
 	$wConcerned->extra=abs($bi->amount);
 	$wConcerned->extra2='paid';
 	$wConcerned->label=_('op. concernée');
 	$wConcerned->table=0;
-	//	$wConcerned->value=$p_val['jr_rapt'];
+	$wConcerned->value=$bi->tp_rec;
+	$name='';$status='';
 	if ( $bi->f_id != null)
 	  {
 	    $w->value=$cn->get_value('select ad_value from fiche_detail where f_id=$1 and ad_id=23',array($bi->f_id));
+	    $name=$cn->get_value('select ad_value from fiche_detail where f_id=$1 and ad_id=1',array($bi->f_id));
 	  }
+	switch($bi->status)
+	  {
+	  case 'N':
+	    $status='Nouveau';
+	    break;
+	  case 'E':
+	    $status='Erreur';
+	    break;
+	  case 'W':
+	    $status='Réconciliés';
+	    break;
+	  case 'T':
+	    $status='Transféré';
+	    $w->readOnly=true;
+	    $wConcerned=true;
+	    break;
+	  case 'D':
+	    $status='A effacer';
+	    break;
 
+	  }
       }
+    $remove=new ICheckBox('remove');
+    $recup=new ICheckBox('recup');
 
     require_once('template/detail_item.php');
   }
@@ -91,6 +115,9 @@ class Bank_Item
     global $cn;
     $bi_sql=new Temp_Bank_Sql($cn,$this->id);
     $bi_sql->f_id=$this->f_id;
+    $bi_sql->status=$this->status;
+    $bi_sql->tp_rec=$this->tp_rec;
+
     $bi_sql->update();
   }
 }
