@@ -45,12 +45,14 @@ Filtrer : <?=$filter->input()?>
 </td>
 
 <td>
-<?=h($row['libelle'])?>
+<?=h($row['tp_third'])?>
 </td>
 
 <td>
-<?=h($row['tp_third'])?>
+<?=h($row['libelle'])?>
 </td>
+
+
 
 <td>
 <?=h($row['tp_extra'])?>
