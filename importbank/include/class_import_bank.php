@@ -64,7 +64,7 @@ class Import_Bank
 
   }
   /**
-   *Test the CSV file, show the choosed delimiter, the CSV parsed, 
+   *Test the CSV file, show the choosed delimiter, the CSV parsed,
    * and replace column header by attribute
    *@return 0 ok,  -1 error
    */
@@ -101,7 +101,7 @@ array
   'rdelimiter' => string ',' (length=1)
   'encodage' => string '' (length=0)
   'record_import' => string 'Valider' (length=7)
-  'head_col' => 
+  'head_col' =>
     array
       0 => string '15' (length=2)
       1 => string '14' (length=2)
@@ -149,7 +149,7 @@ array
 	return -1;
       }
 
-      
+
     /*
      * read the file and record card
      */
@@ -254,7 +254,7 @@ array
     foreach ($check as $row)
       {
 	if ( $row['value'] == -1 ) continue;
-	if (isset ($row['count']) && $row['count'] > 1 ) 
+	if (isset ($row['count']) && $row['count'] > 1 )
 	  $error.=$row['label']." a été donné ".$row['count']." fois\n" ;
       }
     return $error;
@@ -272,6 +272,7 @@ array
 				order by i_date desc');
     $link='?'.Dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&sb=list&sa='.$_REQUEST['sa'];
 
+    $status=$cn->prepare('status','select count(*) from importbank.temp_bank where import_id=$1  and status=$2');
 
     require_once('template/show_import.php');
   }
@@ -333,15 +334,15 @@ array
 				join importbank.format_bank as b on (format_bank_id=b.id)
 			    where a.id=$1',array($p_id));
     echo h2($array[0]['id']." ".$array[0]['i_date']." ".$array[0]['format_name'],'');
-    $ret=$cn->exec_sql(" SELECT id ,ref_operation,tp_date, amount, 
+    $ret=$cn->exec_sql(" SELECT id ,ref_operation,tp_date, amount,
 				case when status='N' then 'Nouveau'
 				when status='T' then 'Transfèré'
 				when status='W' then 'En attente'
 				when status='E' then 'ERREUR'
 				when status='D' then 'A effacer'
 
-				end as f_status, 
-				libelle, 
+				end as f_status,
+				libelle,
 		       		tp_third, tp_extra
 			  FROM importbank.temp_bank
 			  where import_id=$1 $sql_filter
