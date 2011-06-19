@@ -49,8 +49,6 @@ $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'];
 
 $array=array (
 	array($url.'&sa=import',_('Importation'),_('Importation de nouveaux fichiers'),1),
-	//	array($url.'&sa=reconc',_('Reconciliation'),_('Réconciliation entre les opérations importées'),2),
-	//	array($url.'&sa=transfer',_('Transfert'),_('Transfert vers la comptabilité des op. importées'),3),
 	array($url.'&sa=purge',_('Liste Import '),_('Historique des imports effectués'),5)
 	);
 
@@ -73,6 +71,14 @@ switch($sa)
     $default=0;
   }
 echo ShowItem($array,'H','mtitle','mtitle',$default,' style="width:80%;margin-left:10%"');
+if ($cn->exist_schema('importbank') == false)
+  {
+    require_once('include/class_install_plugin.php');
+
+    $iplugn=new Install_Plugin($cn);
+    $iplugn->install();
+
+  }
 /*
  *Menu : import bank, reconciliation operation, purge temporary table
  */
