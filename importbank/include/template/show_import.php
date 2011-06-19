@@ -6,11 +6,12 @@
 	<Th>Date </Th>
 	<Th>Nom format</Th>
 	<th>Nouveau</th>
-	<th>Transfèrer</th>
-	<th>A transfèrer</th>
+	<th>Transfèré</th>
+	<th>Attente</th>
 	<th>Erreur</th>
-	<th>A effacer</th>
+	<th>Effacé</th>
 	<Th>Supprimer </Th>
+	<th></th>
 </TR>
 <?php
 	for ($i=0;$i<Database::num_row($ret);$i++):

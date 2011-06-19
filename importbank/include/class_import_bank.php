@@ -24,7 +24,9 @@
  * \brief Manage import
  */
 require_once('class_format_bank_sql.php');
-
+require_once('class_acc_ledger_fin.php');
+require_once('class_periode.php');
+require_once('class_temp_bank_sql.php');
 
 class Import_Bank
 {
@@ -299,10 +301,10 @@ array
     $filter->value=array(
 			 array('value'=>0,'label'=>'Tous'),
 			 array('value'=>1,'label'=>'Nouveau'),
-			 array('value'=>2,'label'=>'Transfèrés'),
-			 array('value'=>3,'label'=>'Réconciliés'),
+			 array('value'=>2,'label'=>'Transfèrer'),
+			 array('value'=>3,'label'=>'Attente'),
 			 array('value'=>4,'label'=>'Erreur'),
-			 array('value'=>5,'label'=>'A effacer')
+			 array('value'=>5,'label'=>'Effacer')
 			 );
     $filter->javascript=' onchange="submit(this)"';
 
@@ -337,9 +339,9 @@ array
     $ret=$cn->exec_sql(" SELECT id ,ref_operation,tp_date, amount,
 				case when status='N' then 'Nouveau'
 				when status='T' then 'Transfèré'
-				when status='W' then 'En attente'
+				when status='W' then 'Attente'
 				when status='E' then 'ERREUR'
-				when status='D' then 'A effacer'
+				when status='D' then 'Effacer'
 
 				end as f_status,
 				libelle,
@@ -350,5 +352,191 @@ array
     require_once('template/show_list.php');
 
 
+  }
+  /**
+   *@brief delete the record marked as deleted
+   *@param $p_array  is normally the request
+   */
+  static function delete_record($p_array)
+  {
+    global $cn;
+    $cn->exec_sql('delete from importbank.temp_bank where import_id=$1
+		   and status=\'D\'',array($p_array['id']));
+  }
+  /**
+   *@brief import row marked to transfer and from the specific import to
+   * the database 
+   *@param $p_array
+   */
+  static function transfer_record($p_array)
+  {
+    global $cn;
+
+    try
+    {
+        $cn->start();
+	/*
+	 * retrieve banque account, ledger, bank quick code
+	 */
+	$led_id=$cn->get_value('select jrn_def_id
+				from importbank.format_bank as fb
+				    join importbank.import as imp on (format_bank_id = fb.id)
+				  where imp.id=$1',array($p_array['id']));
+
+	$fin_ledger=new Acc_Ledger_Fin($cn,$led_id);
+	$card_bank=$fin_ledger->get_bank();
+	$quickcode_bank=$cn->get_value('select ad_value from fiche_detail where f_id=$1 and ad_id=$2',
+				     array($card_bank,ATTR_DEF_QUICKCODE));
+	$account_bank=$cn->get_value('select ad_value from fiche_detail where f_id=$1 and ad_id=$2',
+				     array($card_bank,ATTR_DEF_ACCOUNT));
+	$bank_name=$fin_ledger->get_name();
+	/*
+	 * record each row
+	 */
+	$sql = "select id from importbank.temp_bank where import_id=$1 and status='W'";
+
+        $ResAll=$cn->exec_sql($sql,array($p_array['id']));
+        $Max=Database::num_row($ResAll);
+
+        for ($i = 0;$i < $Max;$i++)
+        {
+            $val=Database::fetch_array($ResAll,$i);
+
+	    $row=new Temp_Bank_Sql($cn,$val['id']);
+
+	    if ( $row->f_id == null || $row->f_id=='')
+	      {
+		// error 
+		$this->transfert_error($row['id'],'Aucune fiche donnée');
+		continue;
+	      }
+
+            // Retrieve the account thx the quick code
+            $f=new Fiche($cn,$row->f_id);
+            $poste_comptable=$f->strAttribut(ATTR_DEF_ACCOUNT);
+	    $quick_code=$f->strAttribut(ATTR_DEF_QUICKCODE);
+
+            // Vérification que le poste comptable trouvé existe
+            if ( $poste_comptable == NOTFOUND || strlen(trim($poste_comptable))==0)
+	      {
+		// error 
+		self::transfert_error($row->id,'Poste comptable de la  fiche est incorrecte');
+		continue;
+	      }
+	    if ( self::check_date ($row->tp_date) == false)
+	      {
+		// error 
+		self::transfert_error($row->id,'Date hors des limites');
+		continue;
+	      }
+	    $err=self::is_closed($row->tp_date,$led_id);
+	    if ( $err != '')
+	      {
+		self::transfert_error($err,'Date hors des journaux');
+		continue;
+	      }
+
+            // Finances
+
+            $seq=$cn->get_next_seq('s_grpt');
+            $p_user = $_SESSION['g_user'];
+
+            $acc_op=new Acc_Operation($cn);
+            $acc_op->amount=$row->amount;
+	    $acc_op->desc=$bank_name;
+            $acc_op->type="d";
+            $acc_op->date=$row->tp_date;
+            $acc_op->user=$p_user;
+            $acc_op->poste=$account_bank;
+            $acc_op->grpt=$seq;
+            $acc_op->jrn=$led_id;
+            $acc_op->periode=0;
+	    $acc_op->f_id=$card_bank;
+            $acc_op->qcode=$quickcode_bank;
+            $acc_op->mt=microtime(true);
+            $r=$acc_op->insert_jrnx();
+
+
+            $acc_op->type="c";
+            $acc_op->poste=$poste_comptable;
+            $acc_op->desc=$row->tp_third." ".$row->libelle." ".$row->tp_extra;
+            $acc_op->amount=$row->amount;
+	    $acc_op->f_id=$row->f_id;
+            $acc_op->qcode=$quick_code;
+            $r=$acc_op->insert_jrnx();
+
+            $jr_id=$acc_op->insert_jrn();
+
+            $internal=$fin_ledger->compute_internal_code($seq);
+
+            $Res=$cn->exec_sql("update jrn set jr_internal=$1 where jr_id = $2",array($internal,$jr_id));
+
+	    $fin_ledger->insert_quant_fin($card_bank,$jr_id,$row->f_id,$row->amount);
+
+            // insert rapt
+
+            $acc_reconc=new Acc_Reconciliation($cn);
+            $acc_reconc->set_jr_id=$jr_id;
+            $acc_reconc->insert($row->tp_rec);
+
+            $sql2 = "update importbank.temp_bank set status = 'T',tp_error_msg=null  where id=$1";
+            $Res2=$cn->exec_sql($sql2,array($row->id));
+        }
+    }
+    catch (Exception $e)
+    {
+        $cn->rollback();
+        echo '<span class="error">'.
+        'Erreur dans '.__FILE__.':'.__LINE__.
+        ' Message = '.$e->getMessage().
+        '</span>';
+    }
+
+    $cn->commit();
+  }
+  /**
+   *Update the row with an error message, and change is status to E
+   */
+  function transfert_error($id,$message)
+  {
+    global $cn;
+    $cn->exec_sql('update importbank.temp_bank set status=$1,tp_error_msg=$2 where id=$3',
+		  array('E',$message,$id));
+  }
+  /**
+   * check 
+   * if the date is outside the defined periode
+   */ 
+  function check_date($p_date)
+  {
+    global $cn;
+    $sql="select count(*) from parm_periode where p_start <= to_date($1,'DD.MM.YYYY') and p_end >= to_date($1,'DD.MM.YYYY') ";
+    $res=$cn->get_value($sql,array($p_date));
+    if ( $res == 0) return false;
+    return true;
+  }
+  /**
+   * Check if the date is in a periode and if the ledger
+   * is closed or not
+   */
+  function is_closed($p_date,$ledger_id)
+  {
+    global $cn;
+    try
+      {
+	$periode=new Periode($cn);
+	$per=$periode->find_periode($p_date);
+	$periode->set_jrn($ledger_id);
+	$periode->set_periode($per);
+	if ( $periode->is_closed() == 1 )
+	  return "Période fermée";
+	return "";
+      }
+    catch (Exception $e)
+      {
+	$err=$e->getMessage();
+	return $err;
+      }
+   
   }
 }

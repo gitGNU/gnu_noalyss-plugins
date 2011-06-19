@@ -31,6 +31,7 @@ class Temp_Bank_sql
 				  ,"tp_extra"=>"tp_extra"
 				  ,"f_id"=>"f_id"
 				  ,"tp_rec"=>"tp_rec"
+				  ,"tp_error_msg"=>"tp_error_msg"
                                  );
         function __construct ( & $p_cn,$p_id=-1)
             {
@@ -160,6 +161,7 @@ class Temp_Bank_sql
                      ,tp_extra
                      ,f_id
 		     ,tp_rec
+		     ,tp_error_msg
                      ) values (to_date($1,'DD.MM.YYYY')
                      ,$2
                      ,$3
@@ -171,6 +173,8 @@ class Temp_Bank_sql
                      ,$9
                      ,$10
 		     ,$11
+		     ,$12
+		     
                      ) returning id";
 
                 $this->id=$this->cn->get_value(
@@ -186,6 +190,8 @@ class Temp_Bank_sql
                                      ,$this->tp_extra
                                      ,$this->f_id
 				     ,$this->tp_rec
+				     ,$this->tp_error_msg
+
                                    )
                           );
                 }
@@ -213,6 +219,7 @@ class Temp_Bank_sql
                      ,$10
                      ,$11
 		     ,$12
+		     ,$13
                      ) returning id";
 
                 $this->id=$this->cn->get_value(
@@ -228,7 +235,9 @@ class Temp_Bank_sql
                                      ,$this->tp_extra
                                      ,$this->f_id
                                      ,$this->id
-				     ,$this->tp_rec)
+				     ,$this->tp_rec
+				     ,$this->tp_error_msg
+				     )
                           );
 
                 }
@@ -250,7 +259,8 @@ class Temp_Bank_sql
                  ,tp_extra = $9
                  ,f_id = $10
 		 ,tp_rec=$11
-                 where id= $12";
+		 ,tp_error_msg=$12
+                 where id= $13";
             $res=$this->cn->exec_sql(
                      $sql,
                      array($this->tp_date
@@ -264,6 +274,7 @@ class Temp_Bank_sql
                            ,$this->tp_extra
                            ,$this->f_id
 			   ,$this->tp_rec
+			   ,$this->tp_error_msg
                            ,$this->id)
                  );
 
@@ -286,6 +297,7 @@ class Temp_Bank_sql
                  ,tp_extra
                  ,f_id
 		 ,tp_rec
+		 ,tp_error_msg
                  from importbank.temp_bank where id=$1";
             /* please adapt */
             $res=$this->cn->get_array(

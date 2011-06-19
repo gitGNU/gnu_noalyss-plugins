@@ -75,18 +75,18 @@ class Bank_Item
 	    $status='Nouveau';
 	    break;
 	  case 'E':
-	    $status='Erreur';
+	    $status='Erreur : '.$bi->tp_error_msg;
 	    break;
 	  case 'W':
-	    $status='Réconciliés';
+	    $status='Attente';
 	    break;
 	  case 'T':
-	    $status='Transféré';
+	    $status='Transférer';
 	    $w->readOnly=true;
-	    $wConcerned=true;
+	    $wConcerned->readOnly=true;
 	    break;
 	  case 'D':
-	    $status='A effacer';
+	    $status='Effacer';
 	    break;
 
 	  }

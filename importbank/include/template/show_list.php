@@ -1,8 +1,15 @@
 <form method="get">
 
 Filtrer : <?=$filter->input()?>
-<?=HtmlInput::request_to_hidden(array('gDossier','plugin_code','sb','sa','id'))?>
+<?=HtmlInput::request_to_hidden(array('gDossier','plugin_code','sb','sa','id',$filter->name))?>
+<?=HtmlInput::submit('refresh','Recharger')?>
 </form>
+<form method="get">
+<?=HtmlInput::request_to_hidden(array('gDossier','plugin_code','sb','sa','id',$filter->name))?>
+<?=HtmlInput::submit('delete_record','Effacer')?>
+<?=HtmlInput::submit('transfer_record','Transfèrer')?>
+</form>
+<? var_dump($_GET)?>
 <table class="result">
 	<TR>
 	<th></th>
@@ -36,7 +43,7 @@ Filtrer : <?=$filter->input()?>
 <?=format_date($row['tp_date'])?>
 </TD>
 
-<td>
+<td class="num">
 <?=nbm($row['amount'])?>
 </td>
 

@@ -95,10 +95,6 @@ if($_REQUEST['sa'] == 'reconc')
     Import_Bank::reconciliation();
   }
 
-if($_REQUEST['sa'] == 'transfer')
-  {
-    Import_Bank::transfert();
-  }
 
 if($_REQUEST['sa'] == 'purge')
   {
@@ -107,6 +103,15 @@ if($_REQUEST['sa'] == 'purge')
       {
 	Import_Bank::delete($_REQUEST);
       }
+    if (isset($_REQUEST['delete_record']))
+      {
+	Import_Bank::delete_record($_REQUEST);
+      }
+    if (isset($_REQUEST['transfer_record']))
+      {
+	Import_Bank::transfer_record($_REQUEST);
+      }
+
     /*
      * Show all the import 
      */

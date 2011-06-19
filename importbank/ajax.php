@@ -33,6 +33,7 @@ case 'show':
       $bi_sql=new Temp_Bank_Sql($cn,$id);
       $bi_sql->status='D';
       $bi_sql->update();
+      $extra='{"id":"'.$id.'","msg":"<span style=\"color:red\">Effacer</span>"}';
 
     }
   else   if (  isset($_GET['recup'] ))
@@ -42,6 +43,8 @@ case 'show':
       $bi_sql->status='N';
       $bi_sql->update();
       $bi->show_item($ctl);
+      $extra='{"id":"'.$id.'","msg":"<span style=\"color:red\">Récupérer</span>"}';
+
     }
 
     else 
@@ -61,9 +64,9 @@ case 'show':
 	      $bi->status='W';
 	      $bi->update();
 	    }
-	  $msg="Opération sauvée";
+	  $msg="Attente";
 	  $bi->show_item($ctl);
-	  $extra=$id;
+	  $extra='{"id":"'.$id.'","msg":"<span style=\"color:red\">Attente</span>"}';
 	}
       else
 	$bi->show_item($ctl);
@@ -72,7 +75,7 @@ case 'show':
 }
 
 $html=escape_xml($r);
-
+$extra=escape_xml($extra);
 header('Content-type: text/xml; charset=UTF-8');
 echo <<<EOF
 <?xml version="1.0" encoding="UTF-8"?>

@@ -30,7 +30,7 @@ echo HtmlInput::hidden('p_jrn',$bi->jrn_def_id);
 <tr>
 	<TD>Montant
 	</TD>
-	<td><?=nbm($bi->amount)?>
+	<td class="num"><?=nbm($bi->amount)?>
 	</td>
 </tr>
 <tr>
@@ -82,6 +82,6 @@ echo HtmlInput::hidden('p_jrn',$bi->jrn_def_id);
 <? endif; ?>
 </table>
 <?=HtmlInput::submit('save','Sauve');?>
-
+<?=HtmlInput::button_close($ctl)?>
 </form>
 </div>
