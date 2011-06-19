@@ -142,7 +142,7 @@ class Format_Bank_sql
         public function insert()
             {
             if ( $this->verify() != 0 ) return;
-	    var_dump($this);
+
             if ( $this->id==-1 )
                 {
                 /*  please adapt */
