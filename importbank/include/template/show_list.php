@@ -9,7 +9,7 @@ Filtrer : <?=$filter->input()?>
 <?=HtmlInput::submit('delete_record','Effacer')?>
 <?=HtmlInput::submit('transfer_record','Transfèrer')?>
 </form>
-<? var_dump($_GET)?>
+
 <table class="result">
 	<TR>
 	<th></th>
@@ -70,3 +70,8 @@ Filtrer : <?=$filter->input()?>
 ?>
 
 </table>
+<form method="get">
+<?=HtmlInput::request_to_hidden(array('gDossier','plugin_code','sb','sa','id',$filter->name))?>
+<?=HtmlInput::submit('delete_record','Effacer')?>
+<?=HtmlInput::submit('transfer_record','Transfèrer')?>
+</form>
