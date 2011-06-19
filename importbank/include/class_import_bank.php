@@ -407,7 +407,7 @@ array
 	    if ( $row->f_id == null || $row->f_id=='')
 	      {
 		// error 
-		$this->transfert_error($row['id'],'Aucune fiche donnée');
+		self::transfert_error($row->id,'Aucune fiche donnée');
 		continue;
 	      }
 
@@ -466,9 +466,9 @@ array
             $r=$acc_op->insert_jrnx();
 
             $jr_id=$acc_op->insert_jrn();
-
+	    var_dump($jr_id);
             $internal=$fin_ledger->compute_internal_code($seq);
-
+	    var_dump($row);
             $Res=$cn->exec_sql("update jrn set jr_internal=$1 where jr_id = $2",array($internal,$jr_id));
 
 	    $fin_ledger->insert_quant_fin($card_bank,$jr_id,$row->f_id,$row->amount);
@@ -476,7 +476,7 @@ array
             // insert rapt
 
             $acc_reconc=new Acc_Reconciliation($cn);
-            $acc_reconc->set_jr_id=$jr_id;
+            $acc_reconc->set_jr_id($jr_id);
             $acc_reconc->insert($row->tp_rec);
 
             $sql2 = "update importbank.temp_bank set status = 'T',tp_error_msg=null  where id=$1";
