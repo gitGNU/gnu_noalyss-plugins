@@ -63,9 +63,11 @@ echo HtmlInput::hidden('p_jrn',$bi->jrn_def_id);
 	<td><?=$wConcerned->input();?>
 	</td>
 </tr>
+<? $style=($bi->status == 'E') ? 'style="color:red;font-weight:bold"' : '';?>
+
 <tr>
 	<TD>statut</TD>
-	<td><?=$status?></td>
+	<td <?=$style?> ><?=$status?></td>
 </tr>
 <? if ($bi->status != 'D') : ?>
 <tr>

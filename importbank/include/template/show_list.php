@@ -1,7 +1,7 @@
 <form method="get">
 
 Filtrer : <?=$filter->input()?>
-<?=HtmlInput::request_to_hidden(array('gDossier','plugin_code','sb','sa','id',$filter->name))?>
+<?=HtmlInput::request_to_hidden(array('gDossier','plugin_code','sb','sa','id'))?>
 <?=HtmlInput::submit('refresh','Recharger')?>
 </form>
 <form method="get" onsubmit="return confirm ('Vous confirmez ?')">
@@ -46,8 +46,8 @@ Filtrer : <?=$filter->input()?>
 <td class="num">
 <?=nbm($row['amount'])?>
 </td>
-
-<td id="<?='st'.$row['id']?>">
+<? $style=($row['f_status'] == 'ERREUR') ? 'style="background-color:red;color:white"' : '';?>
+<td id="<?='st'.$row['id']?>" <?=$style?> >
 <?=$row['f_status']?>
 </td>
 
