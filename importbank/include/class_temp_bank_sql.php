@@ -246,7 +246,7 @@ class Temp_Bank_sql
 
         public function update()
             {
-	      xdebug_start_trace();
+
             if ( $this->verify() != 0 ) return;
             /*   please adapt */
             $sql=" update importbank.temp_bank set tp_date =to_date($1,'DD.MM.YYYY')
@@ -278,7 +278,7 @@ class Temp_Bank_sql
 			   ,$this->tp_error_msg
                            ,$this->id)
                  );
-	    xdebug_stop_trace();
+
             }
         /**
          *@brief load a object
