@@ -104,9 +104,15 @@ class Bank_Item
 	    $status='Attente';
 	    break;
 	  case 'T':
-	    $status='Transférer';
+	    $status='Transféré';
 	    $w->readOnly=true;
 	    $wConcerned->readOnly=true;
+	    $amount->readOnly=true;
+	    $third->readOnly=true;
+	    $extra->readOnly=true;
+	    $libelle->readOnly=true;
+	    $date->readOnly=true;
+
 	    break;
 	  case 'D':
 	    $status='Effacer';

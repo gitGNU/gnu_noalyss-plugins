@@ -301,7 +301,7 @@ array
     $filter->value=array(
 			 array('value'=>0,'label'=>'Tous'),
 			 array('value'=>1,'label'=>'Nouveau'),
-			 array('value'=>2,'label'=>'Transfèrer'),
+			 array('value'=>2,'label'=>'Transfèré'),
 			 array('value'=>3,'label'=>'Attente'),
 			 array('value'=>4,'label'=>'Erreur'),
 			 array('value'=>5,'label'=>'Effacer')
