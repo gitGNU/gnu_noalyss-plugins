@@ -18,31 +18,31 @@ echo HtmlInput::hidden('p_jrn',$bi->jrn_def_id);
 
 <table>
 <TR>
-<TD>Date</TD><td><?=$bi->tp_date?></td></tr>
+<TD>Date</TD><td><?=$date->input()?></td></tr>
 <tr><td>n° opération </td><td><?=h($bi->ref_operation)?></td></tr>
 <tr><TD>
 	Tiers
     </TD>
     <td>
-	<?=h($bi->tp_third)?>
+	<?=$third->input()?>
     </td>
 </tr>
 <tr>
 	<TD>Montant
 	</TD>
-	<td class="num"><?=nbm($bi->amount)?>
+	<td><?=$amount->input()?>
 	</td>
 </tr>
 <tr>
 	<TD>Libelle
 	</TD>
-	<td><?=h($bi->libelle)?>
+	<td><?=$libelle->input()?>
 	</td>
 </tr>
 <tr>
 	<TD>Autre information
 	</TD>
-	<td><?=h($bi->tp_extra)?>
+	<td><?=$extra->input()?>
 	</td>
 </tr>
 <tr>

@@ -69,6 +69,29 @@ class Bank_Item
 	    $w->value=$cn->get_value('select ad_value from fiche_detail where f_id=$1 and ad_id=23',array($bi->f_id));
 	    $name=$cn->get_value('select ad_value from fiche_detail where f_id=$1 and ad_id=1',array($bi->f_id));
 	  }
+	$third=new IText('tp_third');
+	$third->value=$bi->tp_third;
+
+	$extra=new IText('tp_extra');
+	$extra->value=$bi->tp_extra;
+	if ( strlen($bi->libelle) > 20)
+	  {
+	    $libelle=new ITextArea('libelle');
+	    $libelle->value=$bi->libelle;
+
+	  }
+	else
+	  {
+	    $libelle=new IText('libelle');
+	    $libelle->value=$bi->libelle;
+	    $libelle->size=strlen($bi->libelle);
+	  }
+	$amount=new INum('amount');
+	$amount->value=$bi->amount;
+
+	$date=new IDate('tp_date');
+	$date->value=$bi->tp_date;
+
 	switch($bi->status)
 	  {
 	  case 'N':
@@ -93,6 +116,7 @@ class Bank_Item
       }
     $remove=new ICheckBox('remove');
     $recup=new ICheckBox('recup');
+
 
     require_once('template/detail_item.php');
   }

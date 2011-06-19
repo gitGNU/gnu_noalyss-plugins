@@ -53,16 +53,24 @@ case 'show':
 	  
 	  if ($_GET['fiche'.$id] != '')
 	    {
+	      $bi_sql=new Temp_Bank_Sql($cn,$id);
+
 	      $f_id=$cn->get_value('select f_id from fiche_Detail
 					where
 					ad_value=upper(trim($1)) and ad_id=23',array($_GET['fiche'.$id]));
 
 	      if ($f_id == '') $f_id=null;
-	      $bi->f_id=$f_id;
+	      $bi_sql->f_id=$f_id;
 	      $rec=$_GET['e_concerned'.$id];
-	      $bi->tp_rec=(trim($rec) != '')?trim($rec):null;
-	      $bi->status='W';
-	      $bi->update();
+	      $bi_sql->tp_rec=(trim($rec) != '')?trim($rec):null;
+	      $bi_sql->status='W';
+	      $bi_sql->libelle=$_GET['libelle'];
+	      $bi_sql->amount=$_GET['amount'];
+	      $bi_sql->tp_extra=$_GET['tp_extra'];
+	      $bi_sql->tp_third=$_GET['tp_third'];
+	      $bi_sql->tp_date=$_GET['tp_date'];
+
+	      $bi_sql->update();
 	    }
 	  $msg="Attente";
 	  $bi->show_item($ctl);
