@@ -466,18 +466,20 @@ array
             $r=$acc_op->insert_jrnx();
 
             $jr_id=$acc_op->insert_jrn();
-	    var_dump($jr_id);
+
             $internal=$fin_ledger->compute_internal_code($seq);
-	    var_dump($row);
+
             $Res=$cn->exec_sql("update jrn set jr_internal=$1 where jr_id = $2",array($internal,$jr_id));
 
 	    $fin_ledger->insert_quant_fin($card_bank,$jr_id,$row->f_id,$row->amount);
 
             // insert rapt
-
-            $acc_reconc=new Acc_Reconciliation($cn);
-            $acc_reconc->set_jr_id($jr_id);
-            $acc_reconc->insert($row->tp_rec);
+	    if ( $cn->get_value ('select count(jr_id) from jrn where jr_id=$1',array($row->tp_rec)) == 1)
+	      {
+		$acc_reconc=new Acc_Reconciliation($cn);
+		$acc_reconc->set_jr_id($jr_id);
+		$acc_reconc->insert($row->tp_rec);
+	      }
 
             $sql2 = "update importbank.temp_bank set status = 'T',tp_error_msg=null  where id=$1";
             $Res2=$cn->exec_sql($sql2,array($row->id));
