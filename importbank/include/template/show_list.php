@@ -4,7 +4,7 @@ Filtrer : <?=$filter->input()?>
 <?=HtmlInput::request_to_hidden(array('gDossier','plugin_code','sb','sa','id',$filter->name))?>
 <?=HtmlInput::submit('refresh','Recharger')?>
 </form>
-<form method="get">
+<form method="get" onsubmit="return confirm ('Vous confirmez ?')">
 <?=HtmlInput::request_to_hidden(array('gDossier','plugin_code','sb','sa','id',$filter->name))?>
 <?=HtmlInput::submit('delete_record','Effacer')?>
 <?=HtmlInput::submit('transfer_record','Transfèrer')?>
@@ -70,7 +70,7 @@ Filtrer : <?=$filter->input()?>
 ?>
 
 </table>
-<form method="get">
+<form method="get" onsubmit="return confirm ('Vous confirmez?')">
 <?=HtmlInput::request_to_hidden(array('gDossier','plugin_code','sb','sa','id',$filter->name))?>
 <?=HtmlInput::submit('delete_record','Effacer')?>
 <?=HtmlInput::submit('transfer_record','Transfèrer')?>
