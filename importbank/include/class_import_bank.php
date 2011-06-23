@@ -174,6 +174,35 @@ class Import_Bank
 
   }
   /**
+   * return the HTML style for the status 
+   * White : new
+   * green : transfered
+   * red  : error
+   */ 
+  static function color_status($id)
+  {
+    $style="";
+    switch($id)
+      {
+      case 'E':
+	$style="background-color:red;color:white";
+	break;
+      case 'T':
+	$style="background-color:darkgreen;color:white";
+	break;
+      case 'D':
+	$style="background-color:grey;color:red";
+	break;
+      case 'N':
+	$style="background-color:white;color:blue";
+	break;
+      default:
+	return "";
+      }
+    $style='style="'.$style.'"';
+    return $style;
+  }
+  /**
    *@brief delete the record marked as deleted
    *@param $p_array  is normally the request
    */
