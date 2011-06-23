@@ -46,8 +46,7 @@ Filtrer : <?=$filter->input()?>
 <td class="num">
 <?=nbm($row['amount'])?>
 </td>
-<? $style=($row['f_status'] == 'ERREUR') ? 'style="background-color:red;color:white"' : '';?>
-<td id="<?='st'.$row['id']?>" <?=$style?> >
+<td id="<?='st'.$row['id']?>" <?=Import_Bank::color_status($row['status'])?>  >
 <?=$row['f_status']?>
 </td>
 
@@ -61,7 +60,7 @@ Filtrer : <?=$filter->input()?>
 
 
 
-<td>
+<td >
 <?=h($row['tp_extra'])?>
 </td>
 </tr>
