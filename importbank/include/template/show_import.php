@@ -79,10 +79,10 @@ echo HtmlInput::button_anchor('Détail',$link.'&id='.$row['id']);
 
 <?php
 $action="onclick=\"select_checkbox('purge')\"";
-echo HtmlInput::button('s','Tous cochez',$action);
+echo HtmlInput::button('s','Tout cocher',$action);
 
 $action="onclick=\"unselect_checkbox('purge')\"";
-echo HtmlInput::button('u','Tous décochez',$action);
+echo HtmlInput::button('u','Tout décocher',$action);
 echo HtmlInput::hidden('sa',$_REQUEST['sa']);
 $action=" onclick=\"return confirm('Vous confirmez ?');\"";
 echo HtmlInput::submit('delete','Supprimer la sélection',$action);
