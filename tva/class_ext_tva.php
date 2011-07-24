@@ -330,9 +330,16 @@ class Ext_Tva extends Ext_Tva_Gen
 			$_REQUEST['plugin_code'],
 			dossier::id(),
 			$this->da_id);
+    $js_remove=sprintf("onclick=\"if ( confirm('%s')){remove_form('%s',%d,%d,'da');}\"",
+		       "Vous confirmez vouloir effacer ?",
+			$_REQUEST['plugin_code'],
+			dossier::id(),
+			$this->da_id);
+
      $array=array (
 		   array("javascript:void(0)",_("Ecriture comptable"),_("Création de l'écriture comptable"),1,$js_record),
-		   array("javascript:void(0)",_("Générer fichier"),_("Création du fichier xml"),2)
+		   array("javascript:void(0)",_("Générer fichier"),_("Création du fichier xml"),2),
+		   array("javascript:void(0)",_("Effacement déclaration"),_("Effacement déclaration"),3,$js_remove)
 		   );
      $r.=ShowItem($array,'V',"mtitle","mtitle");
      return $r;

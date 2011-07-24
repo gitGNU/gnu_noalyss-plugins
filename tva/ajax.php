@@ -44,28 +44,43 @@ case 'dsp_decl':
   }
 
   break;
+  /**
+   * generate writing
+   */
 case 'rw':
   require_once('class_acc_ledger.php');
-  $r='<div style="float:right"><a class="mtitle" href="javascript:void(0)" onclick="removeDiv(\'record_write\')">fermer</a></div>';
-  $ctl='record_write';
-  $ledger=new Acc_ledger($cn,0);
-  $sel_ledger=$ledger->select_ledger('ODS',1);
-  $r.=h2info('Génération écriture');
+  $count=$cn->get_value('select count(*) from tva_belge.declaration_amount where da_id=$1',array($_REQUEST['p_id']));
+  if ( $count == 1 )
+    {
+      $r='<div style="float:right"><a class="mtitle" href="javascript:void(0)" onclick="removeDiv(\'record_write\')">fermer</a></div>';
+      $ctl='record_write';
+      $ledger=new Acc_ledger($cn,0);
+      $sel_ledger=$ledger->select_ledger('ODS',1);
+      $r.=h2info('Génération écriture');
 
-  $r.='<form onsubmit="save_write(this);return false;">';
-  $decl=new Ext_Tva($cn);
-  $decl->set_parameter('id',$_GET['p_id']);
-  $decl->load();
-  $date=new IDate('pdate');
-  $r.="Date :".$date->input().'<br>';
-  $r.="Choix du journal : ".$sel_ledger->input();
-  $r.=$decl->propose_form();
-  $r.=HtmlInput::hidden('mt',microtime(true));
-  $r.=HtmlInput::extension();
-  $r.=dossier::hidden();
-  $r.=HtmlInput::submit('save','Sauver','onclick="return confirm(\'Vous confirmez ? \')"');
-  $r.='</form>';
+      $r.='<form onsubmit="save_write(this);return false;">';
+      $decl=new Ext_Tva($cn);
+      $decl->set_parameter('id',$_GET['p_id']);
+      $decl->load();
+      $date=new IDate('pdate');
+      $r.="Date :".$date->input().'<br>';
+      $r.="Choix du journal : ".$sel_ledger->input();
+      $r.=$decl->propose_form();
+      $r.=HtmlInput::hidden('mt',microtime(true));
+      $r.=HtmlInput::extension();
+      $r.=dossier::hidden();
+      $r.=HtmlInput::submit('save','Sauver','onclick="return confirm(\'Vous confirmez ? \')"');
+      $r.='</form>';
+    } else 
+    {
+      $ctl='record_write';
+      $r=HtmlInput::anchor_close($ctl);
+      $r.="<h2 class=\"info\">Désolé cette opération n'existe pas </h2>";
+      $r.='<span class="notice">Il se peut que l\'information aie été effacée</span>';
+      $r.=HtmlInput::button_close($ctl);
+    }
   break;
+
 case 'sw':
   $ctl='record_write';
   ob_start();
@@ -140,6 +155,27 @@ case 'sw':
   $r=ob_get_contents();
   ob_clean();
    break;
+case 'rm_form':
+  switch($type)
+    { 
+    case 'da':
+      $sql="delete from tva_belge.declaration_amount where da_id=$1";
+      break;
+    case 'li':
+      $sql="delete from tva_belge.intracomm where i_id=$1";
+      break;
+    case 'lc':
+      $sql="delete from tva_belge.assujetti where a_id=$1";
+      break;
+    }
+  $ctl='remove_form';
+  $cn->exec_sql($sql,array($_REQUEST['p_id']));
+  $r=HtmlInput::anchor_close($ctl);
+  $r.='<h2 class="info"> Information </h2>';
+  $r.='<h2 class="notice">Opération effacée</h2>';
+  $r.=HtmlInput::button_close($ctl);
+  $html=escape_xml($r);
+  break;
 default:
   $r=var_export($_REQUEST,true);
 }
@@ -151,7 +187,7 @@ echo <<<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
 <ctl>$ctl</ctl>
-<html>$html</html>
+<code>$html</code>
 <extra>$extra</extra>
 </data>
 EOF;

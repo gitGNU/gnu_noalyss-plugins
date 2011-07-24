@@ -86,6 +86,13 @@ class Ext_List_Intra extends Listing {
      $r.=$this->display_info();
      $r.=$this->display_declaration_amount();
      $r.='</form>';
+     $js_remove=sprintf("onclick=\"if ( confirm('%s')){remove_form('%s',%d,%d,'li');}\"",
+		       "Vous confirmez vouloir effacer ?",
+			$_REQUEST['plugin_code'],
+			dossier::id(),
+			$this->i_id);
+
+     $r.=HtmlInput::button('Effacer','Effacer',$js_remove);
      $r.= create_script("$('readonly').disable();");
      return $r;
   }
