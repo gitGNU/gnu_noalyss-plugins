@@ -44,6 +44,7 @@ echo HtmlInput::extension();
 echo HtmlInput::hidden('sa','ltva');
 echo dossier::hidden();
 echo $choice->input();
+echo HtmlInput::submit('rc','Recharger');
 echo '</form>';
 switch($choice->selected) {
 case 0:
