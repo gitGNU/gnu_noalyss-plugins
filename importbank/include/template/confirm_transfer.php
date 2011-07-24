@@ -14,10 +14,15 @@ switch ($sep_field->selected)
 	  echo "Séparateur invalide ";
 	  exit();
 }
+
 while( ($row=fgets($fbank)) !== false)
 {
+	if ( $row_count >= $skip->value)
+	  echo '<tr style="border:solid 1px black">';
+	else
+	  echo '<tr style="background:red;border:solid 1px red">';
 	$row_count++;
-	echo '<tr style="border:solid 1px black">';
+
 	$array_row=explode($sp,$row);
    $count_col=count($array_row);
      $max=($count_col>$max)?$count_col:$max;
@@ -25,7 +30,7 @@ while( ($row=fgets($fbank)) !== false)
      echo td($count_col);
     for ($i=0;$i<$count_col;$i++)
       {
-				echo td(utf8_encode($array_row[$i]),'style="border:solid 1px black"');
+	echo td(utf8_encode($array_row[$i]),'style="border:solid 1px black"');
       }
       echo '</tr>';
 }
@@ -112,7 +117,7 @@ Format de date
 
 
 </table>
-
+<p class="notice">Les lignes en rouge ne seront pas importées</p>
 <?php
 echo HtmlInput::post_to_hidden(array('gDossier','plugin_code','sa','format'));
 echo HtmlInput::hidden('sb','upload_file');
