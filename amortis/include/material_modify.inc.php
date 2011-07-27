@@ -36,7 +36,7 @@ $a=$cn->get_value("select a_id from amortissement.amortissement where f_id=$1",
 		  array($f));
 if ( $cn->count() == 0 )
   {
-    echo HtmlInput::button_close($t);
+    echo HtmlInput::anchor_close($t);
     echo '<h2 class="info">Détail de matériel</h2>';
     echo "<h2 class=\"error\"> Bien à amortir effacé </h2>";
     echo HtmlInput::button('close','Fermer',"onclick=\"removeDiv('bxmat');refresh_window()\" ");
@@ -45,7 +45,7 @@ else
   {
     $mat=new Am_Card();
     $mat->set_material($f);
-    echo HtmlInput::button_close($t);
+    echo HtmlInput::anchor_close($t);
     $mat->input();
   }
 ?>
