@@ -142,7 +142,15 @@ class Format_Bank_sql
         public function insert()
             {
             if ( $this->verify() != 0 ) return;
-
+	    if ( strlen(trim($this->format_name))==0)
+	      {
+		$get_id=$this->cn->get_value('select id from importbank.format_name where format_name=$1',array($this->format_name));
+		if ( $this->cn->size() == 1) {
+		  $this->update();
+		  return;
+		}
+		
+	      }
             if ( $this->id==-1 )
                 {
                 /*  please adapt */
