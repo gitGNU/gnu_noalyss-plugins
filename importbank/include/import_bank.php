@@ -69,7 +69,7 @@ if ( $_REQUEST ['sb'] == 'select_form')
       {
 	throw new Exception('Nombre de ligne trouvé incorrect');
       }
-  }
+      }
     echo '<div class="content" style="width:80%;margin-left:10%">';
     $sb='upload_file';
     require_once ('template/show_field.php');

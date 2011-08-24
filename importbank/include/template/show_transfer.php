@@ -21,12 +21,14 @@ $id=$cn->get_value('insert into importbank.import(format_bank_id) values ($1) re
 		  array($format_bank->id));
 ob_start();
 echo '<table>';
-while( ($row=fgets($fbank)) !== false)
+while( ($row=fgetcsv($fbank,0,$sp)) !== false)
 {
 	$row_count++;
-	$array_row=explode($sp,$row);
+
+	$array_row=$row;
 	$count_col=count($array_row);
 	if ( $row_count<=$_POST['skip']) continue;
+
 	if ( $count_col==$_POST['nb_col'])
 	  {
 	    echo '<tr style="border:solid 1px black">';

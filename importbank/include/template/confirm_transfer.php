@@ -15,7 +15,7 @@ switch ($sep_field->selected)
 	  exit();
 }
 
-while( ($row=fgets($fbank)) !== false)
+while( ($row=fgetcsv($fbank,0,$sp)) !== false)
 {
 	if ( $row_count >= $skip->value)
 	  echo '<tr style="border:solid 1px black">';
@@ -23,7 +23,7 @@ while( ($row=fgets($fbank)) !== false)
 	  echo '<tr style="background:red;border:solid 1px red">';
 	$row_count++;
 
-	$array_row=explode($sp,$row);
+	$array_row=$row;
    $count_col=count($array_row);
      $max=($count_col>$max)?$count_col:$max;
      echo td($row_count);
