@@ -87,7 +87,7 @@ class Import_Bank
   {
     global $cn;
 
-    $ret=$cn->exec_sql('select a.id,to_char(i_date,\'DD.MM.YYYY HH24:MI\') as i_date,format_name
+    $ret=$cn->exec_sql('select a.id,to_char(i_date,\'DD.MM.YYYY HH24:MI\') as str_date,format_name,i_date
 				from importbank.import as a
 				join importbank.format_bank as b on (format_bank_id=b.id)
 				order by i_date desc');
