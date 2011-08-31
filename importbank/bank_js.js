@@ -15,7 +15,7 @@ function reconcilie(target,dossier_id,p_id,plugin_code)
 	removeDiv(target);
     }
     var sx=0;
-    var height=document.body.clientHeight/2-100;
+    var height=0; 
     if ( window.scrollY)
     {
         sx=window.scrollY+height;
@@ -24,7 +24,7 @@ function reconcilie(target,dossier_id,p_id,plugin_code)
      {
             sx=document.body.scrollTop+height;
      }
-    var str_style="top:"+sx+";";
+    var str_style="top:"+sx+";margin-left:10%;";
 
     var div={id:target, cssclass:'op_detail',style:str_style,html:loading(),drag:1};
     
