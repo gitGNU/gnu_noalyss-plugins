@@ -22,7 +22,7 @@ echo HtmlInput::hidden('p_jrn',$bi->jrn_def_id);
 <tr>
 	<TD>Journal
 	</TD>
-	<td><?=$jrn?>
+	<td><span class="notice"><?=$jrn?></span>
 	</td>
 </tr>
 <tr>
