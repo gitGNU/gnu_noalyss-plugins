@@ -19,6 +19,19 @@ echo HtmlInput::hidden('p_jrn',$bi->jrn_def_id);
 <table>
 <TR>
 <TD>Date</TD><td><?=$date->input()?></td></tr>
+<tr>
+	<TD>Journal
+	</TD>
+	<td><?=$jrn?>
+	</td>
+</tr>
+<tr>
+	<TD>Contrepartie
+	</TD>
+	<td><?=$w->input()?><?=$w->search()?><span id="e_third"><?=h($name)?></span>
+	</td>
+</tr>
+
 <tr><td>n° opération </td><td><?=h($bi->ref_operation)?></td></tr>
 <tr><TD>
 	Tiers
@@ -43,18 +56,6 @@ echo HtmlInput::hidden('p_jrn',$bi->jrn_def_id);
 	<TD>Autre information
 	</TD>
 	<td><?=$extra->input()?>
-	</td>
-</tr>
-<tr>
-	<TD>Journal
-	</TD>
-	<td><?=$jrn?>
-	</td>
-</tr>
-<tr>
-	<TD>Contrepartie
-	</TD>
-	<td><?=$w->input()?><?=$w->search()?><span id="e_third"><?=h($name)?></span>
 	</td>
 </tr>
 <tr>
