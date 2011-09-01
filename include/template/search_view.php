@@ -1,19 +1,19 @@
 <?php
-print_r($sql);
+
 $ret=$cn->exec_sql($sql);
 $nb_row=$cn->size();
 if ( $nb_row == 0 ) exit();
 $checkbox=new ICheckBox('jr_id[]');
-var_dump($_POST);
+
 ?>
-<form method="POST">
+<form method="POST" id="form1" onsubmit="return confirm('Vous confirmez?')">
 <?
 	echo HtmlInput::extension();
 	echo HtmlInput::get_to_hidden(array('sa'));
 	echo Dossier::hidden();
 ?>
 
-<div id="div_poste">
+<div id="div_poste" class="op_detail" style="top:230;margin:5;overflow:visible;display:none;">
 	<h2>Changer dans les opérations sélectionnées le poste comptable </h2>
 	<p class="notice">Attention, cela ne changera pas la fiche, soyez prudent</p>
 <?
@@ -41,12 +41,15 @@ var_dump($_POST);
 	<td> <span id="tposte_label"></span>'</td>
 	</TR>
 	<tr><TD><?=HtmlInput::submit('chg_poste','Changer le poste comptable')?></TD>
+<td><?
+echo  HtmlInput::button('accounting_hide_bt','Annuler','onclick="$(\'div_poste\').hide();"');
+?>
+</TD>
 </tr>
 </table>
-
 </div>
 
-<div id="div_card">
+<div id="div_card" class="op_detail" style="top:230;margin:5;overflow:visible;display:none;">
 <h2>Changer dans les opérations sélectionnées la fiche </h2>
 	<p class="notice">Attention, cela changera la fiche et le poste comptable: ce sera celui de la fiche qui sera utilisé, soyez prudent</p>
 <?
@@ -68,20 +71,27 @@ var_dump($_POST);
 ?>
 <table>
 <TR>
+	<TD>Changer</TD>
 	<TD><?=$csource->input();?></TD>
 	<td><?=$csource->search()?></td>
 	<td><span id="csource_label"></span></td>
 </tr>
 <tr>
+	<TD>par </TD>
+
 	<TD><?=$ctarget->input()?></TD>
 	<td><?=$ctarget->search()?></td>
 	<td><span id="ctarget_label"></span></td>
 </tr>
 </table>
-	<? echo HtmlInput::submit('chg_card','Fiche'); ?>
+	<? echo HtmlInput::submit('chg_card','Changer la fiche'); ?>
+<?
+echo  HtmlInput::button('card_hide_bt','Annuler','onclick="$(\'div_card\').hide();"');
+?>
+
 </div>
 
-<div id="div_ledger">
+<div id="div_ledger" class="op_detail" style="top:230;margin:5;overflow:visible;display:none;">
 <h2>Changer dans les opérations sélectionnées le journal </h2>
 	<p class="notice">Attention, transfèrera les opérations vers le journal choisi mais il faut que ce journal soit de même type (achat vers achat, vente vers vente...), les pièces justificatives ne seront pas mises à jour, soyez prudent</p>
 
@@ -96,13 +106,28 @@ $tledger->value=$aledger;
 <p>
 Les opérations appartenant au journal <?=$sledger->input()?> vers le journal <?=$tledger->input()?>
 </p>
-	<? echo HtmlInput::submit('chg_ledger','Journal'); ?>
+	<? echo HtmlInput::submit('chg_ledger','Déplacer dans le journal'); ?>
+<?
+echo  HtmlInput::button('ledger_hide_bt','Annuler','onclick="$(\'div_ledger\').hide();"');
+?>
+
 </div>
 <table class="result">
 <?php
 echo HtmlInput::extension();
 echo Dossier::hidden();
 echo HtmlInput::hidden('sa',$_REQUEST['sa']);
+?>
+<TR>
+	<TH>Date</TH>
+	<TH>interne</TH>
+	<TH>N°pièce</TH>
+	<TH>Journal</TH>
+	<TH>Libellé</TH>
+	<TH class="num">Montant</TH>
+	<TH><INPUT TYPE="CHECKBOX" onclick="toggle_checkbox('form1')"></TH>
+</TR>
+<?
 for ($i = 0;$i < $nb_row;$i++) :
 	$row=$cn->fetch_array($ret,$i);
 	$odd=($i%2==0)?' class="odd"':' class="even"';

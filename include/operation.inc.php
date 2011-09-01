@@ -16,7 +16,6 @@ echo '</form>';
  */
 if (isset($_POST['chg_poste']))
   {
-       var_dump($_POST);
        change_accounting($cn);
   }
 /*
@@ -24,7 +23,6 @@ if (isset($_POST['chg_poste']))
  */
 if (isset($_POST['chg_card']))
   {
-    var_dump($_POST);
     change_card($cn);
   }
 /*
@@ -32,7 +30,6 @@ if (isset($_POST['chg_card']))
  */
 if (isset($_POST['chg_ledger']))
   {
-    var_dump($_POST);
     change_ledger($cn);
   }
 
@@ -54,6 +51,11 @@ if ( isset ($_GET['viewsearch']))
 
     // Count nb of line
     $max_line=$cn->count_sql($sql);
+echo HtmlInput::button('accounting_bt','Poste comptable','onclick="$(\'div_poste\').show();$(\'div_card\').hide();$(\'div_ledger\').hide()"');
+
+echo HtmlInput::button('card_bt','Fiche','onclick="$(\'div_poste\').hide();$(\'div_card\').show();$(\'div_ledger\').hide()"');
+
+echo HtmlInput::button('ledger_bt','Journal','onclick="$(\'div_poste\').hide();$(\'div_card\').hide();$(\'div_ledger\').show()"');
 
     require_once('template/search_view.php');
 

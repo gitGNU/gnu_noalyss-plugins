@@ -57,6 +57,7 @@ echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="ht
 
 echo ShowItem($array,'H','mtitle ','mtitle ',$def,' style="width:80%;margin-left:10%;border-collapse: separate;border-spacing:  5px;"');
 require_once('include/tool_function.php');
+echo '<div class="content" style="width:80%;margin-left:10%">';
 // include the right file
 if ($def==1)
   {

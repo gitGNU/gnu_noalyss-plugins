@@ -89,7 +89,7 @@ function change_accounting(&$cn)
 	}
     }
   echo '</table>';
-  echo '<p> Nombre d\'opérations changée'.$count.'</p>';
+  echo '<p> Nombre d\'opérations changées :'.$count.'</p>';
 }
 
 
@@ -245,7 +245,14 @@ function change_ledger(&$cn)
 
   $cn->prepare('retrieve','select jr_date,jr_comment,jr_montant,jr_internal from jrn where jr_id=$1');
   echo h2info('Opération changée');
-  echo 'compte : '.$_REQUEST['sposte'].' vers '.$_REQUEST['tposte'];
+  $source_name=$cn->get_value("select '('||jrn_def_type||') '||jrn_def_name from jrn_def where
+				jrn_def_id=$1",array($_POST['sledger']));
+
+  $target_name=$cn->get_value("select '('||jrn_def_type||') '||jrn_def_name from jrn_def where
+				jrn_def_id=$1",array($_POST['tledger']));
+
+
+  echo 'compte : '.$source_name.' vers '.$target_name;
   $count=0;
   echo '<table class="result">';
   foreach ($_POST['jr_id'] as $id)
