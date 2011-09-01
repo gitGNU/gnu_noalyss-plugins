@@ -318,6 +318,8 @@ function display_result_receipt(&$cn)
 	";
   $ret=$cn->exec_sql($sql,array($_GET['ledger'],$_GET['dstart'],$_GET['dend']));
   $nb_row=Database::num_row($ret);
+  $checkbox=new ICheckBox('jr_id[]');
+
   require_once('template/result_receipt.php');
 }
 /**
@@ -330,6 +332,12 @@ function display_numb_receipt()
   $number=new INum('number');
   $submit=HtmlInput::submit('chg_receipt','Valider');
   $hidden=HtmlInput::get_to_hidden(array('ledger','dend','dstart'));
+  $with_step=new ISelect('istep');
+  $with_step->value=array(
+			  array('value'=>1,'label'=>'Non'),
+			  array('value'=>2,'label'=>'Oui')
+			 );
+
   require_once('template/numbering.php');
 }
 /**
@@ -338,24 +346,19 @@ function display_numb_receipt()
  */
 function change_receipt(&$cn)
 {
-   $sql="select jr_id, jr_date,jr_pj_number
-	from jrn
-	where
-	jr_def_id=$1 and jr_date >= to_date($2,'DD.MM.YYYY')
-	and jr_date <= to_date($3,'DD.MM.YYYY')
-	 order by jr_date asc,substring(jr_pj_number,'\\\\d+$')::numeric asc  
-	";
-  $ret=$cn->exec_sql($sql,array($_GET['ledger'],$_GET['dstart'],$_GET['dend']));
-  $nb_row=Database::num_row($ret);
+  $msg= check_jrid();
+  if( $msg != "")
+    {
+      echo " <p class=\"error\">$msg</p>"; return;
+    }
   $cn->prepare('update_receipt','update jrn set jr_pj_number=$1 where jr_id =$2');
   $start=$_POST['number'];
   $cn->start();
-  for ($i=0;$i<$nb_row ;$i++)
+  foreach ($_POST['jr_id'] as $id)
     {
-      $row=Database::fetch_array($ret,$i);
       $pj=$_POST['prefix'].sprintf("%d",$start);
-      $result_update=$cn->execute('update_receipt',array($pj,$row['jr_id']));
-      $start++;
+      $result_update=$cn->execute('update_receipt',array($pj,$id));
+      if ( $_POST['istep'] == 1)      $start++;
     }
   $cn->commit();
 }
