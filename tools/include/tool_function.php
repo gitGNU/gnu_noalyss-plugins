@@ -278,3 +278,84 @@ function change_ledger(&$cn)
   echo '<p> Nombre d\'opérations changée'.$count.'</p>';
 
 }
+
+/**
+ *@brief display search box
+ *@param $cn database connx
+ */
+function display_search_receipt(&$cn)
+{
+  $idate_start=new IDate('dstart');
+  $idate_start->value=HtmlInput::default_value('dstart','',$_GET);
+  $idate_end=new IDate('dend');
+  $idate_end->value=HtmlInput::default_value('dend','',$_GET);
+
+  $sql="select jrn_def_id, '('||jrn_def_type||') '||jrn_def_name from jrn_def order by jrn_def_name asc";
+  $array=$cn->make_array($sql);
+  $iledger=new ISelect('ledger');
+  $iledger->value=$array;
+  $iledger->selected=HtmlInput::default_value('ledger','',$_GET);
+
+  $hidden=HtmlInput::get_to_hidden(array('sa','plugin_code','gDossier'));
+
+  $submit=HtmlInput::submit('search','Rechercher');
+  $hide=  HtmlInput::button('accounting_hide_bt','Annuler','onclick="$(\'div_receipt\').hide();"');
+  require_once('template/search_box.php');
+}
+/**
+ *@brief display result of search receipt
+ *@param $cn database connx
+ *@note from $_REQUEST retrieve dstart,dend and ledger
+ */
+function display_result_receipt(&$cn)
+{
+  $sql="select jr_id,jr_internal,to_char(jr_date,'DD.MM.YY') as str_date, jr_date,jr_montant,jr_comment,jr_pj_number
+	from jrn
+	where
+	jr_def_id=$1 and jr_date >= to_date($2,'DD.MM.YYYY')
+	and jr_date <= to_date($3,'DD.MM.YYYY')
+	 order by jr_date asc,substring(jr_pj_number,'\\\\d+$')::numeric asc  
+	";
+  $ret=$cn->exec_sql($sql,array($_GET['ledger'],$_GET['dstart'],$_GET['dend']));
+  $nb_row=Database::num_row($ret);
+  require_once('template/result_receipt.php');
+}
+/**
+ *@brief display the prefix + from number
+ *@note use the variable from $_GET 
+ */
+function display_numb_receipt()
+{
+  $prefix=new IText('prefix');
+  $number=new INum('number');
+  $submit=HtmlInput::submit('chg_receipt','Valider');
+  $hidden=HtmlInput::get_to_hidden(array('ledger','dend','dstart'));
+  require_once('template/numbering.php');
+}
+/**
+ *@brief change the number of receipt
+ *@param $cn database connx
+ */
+function change_receipt(&$cn)
+{
+   $sql="select jr_id, jr_date,jr_pj_number
+	from jrn
+	where
+	jr_def_id=$1 and jr_date >= to_date($2,'DD.MM.YYYY')
+	and jr_date <= to_date($3,'DD.MM.YYYY')
+	 order by jr_date asc,substring(jr_pj_number,'\\\\d+$')::numeric asc  
+	";
+  $ret=$cn->exec_sql($sql,array($_GET['ledger'],$_GET['dstart'],$_GET['dend']));
+  $nb_row=Database::num_row($ret);
+  $cn->prepare('update_receipt','update jrn set jr_pj_number=$1 where jr_id =$2');
+  $start=$_POST['number'];
+  $cn->start();
+  for ($i=0;$i<$nb_row ;$i++)
+    {
+      $row=Database::fetch_array($ret,$i);
+      $pj=$_POST['prefix'].sprintf("%d",$start);
+      $result_update=$cn->execute('update_receipt',array($pj,$row['jr_id']));
+      $start++;
+    }
+  $cn->commit();
+}
