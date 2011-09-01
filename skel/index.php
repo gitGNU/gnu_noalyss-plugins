@@ -79,6 +79,7 @@ if ( $cn->exist_schema('tva_belge') == false)
   }
 
 // show menu
+echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=aide" target="_blank">Aide</a></div>';
 
 echo ShowItem($menu,'H','mtitle ','mtitle ',$def,' style="width:80%;margin-left:10%;border-collapse: separate;border-spacing:  5px;"');
 
