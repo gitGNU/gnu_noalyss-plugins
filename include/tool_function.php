@@ -353,12 +353,20 @@ function change_receipt(&$cn)
     }
   $cn->prepare('update_receipt','update jrn set jr_pj_number=$1 where jr_id =$2');
   $start=$_POST['number'];
+  $nb=1;
+  if ( trim($start) == "" || $_POST['istep']==2 ) $nb=0;
+
   $cn->start();
   foreach ($_POST['jr_id'] as $id)
     {
-      $pj=$_POST['prefix'].sprintf("%d",$start);
+      if ( $nb == 1)
+	$pj=trim($_POST['prefix']).sprintf("%d",$start);
+      else
+	$pj=trim($_POST['prefix']);
+      if ( trim($pj) == '') $pj=null;
+
       $result_update=$cn->execute('update_receipt',array($pj,$id));
-      if ( $_POST['istep'] == 1)      $start++;
+      if ( $nb == 1)      $start++;
     }
   $cn->commit();
 }
