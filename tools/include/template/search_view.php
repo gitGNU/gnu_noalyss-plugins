@@ -64,6 +64,8 @@ echo  HtmlInput::button('accounting_hide_bt','Annuler','onclick="$(\'div_poste\'
 	$ctarget=new ICard('ctarget');
 	$ctarget->typecard='all';
   	$ctarget->set_attribute('label','ctarget_label');
+	$ctarget->javascript=sprintf(' onchange="fill_data_onchange(\'%s\');" ',
+			       $ctarget->name);
 	$ctarget->set_dblclick("fill_ipopcard(this);");
 	$ctarget->set_attribute("typecard",'all');
 
