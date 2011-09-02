@@ -169,6 +169,8 @@ function change_card(&$cn)
   echo 'Fiche : '.$_REQUEST['csource'].' vers '.$_REQUEST['ctarget'];
   $count=0;
   echo '<table class="result">';
+  $cn->start();
+
   foreach ($_POST['jr_id'] as $id)
     {
       $feedback=$cn->execute('retrieve',array($id));
@@ -209,8 +211,10 @@ function change_card(&$cn)
 	  echo td(nbm($row['jr_montant'],' class="num"'));
 	  echo '</tr>';
 	}
+  
     }
   echo '</table>';
+  $cn->commit();
   echo '<p> Nombre d\'opérations changée :'.$count.'</p>';
 }
   /**
@@ -255,6 +259,7 @@ function change_ledger(&$cn)
   echo 'compte : '.$source_name.' vers '.$target_name;
   $count=0;
   echo '<table class="result">';
+  $cn->start();
   foreach ($_POST['jr_id'] as $id)
     {
       $update=$cn->execute('update_ledger_x',array(trim($_POST['tledger']),$id,trim($_POST['sledger'])));
@@ -275,6 +280,8 @@ function change_ledger(&$cn)
 	}
     }
   echo '</table>';
+  $cn->commit();
+
   echo '<p> Nombre d\'opérations changée'.$count.'</p>';
 
 }
