@@ -1,4 +1,6 @@
 <?php
+  /*
+EXAMPLE
 require_once('skel_constant.php');
 require_once('class_database.php');
 require_once('class_ext_tva.php');
@@ -12,7 +14,7 @@ $html='';$extra='';$ctl='';
 ob_start();
 switch($act) {
 case 'dsp_decl':
-  /* the hide button */
+  // the hide button 
   require_once('include/ajax_dsp.php');
   break;
 }
@@ -29,5 +31,6 @@ echo '<data>';
 echo "<ctl>$ctl</ctl>";
 echo "<html>$html</html>";
 echo "<extra>$extra</extra>";
-eco "</data>";
+echo "</data>";
+*/
 ?>

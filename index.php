@@ -38,6 +38,7 @@ $array=array (
          array($url.'&sa=op',_('Opération'),_('Changer poste comptable ou fiche'),1),
          array($url.'&sa=pj',_('Pièce'),_('Rénuméroter des pièces justificative'),2)
        );
+Extension::check_version(4190);
 
 $sa=(isset($_REQUEST['sa']))?$_REQUEST['sa']:"";
 $def=0;
