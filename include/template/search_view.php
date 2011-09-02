@@ -14,8 +14,8 @@ $checkbox=new ICheckBox('jr_id[]');
 ?>
 
 <div id="div_poste" class="op_detail" style="top:230;margin:5;overflow:visible;display:none;">
-	<h2>Changer dans les opérations sélectionnées le poste comptable </h2>
-	<p class="notice">Attention, cela ne changera pas la fiche, soyez prudent</p>
+	<h2 class="info">Poste comptable </h2>
+	<p class="notice">Changera dans les opérations sélectionnées le poste comptable.Attention, cela ne changera pas la fiche, soyez prudent</p>
 <?
 	$target=new IPoste('tposte');
 	$source=new IPoste('sposte');
@@ -50,8 +50,8 @@ echo  HtmlInput::button('accounting_hide_bt','Annuler','onclick="$(\'div_poste\'
 </div>
 
 <div id="div_card" class="op_detail" style="top:230;margin:5;overflow:visible;display:none;">
-<h2>Changer dans les opérations sélectionnées la fiche </h2>
-	<p class="notice">Attention, cela changera la fiche et le poste comptable: ce sera celui de la fiche qui sera utilisé, soyez prudent</p>
+<h2 class="info">Changer  la fiche </h2>
+	<p class="notice">Attention, dans les opérations sélectionnées cela changera la fiche et le poste comptable: ce sera celui de la fiche qui sera utilisé, soyez prudent</p>
 <?
 	$csource=new ICard('csource');
   	$csource->set_attribute('label','csource_label');
@@ -94,8 +94,8 @@ echo  HtmlInput::button('card_hide_bt','Annuler','onclick="$(\'div_card\').hide(
 </div>
 
 <div id="div_ledger" class="op_detail" style="top:230;margin:5;overflow:visible;display:none;">
-<h2>Changer dans les opérations sélectionnées le journal </h2>
-	<p class="notice">Attention, transfèrera les opérations vers le journal choisi mais il faut que ce journal soit de même type (achat vers achat, vente vers vente...), les pièces justificatives ne seront pas mises à jour, soyez prudent</p>
+<h2 class="info">Déplacer dans un autre journal </h2>
+	<p class="notice">Attention, pour les opérations sélectionnées,cela  transfèrera les opérations vers le journal choisi mais il faut que ce journal soit de même type (achat vers achat, vente vers vente...), les pièces justificatives ne seront pas mises à jour, soyez prudent</p>
 
 <?
 	$sql="select jrn_def_id, '('||jrn_def_type||') '||jrn_def_name from jrn_def order by jrn_def_name asc";
@@ -166,3 +166,8 @@ endfor;
 ?>
 </table>
 </form>
+<script type="text/javascript">
+new Draggable('div_card',{zindex:2});
+new Draggable('div_ledger',{zindex:2});
+new Draggable('div_poste',{zindex:2});
+</script>
