@@ -42,7 +42,7 @@ $nrec=Database::fetch_array($rec,0);
 <td><?=$row['id']?></td>
 <td>
 <?=HtmlInput::hidden('id[]',$row['id']);?>
-<?=format_date($row['i_date'])?>
+<?=format_date($row['str_date'])?>
 </td>
 <td>
 <?=h($row['format_name'])?>
