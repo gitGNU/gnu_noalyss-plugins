@@ -35,7 +35,7 @@ $j=ob_get_contents();
 ob_clean();
 echo create_script($j);
 
-$url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'];
+$url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&ac='.$_REQUEST['ac'];
 
 $cn=new Database (dossier::id());
 

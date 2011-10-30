@@ -35,6 +35,7 @@ echo HtmlInput::print_window();
 <form method="GET" action="extension.raw.php" style="display:inline">
 <?=dossier::hidden()?>
 <?=HtmlInput::hidden('material','1');?>
+<?=HtmlInput::hidden('ac',$_REQUEST['ac']);?>
 <?=HtmlInput::extension()?>
 <?=HtmlInput::submit('csv','Export CSV');?>
 </form>

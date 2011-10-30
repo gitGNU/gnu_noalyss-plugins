@@ -4,6 +4,7 @@
 <?
 echo HtmlInput::hidden('sa',$_REQUEST['sa']);
 echo HtmlInput::hidden('sb',$_REQUEST['sb']);
+echo HtmlInput::hidden('ac',$_REQUEST['ac']);
 echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
 echo dossier::hidden();
 ?>
@@ -25,7 +26,7 @@ for ($i=0;$i<count($array);$i++) :
 	echo td($array[$i]['vw_name']);
 	echo td(nbm($array[$i]['h_amount']), 'align="right"');
 	echo td($array[$i]['h_year'],'align="center"');
-				 
+
 	echo td($array[$i]['h_pj']);
 	$msg='';
 	if ( $array[$i]['jr_internal'] != '' )
@@ -37,7 +38,7 @@ for ($i=0;$i<count($array);$i++) :
    $ic=new ICheckBox('p_sel[]');
 
    echo td($ic->input().HtmlInput::hidden('h[]',$array[$i]['ha_id']));
-				 
+
 
 
         echo '</tr>';

@@ -27,6 +27,7 @@ echo '<div class="content" style="width:80%;margin-left:10%">';
 echo '<FORM METHOD="GET">';
 echo HtmlInput::hidden('sa',$_REQUEST['sa']);
 echo HtmlInput::hidden('sb',$_REQUEST['sb']);
+echo HtmlInput::hidden('ac',$_REQUEST['ac']);
 echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
 echo dossier::hidden();
 $list=$cn->make_list('select fd_id from fiche_def where frd_id=7');
@@ -53,7 +54,7 @@ if ( $list !='')
     echo "Fiche ".$p_card->input().$p_card->search();
     echo HtmlInput::submit('search','Accepter');
     echo '</form>';
-    
+
     echo '<FORM METHOD="GET" ACTION="extension.raw.php">';
     echo HtmlInput::hidden('sa',$_REQUEST['sa']);
     echo HtmlInput::hidden('sb',$_REQUEST['sb']);
@@ -61,7 +62,7 @@ if ( $list !='')
     echo dossier::hidden();
     echo HtmlInput::submit('pdf_all','Toutes les fiches en PDF');
     echo '</form>';
-    
+
     if ( isset($_GET['search']))
       {
 	$a=new Am_Card();

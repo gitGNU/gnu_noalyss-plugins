@@ -24,7 +24,7 @@
  * \brief let you generate the accounting for the paid off for a selected
  *  year history and remove
  */
-$url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&sa=util';
+$url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&sa=util'.'&ac='.$_REQUEST['ac'];
 
 $menu=array(
 	    array($url.'&sb=generate','Génére écriture',' Génération écriture comptable ',1),

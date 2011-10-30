@@ -28,6 +28,7 @@ echo '<div class="content" style="width:80%;margin-left:10%">';
 echo '<FORM METHOD="GET">';
 echo HtmlInput::hidden('sa',$_REQUEST['sa']);
 echo HtmlInput::hidden('sb',$_REQUEST['sb']);
+echo HtmlInput::hidden('ac',$_REQUEST['ac']);
 echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
 echo dossier::hidden();
 $year=new INum('p_year');

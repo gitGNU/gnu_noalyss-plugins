@@ -23,10 +23,10 @@
 /*!\file
  * \brief this file let you print a report about
  * - card (simple listing)
- * - paid off of the selected year 
+ * - paid off of the selected year
  * - ...
  */
-$url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&sa=report';
+$url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&sa=report'."&ac=".$_REQUEST['ac'];
 
 $menu=array(
 	    array($url.'&sb=dfiche','Détail fiche',' Détail fiche ',1),

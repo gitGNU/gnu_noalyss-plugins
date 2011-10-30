@@ -2,7 +2,7 @@
 <style>
 @PAGE landscape {size: landscape;}
 TABLE {PAGE: landscape;}
-</style> 
+</style>
 <table class="result">
 <tr>
   <th>Code</th>
@@ -24,7 +24,7 @@ for ($i=0;$i < count($array) ; $i++):
 	echo td($fiche->strAttribut(ATTR_DEF_QUICKCODE));
 	echo td($fiche->strAttribut(ATTR_DEF_NAME));
 	echo td(format_date($array[$i]['a_date']));
-	
+
 	echo td($array[$i]['a_start']);
 
 	echo td(nbm($array[$i]['a_amount']),'style="text-align:right"');
@@ -44,11 +44,11 @@ for ($i=0;$i < count($array) ; $i++):
 	$pct=$cn->get_value("select  ad_percentage from amortissement.amortissement_detail
 			where a_id=$1 and ad_year = $2",
 					array($array[$i]['a_id'],$year));
-					
+
 
 	echo td(nbm($remain),'style="text-align:right"');
 	echo td(nbm($amortize),'style="text-align:right"');
-		echo td(nbm($pct),'style="text-align:right"');					
+		echo td(nbm($pct),'style="text-align:right"');
 	echo td(nbm($toamortize),'style="text-align:right"');
 echo '</tr>';
 endfor;
@@ -81,6 +81,7 @@ echo td(nbm($tot_net),"align=\"right\"");
 <form method="GET" action="extension.raw.php">
 <?=dossier::hidden()?>
 <?=HtmlInput::hidden('list_year',$year);?>
+<?=HtmlInput::hidden('ac',$_REQUEST['ac']);?>
 <?=HtmlInput::extension()?>
 <?=HtmlInput::submit('csv','Export CSV');?>
 </form>

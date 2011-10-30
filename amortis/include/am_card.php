@@ -37,6 +37,7 @@ echo '<form method="GET">';
 echo dossier::hidden();
 echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
 echo HtmlInput::hidden('sa',$_REQUEST['sa']);
+echo HtmlInput::hidden('ac',$_REQUEST['ac']);
 $ck=new ICheckBox('all');
 $ck->selected=(isset ($_GET['all']))?true:false;
 echo '<p> Tous les biens y compris ceux qui sont complétement amortis '.$ck->input();
