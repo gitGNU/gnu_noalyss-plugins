@@ -78,7 +78,7 @@ array
   'p_year' => string '' (length=0)
   'p_jrn' => string '4' (length=1)
   'p_date' => string '' (length=0)
-  'a_id' => 
+  'a_id' =>
     array
       0 => string '86' (length=2)
       1 => string '85' (length=2)
@@ -92,7 +92,7 @@ array
     $msg='';
     if ( isNumber($p_array['p_year']) == 0 || $p_array['p_year'] < 1900 || $p_array['p_year']>2100) $msg="Année invalide\n";
     if ( isDate($p_array['p_date']) == null) $msg.="Date invalide ";
-    if ( $msg != '') 
+    if ( $msg != '')
       {
 	echo alert($msg);
 	return false;
@@ -112,7 +112,7 @@ array
       {
 	if ( isset ($p_array['p_ck'.$i]))
 	  {
-	 
+
 	    /*
 	     * If selected the add it to array
 	     */
@@ -134,15 +134,15 @@ array
 		       'ld'.$idx =>'Amortissement '.$fiche->strAttribut(ATTR_DEF_QUICKCODE),
 		       'qc_'.$idx=>'');
 	    $array+=$mat;
-	    $idx++;	       
+	    $idx++;
 	  }
       }
     $array+=array('nb_item'=>$idx);
     $ledger=new Acc_Ledger($cn,$p_array['p_jrn']);
-    $ledger->with_concerned=false;    
+    $ledger->with_concerned=false;
     echo '<div style="width:80%;margin-left:10%">';
     echo '<form method="POST" style="display:inline">';
-    echo $ledger->show_form($array,true);
+    echo $ledger->input($array,true);
     echo HtmlInput::submit('save','Sauver');
     echo HtmlInput::hidden('sa',$p_array['sa']);
     echo HtmlInput::hidden('sb',$p_array['sb']);
@@ -178,7 +178,7 @@ array
     echo HtmlInput::submit('correct','Corriger');
     echo '</form>';
     echo '</div>';
-    return true;		 
+    return true;
   }
   /**
    * save into amortissement_histo
@@ -190,7 +190,7 @@ array
   'p_year' => string '' (length=0)
   'p_jrn' => string '4' (length=1)
   'p_date' => string '' (length=0)
-  'a_id' => 
+  'a_id' =>
     array
       0 => string '86' (length=2)
       1 => string '85' (length=2)

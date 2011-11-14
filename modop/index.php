@@ -24,14 +24,11 @@
  * \brief modify a operation
  */
 Extension::check_version(3432);
-$str=new IText("jr_internal");
-$str->value=(isset($_GET['jr_internal']))?strtoupper($_GET['jr_internal']):'';
-$str->value=(isset($_GET['ext_jr_internal']))?strtoupper($_GET['ext_jr_internal']):$str->value;
+$str=new IConcerned("jr_id");
+$str->value=(isset($_GET['jr_id']))?strtoupper($_GET['jr_id']):'';
+$str->value=(isset($_GET['ext_jr_id']))?strtoupper($_GET['ext_jr_id']):$str->value;
 
-$search=new IButton('getjr');
-$js="openRecherche(".dossier::id().")";
-$search->label='Chercher dans les journaux';
-$search->javascript=sprintf('%s',$js);
+
 
 ?>
 <FORM METHOD="GET">
@@ -39,17 +36,18 @@ $search->javascript=sprintf('%s',$js);
   <? echo HtmlInput::hidden('ac',$_REQUEST['ac']);?>
 <?=_("Code interne de l'opération à modifier") ?>
   <?=$str->input()?>
-  <?=HtmlInput::submit('seek','retrouver')?>
+	<?
+
+	echo HtmlInput::submit('seek','retrouver')?>
 </FORM>
-  <?=$search->input()?>
 <hr>
 <?php
   if ( isset($_GET['seek'])) {
     /* retrieve and show the accounting */
-    if ( trim($_GET['jr_internal'])=='') {
+    if ( trim($_GET['jr_id'])=='') {
       alert('Aucune opération demandé'); exit;}
     /*  retrieve and display operation */
-    require_once('modop_display.php'); 
+    require_once('modop_display.php');
     exit();
   }
 $action=(isset ($_GET['action']))?$_GET['action']:'end';

@@ -2,7 +2,7 @@
 /*
  * Step 1/4
  */
-if ( ! isset ($_REQUEST ['sb'])) 
+if ( ! isset ($_REQUEST ['sb']))
   {
     echo '<div class="content" style="width:80%;margin-left:10%">';
     echo '<form method="get">';
@@ -12,7 +12,7 @@ if ( ! isset ($_REQUEST ['sb']))
     $iselect->value[]=$new;
     require_once('template/import_new.php');
     echo HtmlInput::submit('select_submit','Valider');
-    echo HtmlInput::get_to_hidden(array('gDossier','plugin_code','sa'));
+    echo HtmlInput::get_to_hidden(array('gDossier','plugin_code','sa','ac'));
     echo HtmlInput::hidden('sb','select_form');
     echo '</form>';
     echo '</div>';
@@ -27,30 +27,30 @@ $jrn_def=new ISelect('jrn_def');
 $jrn_def->value=$cn->make_array('select jrn_def_id,jrn_def_name from jrn_def where '.$user->get_ledger_sql('FIN',3).' order by jrn_def_name');
 $sep_decimal=new ISelect('sep_dec');
 $sep_decimal->value=$adecimal;
-    
+
 $sep_thousand=new ISelect('sep_thous');
 $sep_thousand->value=$athousand;
-    
+
 $sep_field=new ISelect('sep_field');
 $sep_field->value=$aseparator;
 
 $col_valid=new INum('col_valid');
-    
+
 $format_date=new ISelect('format_date');
 $format_date->value=$aformat_date;
-    
+
 $file=new IFile('import_file');
 $skip=new INum('skip');
 $skip->value=0;
 $skip->size=5;
 
-$nb_col=new INum('nb_col');    
+$nb_col=new INum('nb_col');
 /*
  * Step 2 : show the selected format and upload the file
  */
 if ( $_REQUEST ['sb'] == 'select_form')
   {
-    
+
     if ( $_GET['format'] != '0')
       {
 	$format_bank=new Format_Bank_Sql($cn,$_GET['format']);
@@ -135,7 +135,7 @@ if ( $_POST['sb']=='upload_file')
 	$nb_col->value=$_POST['nb_col'];
 	$skip->value=$_POST['skip'];
 
-	
+
 	$filename=$_POST['filename'];
 
 	$fbank=fopen($filename,'r');
@@ -155,7 +155,7 @@ if ( $_POST['sb']=='upload_file')
 	    $pos_extra=$format_bank->pos_extra;
 
 	  }
- 
+
 	echo '<div class="content" style="width:80%;margin-left:10%">';
 	$sb='confirm';
 	require_once ('template/confirm_transfer.php');

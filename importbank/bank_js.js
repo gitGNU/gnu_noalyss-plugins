@@ -1,7 +1,7 @@
 function reconcilie(target,dossier_id,p_id,plugin_code)
 {
-    var qs="?gDossier="+dossier_id+'&plugin_code='+plugin_code+'&act=show&id='+p_id+'&ctl='+target;
-    
+    var qs="gDossier="+dossier_id+'&plugin_code='+plugin_code+'&act=show&id='+p_id+'&ctl='+target;
+
     var action=new Ajax.Request ( 'ajax.php',
 				  {
 				      method:'get',
@@ -10,12 +10,12 @@ function reconcilie(target,dossier_id,p_id,plugin_code)
 				      onSuccess:success_box
 				  }
 				);
-    if ( $(target)) 
+    if ( $(target))
     {
 	removeDiv(target);
     }
     var sx=0;
-    var height=0; 
+    var height=0;
     if ( window.scrollY)
     {
         sx=window.scrollY+height;
@@ -26,8 +26,8 @@ function reconcilie(target,dossier_id,p_id,plugin_code)
      }
     var str_style="top:"+sx+";margin-left:10%;";
 
-    var div={id:target, cssclass:'op_detail',style:str_style,html:loading(),drag:1};
-    
+    var div={id:target, cssclass:'inner_box',style:str_style,html:loading(),drag:1};
+
     add_div(div);
 }
 
@@ -41,7 +41,7 @@ function save_bank_info(obj)
 				      onFailure:error_box,
 				      onSuccess:success_bank_info
 				  });
-    
+
     return false;
 }
 
@@ -60,4 +60,4 @@ function success_bank_info(req,json)
     catch(e) {
 	alert('Erreur success_box_info '+e.message);
     }
-}	
+}

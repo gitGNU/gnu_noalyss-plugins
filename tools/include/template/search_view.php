@@ -9,11 +9,11 @@ $checkbox=new ICheckBox('jr_id[]');
 <form method="POST" id="form1" onsubmit="return confirm('Vous confirmez?')">
 <?
 	echo HtmlInput::extension();
-	echo HtmlInput::get_to_hidden(array('sa'));
+	echo HtmlInput::get_to_hidden(array('sa','ac'));
 	echo Dossier::hidden();
 ?>
 
-<div id="div_poste" class="op_detail" style="top:230;margin:5;overflow:visible;display:none;">
+<div id="div_poste" class="inner_box" style="top:230;margin:5;overflow:visible;display:none;">
 	<h2 class="info">Poste comptable </h2>
 	<p class="notice">Changera dans les opérations sélectionnées le poste comptable.Attention, cela ne changera pas la fiche, soyez prudent</p>
 <?
@@ -49,7 +49,7 @@ echo  HtmlInput::button('accounting_hide_bt','Annuler','onclick="$(\'div_poste\'
 </table>
 </div>
 
-<div id="div_card" class="op_detail" style="top:230;margin:5;overflow:visible;display:none;">
+<div id="div_card" class="inner_box" style="top:230;margin:5;overflow:visible;display:none;">
 <h2 class="info">Changer  la fiche </h2>
 	<p class="notice">Attention, dans les opérations sélectionnées cela changera la fiche et le poste comptable: ce sera celui de la fiche qui sera utilisé, soyez prudent</p>
 <?
@@ -93,7 +93,7 @@ echo  HtmlInput::button('card_hide_bt','Annuler','onclick="$(\'div_card\').hide(
 
 </div>
 
-<div id="div_ledger" class="op_detail" style="top:230;margin:5;overflow:visible;display:none;">
+<div id="div_ledger" class="inner_box" style="top:230;margin:5;overflow:visible;display:none;">
 <h2 class="info">Déplacer dans un autre journal </h2>
 	<p class="notice">Attention, pour les opérations sélectionnées,cela  transfèrera les opérations vers le journal choisi mais il faut que ce journal soit de même type (achat vers achat, vente vers vente...), les pièces justificatives ne seront pas mises à jour, soyez prudent</p>
 

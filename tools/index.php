@@ -21,7 +21,7 @@
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
 
 /*!\file
- * \brief main file for tools 
+ * \brief main file for tools
  */
 
 /*
@@ -33,7 +33,7 @@ $j=ob_get_contents();
 ob_clean();
 echo create_script($j);
 
-$url='?'.dossier::get()."&plugin_code=".$_REQUEST['plugin_code'];
+$url='?'.dossier::get()."&plugin_code=".$_REQUEST['plugin_code']."&ac=".$_REQUEST['ac'];
 $array=array (
          array($url.'&sa=op',_('Opération'),_('Changer poste comptable ou fiche'),1),
          array($url.'&sa=pj',_('Pièce'),_('Rénuméroter des pièces justificative'),2)

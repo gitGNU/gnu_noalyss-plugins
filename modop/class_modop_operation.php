@@ -26,10 +26,10 @@
 
 class Modop_Operation
 {
-    function __construct($p_cn,$p_internal)
+    function __construct($p_cn,$p_id)
     {
         $this->db=$p_cn;
-        $this->jr_internal=trim($p_internal);
+        $this->jr_id=trim($p_id);
         $this->array=array();
     }
     /**
@@ -41,8 +41,8 @@ class Modop_Operation
     {
         /*  check if we retrieve it */
         $this->ledger_type=$this->db->get_value("select jrn_def_type from jrn_def ".
-                                                " where jrn_def_id = (select jr_def_id from jrn where jr_internal=$1)",
-                                                array($this->jr_internal));
+                                                " where jrn_def_id = (select jr_def_id from jrn where jr_id=$1)",
+                                                array($this->jr_id));
         if ($this->ledger_type=='')
             throw new Exception('Operation non trouvée');
         /* ---------------------------------------------------------------------- */
@@ -53,10 +53,12 @@ class Modop_Operation
             $this->array['e_mp']=0;
             $this->array['jrn_type']='ACH';
             $jrn=$this->db->get_array("select jr_id,to_char(jr_date,'DD.MM.YYYY') as date_fmt,".
-                                      " to_char(jrn_ech,'DD.MM.YYYY') as ech_fmt,jr_comment,jr_pj_number, jr_tech_per,jr_Def_id ".
-                                      " from jrn where jr_internal=$1",
-                                      array($this->jr_internal));
+                                      " to_char(jrn_ech,'DD.MM.YYYY') as ech_fmt,jr_comment,jr_pj_number,
+										  jr_tech_per,jr_Def_id,jr_internal ".
+                                      " from jrn where jr_id=$1",
+                                      array($this->jr_id));
             $this->jr_id=$jrn[0]['jr_id'];
+			$this->jr_internal=$jrn[0]['jr_internal'];
             /*  retrieve from jrn */
             $this->array['e_ech']=$jrn[0]['ech_fmt'];
             $this->array['e_date']=$jrn[0]['date_fmt'];
@@ -101,9 +103,15 @@ class Modop_Operation
         {
             $this->array['e_mp']=0;
             $this->array['jrn_type']='VEN';
-            $jrn=$this->db->get_array("select jr_id,to_char(jr_date,'DD.MM.YYYY') as date_fmt,to_char(jrn_ech,'DD.MM.YYYY') as ech_fmt,jr_comment,jr_pj_number, jr_tech_per,jr_Def_id from jrn where jr_internal=$1",
-                                      array($this->jr_internal));
+            $jrn=$this->db->get_array("select jr_id,
+						to_char(jr_date,'DD.MM.YYYY') as date_fmt,
+						to_char(jrn_ech,'DD.MM.YYYY') as ech_fmt,
+						jr_comment,jr_pj_number,
+						jr_tech_per,jr_Def_id,jr_internal
+						from jrn where jr_id=$1",
+                                      array($this->jr_id));
             $this->jr_id=$jrn[0]['jr_id'];
+            $this->jr_internal=$jrn[0]['jr_internal'];
             /*  retrieve from jrn */
             $this->array['e_ech']=$jrn[0]['ech_fmt'];
             $this->array['e_date']=$jrn[0]['date_fmt'];
@@ -149,17 +157,18 @@ class Modop_Operation
         {
             $this->array['e_mp']=0;
             $this->array['jrn_type']='ODS';
-            $jrn=$this->db->get_array("select jr_id,to_char(jr_date,'DD.MM.YYYY') as date_fmt,jr_comment,jr_pj_number, jr_tech_per,jr_Def_id from jrn where jr_internal=$1",
-                                      array($this->jr_internal));
+            $jrn=$this->db->get_array("select jr_id,jr_internal,to_char(jr_date,'DD.MM.YYYY') as date_fmt,jr_comment,jr_pj_number, jr_tech_per,jr_Def_id from jrn where jr_id=$1",
+                                      array($this->jr_id));
             $this->jr_id=$jrn[0]['jr_id'];
+            $this->jr_internal=$jrn[0]['jr_internal'];
             /*  retrieve from jrn */
             $this->array['e_date']=$jrn[0]['date_fmt'];
             $this->array['desc']=$jrn[0]['jr_comment'];
             $this->array['e_pj']=$jrn[0]['jr_pj_number'];
             $this->array['p_jrn']=$jrn[0]['jr_def_id'];
             $this->array['periode']=$jrn[0]['jr_tech_per'];
-            $ods=$this->db->get_array('select j_qcode,j_poste,j_text,j_montant,j_debit from jrnx where j_grpt = (select jr_grpt_id from jrn where jr_internal=$1)',
-                                      array($this->jr_internal));
+            $ods=$this->db->get_array('select j_qcode,j_poste,j_text,j_montant,j_debit from jrnx where j_grpt = (select jr_grpt_id from jrn where jr_id=$1)',
+                                      array($this->jr_id));
             for ($e=0; $e<count($ods); $e++)
             {
                 $this->array['qc_'.$e]=$ods[$e]['j_qcode'];
@@ -177,8 +186,8 @@ class Modop_Operation
 ///////////////////////////////////////////////////////////////////////////
         if ( $this->ledger_type=="FIN")
         {
-            $jrn=$this->db->get_array("select jr_id,to_char(jr_date,'DD.MM.YYYY') as date_fmt,to_char(jrn_ech,'DD.MM.YYYY') as ech_fmt,jr_comment,jr_pj_number, jr_tech_per,jr_Def_id from jrn where jr_internal=$1",
-                                      array($this->jr_internal));
+            $jrn=$this->db->get_array("select jr_id,to_char(jr_date,'DD.MM.YYYY') as date_fmt,to_char(jrn_ech,'DD.MM.YYYY') as ech_fmt,jr_comment,jr_pj_number, jr_tech_per,jr_Def_id from jrn where jr_id=$1",
+                                      array($this->jr_id));
             /*  retrieve from jrn */
             $this->jr_id=$jrn[0]['jr_id'];
             $this->array['e_date']=$jrn[0]['date_fmt'];

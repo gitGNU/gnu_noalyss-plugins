@@ -53,12 +53,12 @@ class Bank_Item
 	$w->set_attribute('label','e_third');
 	$w->set_attribute('typecard','deb');
 	$w->set_callback('filter_card');
-	$w->set_function('fill_data'); 
+	$w->set_function('fill_data');
 	$w->set_attribute('inp','fiche');
 
 	$wConcerned=new IConcerned();
 	$wConcerned->name="e_concerned".$id;
-	$wConcerned->extra=abs($bi->amount);
+	$wConcerned->amount_id=abs($bi->amount);
 	$wConcerned->extra2='paid';
 	$wConcerned->label=_('op. concernée');
 	$wConcerned->table=0;

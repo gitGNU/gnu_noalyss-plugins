@@ -9,6 +9,7 @@ echo $search_box;
 echo HtmlInput::submit("viewsearch",_("Recherche"));
 echo HtmlInput::extension();
 echo HtmlInput::hidden('sa',$_REQUEST['sa']);
+echo HtmlInput::hidden('ac',$_REQUEST['ac']);
 echo '</form>';
 
 /*

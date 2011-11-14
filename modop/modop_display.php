@@ -33,21 +33,12 @@ echo js_include('acc_ledger.js');
 require_once ('class_ipopup.php');
 //----------------------------------------------------------------------
 // create compute button
-$compute=new IPopup('compute');
-$compute->value=JS_CALC_LINE;
-//$compute->title="Calculatrice";
-$compute->drag=true;
-$compute->blocking=false;
-$compute->set_height("350");
-$compute->set_width("500");
-echo $compute->input();
-
 $cn=new Database(dossier::id());
 
 /*  we can't modify from a closed periode */
 /*  get periode */
-$sql="select jr_tech_per from jrn where jr_internal=$1";
-$periode=$cn->get_value($sql,array(trim($_GET['jr_internal'])));
+$sql="select jr_tech_per from jrn where jr_id=$1";
+$periode=$cn->get_value($sql,array(trim($_GET['jr_id'])));
 if ( $cn->count() == 0 )
 {
     alert('Opération non trouvée');
@@ -65,7 +56,7 @@ if ($oPeriode->is_closed() == 1)
 
 /* check if periode is closed */
 // retrieve jrn
-$op=new Modop_Operation($cn,$_GET['jr_internal']);
+$op=new Modop_Operation($cn,$_GET['jr_id']);
 try
 {
     $op->format();		/* load format the data into an array with by the class_acc_ledger... */
@@ -313,10 +304,6 @@ if ($op->ledger_type=='FIN')
     $wAmount->setReadOnly(false);
     $array[0]['amount']=$wAmount->input();
     // show compute
-    $cal=new IButton('calc');
-    $cal->label='Calculatrice';
-    $cal->javascript=" showIPopup('compute') ";
-    $str_cal_button=$cal->input();
     require_once('template_ledger_fin.php');
 
     echo HtmlInput::extension().dossier::hidden().HtmlInput::hidden('jrn_type','FIN');

@@ -29,7 +29,7 @@ function add_material(dossier_id,plugin_code,target)
      }
     var str_style="top:"+sx+";width:50%;height:70%";
 
-    var div={id:target, cssclass:'op_detail',style:str_style,html:loading()};
+    var div={id:target, cssclass:'inner_box',style:str_style,html:loading()};
     
     add_div(div);
 
@@ -62,7 +62,7 @@ function display_material(dossier_id,f_id,plugin_code,target)
      }
     var str_style="top:"+sx+";width:50%;height:auto";
 
-    var div={id:target, cssclass:'op_detail',style:str_style,html:loading()};
+    var div={id:target, cssclass:'inner_box',style:str_style,html:loading()};
     
     add_div(div);
 

@@ -1,6 +1,6 @@
 <h2>Etape 2 / 4: introduire le fichier</h2>
 
-<form method="POST"   enctype="multipart/form-data" action="extension.php">
+<form method="POST"   enctype="multipart/form-data" >
 <table>
 <tr>
 	<td>
@@ -77,7 +77,7 @@ Format de date
 
 Fichier à importer <?=$file->input()?>
 
-<? 
+<?
 echo HtmlInput::submit('input_file','Valider');
 echo HtmlInput::get_to_hidden(array('format','gDossier','sa','plugin_code','format'));
 echo HtmlInput::hidden('sb',$sb);

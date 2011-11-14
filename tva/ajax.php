@@ -71,7 +71,7 @@ case 'rw':
       $r.=dossier::hidden();
       $r.=HtmlInput::submit('save','Sauver','onclick="return confirm(\'Vous confirmez ? \')"');
       $r.='</form>';
-    } else 
+    } else
     {
       $ctl='record_write';
       $r=HtmlInput::anchor_close($ctl);
@@ -105,7 +105,7 @@ case 'sw':
       $array['poste'.$i]=$atva;
       $array['amount'.$i]=$atva_amount;
       $array['ld'.$i]='';
-      if ( isset($atva_ic)) $array['ck'.$i]=1;      
+      if ( isset($atva_ic)) $array['ck'.$i]=1;
       $i++;
       $nb_item++;
     }
@@ -114,7 +114,7 @@ case 'sw':
       $array['poste'.$i]=$crtva;
       $array['amount'.$i]=$crtva_amount;
       $array['ld'.$i]='';
-      if ( isset($crtva_ic)) $array['ck'.$i]=1;      
+      if ( isset($crtva_ic)) $array['ck'.$i]=1;
       $i++;
       $nb_item++;
     }
@@ -123,7 +123,7 @@ case 'sw':
       $array['poste'.$i]=$dttva;
       $array['amount'.$i]=$dttva_amount;
       $array['ld'.$i]='';
-      if ( isset($dttva_ic)) $array['ck'.$i]=1;      
+      if ( isset($dttva_ic)) $array['ck'.$i]=1;
       $i++;
       $nb_item++;
     }
@@ -132,7 +132,7 @@ case 'sw':
       $array['poste'.$i]=$solde;
       $array['amount'.$i]=$solde_amount;
       $array['ld'.$i]='';
-      if ( isset($solde_ic)) $array['ck'.$i]=1;      
+      if ( isset($solde_ic)) $array['ck'.$i]=1;
       $i++;
       $nb_item++;
     }
@@ -148,7 +148,8 @@ case 'sw':
    $ods->save($array);
    echo h2info("Sauvée : ajoutez le numéro de pièce");
    echo   HtmlInput::detail_op($ods->jr_id,'détail opération : '.$ods->internal);
-   
+   $ods->with_concerned=false;
+   echo $ods->confirm($array,true);
   } catch(Exception $e) {
     echo alert($e->getMessage());
   }
@@ -157,7 +158,7 @@ case 'sw':
    break;
 case 'rm_form':
   switch($type)
-    { 
+    {
     case 'da':
       $sql="delete from tva_belge.declaration_amount where da_id=$1";
       break;

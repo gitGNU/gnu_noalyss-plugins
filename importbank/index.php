@@ -45,7 +45,7 @@ echo create_script($j);
  */
 global $cn;
 
-$url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'];
+$url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code']."&ac=".$_REQUEST['ac'];
 
 $array=array (
 	array($url.'&sa=import',_('Importation'),_('Importation de nouveaux fichiers'),1),
@@ -119,7 +119,7 @@ if($_REQUEST['sa'] == 'purge')
       }
 
     /*
-     * Show all the import 
+     * Show all the import
      */
     if ( ! isset($_REQUEST['sb']))
       {

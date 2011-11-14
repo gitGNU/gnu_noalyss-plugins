@@ -35,7 +35,7 @@ $cn=new Database(dossier::id());
  * load javascript
  */
 
-$url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'];
+$url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code']."&ac=".$_REQUEST['ac'];
 
 $cn=new Database (dossier::id());
 

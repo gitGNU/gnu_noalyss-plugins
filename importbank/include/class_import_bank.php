@@ -91,7 +91,8 @@ class Import_Bank
 				from importbank.import as a
 				join importbank.format_bank as b on (format_bank_id=b.id)
 				order by i_date desc');
-    $link='?'.Dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&sb=list&sa='.$_REQUEST['sa'];
+    $link='?'.Dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].
+			'&sb=list&sa='.$_REQUEST['sa']."&ac=".$_REQUEST['ac'];
 
     $status=$cn->prepare('status','select count(*) from importbank.temp_bank where import_id=$1  and status=$2');
 
@@ -174,11 +175,11 @@ class Import_Bank
 
   }
   /**
-   * return the HTML style for the status 
+   * return the HTML style for the status
    * White : new
    * green : transfered
    * red  : error
-   */ 
+   */
   static function color_status($id)
   {
     $style="";
@@ -214,7 +215,7 @@ class Import_Bank
   }
   /**
    *@brief import row marked to transfer and from the specific import to
-   * the database 
+   * the database
    *@param $p_array
    */
   static function transfer_record($p_array)
@@ -255,7 +256,7 @@ class Import_Bank
 
 	    if ( $row->f_id == null || $row->f_id=='')
 	      {
-		// error 
+		// error
 		self::transfert_error($row->id,'Aucune fiche donnée');
 		continue;
 	      }
@@ -268,13 +269,13 @@ class Import_Bank
             // Vérification que le poste comptable trouvé existe
             if ( $poste_comptable == NOTFOUND || strlen(trim($poste_comptable))==0)
 	      {
-		// error 
+		// error
 		self::transfert_error($row->id,'Poste comptable de la  fiche est incorrecte');
 		continue;
 	      }
 	    if ( self::check_date ($row->tp_date) == false)
 	      {
-		// error 
+		// error
 		self::transfert_error($row->id,'Date hors des limites');
 		continue;
 	      }
@@ -355,9 +356,9 @@ class Import_Bank
 		  array('E',$message,$id));
   }
   /**
-   * check 
+   * check
    * if the date is outside the defined periode
-   */ 
+   */
   function check_date($p_date)
   {
     global $cn;
@@ -388,6 +389,6 @@ class Import_Bank
 	$err=$e->getMessage();
 	return $err;
       }
-   
+
   }
 }

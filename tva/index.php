@@ -25,7 +25,7 @@
  */
 Extension::check_version(3600);
 
-$url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'];
+$url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code']."&ac=".$_REQUEST['ac'];
 $array=array (
 	array($url.'&sa=dec',_('Déclaration TVA'),_('Déclaration Trimestriel ou annuel de TVA'),1),
 	array($url.'&sa=li',_('Listing intracommunautaire'),_('Listing intracommunautaire trimestriel'),2),
@@ -69,23 +69,23 @@ if ( $cn->exist_schema('tva_belge') == false) {
 }
 // check schema
 $a=$cn->exist_column('assujetti_chld','ac_periode','tva_belge');
-if ( $a == false) 
+if ( $a == false)
   $cn->exec_sql("alter table tva_belge.assujetti_chld add ac_periode text");
 
 $a=$cn->exist_column('assujetti_chld','exercice','tva_belge');
-if ( $a == false) 
+if ( $a == false)
   $cn->exec_sql("alter table tva_belge.assujetti_chld add exercice text");
 
 $a=$cn->exist_column('declaration_amount','exercice','tva_belge');
-if ( $a == false) 
+if ( $a == false)
   $cn->exec_sql("alter table tva_belge.declaration_amount add exercice text");
 
 $a=$cn->exist_column('intracomm','exercice','tva_belge');
-if ( $a == false) 
+if ( $a == false)
   $cn->exec_sql("alter table tva_belge.intracomm add exercice text");
 
 $a=$cn->exist_column('assujetti','exercice','tva_belge');
-if ( $a == false) 
+if ( $a == false)
   $cn->exec_sql("alter table tva_belge.assujetti add exercice text");
 
 echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=tva" target="_blank">Aide</a></div>';
