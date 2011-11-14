@@ -35,7 +35,7 @@ class Modop_Operation
     /**
      *@brief retrieve data from jrnx, jrn, quant_xxx and format them to
      * usable for the acc_leger input function
-     *@see Acc_Ledger::show_form(),Acc_Ledger_Purchase::input(),Acc_Ledger_Sold::input(),
+     *@see Acc_Ledger::input(),Acc_Ledger_Purchase::input(),Acc_Ledger_Sold::input(),
      */
     function format()
     {
@@ -205,18 +205,13 @@ class Modop_Operation
       */
     function suspend_strict()
     {
-        $owner=new Own($this->db);
-        if ( $owner->MY_STRICT == 'Y')
-        {
-            $owner->MY_STRICT='N';
-            $owner->save('MY_STRICT');
-            $this->strict=true;
-        }
-        else
-            $this->strict=false;
+        global $g_parameter;
+        $g_parameter->MY_STRICT='N';
+       $this->strict=false;
     }
     /**
      *@brief activate strict mode, only if $this->strict=true
+     * @deprecated
      *@see suspend_receipt
      */
     function activate_strict()
@@ -233,18 +228,13 @@ class Modop_Operation
       */
     function suspend_receipt()
     {
-        $owner=new Own($this->db);
-        if ( $owner->MY_PJ_SUGGEST == 'Y')
-        {
-            $owner->MY_PJ_SUGGEST='N';
-            $owner->save('MY_PJ_SUGGEST');
-            $this->toggle=true;
-        }
-        else
-            $this->toggle=false;
+        global $g_parameter;
+        $g_parameter->MY_PJ_SUGGEST='N';
+        $this->toggle=false;
     }
     /**
      *@brief activate receipt, only if $this->toggle=true
+     *@deprecated
      *@see suspend_receipt
      */
     function activate_receipt()

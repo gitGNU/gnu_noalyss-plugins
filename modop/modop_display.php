@@ -96,6 +96,7 @@ if ($op->ledger_type=='ACH')
 
     echo '<FORM METHOD="GET" class="print">';
     $op->suspend_receipt();
+    echo HtmlInput::hidden('ac',$_REQUEST['ac']);
     echo $jrn->input($op->array);
     echo HtmlInput::extension().dossier::hidden();
     echo HtmlInput::hidden('action','confirm');
@@ -105,7 +106,6 @@ if ($op->ledger_type=='ACH')
     echo HtmlInput::hidden('ext_jr_internal',$op->jr_internal);
     echo HtmlInput::button('add_item',_('Ajout article'),      ' onClick="ledger_add_row()"');
     echo '</form>';
-    $op->activate_receipt();
 
 }
 /* ---------------------------------------------------------------------- */
@@ -130,8 +130,7 @@ if ($op->ledger_type=='VEN')
 
     echo '<FORM METHOD="GET" class="print">';
     echo $jrn->input($op->array);
-    $op->activate_receipt();
-
+    echo HtmlInput::hidden('ac',$_REQUEST['ac']);
     echo HtmlInput::extension().dossier::hidden();
     echo HtmlInput::hidden('action','confirm');
     echo HtmlInput::submit('save','Sauve');
@@ -159,9 +158,8 @@ if ($op->ledger_type=='ODS')
     $op->suspend_receipt();
 
     echo '<FORM METHOD="GET" class="print">';
-    echo $jrn->show_form($op->array);
-    $op->activate_receipt();
-
+    echo $jrn->input($op->array);
+    echo HtmlInput::hidden('ac',$_REQUEST['ac']);
     echo HtmlInput::extension().dossier::hidden();
     echo HtmlInput::hidden('action','confirm');
     echo HtmlInput::submit('save','Sauve');
@@ -201,6 +199,7 @@ if ($op->ledger_type=='FIN')
     $f_add_button->javascript=" select_card_type(this);";
     $str_add_button=$f_add_button->input();
     echo '<FORM METHOD="GET" class="print">';
+    echo HtmlInput::hidden('ac',$_REQUEST['ac']);
     $Date=new IDate("e_date",$op->array['e_date']);
     $f_date=$Date->input();
     $label=HtmlInput::infobulle(3);
@@ -208,7 +207,6 @@ if ($op->ledger_type=='FIN')
     // Ledger (p_jrn)
     //--
     $add_js="";
-    $owner=new Own($cn);
 
     $wLedger=$jrn->select_ledger('FIN',2);
     $wLedger->javascript=$add_js;

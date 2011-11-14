@@ -35,6 +35,7 @@ if ( $_GET['jrn_type'] == 'ACH') {
   $jrn=new Acc_Ledger_Purchase($cn,$_GET['p_jrn']);
   try {
   echo '<FORM METHOD="GET">';
+  echo HtmlInput::hidden('ac',$_REQUEST['ac']);
   echo HtmlInput::extension().dossier::hidden();
   echo HtmlInput::hidden('action','save');
   echo HtmlInput::hidden('ext_jr_id',$_GET['ext_jr_id']);
@@ -55,6 +56,7 @@ if ( $_GET['jrn_type'] == 'VEN') {
   try {
   $a=$jrn->confirm($_GET);
   echo '<FORM METHOD="GET">';
+  echo HtmlInput::hidden('ac',$_REQUEST['ac']);
   echo HtmlInput::extension().dossier::hidden();
   echo HtmlInput::hidden('action','save');
   echo HtmlInput::hidden('ext_jr_id',$_GET['ext_jr_id']);
@@ -76,8 +78,9 @@ if ( $_GET['jrn_type'] == 'ODS') {
   $jrn->with_concerned=false;
   try {
     $jrn->verify($_GET);
-    $a= $jrn->show_form($_GET,1);
+    $a= $jrn->input($_GET,1);
     echo '<FORM METHOD="GET">';
+    echo HtmlInput::hidden('ac',$_REQUEST['ac']);
     echo HtmlInput::extension().dossier::hidden();
     echo HtmlInput::hidden('action','save');
     echo HtmlInput::hidden('ext_jr_id',$_GET['ext_jr_id']);

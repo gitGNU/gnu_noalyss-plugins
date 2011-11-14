@@ -36,6 +36,7 @@ $search->javascript=sprintf('%s',$js);
 ?>
 <FORM METHOD="GET">
   <? echo HtmlInput::extension().dossier::hidden();?>
+  <? echo HtmlInput::hidden('ac',$_REQUEST['ac']);?>
 <?=_("Code interne de l'opération à modifier") ?>
   <?=$str->input()?>
   <?=HtmlInput::submit('seek','retrouver')?>
@@ -43,8 +44,6 @@ $search->javascript=sprintf('%s',$js);
   <?=$search->input()?>
 <hr>
 <?php
-echo IButton::show_calc();
-
   if ( isset($_GET['seek'])) {
     /* retrieve and show the accounting */
     if ( trim($_GET['jr_internal'])=='') {

@@ -40,8 +40,6 @@ if ( $_GET['jrn_type'] == 'ACH')
         $pj=$_GET['e_pj'];
         $_GET['e_pj']=microtime();
         $new_internal=$jrn->insert($_GET);
-        $op->activate_receipt();
-        $op->activate_strict();
     }
     catch (Exception $e)
     {
@@ -89,8 +87,6 @@ if ( $_GET['jrn_type'] == 'VEN')
         $pj=$_GET['e_pj'];
         $_GET['e_pj']=microtime();
         $new_internal=$jrn->insert($_GET);
-        $op->activate_receipt();
-        $op->activate_strict();
     }
     catch (Exception $e)
     {
@@ -143,8 +139,6 @@ if ( $_GET['jrn_type'] == 'ODS')
         $_GET['e_pj']=microtime();
         $jrn->save($_GET);
         $new_internal=$jrn->internal;
-        $op->activate_receipt();
-        $op->activate_strict();
     }
     catch (Exception $e)
     {
