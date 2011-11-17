@@ -14,5 +14,6 @@
 	<td><?=$idate_end->input()?></td>
 	</tr>
 </table>
+	<?=HtmlInput::request_to_hidden(array('ac','plugin_code'));?>
 <?=$submit?>
 </FORM>

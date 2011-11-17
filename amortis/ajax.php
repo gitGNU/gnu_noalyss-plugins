@@ -31,9 +31,7 @@ extract ($_REQUEST);
 $ctl=$t;
 $html='opération non trouvée';
 $extra='';
-$close='<div style="float:right;height:10px;display:block;margin-top:2px;margin-right:2px">';
-$close.='<A style="background-color:blue;color:white;text-decoration:none" HREF="javascript:void(0)" onclick="removeDiv(\''.$t.'\');">Fermer</A>'; 
-$close.='</div>';
+$close=HtmlInput::anchor_close($t);
 $html=$close.$html;
 switch($op)
   {
@@ -80,7 +78,7 @@ switch($op)
     $html=ob_get_contents();
     ob_clean();
     break;
-    
+
   }
 
 $html=escape_xml($html);
