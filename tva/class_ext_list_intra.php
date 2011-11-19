@@ -65,11 +65,11 @@ class Ext_List_Intra extends Listing {
       $child->set_parameter('tva_num',$tva_num[$i]);
 
       $array[]=$child;
-    }//end for			    
+    }//end for
     $this->aChild=$array;
     } else
       $this->aChild=array();
-    
+
     $this->start_periode=$p_array['start_periode'];
     $this->end_periode=$p_array['end_periode'];
     $this->flag_periode=$p_array['flag_periode'];
@@ -79,11 +79,12 @@ class Ext_List_Intra extends Listing {
     $this->country=$p_array['country'];
     $this->periode_dec=$p_array['periode_dec'];
     $this->exercice=$p_array['exercice'];
-    
+
   }
   function display() {
      $r= '<form class="print" id="readonly">';
      $r.=$this->display_info();
+	 $r.=HtmlInput::request_to_hidden(array('ac'));
      $r.=$this->display_declaration_amount();
      $r.='</form>';
      $js_remove=sprintf("onclick=\"if ( confirm('%s')){remove_form('%s',%d,%d,'li');}\"",
@@ -115,12 +116,12 @@ class Ext_List_Intra extends Listing {
    $array=array();
    // retrieve missing and compute an array
    for ($i=0;$i<$nb;$i++){
-     $child=new Ext_List_Intra_Child($this->db);	
+     $child=new Ext_List_Intra_Child($this->db);
      foreach ($res[$i] as $idx=>$value){
        $child->$idx=$value;
-     }	
+     }
      $array[]=$child;
-   }//end for			    
+   }//end for
    $this->aChild=$array;
 
    return 1;
@@ -134,7 +135,7 @@ class Ext_List_Intra extends Listing {
     /* insert into the first table */
     $sql=<<<EOF
 INSERT INTO tva_belge.intracomm(
-            start_date, end_date,  periodicity, tva_name, 
+            start_date, end_date,  periodicity, tva_name,
             num_tva, adress, country,  periode_dec,exercice)
       VALUES (to_date($1,'DD.MM.YYYY'),to_date($2,'DD.MM.YYYY'),$3,$4,$5,$6,$7,$8,$9) returning i_id;
 EOF;
@@ -172,8 +173,8 @@ for ($e=0;$e<count($this->aChild);$e++){
     if (trim($a)=='') $a=-1;
     $sql=<<<EOF
       select sum(j_montant) as amount,j_qcode
-      from jrnx 
-      where j_grpt in (select distinct j_grpt from quant_sold join jrnx using (j_id) where qs_vat_code in ($a) ) 
+      from jrnx
+      where j_grpt in (select distinct j_grpt from quant_sold join jrnx using (j_id) where qs_vat_code in ($a) )
       and j_poste::text like $1||'%'
       and (j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))
       group by j_qcode
@@ -212,12 +213,12 @@ EOF;
 
       if ( strpos($num_tva,'BE') === 0) { echo "pas bon";continue;}
       $child->set_parameter('tva_num',$num_tva);
-      
+
       $child->set_parameter('name_child',$fiche->strAttribut(ATTR_DEF_NAME));
       $child->set_parameter('code','L');
 
       $array[]=$child;
-    }//end for			    
+    }//end for
     $this->aChild=$array;
   }
   /**
@@ -230,7 +231,7 @@ EOF;
     $clean=new IButton();
     $clean->label='Efface ligne';
     $clean->javascript="deleteRow('tb_dsp',this);";
-	
+
     $r='';
     $r.=th('QuickCode');
     $r.=th('Name');
@@ -288,9 +289,9 @@ class Ext_List_Intra_Child extends Ext_List_Intra {
   function insert() {
 $sql=<<<EOF
 INSERT INTO tva_belge.intracomm_chld(
-            i_id, ic_tvanum, ic_amount, ic_code, ic_periode, ic_qcode, 
+            i_id, ic_tvanum, ic_amount, ic_code, ic_periode, ic_qcode,
             ic_name)
-  VALUES ($1, $2, $3, $4, $5, $6, $7) returning ic_id; 
+  VALUES ($1, $2, $3, $4, $5, $6, $7) returning ic_id;
 EOF;
 $this->ic_id=$this->db->get_value($sql,array(
 					     $this->i_id,

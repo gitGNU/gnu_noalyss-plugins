@@ -80,7 +80,7 @@ class Ext_Tva extends Ext_Tva_Gen
   /**
    *@brief retrieve * row thanks a condition
    */
-   public function seek($cond,$p_array=null) 
+   public function seek($cond,$p_array=null)
    {
    }
    public function from_array($p_array) {
@@ -104,14 +104,14 @@ class Ext_Tva extends Ext_Tva_Gen
 
     if ( $this->verify() != 0 ) return;
     $sql="INSERT INTO tva_belge.declaration_amount(
-             d00, d01, d02, d03, d44, d45, d46, d47, d48, d49, d81, 
-            d82, d83, d84, d85, d86, d87, d88, d54, d55, d56, d57, d61, d63, 
-            dxx, d59, d62, d64, dyy, d71, d72, d91, start_date, end_date, 
+             d00, d01, d02, d03, d44, d45, d46, d47, d48, d49, d81,
+            d82, d83, d84, d85, d86, d87, d88, d54, d55, d56, d57, d61, d63,
+            dxx, d59, d62, d64, dyy, d71, d72, d91, start_date, end_date,
              periodicity,tva_name,num_tva,adress,country,periode_dec,exercice)
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 
-            $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, 
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12,
+            $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25,
             $26, $27, $28, $29, $30, $31, $32, to_date($33,'DD.MM.YYYY'), to_date($34,'DD.MM.YYYY'), $35,$36,
-            $37,$38,$39,$40,$41) 
+            $37,$38,$39,$40,$41)
              returning da_id;";
       $this->da_id=$this->db->get_value($sql,
 				     array($this->d00, /* 1 */
@@ -166,7 +166,7 @@ class Ext_Tva extends Ext_Tva_Gen
 
   public function load() {
 
-   $sql="select * from tva_belge.declaration_amount where da_id=$1"; 
+   $sql="select * from tva_belge.declaration_amount where da_id=$1";
 
    $res=$this->db->get_array(
 			    $sql,
@@ -176,7 +176,7 @@ class Ext_Tva extends Ext_Tva_Gen
    foreach ($res[0] as $idx=>$value) { $this->$idx=$value; }
   }
   public function delete() {
-/*    $sql="delete from tva_rate where tva_id=$1"; 
+/*    $sql="delete from tva_rate where tva_id=$1";
     $res=$this->cn->exec_sql($sql,array($this->tva_id));
 */
   }
@@ -201,7 +201,7 @@ class Ext_Tva extends Ext_Tva_Gen
 
     // set default value 0 for all
     $keys=array_keys($this->variable);
-    for ($i = 0;$i < count($this->variable);$i++) { 
+    for ($i = 0;$i < count($this->variable);$i++) {
       $idx=$keys[$i];
       $this->$idx=0;
       if ( $idx=='d91') break;
@@ -228,7 +228,7 @@ class Ext_Tva extends Ext_Tva_Gen
       $oTva->set_parameter('grid','GRIL'.$array[$e]);
       $amount=$oTva->amount_operation();
       $this->set_parameter('d'.$array[$e],$amount);
-     
+
     }
     //Frame IV
     $array=array('54','55','56','57','61','63');
@@ -240,7 +240,7 @@ class Ext_Tva extends Ext_Tva_Gen
 
     }
 
-   
+
     $array=array('59','62','64');
     for ($e=0;$e<count($array);$e++) {
       $oTva=new Tva_amount($this->db,'in',$this->start_periode,$this->end_periode);
@@ -265,7 +265,7 @@ class Ext_Tva extends Ext_Tva_Gen
     // GRILYY
     $this->dyy=round($this->d59+$this->d62+$this->d64,2);
 
-    
+
     //Fram VI
     if ( $this->dxx > $this->dyy ) $this->d71=$this->dxx-$this->dyy;
     if ( $this->dxx < $this->dyy ) $this->d72=$this->dyy-$this->dxx;
@@ -367,7 +367,7 @@ class Ext_Tva extends Ext_Tva_Gen
        $saldo=new Acc_Account_Ledger($this->db,$deb);
        /* get label */
        $lib=$this->db->get_value('select pcm_lib from tmp_pcmn where pcm_val=$1',array($deb));
-				
+
        $cond=sprintf(" j_date >=to_date('%s','DD.MM.YYYY') and j_date <= '%s'",
 		     $first_day,
 		     $this->end_date);
@@ -381,19 +381,19 @@ class Ext_Tva extends Ext_Tva_Gen
 
        $ICheckBox=new ICheckBox('deb['.$idx.']');
        if ( $result['debit'] < $result['credit'] ) {
-	 $amount_vat-=$result['solde'];	 $ICheckBox->selected=true;} 
+	 $amount_vat-=$result['solde'];	 $ICheckBox->selected=true;}
        else {
 	 $amount_vat+=$result['solde'];	 $ICheckBox->selected=false;
        }
        $idx++;
        /* display row */
        $r.=tr(td($account->input()).td($lib).td($amount->input()).td($ICheckBox->input()));
-       
+
        /* get saldo for CREDIT*/
        $saldo=new Acc_Account_Ledger($this->db,$cred);
        /* get label */
        $lib=$this->db->get_value('select pcm_lib from tmp_pcmn where pcm_val=$1',array($cred));
-				
+
        $cond=sprintf(" j_date >=to_date('%s','DD.MM.YYYY') and j_date <= '%s'",
 		     $first_day,
 		     $this->end_date);
@@ -409,11 +409,11 @@ class Ext_Tva extends Ext_Tva_Gen
        if ( $result['debit'] < $result['credit'] ) {$amount_vat-=$result['solde'];	 $ICheckBox->selected=true;}
        else {	 $ICheckBox->selected=false;
 	 $amount_vat+=$result['solde'];}
-       
+
        /* display row */
        $r.=tr(td($account->input()).td($lib).td($amount->input()).td($ICheckBox->input()));
        $idx++;
-       
+
      }
      /* ATVA */
      $atva=$this->db->get_value("select paccount from tva_belge.parameter where pcode='ATVA'");
@@ -422,7 +422,7 @@ class Ext_Tva extends Ext_Tva_Gen
        $saldo=new Acc_Account_Ledger($this->db,$atva);
        /* get label */
        $lib=$this->db->get_value('select pcm_lib from tmp_pcmn where pcm_val=$1',array($atva));
-				
+
        $cond=sprintf(" j_date >=to_date('%s','DD.MM.YYYY') and j_date <= '%s'",
 		     $first_day,
 		     $this->end_date);
@@ -435,7 +435,7 @@ class Ext_Tva extends Ext_Tva_Gen
 
        if ( $result['debit'] < $result['credit'] ) {
 	 $amount_vat-=$result['solde'];	 $ICheckBox->selected=true;}
-       else {       
+       else {
 	 $ICheckBox->selected=false;
 	 $amount_vat+=$result['solde'];
        }
@@ -451,7 +451,7 @@ class Ext_Tva extends Ext_Tva_Gen
        $saldo=new Acc_Account_Ledger($this->db,$crtva);
        /* get label */
        $lib=$this->db->get_value('select pcm_lib from tmp_pcmn where pcm_val=$1',array($crtva));
-				
+
        $cond=sprintf(" j_date >=to_date('%s','DD.MM.YYYY') and j_date <= '%s'",
 		     $first_day,
 		     $this->end_date);
@@ -481,7 +481,7 @@ class Ext_Tva extends Ext_Tva_Gen
        $saldo=new Acc_Account_Ledger($this->db,$dttva);
        /* get label */
        $lib=$this->db->get_value('select pcm_lib from tmp_pcmn where pcm_val=$1',array($dttva));
-				
+
        $cond=sprintf(" j_date >=to_date('%s','DD.MM.YYYY') and j_date <= '%s'",
 		     $first_day,
 		     $this->end_date);
@@ -509,7 +509,7 @@ class Ext_Tva extends Ext_Tva_Gen
        if ( $dttva != ''  ) {
 	 /* get label */
 	 $lib=$this->db->get_value('select pcm_lib from tmp_pcmn where pcm_val=$1',array($dttva));
-				
+
 	 $ICheckBox=new ICheckBox('solde_ic');
 	 $ICheckBox->selected=false;
 	 $account=new IText('solde');
@@ -525,7 +525,7 @@ class Ext_Tva extends Ext_Tva_Gen
        if ( $crtva != ''  ) {
 	 /* get label */
 	 $lib=$this->db->get_value('select pcm_lib from tmp_pcmn where pcm_val=$1',array($crtva));
-				
+
 	 $ICheckBox=new ICheckBox('solde_ic');
 	 $ICheckBox->selected=true;
 	 $account=new IText('solde');
@@ -544,6 +544,7 @@ class Ext_Tva extends Ext_Tva_Gen
    }
    function display() {
      $r= '<form class="print" id="readonly">';
+	 $r.=HtmlInput::request_to_hidden(array('ac'));
      $r.='<div style="position:absolute;top:150;right:0;width:200;right-margin:3%">';
      $r.=$this->menu();
      $r.='</div>';

@@ -30,6 +30,7 @@ echo '</div>';
 
 echo '<div id="main" class="content" style="width:80%;margin-left:10%">';
 echo '<form method="get">';
+echo HtmlInput::request_to_hidden(array('ac'));
 echo _('Filtrer par ');
 $choice=new ISelect('type');
 $choice->value=array(
@@ -50,14 +51,14 @@ switch($choice->selected) {
 case 0:
  $sql="
 select da_id as id, 'Déclaration trim/mens' as type_title,1 as type_decl,to_char(date_decl,'DD.MM.YYYY') as date_fmt,date_decl,
-case when periodicity ='1' then 'Mensuel'  
+case when periodicity ='1' then 'Mensuel'
 when periodicity = '2' then 'Trimestriel'
 end as fmt_periodicity,
-periode_dec,exercice 
-from tva_belge.declaration_amount 
+periode_dec,exercice
+from tva_belge.declaration_amount
 union all
 select i_id as id, 'Listing Intracom' as type_title, 3 as type_decl, to_char(date_decl,'DD.MM.YYYY') as date_fmt,date_decl,
-case when periodicity ='1' then 'Mensuel'  
+case when periodicity ='1' then 'Mensuel'
 when periodicity = '2' then 'Trimestriel'
 when periodicity = '3' then 'Annuel'
 end as fmt_periodicity,
@@ -66,7 +67,7 @@ from tva_belge.intracomm
 union all
 select a_id as id, 'Listing assujetti' as type_title, 2 as type_decl, to_char(date_decl,'DD.MM.YYYY') as date_fmt,date_decl,
  'Annuel' as fmt_periodicity,
-periode_dec,exercice 
+periode_dec,exercice
 from tva_belge.assujetti
 
 order by date_decl desc
@@ -75,10 +76,10 @@ order by date_decl desc
   break;
 
 case 1:
- 
+
   $sql="
 select da_id as id, 'Déclaration trim/mens' as type_title,1 as type_decl,to_char(date_decl,'DD.MM.YYYY') as date_fmt,
-case when periodicity ='1' then 'Mensuel'  
+case when periodicity ='1' then 'Mensuel'
 when periodicity = '2' then 'Trimestriel'
 end as fmt_periodicity,
 periode_dec,exercice
@@ -97,7 +98,7 @@ break;
 case 3:
 $sql="
 select i_id as id, 'Listing Intracom' as type_title, 3 as type_decl, to_char(date_decl,'DD.MM.YYYY') as date_fmt,date_decl,
-case when periodicity ='1' then 'Mensuel'  
+case when periodicity ='1' then 'Mensuel'
 when periodicity = '2' then 'Trimestriel'
 when periodicity = '3' then 'Annuel'
 end as fmt_periodicity,

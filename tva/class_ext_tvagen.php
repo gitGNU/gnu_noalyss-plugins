@@ -28,7 +28,7 @@ require_once('tva_constant.php');
 require_once('class_own.php');
 /**
  *@brief transform a string into an arrau without empty element and  duplicate
- * the array is sorted 
+ * the array is sorted
  *@param $p_string string containing a comma a separator
  *@return array
  *
@@ -50,13 +50,13 @@ class Ext_Tva_Gen
 {
   function __construct($p_cn) {
     $this->db=$p_cn;
-  }			   
+  }
   public function get_parameter($p_string) {
     if ( array_key_exists($p_string,$this->variable) ) {
       $idx=$this->variable[$p_string];
       return $this->$idx;
     }
-    else 
+    else
       throw new Exception (__FILE__.":".__LINE__.'Erreur attribut inexistant');
   }
   public function set_parameter($p_string,$p_value) {
@@ -64,16 +64,16 @@ class Ext_Tva_Gen
       $idx=$this->variable[$p_string];
       $this->$idx=$p_value;
     }
-    else 
+    else
       throw new Exception (__FILE__.":".__LINE__.'Erreur attribut inexistant');
-    
-    
+
+
   }
   public function get_info() {    return var_export(self::$variable,true);  }
 
   public function save() {
   /* please adapt */
-    if (  $this->get_parameter("id") == 0 ) 
+    if (  $this->get_parameter("id") == 0 )
       $this->insert();
     else
       $this->update();
@@ -83,7 +83,7 @@ class Ext_Tva_Gen
     require_once('class_iradio.php');
     $monthly=new IRadio('periodic');
     $monthly->value=1;
-    
+
     // month
     $month=new ISelect('bymonth');
     $array=array ();
@@ -98,8 +98,8 @@ class Ext_Tva_Gen
     $year = new IText('year');
     $year->size=4;
     $str_year=$year->input();
-    
-    // Tri 
+
+    // Tri
     $quater=new ISelect('byquaterly');
     $array=array();
     for ($i=0;$i<4;$i++) {
@@ -115,6 +115,7 @@ class Ext_Tva_Gen
     $str_hidden=HtmlInput::extension().dossier::hidden();
     if (isset($_REQUEST['sa']))
       $str_hidden.=HtmlInput::hidden('sa',$_REQUEST['sa']);
+	$str_hidden.=HtmlInput::request_to_hidden(array('ac'));
     $str_byyear='';
     if ( $by_year == true ) {
       $yearly=new IRadio('periodic');

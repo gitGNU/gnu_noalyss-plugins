@@ -44,13 +44,13 @@ class Ext_List_Assujetti extends Listing {
 			      );
   private $aChild=array();
   static function choose_periode($by_year=false) {
-   
+
     // year
     $year = new IText('year');
     $year->size=4;
     $str_year=$year->input();
-    
-   
+
+
     $str_submit=HtmlInput::submit('decl',_('Afficher'));
     $str_hidden=HtmlInput::extension().dossier::hidden();
     if (isset($_REQUEST['sa']))
@@ -59,6 +59,7 @@ class Ext_List_Assujetti extends Listing {
     $r.="Année :".$str_year;
     $r.=$str_submit;
     $r.=$str_hidden;
+	$r.=HtmlInput::request_to_hidden(array('ac'));
     $r.='</form>';
     return $r;
   }
@@ -82,11 +83,11 @@ class Ext_List_Assujetti extends Listing {
 	$child->set_parameter('tva_num',$tva_num[$i]);
 
 	$array[]=$child;
-      }//end for			    
+      }//end for
       $this->aChild=$array;
-    } else 
+    } else
       $this->aChild=array();
-    
+
     $this->start_periode=$p_array['start_periode'];
     $this->end_periode=$p_array['end_periode'];
     $this->flag_periode=$p_array['flag_periode'];
@@ -99,6 +100,7 @@ class Ext_List_Assujetti extends Listing {
   }
   function display() {
     $r= '<form class="print" id="readonly">';
+	$r.=HtmlInput::request_to_hidden(array('ac'));
     $r.=$this->display_info();
     $r.=$this->display_declaration_amount();
     $r.='</form>';
@@ -131,12 +133,12 @@ class Ext_List_Assujetti extends Listing {
     $array=array();
     // retrieve missing and compute an array
     for ($i=0;$i<$nb;$i++){
-      $child=new Ext_List_Assujetti_Child($this->db);	
+      $child=new Ext_List_Assujetti_Child($this->db);
       foreach ($res[$i] as $idx=>$value){
 	$child->$idx=$value;
-      }	
+      }
       $array[]=$child;
-    }//end for			    
+    }//end for
     $this->aChild=$array;
 
     return 1;
@@ -150,7 +152,7 @@ class Ext_List_Assujetti extends Listing {
     /* insert into the first table */
     $sql=<<<EOF
       INSERT INTO tva_belge.assujetti(
-				      start_date, end_date,  periodicity, tva_name, 
+				      start_date, end_date,  periodicity, tva_name,
 				      num_tva, adress, country,  periode_dec,exercice)
       VALUES (to_date($1,'DD.MM.YYYY'),to_date($2,'DD.MM.YYYY'),$3,$4,$5,$6,$7,$8,$9) returning a_id;
 EOF;
@@ -188,8 +190,8 @@ EOF;
     if (trim($a)=='') $a=-1;
     $sql=<<<EOF
       select sum(j_montant) as amount,j_qcode
-      from jrnx 
-      where j_grpt in (select distinct j_grpt from quant_sold join jrnx using (j_id) where qs_vat_code in ($a) ) 
+      from jrnx
+      where j_grpt in (select distinct j_grpt from quant_sold join jrnx using (j_id) where qs_vat_code in ($a) )
       and j_poste::text like $1||'%'
       and (j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))
       group by j_qcode
@@ -212,7 +214,7 @@ EOF;
       $fiche->get_by_qcode($all[$i]['j_qcode'],false);
       $num_tva=$fiche->strAttribut(ATTR_DEF_NUMTVA);
       $child->set_parameter('tva_num',$num_tva);
-      $sq="select sum(qs_vat) from quant_sold 
+      $sq="select sum(qs_vat) from quant_sold
 where qs_client = $1 and j_id in (select distinct j_id from jrnx where  j_date >= to_date($2,'DD.MM.YYYY')
                                   and j_date <= to_date($3,'DD.MM.YYYY')
                                   )
@@ -239,7 +241,7 @@ where qs_client = $1 and j_id in (select distinct j_id from jrnx where  j_date >
       $child->set_parameter('name_child',$fiche->strAttribut(ATTR_DEF_NAME));
 
       $array[]=$child;
-    }//end for			    
+    }//end for
     $this->aChild=$array;
   }
   /**
@@ -251,7 +253,7 @@ where qs_client = $1 and j_id in (select distinct j_id from jrnx where  j_date >
     $clean=new IButton();
     $clean->label='Efface ligne';
     $clean->javascript="deleteRow('tb_dsp',this);";
-	
+
     $r='';
     $r.=th('QuickCode');
     $r.=th('Name');
@@ -307,9 +309,9 @@ class Ext_List_Assujetti_Child extends Ext_List_Assujetti {
 
     $sql=<<<EOF
       INSERT INTO tva_belge.assujetti_chld(
-					   a_id, ac_tvanum, ac_amount, ac_vat,  ac_qcode, 
+					   a_id, ac_tvanum, ac_amount, ac_vat,  ac_qcode,
 					   ac_name)
-      VALUES ($1, $2, $3, $4, $5, $6) returning ac_id; 
+      VALUES ($1, $2, $3, $4, $5, $6) returning ac_id;
 EOF;
     $this->ic_id=$this->db->get_value($sql,array(
 						 $this->a_id,

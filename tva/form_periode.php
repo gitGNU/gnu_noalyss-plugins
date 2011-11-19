@@ -12,6 +12,7 @@ if (isset ($by_year) && $by_year == true ) :
 ?>
 <?=_('Par année')?> <?=$str_byyear?><br/>
 <?php
+echo HtmlInput::request_to_hidden(array('ac'));
 endif;
 ?>
 <br>
