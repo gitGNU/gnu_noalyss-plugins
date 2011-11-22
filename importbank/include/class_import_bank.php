@@ -282,7 +282,7 @@ class Import_Bank
 		    $err=self::is_closed($row->tp_date,$led_id);
 	    if ( $err != '')
 	      {
-		self::transfert_error($err,'Date hors des journaux');
+		self::transfert_error($row->id,$err.' - Date hors des journaux');
 		continue;
 	      }
 
@@ -326,9 +326,9 @@ class Import_Bank
             // insert rapt
 	    if ( $cn->get_value ('select count(jr_id) from jrn where jr_id=$1',array($row->tp_rec)) == 1)
 	      {
-		$acc_reconc=new Acc_Reconciliation($cn);
-		$acc_reconc->set_jr_id($jr_id);
-		$acc_reconc->insert($row->tp_rec);
+			$acc_reconc=new Acc_Reconciliation($cn);
+			$acc_reconc->set_jr_id($jr_id);
+			$acc_reconc->insert($row->tp_rec);
 	      }
 
             $sql2 = "update importbank.temp_bank set status = 'T',tp_error_msg=null  where id=$1";
