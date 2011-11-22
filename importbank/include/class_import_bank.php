@@ -279,7 +279,7 @@ class Import_Bank
 		self::transfert_error($row->id,'Date hors des limites');
 		continue;
 	      }
-	    $err=self::is_closed($row->tp_date,$led_id);
+		    $err=self::is_closed($row->tp_date,$led_id);
 	    if ( $err != '')
 	      {
 		self::transfert_error($err,'Date hors des journaux');
@@ -349,7 +349,7 @@ class Import_Bank
   /**
    *Update the row with an error message, and change is status to E
    */
-  function transfert_error($id,$message)
+  static function transfert_error($id,$message)
   {
     global $cn;
     $cn->exec_sql('update importbank.temp_bank set status=$1,tp_error_msg=$2 where id=$3',
@@ -359,7 +359,7 @@ class Import_Bank
    * check
    * if the date is outside the defined periode
    */
-  function check_date($p_date)
+  static function check_date($p_date)
   {
     global $cn;
     $sql="select count(*) from parm_periode where p_start <= to_date($1,'DD.MM.YYYY') and p_end >= to_date($1,'DD.MM.YYYY') ";
@@ -371,7 +371,7 @@ class Import_Bank
    * Check if the date is in a periode and if the ledger
    * is closed or not
    */
-  function is_closed($p_date,$ledger_id)
+  static function is_closed($p_date,$ledger_id)
   {
     global $cn;
     try
