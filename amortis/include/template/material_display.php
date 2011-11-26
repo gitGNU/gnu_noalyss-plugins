@@ -40,8 +40,8 @@
 <table class="result">
 <th>Année</th>
 <th>Montant</th>
-<th>Amortissement acté</th>
-<th>Pièce </th>
+<th style="text-align:right" >Amortissement acté</th>
+<th style="text-align:center">Pièce </th>
 <th>n°  interne</th>
 
 
@@ -59,7 +59,7 @@ for ($i=0;$i<count($array);$i++):
 	</td>
 	<td>
 	<?
-	echo $array[$i]->ad_amount;
+	echo nbm($array[$i]->ad_amount);
         ?>
 
 </td>
@@ -68,22 +68,22 @@ for ($i=0;$i<count($array);$i++):
 
 	$x=$cn->get_array('select ha_id,h_pj,jr_internal,h_amount from amortissement.amortissement_histo where a_id=$1 and h_year=$2',
 	                   array($amort->a_id,$array[$i]->ad_year));
-	if ( count ($x) == 1) 
+	if ( count ($x) == 1)
 	{
 	$done=bcadd($done,$x[0]['h_amount']);
 
-	echo td($x[0]['h_amount']);
+	echo td(nbm($x[0]['h_amount']),' class="num"');
 
-	echo td($x[0]['h_pj']);
+	echo td($x[0]['h_pj'],' style="text-align:center"');
 
-	if ( $x[0]['jr_internal'] != '' ) { 
+	if ( $x[0]['jr_internal'] != '' ) {
 	$jr_id=$cn->get_value('select jr_id from jrn where jr_internal=$1',array($x[0]['jr_internal']));
 	echo td(HtmlInput::detail_op($jr_id,$x[0]['jr_internal']));
 	} else {
 	echo td();
 	}
 	}
-	echo td($array[$i]->ad_percentage);
+	echo td(nbm($array[$i]->ad_percentage).'%');
 	?>
 </tr>
 
@@ -104,7 +104,7 @@ if ( $annuite !=  $p_amount)
 	echo '<h2>';
  }
  ?>
-</fieldset> 
+</fieldset>
 <? echo "Date ".date ('d.m.Y');?>
 <? echo HtmlInput::print_window()?>
-   
+

@@ -10,12 +10,12 @@ echo dossier::hidden();
 ?>
 <table class="result">
 <tr>
-<th>Quick Code</th>
-<th>Nom</th>
-<th style="text-align:right">Montant</th>
-<th style="text-align:center">Année</th>
-<th>N°</th>
-<th>Opération</th>
+<th><?=$header->get_header(0)?></th>
+<th><?=$header->get_header(1)?></th>
+<th style="text-align:right"><?=$header->get_header(2)?></th>
+<th style="text-align:center"><?=$header->get_header(3)?></th>
+<th><?=$header->get_header(4)?></th>
+<th><?=$header->get_header(5)?></th>
 
 </tr>
 <?
