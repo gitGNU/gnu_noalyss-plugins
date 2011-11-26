@@ -57,21 +57,26 @@ case 'rw':
       $ledger=new Acc_ledger($cn,0);
       $sel_ledger=$ledger->select_ledger('ODS',1);
       $r.=h2info('Génération écriture');
-
-      $r.='<form onsubmit="save_write(this);return false;">';
-      $decl=new Ext_Tva($cn);
-      $decl->set_parameter('id',$_GET['p_id']);
-      $decl->load();
-      $date=new IDate('pdate');
-      $r.="Date :".$date->input().'<br>';
-      $r.="Choix du journal : ".$sel_ledger->input();
-      $r.=$decl->propose_form();
-      $r.=HtmlInput::hidden('mt',microtime(true));
-      $r.=HtmlInput::extension();
-      $r.=dossier::hidden();
-      $r.=HtmlInput::submit('save','Sauver','onclick="return confirm(\'Vous confirmez ? \')"');
-      $r.='</form>';
-    } else
+	  if ($sel_ledger != null)
+	  {
+		  $r.='<form onsubmit="save_write(this);return false;">';
+		  $decl=new Ext_Tva($cn);
+		  $decl->set_parameter('id',$_GET['p_id']);
+		  $decl->load();
+		  $date=new IDate('pdate');
+		  $r.="Date :".$date->input().'<br>';
+		  $r.="Choix du journal : ".$sel_ledger->input();
+		  $r.=$decl->propose_form();
+		  $r.=HtmlInput::hidden('mt',microtime(true));
+		  $r.=HtmlInput::extension();
+		  $r.=dossier::hidden();
+		  $r.=HtmlInput::submit('save','Sauver','onclick="return confirm(\'Vous confirmez ? \')"');
+		  $r.='</form>';
+		} else {
+			$r.='<h2 class="error"> Aucun journal accessible</h2>';
+		}
+	}
+	else
     {
       $ctl='record_write';
       $r=HtmlInput::anchor_close($ctl);

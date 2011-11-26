@@ -23,7 +23,7 @@
 /*!\file
  * \brief modify a operation
  */
-Extension::check_version(3432);
+Extension::check_version(4400);
 $str=new IConcerned("jr_id");
 $str->value=(isset($_GET['jr_id']))?strtoupper($_GET['jr_id']):'';
 $str->value=(isset($_GET['ext_jr_id']))?strtoupper($_GET['ext_jr_id']):$str->value;

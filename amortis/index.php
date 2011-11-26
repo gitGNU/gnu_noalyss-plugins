@@ -19,7 +19,7 @@
 /* $Revision$ */
 
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
-
+Extension::check_version(4400);
 /*!\file
  * \brief main entry
  */
