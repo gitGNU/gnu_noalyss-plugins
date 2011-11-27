@@ -24,7 +24,7 @@ if ( ! isset ($_REQUEST ['sb']))
  */
 $format=new IText('format_name');
 $jrn_def=new ISelect('jrn_def');
-$jrn_def->value=$cn->make_array('select jrn_def_id,jrn_def_name from jrn_def where '.$user->get_ledger_sql('FIN',3).' order by jrn_def_name');
+$jrn_def->value=$cn->make_array('select jrn_def_id,jrn_def_name from jrn_def where '.$g_user->get_ledger_sql('FIN',3).' order by jrn_def_name');
 $sep_decimal=new ISelect('sep_dec');
 $sep_decimal->value=$adecimal;
 

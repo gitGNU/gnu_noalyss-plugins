@@ -151,11 +151,11 @@ class Import_Bank
 
 
       }
-    $array=$cn->get_array('select a.id as id,to_char(i_date,\'DD.MM.YYYY HH24:MI\') as i_date,format_name
+    $array=$cn->get_array('select a.id as id,to_char(i_date,\'DD.MM.YYYY HH24:MI\') as i_date,format_name,jrn_def_id
 				from importbank.import as a
 				join importbank.format_bank as b on (format_bank_id=b.id)
 			    where a.id=$1',array($p_id));
-    echo h2($array[0]['id']." ".$array[0]['i_date']." ".$array[0]['format_name'],'');
+    echo h1($array[0]['id']." ".$array[0]['i_date']." ".$array[0]['format_name'],'');
     $ret=$cn->exec_sql(" SELECT id ,ref_operation,tp_date, amount,
 				case when status='N' then 'Nouveau'
 				when status='T' then 'Transfèré'
@@ -170,6 +170,10 @@ class Import_Bank
 			  FROM importbank.temp_bank
 			  where import_id=$1 $sql_filter
 			  order by tp_date,ref_operation,amount",array($p_id));
+	$jrn_name=$cn->get_value('select jrn_def_name from jrn_def where  jrn_def_id=$1',array($array[0]['jrn_def_id']));
+	$jrn_account=$cn->get_value ("select ad_value from fiche_detail
+						where ad_id=1 and f_id=(select jrn_Def_bank from jrn_def where jrn_def_id=$1) "
+			,array($array[0]['jrn_def_id']));
     require_once('template/show_list.php');
 
 
@@ -329,6 +333,24 @@ class Import_Bank
 			$acc_reconc=new Acc_Reconciliation($cn);
 			$acc_reconc->set_jr_id($jr_id);
 			$acc_reconc->insert($row->tp_rec);
+			// lettering
+			$a_rec=$cn->get_array('select j_id
+										from jrnx join jrn on (j_grpt=jr_grpt_id)
+									  where
+									  f_id=$1 and jr_id=$2',array($row->f_id,$row->tp_rec));
+			if ( count($a_rec) == 1 )
+			{
+				$a_target=$cn->get_array('select j_id
+										from jrnx join jrn on (j_grpt=jr_grpt_id)
+									  where
+									  f_id=$1 and jr_id=$2',array($row->f_id,$jr_id));
+				if ( count($a_target)==1)
+				{
+					$lc=new Lettering_Card($cn);
+					$lc->insert_couple($a_rec[0]['j_id'],$a_target[0]['j_id']);
+				}
+			}
+
 	      }
 
             $sql2 = "update importbank.temp_bank set status = 'T',tp_error_msg=null  where id=$1";

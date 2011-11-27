@@ -1,3 +1,4 @@
+<h2 class="info"> Journal cible = <?=$jrn_name?> Compte de ce journal <?=$jrn_account?></h2>
 <form method="get">
 
 Filtrer : <?=$filter->input()?>

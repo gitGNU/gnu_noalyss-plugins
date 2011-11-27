@@ -7,7 +7,10 @@ require_once ('class_ext_list_assujetti.php');
 require_once('class_acc_ledger.php');
 
 extract($_GET);
+global $g_parameter;
 $cn=new Database($gDossier);
+$g_parameter=new Own($cn);
+
 $html='';$extra='';$ctl='';
 switch($act) {
 case 'dsp_decl':
@@ -52,11 +55,10 @@ case 'rw':
   $count=$cn->get_value('select count(*) from tva_belge.declaration_amount where da_id=$1',array($_REQUEST['p_id']));
   if ( $count == 1 )
     {
-      $r='<div style="float:right"><a class="mtitle" href="javascript:void(0)" onclick="removeDiv(\'record_write\')">fermer</a></div>';
       $ctl='record_write';
       $ledger=new Acc_ledger($cn,0);
       $sel_ledger=$ledger->select_ledger('ODS',1);
-      $r.=h2info('Génération écriture');
+      $r=HtmlInput::title_box('Génération écriture','record_write');
 	  if ($sel_ledger != null)
 	  {
 		  $r.='<form onsubmit="save_write(this);return false;">';
