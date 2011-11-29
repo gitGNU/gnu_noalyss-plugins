@@ -1,6 +1,6 @@
 
 <form id="purge" method="POST">
-<table class="result">
+<table class="table_large">
 	<TR>
 	<th> num transfert</th>
 	<Th>Date </Th>

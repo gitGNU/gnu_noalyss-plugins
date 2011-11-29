@@ -11,7 +11,7 @@ Filtrer : <?=$filter->input()?>
 <?=HtmlInput::submit('transfer_record','Transfèrer')?>
 </form>
 
-<table class="result">
+<table class="table_large">
 	<TR>
 	<th></th>
 	<TH>N° opération</TH>
