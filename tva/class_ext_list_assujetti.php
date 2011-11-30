@@ -249,7 +249,7 @@ where qs_client = $1 and j_id in (select distinct j_id from jrnx where  j_date >
    */
   function display_declaration_amount() {
     $res='<fieldset><legend>Listing</legend>';
-    $res.= '<table id="tb_dsp" class="result" style="width:80%;margin-left:5%">';
+    $res.= '<table id="tb_dsp" class="result" style="width:80%;">';
     $clean=new IButton();
     $clean->label='Efface ligne';
     $clean->javascript="deleteRow('tb_dsp',this);";
