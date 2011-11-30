@@ -33,7 +33,7 @@ require_once('class_html_table.php');
 Extension::check_version(4400);
 global $cn;
 echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=importation_de_banque" target="_blank">Aide</a>'.
-'<span style="font-size:0.7em;color:red;display:inline">vers:SVNINFO</span>'.
+'<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
 '</div>';
 $cn=new Database(dossier::id());
 
