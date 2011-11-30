@@ -27,6 +27,9 @@ Extension::check_version(4400);
 $str=new IConcerned("jr_id");
 $str->value=(isset($_GET['jr_id']))?strtoupper($_GET['jr_id']):'';
 $str->value=(isset($_GET['ext_jr_id']))?strtoupper($_GET['ext_jr_id']):$str->value;
+echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=modification_d_operation" target="_blank">Aide</a>'.
+'<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
+'</div>';
 
 
 
