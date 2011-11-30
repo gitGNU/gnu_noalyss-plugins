@@ -30,7 +30,7 @@
 Extension::check_version(4400);
 global $cn;
 echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=importation_de_plan_comptable" target="_blank">Aide</a>'.
-'<span style="font-size:0.7em;color:red;display:inline">SVNINFO</span>'.
+'<span style="font-size:0.7em;color:red;display:inline">vers:SVNINFO</span>'.
 '</div>';
 $cn=new Database(dossier::id());
 /*

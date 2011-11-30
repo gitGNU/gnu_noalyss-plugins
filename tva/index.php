@@ -89,7 +89,7 @@ if ( $a == false)
   $cn->exec_sql("alter table tva_belge.assujetti add exercice text");
 
 echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=tva" target="_blank">Aide</a>'.
-'<span style="font-size:0.7em;color:red;display:inline">SVNINFO</span>'.
+'<span style="font-size:0.7em;color:red;display:inline">vers:SVNINFO</span>'.
 '</div>';
 // show menu
 echo ShowItem($array,'H',"mtitle","mtitle",$def,' style="width:80%;margin-left:10%;border-spacing:5;" ');
