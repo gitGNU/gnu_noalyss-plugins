@@ -54,7 +54,9 @@ switch($sa)
 
 $cn=new Database(dossier::id());
 // show menu
-echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=outil_comptable" target="_blank">Aide</a></div>';
+echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=outil_comptable" target="_blank">Aide</a>'.
+'<span style="font-size:0.33em;color:red;display:inline">SVNINFO</span>'.
+'</div>';
 
 echo ShowItem($array,'H','mtitle ','mtitle ',$def,' style="width:80%;margin-left:10%;border-collapse: separate;border-spacing:  5px;"');
 require_once('include/tool_function.php');

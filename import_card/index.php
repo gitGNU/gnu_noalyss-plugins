@@ -29,7 +29,9 @@
  */
 require_once('include/class_import_card.php');
 global $cn;
-echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=importation_de_fiche" target="_blank">Aide</a></div>';
+echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=importation_de_fiche" target="_blank">Aide</a>'.
+'<span style="font-size:0.33em;color:red;display:inline">SVNINFO</span>'.
+'</div>';
 $cn=new Database(dossier::id());
 if ( ! isset($_REQUEST['sa']))
   {
