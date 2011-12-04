@@ -140,7 +140,7 @@ for ($i = 0;$i < $nb_row;$i++) :
 
 
 	<TR <?=$odd?> >
-	<TD><?=$row['jr_str_date']?></TD>
+	<TD><?=$row['str_jr_date']?></TD>
 	<td><?=HtmlInput::detail_op($row['jr_id'],$row['jr_internal'])?></td>
 	<td><?=$row['jr_pj_number']?></td>
 	<td><?=$row['jrn_def_name']?></td>
