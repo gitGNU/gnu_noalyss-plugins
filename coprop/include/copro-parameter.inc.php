@@ -1,0 +1,108 @@
+<?php
+
+/*
+ *   This file is part of PhpCompta.
+ *
+ *   PhpCompta is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version.
+ *
+ *   PhpCompta is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with PhpCompta; if not, write to the Free Software
+ *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ */
+/* $Revision$ */
+
+// Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
+
+/**
+ * @file
+ * @brief table parametre pour les copropriétés
+ *
+ */
+require_once 'class_copro_parameter.php';
+global $cn,$g_copro_parameter;
+
+if ( isset ($_POST['save']))
+{
+	$cn->start();
+	try {
+		$g_copro_parameter->save('categorie_lot',$_POST['categorie_lot']);
+		$g_copro_parameter->save('categorie_coprop',$_POST['categorie_coprop']);
+		$g_copro_parameter->save('poste_appel',$_POST['poste_appel']);
+		$g_copro_parameter->save('journal_appel',$_POST['journal_appel']);
+	}
+	catch(Exception $e)
+	{
+		$cn->rollback();
+		echo $e->getTraceAsString();
+	}
+	$cn->commit();
+}
+$g_copro_parameter=new Copro_Parameter();
+/*
+ * Liste paramètres
+ */
+$cat_lot=new ISelect('categorie_lot');
+$cat_lot->value=$cn->make_array("select fd_id,fd_label from fiche_def order by fd_label");
+$cat_lot->selected=$g_copro_parameter->categorie_lot;
+
+$cat_coprop=new ISelect('categorie_coprop');
+$cat_coprop->value=$cn->make_array("select fd_id,fd_label from fiche_def order by fd_label");
+$cat_coprop->selected=$g_copro_parameter->categorie_coprop;
+
+$journal_appel=new ISelect('journal_appel');
+$journal_appel->value=$cn->make_array("select jrn_def_id,jrn_def_name from jrn_def where jrn_def_type='ODS' order by 2");
+$journal_appel->selected=$g_copro_parameter->journal_appel;
+
+$poste_appel=new IPoste('poste_appel');
+$poste_appel->set_attribute('gDossier',Dossier::id());
+$poste_appel->set_attribute('jrn',0);
+$poste_appel->set_attribute('account','poste_appel');
+
+$poste_appel->value=$g_copro_parameter->poste_appel;
+
+?>
+<form method="POST">
+<table>
+	<tr>
+		<td>
+			Catégorie de fiches pour les lots
+		</td>
+		<td>
+			<?=$cat_lot->input()?>
+		</td>
+	</tr>
+		<tr>
+		<td>
+			Catégorie de fiches pour les copropriétaires
+		</td>
+		<td>
+			<?=$cat_coprop->input();?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Poste comptable par défaut pour les appels de fond
+		</td>
+		<td>
+			<?=$poste_appel->input();?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Journal Appel de fond
+		</td>
+		<td>
+			<?=$journal_appel->input();?>
+		</td>
+	</tr>
+</table>
+	<?=HtmlInput::submit("save","Sauver")?>
+</form>

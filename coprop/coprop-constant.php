@@ -8,9 +8,10 @@
  */
 
 require_once ('class_database.php');
-require_once 'include/class_SKEL_parameter.php');
+require_once 'include/class_copro_parameter.php';
+global $cn,$g_copro_parameter,$gDossier;
 
-global $cn,$g_SKEL_parameter;
-$cn=new Database (dossier::id());
-$g_SKEL_parameter=new SKEL_Parameter();
+$gDossier=Dossier::id();
+$g_copro_parameter=new Copro_Parameter();
+
 ?>

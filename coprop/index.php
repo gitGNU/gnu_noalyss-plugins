@@ -27,95 +27,93 @@
 /*
  * load javascript
  */
+
+require_once 'class_acc_ledger.php';
+
 ob_start();
-require_once('skel_javascript.js');
+require_once('coprop-javascript.js');
 $j=ob_get_contents();
 ob_clean();
 echo create_script($j);
 
 $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&ac='.$_REQUEST['ac'];
-
 $array=array (
-         array($url.'&sa=dec',_('Déclaration TVA'),_('Déclaration Trimestriel ou annuel de TVA'),1),
-         array($url.'&sa=li',_('Listing intracommunautaire'),_('Listing intracommunautaire trimestriel'),2),
-         array($url.'&sa=lc',_('Listing Assujetti'),_('Listing des clients assujettis'),3),
-         array($url.'&sa=ltva',_('Liste des déclarations TVA'),_('Historique des déclarations TVA'),4),
-         array($url.'&sa=param',_('Paramètrage '),_('Paramètre pour la TVA'),5)
+         array($url.'&sa=lot',_('Lot'),_('Listes des lots et liaison copro'),1),
+         array($url.'&sa=cle',_('Clef de répartition'),_('Clef de répartition'),2),
+         array($url.'&sa=af',_('Appel de fond'),_('Création décompte pour appel de fond'),3),
+         array($url.'&sa=pa',_('Paramètre'),_('Configuration et paramètre'),4)
        );
 
 $sa=(isset($_REQUEST['sa']))?$_REQUEST['sa']:0;
 $def=0;
 switch($sa)
   {
-  case 'dec':
+  case 'lot':
     $def=1;
     break;
-  case 'li':
+  case 'cle':
     $def=2;
     break;
-  case 'lc':
+  case 'af':
     $def=3;
     break;
-  case 'ltva':
+  case 'pa':
     $def=4;
     break;
-  case 'param':
-    $def=5;
-    break;
-
   }
 
 $cn=new Database(dossier::id());
-if ( $cn->exist_schema('tva_belge') == false)
+if ( $cn->exist_schema('coprop') == false)
   {
     require_once('include/class_install_plugin.php');
 
     $iplugn=new Install_Plugin($cn);
     $iplugn->install();
-    /**
-     *@todo améliorer le message, peu cosmétique
-     */
     echo_warning(_("L'extension est installée, pourriez-vous en vérifier le paramètrage ?"));
-    $def=5;
+	// Affiche paramètre
+    $def=4;
   }
-
+require_once('coprop-constant.php');
 // show menu
-echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=aide" target="_blank">Aide</a>'.
+echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=plugin:copropriété" target="_blank">Aide</a>'.
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
 '</div>';
 
-echo ShowItem($menu,'H','mtitle ','mtitle ',$def,' style="width:80%;margin-left:10%;border-collapse: separate;border-spacing:  5px;"');
+echo ShowItem($array,'H','mtitle ','mtitle ',$def,' class="topmenu"');
 
 // include the right file
+/*
+ * Lot
+ */
 if ($def==1)
   {
-    require_once('include/decl_tva.inc.php');
+    require_once('include/lot.inc.php');
     exit();
   }
 
-/* Listing of all */
+/*
+ * Paramètre
+ */
 if ($def==4)
   {
-    require_once('include/list_tva.inc.php');
+    require_once('include/copro-parameter.inc.php');
     exit();
   }
-/* listing intracomm */
+/*
+ * Clef
+ */
 if ($def==2)
   {
-    require_once('include/list_intra.inc.php');
+    require_once('include/key.inc.php');
     exit();
   }
-/* listing assujetti */
+/*
+ * Appel de fond
+ */
 if ($def==3)
   {
-    require_once('include/list_assujetti.inc.php');
+    require_once('include/appel_fond.inc.php');
     exit();
   }
 
-/* setting */
-if ( $def==5)
-  {
-    require_once('include/tva_param.inc.php');
-    exit();
-  }
 ?>

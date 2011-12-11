@@ -1,0 +1,1 @@
+Extension pour les copropriétés
