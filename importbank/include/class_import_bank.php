@@ -312,8 +312,7 @@ class Import_Bank
 
 
             $acc_op->type="c";
-            $acc_op->poste="";
-            $acc_op->desc=$row->tp_third." ".$row->libelle." ".$row->tp_extra;
+            $acc_op->poste=$poste_comptable;
             $acc_op->amount=$row->amount;
 	    $acc_op->f_id=$row->f_id;
             $acc_op->qcode=$quick_code;
