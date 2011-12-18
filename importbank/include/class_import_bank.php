@@ -297,7 +297,7 @@ class Import_Bank
 
             $acc_op=new Acc_Operation($cn);
             $acc_op->amount=$row->amount;
-	    $acc_op->desc=$bank_name;
+	    $acc_op->desc="";
             $acc_op->type="d";
             $acc_op->date=$row->tp_date;
             $acc_op->user=$p_user;
@@ -312,13 +312,14 @@ class Import_Bank
 
 
             $acc_op->type="c";
-            $acc_op->poste=$poste_comptable;
+            $acc_op->poste="";
             $acc_op->desc=$row->tp_third." ".$row->libelle." ".$row->tp_extra;
             $acc_op->amount=$row->amount;
 	    $acc_op->f_id=$row->f_id;
             $acc_op->qcode=$quick_code;
             $r=$acc_op->insert_jrnx();
 
+            $acc_op->desc=$row->tp_third." ".$row->libelle." ".$row->tp_extra;
             $jr_id=$acc_op->insert_jrn();
 
             $internal=$fin_ledger->compute_internal_code($seq);
