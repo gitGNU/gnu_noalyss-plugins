@@ -49,7 +49,7 @@ if ( isset($_POST['remove']))
       {
 	if ( isset($_POST['p_sel'][$i]))
 	  {
-	    $cn->exec_sql("update amortissement.amortissement_histo set h_amount=0,h_pj='',jr_internal='' where ha_id=$1",
+	    $cn->exec_sql("update amortissement.amortissement_histo set h_amount=0,h_pj='',jr_internal=null where ha_id=$1",
 			  array($_POST['h'][$i]));
 	  }
       }
