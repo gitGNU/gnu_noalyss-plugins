@@ -27,6 +27,19 @@
  *
  */
 global $cn,$g_copro_parameter;
+if ( isset($_POST['copro_new']))
+{
+	var_dump($_POST);
+	$cp=new Copro_List();
+	try
+	{
+		$cp->insert($_POST);
+	}
+	catch(Exception $e)
+	{
+		echo $e->getTraceAsString();
+	}
+}
 //require_once 'include/class_coprop-lot_coprop.php';
 /* Add button */
 $f_add_button=new IButton('add_card');
@@ -56,11 +69,14 @@ $sql_lot=$cn->prepare ("lot","select jcl_lot, (select ad_value from fiche_detail
 	(select ad_value from fiche_detail where f_id=jcl_lot and ad_id=23) as lot_qcode from coprop.jnt_coprop_lot where jcl_id=$1");
 
 echo $f_add_button->input();
-require_once 'template/list_copro_lot.php';
+echo '<div class="content" id="listcoprolot">';
+require_once 'template/coprop_lot_list.php';
+echo '</div>';
+
+echo '<div class="content" id="ajoutcopro" style="display:none">';
+require_once('template/coprop_lot_add.php');
+
+echo '</div>';
 echo $f_add_button->input();
-/**
- * @todo
- * Bouton pour ajouter une fiche de lot ou copro (comme dans menu ach/ven...)
- */
 
 ?>

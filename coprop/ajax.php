@@ -7,9 +7,10 @@ global $cn;
 $html='';$extra='';$ctl='';
 ob_start();
 switch($act) {
-case 'dsp_decl':
+	// ajout un lien copro + lot
+case 'addcopro':
   /* the hide button */
-  require_once('include/ajax_dsp.php');
+  require_once('include/ajax_add_copro_lot.php');
   break;
 default:
 

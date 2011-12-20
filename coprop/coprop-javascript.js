@@ -23,12 +23,26 @@ function add_coprop()
 {
 	try
 	{
-		alert('Modifier un copropriétaire et ses lots');
+		$('listcoprolot').hide();
+		$('ajoutcopro').show();
 	}
 	catch(e)
 	{
 		alert(e.message);
 	}
+}
+function copro_show_list()
+{
+	try
+	{
+		$('listcoprolot').show();
+		$('ajoutcopro').hide();
+	}
+	catch(e)
+	{
+		alert(e.message);
+	}
+
 }
 /**
  * Ajout clef + tantième lot associés

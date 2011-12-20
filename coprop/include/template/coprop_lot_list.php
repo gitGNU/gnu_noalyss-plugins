@@ -63,5 +63,5 @@ endfor;
 
 </table>
 <?
-echo HtmlInput::button("add_link","Ajout Copropriétaire / lot ","onclick=\"add_coprop('$gDossier')\"");
+echo HtmlInput::button("add_link","Ajout Copropriétaire / lot ","onclick=\"add_coprop()\"");
 ?>
