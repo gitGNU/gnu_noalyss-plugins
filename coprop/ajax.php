@@ -5,15 +5,18 @@ require_once('class_database.php');
 extract($_GET);
 global $cn;
 $html='';$extra='';$ctl='';
-ob_start();
-switch($act) {
+switch ($act)
+{
 	// ajout un lien copro + lot
-case 'addcopro':
-  /* the hide button */
-  require_once('include/ajax_add_copro_lot.php');
-  break;
-default:
+	case 'modcopro':
+		/* the hide button */
+		require_once('include/ajax_mod_copro_lot.php');
+		break;
+	case 'removelot':
+		$cn->exec_sql("delete from coprop.lot where l_id=$1",array($lot_id));
+		break;
+	default:
 
-	var_dump($_GET);
+		var_dump($_GET);
 }
 ?>

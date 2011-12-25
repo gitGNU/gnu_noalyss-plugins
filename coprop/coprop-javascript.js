@@ -5,11 +5,71 @@
 /**
  * Modifier un copropriétaire et les lots qu'il a
  */
-function mod_coprop(dossier,copro_qcode,plugin_code)
+function mod_coprop(dossier,coprop_id,plugin_code,ac)
 {
+	waiting_box();
 	try
 	{
-		alert('Modifier un copropriétaire et ses lots');
+		var queryString="plugin_code="+plugin_code+"&gDossier="+dossier+"&coprop_id="+coprop_id+'&ac='+ac+"&act=modcopro";
+		var action=new Ajax.Request ( 'ajax.php',
+		{
+			method:'get',
+			parameters:queryString,
+			onFailure:null,
+			onSuccess:function (response)
+			{
+				try
+				{
+					remove_waiting_box();
+					$('listcoprolot').hide();
+					$('ajoutcopro').hide();
+					$('divcopropmod').innerHTML=response.responseText;
+					//response.responseText.evalScripts();
+				}
+				catch(e)
+				{
+					alert("Réponse Ajax ="+e.message);
+				}
+			}
+		}
+		);
+	}
+	catch(e)
+	{
+		alert(e.message);
+	}
+}
+function remove_lot(plugin_code,ac,dossier,lot_id)
+{
+	if (! confirm("Vous voulez enlever ce lot ?")) { return;}
+	waiting_box();
+	try
+	{
+		var queryString="plugin_code="+plugin_code+"&gDossier="+dossier+"&lot_id="+lot_id+'&ac='+ac+"&act=removelot";
+		var action=new Ajax.Request ( 'ajax.php',
+		{
+			method:'get',
+			parameters:queryString,
+			onFailure:null,
+			onSuccess:function (response)
+			{
+				try
+				{
+					remove_waiting_box();
+					alert("lot_id="+lot_id);
+					$("row"+lot_id).style.color="red";
+					$("row"+lot_id).style.textDecoration="line-through";
+					$("col"+lot_id).innerHTML="Enlevé";
+
+					//response.responseText.evalScripts();
+				}
+				catch(e)
+				{
+					alert("Réponse Ajax ="+e.message);
+				}
+			}
+		}
+		);
 	}
 	catch(e)
 	{

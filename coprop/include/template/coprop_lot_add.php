@@ -66,6 +66,17 @@ echo $f_copro_bt;
 echo $f_copro;
 echo HtmlInput::hidden('p_jrn',$g_copro_parameter->journal_appel);
 echo HtmlInput::hidden('ledger_type','ODS');
+$alot=$cn->get_array("select f_id,
+		(select ad_value from fiche_Detail as e where ad_id=1 and e.f_id=a.f_id) as fname,
+		(select ad_value from fiche_Detail as f where ad_id=23 and f.f_id=a.f_id) as fqcode
+		from fiche as a
+		where
+		fd_id=$1
+		", array($g_copro_parameter->categorie_lot));
+if ( count($alot)==0) {
+	echo h2info('Aucune fiche de lot');
+	exit();
+}
 ?>
 <table>
 	<tr>
@@ -73,51 +84,22 @@ echo HtmlInput::hidden('ledger_type','ODS');
 		<th>Pourcentage</th>
 	</tr>
 <?
-for ($i=0;$i<20;$i++):
-	$lot=new ICard();
-  $lot->label="Lot : ".HtmlInput::infobulle(0) ;
-  $lot->name="w_lot".$i;
-  $lot->tabindex=1;
-  $lot->value="";
-  $lot->table=0;
-
- // name of the field to update with the name of the card
-  $lot->set_attribute('label','w_lot_label'.$i);
-  // Type of card : deb, cred,
-  $lot->set_attribute('typecard',$g_copro_parameter->categorie_lot);
-
-  $lot->extra=$g_copro_parameter->categorie_lot;
-
-// Add the callback function to filter the card on the jrn
-  $lot->set_callback('filter_card');
-  $lot->set_attribute('ipopup','ipopcard');
-// when value selected in the autcomplete
-  $lot->set_function('fill_data');
-
-// when the data change
-  $lot->javascript=sprintf(' onchange="fill_data_onchange(\'%s\');" ',
-            $lot->name);
-  $lot->set_dblclick("fill_ipopcard(this);");
-
-  $lot_label=new ISpan();
-  $lot_label->table=0;
-  $f_lot=$lot_label->input("w_lot_label".$i,"");
+for ($i=0;$i<count($alot);$i++):
 
 // Search button for card
-  $f_lot_bt=$lot->search();
   $num=new INum("lot_per".$i);
+  $ck=new ICheckBox("lot[]");
+  $ck->value=$alot[$i]['f_id'];
 ?>
 <tr>
 	<td>
-	<?=$f_lot_bt?>
-	<?=$lot->input()?>
+	<?=$ck->input()?>
+	</td>
+	<td>
+		<?=HtmlInput::card_detail($alot[$i]['fqcode'],$alot[$i]['fname'],' class="line" ')?>
 	</td>
 	<td>
 		<?=$num->input()?>
-	</td>
-	<td>
-
-		<?=$f_lot?>
 	</td>
 </tr>
 <? endfor;?>

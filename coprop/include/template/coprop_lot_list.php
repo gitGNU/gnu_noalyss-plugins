@@ -37,20 +37,19 @@ $gDossier=Dossier::id();
 	</tr>
 <?
 for ($i=0;$i<count($a_copro);$i++):
-	$col_copro=HtmlInput::anchor($a_copro[$i]['copro_name'],"","mod_coprop($gDossier,'".$a_copro[$i]['jcl_copro']."','".$_REQUEST['plugin_code']."'");
+	$col_copro=HtmlInput::anchor($a_copro[$i]['copro_name'],"","onclick=\"mod_coprop($gDossier,'".$a_copro[$i]['c_fiche_id']."','".$_REQUEST['plugin_code']."','".$_REQUEST['ac']."')\"");
 ?>
 	<tr>
-		<td><?=col_copro?></td>
-	</tr>
+		<td><?=$col_copro?></td>
 	<td>
 		<?
-			$rlot=$cn->execute('lot',$a_copro[$i]['jcl_id']);
+			$rlot=$cn->execute('lot',array($a_copro[$i]['c_fiche_id']));
 			$max=Database::num_row($rlot);
 			$sp="";
 			for ($e=0;$e<$max;$e++):
 				$row=Database::fetch_array($rlot,$e);
-				$js_lot=HtmlInput::card_detail($row['lot_qcode'],$row['lot_name']);
-				echo $js_lot.$sp;
+				$js_lot=HtmlInput::card_detail($row['lot_qcode'],$row['lot_name'],' class="line"');
+				echo $sp.$js_lot.nb($row['l_part']);
 				$sp=" , ";
 			endfor;
 		?>

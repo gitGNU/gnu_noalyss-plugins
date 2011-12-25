@@ -26,14 +26,43 @@
  * @brief liaison entre lot et copropriétaires
  *
  */
+require_once 'class_copro_lot.php';
 global $cn,$g_copro_parameter;
 if ( isset($_POST['copro_new']))
 {
 	var_dump($_POST);
-	$cp=new Copro_List();
+	$cp=new Copro_Lot();
 	try
 	{
 		$cp->insert($_POST);
+	}
+	catch(Exception $e)
+	{
+		echo $e->getTraceAsString();
+	}
+}
+// Ajout de lots
+if (isset($_POST['addlot']))
+{
+	var_dump($_POST);
+	$cp=new Copro_Lot();
+	try
+	{
+		$cp->add_lot($_POST);
+	}
+	catch(Exception $e)
+	{
+		echo $e->getTraceAsString();
+	}
+}
+// Mise à jour lots existants
+if ( isset($_POST['updexist']))
+{
+		var_dump($_POST);
+	$cp=new Copro_Lot();
+	try
+	{
+		$cp->update_lot($_POST);
 	}
 	catch(Exception $e)
 	{
@@ -53,20 +82,22 @@ $f_add_button->javascript=" this.filter='$filter';this.jrn=-1;select_card_type(t
 /*
  * Liste
  */
-$sql=" select jcl_id,
-	jcl_copro,
-	(select ad_value from fiche_detail where f_id=jcl_copro and ad_id=1) as coprop_name,
-	(select ad_value from fiche_detail where f_id=jcl_copro and ad_id=23) as coprop_qcode
+$sql=" select distinct
+	c_fiche_id,
+	(select ad_value from fiche_detail where f_id=c_fiche_id and ad_id=1) as copro_name,
+	(select ad_value from fiche_detail where f_id=c_fiche_id and ad_id=23) as copro_qcode
+
 	from
-	coprop.jnt_coprop_lot
+	coprop.coproprietaire
 	";
 /**
  * @todo ajouter tri
  */
 $a_copro=$cn->get_array($sql);
 
-$sql_lot=$cn->prepare ("lot","select jcl_lot, (select ad_value from fiche_detail where f_id=jcl_lot and ad_id=1) as lot_name,
-	(select ad_value from fiche_detail where f_id=jcl_lot and ad_id=23) as lot_qcode from coprop.jnt_coprop_lot where jcl_id=$1");
+$sql_lot=$cn->prepare ("lot","select coprop_fk, (select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=1) as lot_name,
+	(select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=23) as lot_qcode,l_part
+	from coprop.lot where coprop_fk=$1");
 
 echo $f_add_button->input();
 echo '<div class="content" id="listcoprolot">';
@@ -77,6 +108,7 @@ echo '<div class="content" id="ajoutcopro" style="display:none">';
 require_once('template/coprop_lot_add.php');
 
 echo '</div>';
+echo '<div id="divcopropmod"></div>';
 echo $f_add_button->input();
 
 ?>
