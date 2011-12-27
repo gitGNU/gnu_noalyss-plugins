@@ -107,11 +107,32 @@ function copro_show_list()
 /**
  * Ajout clef + tantième lot associés
  */
-function add_key()
+function add_key(dossier,plugin_code,ac)
 {
+	waiting_box();
 	try
 	{
-		alert('Ajout clef + tantième lot associés');
+		var queryString="plugin_code="+plugin_code+"&gDossier="+dossier+'&ac='+ac+"&act=addkey";
+		var action=new Ajax.Request ( 'ajax.php',
+		{
+			method:'get',
+			parameters:queryString,
+			onFailure:null,
+			onSuccess:function (response)
+			{
+				try
+				{
+					remove_waiting_box();
+					$('keydetail_div').innerHTML=response.responseText;
+					response.responseText.evalScripts();
+				}
+				catch(e)
+				{
+					alert("Réponse Ajax ="+e.message);
+				}
+			}
+		}
+		);
 	}
 	catch(e)
 	{
@@ -121,14 +142,40 @@ function add_key()
 /**
  * Modifie clef + tantième lot associés
  */
-function mod_key()
+function mod_key(dossier,plugin_code,ac,key_id)
 {
+	waiting_box();
 	try
 	{
-		alert('Modifie clef + tantième lot associés');
+		var queryString="plugin_code="+plugin_code+"&gDossier="+dossier+"&key_id="+key_id+'&ac='+ac+"&act=modkey";
+		var action=new Ajax.Request ( 'ajax.php',
+		{
+			method:'get',
+			parameters:queryString,
+			onFailure:null,
+			onSuccess:function (response)
+			{
+				try
+				{
+					remove_waiting_box();
+					$('keydetail_div').innerHTML=response.responseText;
+					response.responseText.evalScripts();
+
+				}
+				catch(e)
+				{
+					alert("Réponse Ajax ="+e.message);
+				}
+			}
+		}
+		);
 	}
 	catch(e)
 	{
 		alert(e.message);
 	}
+}
+function del_key(plugin_code,ac,dossier,lot_id)
+{
+
 }

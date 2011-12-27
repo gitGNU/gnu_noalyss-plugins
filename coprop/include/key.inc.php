@@ -26,7 +26,25 @@
  * @brief gestion des clefs de répartitions
  *
  */
+require_once 'class_copro_key.php';
 global $cn,$gDossier;
+
+// ajout nouvelle clef
+if ( isset($_POST['add_key']))
+{
+	$a=new Copro_key();
+	$a->insert($_POST);
+}
+
+// Mise à jour
+if ( isset($_POST['mod_key']))
+{
+	$a=new Copro_key();
+	$a->cr_id=$_POST['cr_id'];
+	$a->update($_POST);
+}
+
+
 $sql="select cr_id,cr_name,cr_note,cr_start,cr_end from coprop.clef_repartition ";
 /**
  * @todo ajouter tri
@@ -51,8 +69,8 @@ $a_key=$cn->get_array($sql);
 	</tr>
 <?
 for ($i=0;$i < count($a_key);$i++):
-	$js=sprintf("mod_key(\'%s\',\'%s\',\'%s\')",$gDossier,$a_key[$i]['cr_id'],$_REQUEST['plugin_code']);
-	$mod_key=HtmlInput::anchor($a_key[$i]['cr_name'],"",$js);
+	$js=sprintf("mod_key('%s','%s','%s','%s')",$gDossier,$_REQUEST['plugin_code'],$_REQUEST['ac'],$a_key[$i]['cr_id']);
+	$mod_key=HtmlInput::anchor($a_key[$i]['cr_name'],"","onclick=\"$js\"");
 ?>
 	<tr>
 		<td>
@@ -62,7 +80,7 @@ for ($i=0;$i < count($a_key);$i++):
 			<?=$a_key[$i]['cr_note']?>
 		</td>
 		<td>
-			<?=format_date($a_key[$i]['cr_date'])?>
+			<?=format_date($a_key[$i]['cr_start'])?>
 		</td>
 		<td>
 			<?=format_date($a_key[$i]['cr_end'])?>
@@ -72,4 +90,8 @@ for ($i=0;$i < count($a_key);$i++):
 endfor;
 ?>
 </table>
-<?=HtmlInput::button("add_key","Ajout clef","onclick=\"add_key('".$gDossier."')\"")?>
+<? $js=sprintf("add_key('%s','%s','%s')",$gDossier,$_REQUEST['plugin_code'],$_REQUEST['ac']);
+ echo HtmlInput::button("add_key","Ajout clef","onclick=\"$js\"");
+	?>
+
+<div id="keydetail_div"></div>

@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.0.4
 -- Dumped by pg_dump version 9.0.4
--- Started on 2011-12-11 16:40:35 CET
+-- Started on 2011-12-27 13:17:14 CET
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -15,24 +15,20 @@ SET escape_string_warning = off;
 
 --
 -- TOC entry 8 (class 2615 OID 7283076)
--- Name: coprop; Type: SCHEMA; Schema: -; Owner: dany
+-- Name: coprop; Type: SCHEMA; Schema: -; Owner: -
 --
 
 CREATE SCHEMA coprop;
 
 
-ALTER SCHEMA coprop OWNER TO dany;
-
 SET search_path = coprop, pg_catalog;
-
-SET default_tablespace = '';
 
 SET default_with_oids = false;
 
 --
--- TOC entry 2087 (class 1259 OID 7283087)
+-- TOC entry 2090 (class 1259 OID 7283087)
 -- Dependencies: 8
--- Name: clef_repartition; Type: TABLE; Schema: coprop; Owner: dany; Tablespace: 
+-- Name: clef_repartition; Type: TABLE; Schema: coprop; Owner: -
 --
 
 CREATE TABLE clef_repartition (
@@ -44,12 +40,10 @@ CREATE TABLE clef_repartition (
 );
 
 
-ALTER TABLE coprop.clef_repartition OWNER TO dany;
-
 --
--- TOC entry 2086 (class 1259 OID 7283085)
--- Dependencies: 2087 8
--- Name: clef_repartition_cr_id_seq; Type: SEQUENCE; Schema: coprop; Owner: dany
+-- TOC entry 2089 (class 1259 OID 7283085)
+-- Dependencies: 8 2090
+-- Name: clef_repartition_cr_id_seq; Type: SEQUENCE; Schema: coprop; Owner: -
 --
 
 CREATE SEQUENCE clef_repartition_cr_id_seq
@@ -60,46 +54,33 @@ CREATE SEQUENCE clef_repartition_cr_id_seq
     CACHE 1;
 
 
-ALTER TABLE coprop.clef_repartition_cr_id_seq OWNER TO dany;
-
 --
--- TOC entry 2399 (class 0 OID 0)
--- Dependencies: 2086
--- Name: clef_repartition_cr_id_seq; Type: SEQUENCE OWNED BY; Schema: coprop; Owner: dany
+-- TOC entry 2406 (class 0 OID 0)
+-- Dependencies: 2089
+-- Name: clef_repartition_cr_id_seq; Type: SEQUENCE OWNED BY; Schema: coprop; Owner: -
 --
 
 ALTER SEQUENCE clef_repartition_cr_id_seq OWNED BY clef_repartition.cr_id;
 
 
 --
--- TOC entry 2400 (class 0 OID 0)
--- Dependencies: 2086
--- Name: clef_repartition_cr_id_seq; Type: SEQUENCE SET; Schema: coprop; Owner: dany
---
-
-SELECT pg_catalog.setval('clef_repartition_cr_id_seq', 1, false);
-
-
---
--- TOC entry 2089 (class 1259 OID 7283136)
--- Dependencies: 2379 8
--- Name: clef_repartition_detail; Type: TABLE; Schema: coprop; Owner: dany; Tablespace: 
+-- TOC entry 2092 (class 1259 OID 7283136)
+-- Dependencies: 2384 8
+-- Name: clef_repartition_detail; Type: TABLE; Schema: coprop; Owner: -
 --
 
 CREATE TABLE clef_repartition_detail (
     crd_id integer NOT NULL,
-    crd_lot bigint,
+    lot_fk bigint,
     crd_amount numeric(20,4) DEFAULT 0,
     cr_id bigint
 );
 
 
-ALTER TABLE coprop.clef_repartition_detail OWNER TO dany;
-
 --
--- TOC entry 2088 (class 1259 OID 7283134)
--- Dependencies: 8 2089
--- Name: clef_repartition_detail_crd_id_seq; Type: SEQUENCE; Schema: coprop; Owner: dany
+-- TOC entry 2091 (class 1259 OID 7283134)
+-- Dependencies: 8 2092
+-- Name: clef_repartition_detail_crd_id_seq; Type: SEQUENCE; Schema: coprop; Owner: -
 --
 
 CREATE SEQUENCE clef_repartition_detail_crd_id_seq
@@ -110,48 +91,43 @@ CREATE SEQUENCE clef_repartition_detail_crd_id_seq
     CACHE 1;
 
 
-ALTER TABLE coprop.clef_repartition_detail_crd_id_seq OWNER TO dany;
-
 --
--- TOC entry 2401 (class 0 OID 0)
--- Dependencies: 2088
--- Name: clef_repartition_detail_crd_id_seq; Type: SEQUENCE OWNED BY; Schema: coprop; Owner: dany
+-- TOC entry 2407 (class 0 OID 0)
+-- Dependencies: 2091
+-- Name: clef_repartition_detail_crd_id_seq; Type: SEQUENCE OWNED BY; Schema: coprop; Owner: -
 --
 
 ALTER SEQUENCE clef_repartition_detail_crd_id_seq OWNED BY clef_repartition_detail.crd_id;
 
 
 --
--- TOC entry 2402 (class 0 OID 0)
--- Dependencies: 2088
--- Name: clef_repartition_detail_crd_id_seq; Type: SEQUENCE SET; Schema: coprop; Owner: dany
---
-
-SELECT pg_catalog.setval('clef_repartition_detail_crd_id_seq', 1, false);
-
-
---
--- TOC entry 2091 (class 1259 OID 7283155)
+-- TOC entry 2096 (class 1259 OID 7302202)
 -- Dependencies: 8
--- Name: jnt_coprop_lot; Type: TABLE; Schema: coprop; Owner: dany; Tablespace: 
+-- Name: coproprietaire; Type: TABLE; Schema: coprop; Owner: -
 --
 
-CREATE TABLE jnt_coprop_lot (
-    jcl_id integer NOT NULL,
-    jcl_copro bigint,
-    jcl_lot bigint
+CREATE TABLE coproprietaire (
+    c_id integer NOT NULL,
+    c_fiche_id bigint
 );
 
 
-ALTER TABLE coprop.jnt_coprop_lot OWNER TO dany;
-
 --
--- TOC entry 2090 (class 1259 OID 7283153)
--- Dependencies: 8 2091
--- Name: jnt_coprop_lot_jlc_id_seq; Type: SEQUENCE; Schema: coprop; Owner: dany
+-- TOC entry 2408 (class 0 OID 0)
+-- Dependencies: 2096
+-- Name: TABLE coproprietaire; Type: COMMENT; Schema: coprop; Owner: -
 --
 
-CREATE SEQUENCE jnt_coprop_lot_jlc_id_seq
+COMMENT ON TABLE coproprietaire IS 'Liste des copropriétaires';
+
+
+--
+-- TOC entry 2095 (class 1259 OID 7302200)
+-- Dependencies: 8 2096
+-- Name: coproprietaire_c_id_seq; Type: SEQUENCE; Schema: coprop; Owner: -
+--
+
+CREATE SEQUENCE coproprietaire_c_id_seq
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -159,30 +135,65 @@ CREATE SEQUENCE jnt_coprop_lot_jlc_id_seq
     CACHE 1;
 
 
-ALTER TABLE coprop.jnt_coprop_lot_jlc_id_seq OWNER TO dany;
-
 --
--- TOC entry 2403 (class 0 OID 0)
--- Dependencies: 2090
--- Name: jnt_coprop_lot_jlc_id_seq; Type: SEQUENCE OWNED BY; Schema: coprop; Owner: dany
+-- TOC entry 2409 (class 0 OID 0)
+-- Dependencies: 2095
+-- Name: coproprietaire_c_id_seq; Type: SEQUENCE OWNED BY; Schema: coprop; Owner: -
 --
 
-ALTER SEQUENCE jnt_coprop_lot_jlc_id_seq OWNED BY jnt_coprop_lot.jcl_id;
+ALTER SEQUENCE coproprietaire_c_id_seq OWNED BY coproprietaire.c_id;
 
 
 --
--- TOC entry 2404 (class 0 OID 0)
--- Dependencies: 2090
--- Name: jnt_coprop_lot_jlc_id_seq; Type: SEQUENCE SET; Schema: coprop; Owner: dany
+-- TOC entry 2094 (class 1259 OID 7302189)
+-- Dependencies: 2386 8
+-- Name: lot; Type: TABLE; Schema: coprop; Owner: -
 --
 
-SELECT pg_catalog.setval('jnt_coprop_lot_jlc_id_seq', 1, false);
+CREATE TABLE lot (
+    l_id integer NOT NULL,
+    l_fiche_id bigint,
+    l_part numeric(20,4) DEFAULT 0,
+    coprop_fk bigint NOT NULL
+);
 
 
 --
--- TOC entry 2085 (class 1259 OID 7283077)
+-- TOC entry 2410 (class 0 OID 0)
+-- Dependencies: 2094
+-- Name: TABLE lot; Type: COMMENT; Schema: coprop; Owner: -
+--
+
+COMMENT ON TABLE lot IS 'liste des Lots';
+
+
+--
+-- TOC entry 2093 (class 1259 OID 7302187)
+-- Dependencies: 2094 8
+-- Name: lot_l_id_seq; Type: SEQUENCE; Schema: coprop; Owner: -
+--
+
+CREATE SEQUENCE lot_l_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- TOC entry 2411 (class 0 OID 0)
+-- Dependencies: 2093
+-- Name: lot_l_id_seq; Type: SEQUENCE OWNED BY; Schema: coprop; Owner: -
+--
+
+ALTER SEQUENCE lot_l_id_seq OWNED BY lot.l_id;
+
+
+--
+-- TOC entry 2088 (class 1259 OID 7283077)
 -- Dependencies: 8
--- Name: parameter; Type: TABLE; Schema: coprop; Owner: dany; Tablespace: 
+-- Name: parameter; Type: TABLE; Schema: coprop; Owner: -
 --
 
 CREATE TABLE parameter (
@@ -191,83 +202,46 @@ CREATE TABLE parameter (
 );
 
 
-ALTER TABLE coprop.parameter OWNER TO dany;
-
 --
--- TOC entry 2377 (class 2604 OID 7283090)
--- Dependencies: 2086 2087 2087
--- Name: cr_id; Type: DEFAULT; Schema: coprop; Owner: dany
+-- TOC entry 2382 (class 2604 OID 7283090)
+-- Dependencies: 2089 2090 2090
+-- Name: cr_id; Type: DEFAULT; Schema: coprop; Owner: -
 --
 
 ALTER TABLE clef_repartition ALTER COLUMN cr_id SET DEFAULT nextval('clef_repartition_cr_id_seq'::regclass);
 
 
 --
--- TOC entry 2378 (class 2604 OID 7283139)
--- Dependencies: 2088 2089 2089
--- Name: crd_id; Type: DEFAULT; Schema: coprop; Owner: dany
+-- TOC entry 2383 (class 2604 OID 7283139)
+-- Dependencies: 2091 2092 2092
+-- Name: crd_id; Type: DEFAULT; Schema: coprop; Owner: -
 --
 
 ALTER TABLE clef_repartition_detail ALTER COLUMN crd_id SET DEFAULT nextval('clef_repartition_detail_crd_id_seq'::regclass);
 
 
 --
--- TOC entry 2380 (class 2604 OID 7283158)
--- Dependencies: 2090 2091 2091
--- Name: jcl_id; Type: DEFAULT; Schema: coprop; Owner: dany
+-- TOC entry 2387 (class 2604 OID 7302205)
+-- Dependencies: 2095 2096 2096
+-- Name: c_id; Type: DEFAULT; Schema: coprop; Owner: -
 --
 
-ALTER TABLE jnt_coprop_lot ALTER COLUMN jcl_id SET DEFAULT nextval('jnt_coprop_lot_jlc_id_seq'::regclass);
-
-
---
--- TOC entry 2394 (class 0 OID 7283087)
--- Dependencies: 2087
--- Data for Name: clef_repartition; Type: TABLE DATA; Schema: coprop; Owner: dany
---
-
-COPY clef_repartition (cr_id, cr_name, cr_note, cr_start, cr_end) FROM stdin;
-\.
+ALTER TABLE coproprietaire ALTER COLUMN c_id SET DEFAULT nextval('coproprietaire_c_id_seq'::regclass);
 
 
 --
--- TOC entry 2395 (class 0 OID 7283136)
--- Dependencies: 2089
--- Data for Name: clef_repartition_detail; Type: TABLE DATA; Schema: coprop; Owner: dany
+-- TOC entry 2385 (class 2604 OID 7302192)
+-- Dependencies: 2094 2093 2094
+-- Name: l_id; Type: DEFAULT; Schema: coprop; Owner: -
 --
 
-COPY clef_repartition_detail (crd_id, crd_lot, crd_amount, cr_id) FROM stdin;
-\.
-
-
---
--- TOC entry 2396 (class 0 OID 7283155)
--- Dependencies: 2091
--- Data for Name: jnt_coprop_lot; Type: TABLE DATA; Schema: coprop; Owner: dany
---
-
-COPY jnt_coprop_lot (jcl_id, jcl_copro, jcl_lot) FROM stdin;
-\.
+ALTER TABLE lot ALTER COLUMN l_id SET DEFAULT nextval('lot_l_id_seq'::regclass);
 
 
 --
--- TOC entry 2393 (class 0 OID 7283077)
--- Dependencies: 2085
--- Data for Name: parameter; Type: TABLE DATA; Schema: coprop; Owner: dany
---
-
-COPY parameter (pr_id, pr_value) FROM stdin;
-categorie_lot	1
-categorie_coprop	2
-poste_appel	740
-journal_appel	4
-\.
-
-
---
--- TOC entry 2386 (class 2606 OID 7283142)
--- Dependencies: 2089 2089
--- Name: clef_repartition_detail_pkey; Type: CONSTRAINT; Schema: coprop; Owner: dany; Tablespace: 
+-- TOC entry 2393 (class 2606 OID 7283142)
+-- Dependencies: 2092 2092
+-- Name: clef_repartition_detail_pkey; Type: CONSTRAINT; Schema: coprop; Owner: -
 --
 
 ALTER TABLE ONLY clef_repartition_detail
@@ -275,9 +249,9 @@ ALTER TABLE ONLY clef_repartition_detail
 
 
 --
--- TOC entry 2384 (class 2606 OID 7283095)
--- Dependencies: 2087 2087
--- Name: clef_repartition_pkey; Type: CONSTRAINT; Schema: coprop; Owner: dany; Tablespace: 
+-- TOC entry 2391 (class 2606 OID 7283095)
+-- Dependencies: 2090 2090
+-- Name: clef_repartition_pkey; Type: CONSTRAINT; Schema: coprop; Owner: -
 --
 
 ALTER TABLE ONLY clef_repartition
@@ -285,9 +259,9 @@ ALTER TABLE ONLY clef_repartition
 
 
 --
--- TOC entry 2382 (class 2606 OID 7283084)
--- Dependencies: 2085 2085
--- Name: copro_parameter_pkey; Type: CONSTRAINT; Schema: coprop; Owner: dany; Tablespace: 
+-- TOC entry 2389 (class 2606 OID 7283084)
+-- Dependencies: 2088 2088
+-- Name: copro_parameter_pkey; Type: CONSTRAINT; Schema: coprop; Owner: -
 --
 
 ALTER TABLE ONLY parameter
@@ -295,19 +269,39 @@ ALTER TABLE ONLY parameter
 
 
 --
--- TOC entry 2388 (class 2606 OID 7283160)
--- Dependencies: 2091 2091
--- Name: jnt_coprop_lot_pkey; Type: CONSTRAINT; Schema: coprop; Owner: dany; Tablespace: 
+-- TOC entry 2397 (class 2606 OID 7302219)
+-- Dependencies: 2096 2096
+-- Name: coproprietaire_c_fiche_id_key; Type: CONSTRAINT; Schema: coprop; Owner: -
 --
 
-ALTER TABLE ONLY jnt_coprop_lot
-    ADD CONSTRAINT jnt_coprop_lot_pkey PRIMARY KEY (jcl_id);
+ALTER TABLE ONLY coproprietaire
+    ADD CONSTRAINT coproprietaire_c_fiche_id_key UNIQUE (c_fiche_id);
 
 
 --
--- TOC entry 2390 (class 2606 OID 7283148)
--- Dependencies: 2089 2087 2383
--- Name: clef_repartition_detail_cr_id_fkey; Type: FK CONSTRAINT; Schema: coprop; Owner: dany
+-- TOC entry 2399 (class 2606 OID 7302207)
+-- Dependencies: 2096 2096
+-- Name: coproprietaire_pkey; Type: CONSTRAINT; Schema: coprop; Owner: -
+--
+
+ALTER TABLE ONLY coproprietaire
+    ADD CONSTRAINT coproprietaire_pkey PRIMARY KEY (c_id);
+
+
+--
+-- TOC entry 2395 (class 2606 OID 7302194)
+-- Dependencies: 2094 2094
+-- Name: lot_pkey; Type: CONSTRAINT; Schema: coprop; Owner: -
+--
+
+ALTER TABLE ONLY lot
+    ADD CONSTRAINT lot_pkey PRIMARY KEY (l_id);
+
+
+--
+-- TOC entry 2400 (class 2606 OID 7283148)
+-- Dependencies: 2090 2390 2092
+-- Name: clef_repartition_detail_cr_id_fkey; Type: FK CONSTRAINT; Schema: coprop; Owner: -
 --
 
 ALTER TABLE ONLY clef_repartition_detail
@@ -315,36 +309,36 @@ ALTER TABLE ONLY clef_repartition_detail
 
 
 --
--- TOC entry 2389 (class 2606 OID 7283143)
--- Dependencies: 2089 1947
--- Name: clef_repartition_detail_crl_lot_fkey; Type: FK CONSTRAINT; Schema: coprop; Owner: dany
+-- TOC entry 2403 (class 2606 OID 7302208)
+-- Dependencies: 2096 1950
+-- Name: coproprietaire_c_fiche_id_fkey; Type: FK CONSTRAINT; Schema: coprop; Owner: -
 --
 
-ALTER TABLE ONLY clef_repartition_detail
-    ADD CONSTRAINT clef_repartition_detail_crl_lot_fkey FOREIGN KEY (crd_lot) REFERENCES public.fiche(f_id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- TOC entry 2391 (class 2606 OID 7283161)
--- Dependencies: 1947 2091
--- Name: jnt_coprop_lot_jcl_copro_fkey; Type: FK CONSTRAINT; Schema: coprop; Owner: dany
---
-
-ALTER TABLE ONLY jnt_coprop_lot
-    ADD CONSTRAINT jnt_coprop_lot_jcl_copro_fkey FOREIGN KEY (jcl_copro) REFERENCES public.fiche(f_id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY coproprietaire
+    ADD CONSTRAINT coproprietaire_c_fiche_id_fkey FOREIGN KEY (c_fiche_id) REFERENCES public.fiche(f_id) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED;
 
 
 --
--- TOC entry 2392 (class 2606 OID 7283166)
--- Dependencies: 1947 2091
--- Name: jnt_coprop_lot_jcl_lot_fkey; Type: FK CONSTRAINT; Schema: coprop; Owner: dany
+-- TOC entry 2402 (class 2606 OID 7302230)
+-- Dependencies: 2396 2094 2096
+-- Name: lot_coprop_fk_fkey; Type: FK CONSTRAINT; Schema: coprop; Owner: -
 --
 
-ALTER TABLE ONLY jnt_coprop_lot
-    ADD CONSTRAINT jnt_coprop_lot_jcl_lot_fkey FOREIGN KEY (jcl_lot) REFERENCES public.fiche(f_id) ON UPDATE CASCADE ON DELETE CASCADE;
+ALTER TABLE ONLY lot
+    ADD CONSTRAINT lot_coprop_fk_fkey FOREIGN KEY (coprop_fk) REFERENCES coproprietaire(c_fiche_id) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED;
 
 
--- Completed on 2011-12-11 16:40:35 CET
+--
+-- TOC entry 2401 (class 2606 OID 7302195)
+-- Dependencies: 1950 2094
+-- Name: lot_fiche_fk; Type: FK CONSTRAINT; Schema: coprop; Owner: -
+--
+
+ALTER TABLE ONLY lot
+    ADD CONSTRAINT lot_fiche_fk FOREIGN KEY (l_fiche_id) REFERENCES public.fiche(f_id) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED;
+
+
+-- Completed on 2011-12-27 13:17:14 CET
 
 --
 -- PostgreSQL database dump complete
