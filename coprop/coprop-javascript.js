@@ -56,7 +56,6 @@ function remove_lot(plugin_code,ac,dossier,lot_id)
 				try
 				{
 					remove_waiting_box();
-					alert("lot_id="+lot_id);
 					$("row"+lot_id).style.color="red";
 					$("row"+lot_id).style.textDecoration="line-through";
 					$("col"+lot_id).innerHTML="Enlevé";
