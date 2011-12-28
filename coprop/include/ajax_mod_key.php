@@ -46,6 +46,7 @@ $note->style='style="border:solid blue 1px;vertical-align:text-top;" ';
 
 $name=new IText('cr_name');
 $name->value=$key[0]['cr_name'];
+$name->size=60;
 
 $alot=$cn->get_array("select lot_fk as f_id,
 	(select ad_value from fiche_detail where f_id=lot_fk and ad_id=1) as name,

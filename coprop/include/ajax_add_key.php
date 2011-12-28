@@ -33,6 +33,7 @@ $note->heigh=6;
 $note->width=80;
 $note->style='style="border:solid blue 1px;vertical-align:text-top;" ';
 $name=new IText('cr_name');
+$name->size=60;
 $str_message="Ajout d'une clef de répartition";
 $alot=$cn->get_array("select f_id,vw_name as name,quick_code as qcode, 0 as l_part
 	from vw_fiche_attr where fd_id=$1",array($g_copro_parameter->categorie_lot));
