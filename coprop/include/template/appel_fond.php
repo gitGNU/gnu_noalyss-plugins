@@ -32,8 +32,11 @@
 
 		<td>Journal pour l'appel de fond</td>
 		<td>
-			<?=$led_appel_fond->input()?>
+			<?=$f_categorie_appel_bt?>
+			<?=$categorie_appel->input()?>
 		</td>
+		<td><?=$f_categorie_appel_label?></td>
+		<td><?=$str_add_appel?></td>
 	</tr>
 	<tr>
 		<td>
@@ -50,15 +53,6 @@
 		</td>
 		<td>
 			<?=$amount->input()?>
-		</td>
-	</tr>
-	<tr>
-
-		<td>
-			Poste comptable pour l'appel de fond
-		</td>
-		<td>
-			<?=$poste_appel->input()?>
 		</td>
 	</tr>
 	<tr>

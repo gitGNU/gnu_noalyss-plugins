@@ -35,8 +35,8 @@ if ( isset ($_POST['save']))
 	try {
 		$g_copro_parameter->save('categorie_lot',$_POST['categorie_lot']);
 		$g_copro_parameter->save('categorie_coprop',$_POST['categorie_coprop']);
-		$g_copro_parameter->save('poste_appel',$_POST['poste_appel']);
 		$g_copro_parameter->save('journal_appel',$_POST['journal_appel']);
+		$g_copro_parameter->save('categorie_appel',$_POST['categorie_appel']);
 	}
 	catch(Exception $e)
 	{
@@ -54,19 +54,16 @@ $cat_lot->value=$cn->make_array("select fd_id,fd_label from fiche_def order by f
 $cat_lot->selected=$g_copro_parameter->categorie_lot;
 
 $cat_coprop=new ISelect('categorie_coprop');
-$cat_coprop->value=$cn->make_array("select fd_id,fd_label from fiche_def order by fd_label");
+$cat_coprop->value=$cn->make_array("select fd_id,fd_label from fiche_def order by fd_label ");
 $cat_coprop->selected=$g_copro_parameter->categorie_coprop;
 
 $journal_appel=new ISelect('journal_appel');
 $journal_appel->value=$cn->make_array("select jrn_def_id,jrn_def_name from jrn_def where jrn_def_type='ODS' order by 2");
 $journal_appel->selected=$g_copro_parameter->journal_appel;
 
-$poste_appel=new IPoste('poste_appel');
-$poste_appel->set_attribute('gDossier',Dossier::id());
-$poste_appel->set_attribute('jrn',0);
-$poste_appel->set_attribute('account','poste_appel');
-
-$poste_appel->value=$g_copro_parameter->poste_appel;
+$categorie_appel=new ISelect('categorie_appel');
+$categorie_appel->value=$cn->make_array("select  fd_id,fd_label from fiche_def order by fd_label ");
+$categorie_appel->selected=$g_copro_parameter->categorie_appel;
 
 ?>
 <form method="POST">
@@ -87,12 +84,12 @@ $poste_appel->value=$g_copro_parameter->poste_appel;
 			<?=$cat_coprop->input();?>
 		</td>
 	</tr>
-	<tr>
+		<tr>
 		<td>
-			Poste comptable par défaut pour les appels de fond
+			Catégorie de fiches pour les appels de fond
 		</td>
 		<td>
-			<?=$poste_appel->input();?>
+			<?=$categorie_appel->input();?>
 		</td>
 	</tr>
 	<tr>

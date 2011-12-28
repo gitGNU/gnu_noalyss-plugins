@@ -343,4 +343,7 @@ ALTER TABLE ONLY lot
 --
 -- PostgreSQL database dump complete
 --
-
+INSERT INTO parameter (pr_id, pr_value) VALUES ('categorie_lot', '');
+INSERT INTO parameter (pr_id, pr_value) VALUES ('categorie_coprop', '');
+INSERT INTO parameter (pr_id, pr_value) VALUES ('journal_appel', '');
+INSERT INTO parameter (pr_id, pr_value) VALUES ('categorie_appel', '');

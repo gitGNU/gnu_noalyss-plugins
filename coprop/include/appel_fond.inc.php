@@ -40,13 +40,49 @@ if ( isset($genere ))
 	$ledger=new Acc_Ledger($cn,0);
 	$led_appel_fond=$ledger->select_ledger('ODS',3);
 	$led_appel_fond->selected=$g_copro_parameter->journal_appel;
-	$poste_appel=new IPoste('poste_appel');
-	$poste_appel->set_attribute('gDossier',Dossier::id());
-	$poste_appel->set_attribute('jrn',$g_copro_parameter->journal_appel);
-	$poste_appel->set_attribute('account','poste_appel');
-	$poste_appel->value=$g_copro_parameter->poste_appel;
+	  $copro=new ICard();
+  $categorie_appel=new ICard();
+  $categorie_appel->label=" Appel de fond : ".HtmlInput::infobulle(0) ;
+  $categorie_appel->name="w_categorie_appel";
+  $categorie_appel->tabindex=1;
+  $categorie_appel->value="";
+  $categorie_appel->table=0;
+
+ // name of the field to update with the name of the card
+  $categorie_appel->set_attribute('label','w_categorie_appel_label');
+  // Type of card : deb, cred,
+  $categorie_appel->set_attribute('typecard',$g_copro_parameter->categorie_appel);
+
+  $categorie_appel->extra=$g_copro_parameter->categorie_appel;
+
+// Add the callback function to filter the card on the jrn
+  $categorie_appel->set_callback('filter_card');
+  $categorie_appel->set_attribute('ipopup','ipopcard');
+// when value selected in the autcomplete
+  $categorie_appel->set_function('fill_data');
+
+// when the data change
+  $categorie_appel->javascript=sprintf(' onchange="fill_data_onchange(\'%s\');" ',
+            $categorie_appel->name);
+  $categorie_appel->set_dblclick("fill_ipopcard(this);");
+
+  $categorie_appel_label=new ISpan();
+  $categorie_appel_label->table=0;
+  $f_categorie_appel_label=$categorie_appel_label->input("w_categorie_appel_label","");
+
+// Search button for card
+  $f_categorie_appel_bt=$categorie_appel->search();
+
 	$key=new ISelect("key");
 	$key->value=$cn->make_array("select cr_id,cr_name from coprop.clef_repartition");
+
+	$f_add_button=new IButton('add_card');
+	$f_add_button->label=_('Nouvelle fiche ');
+	$f_add_button->set_attribute('ipopup','ipop_newcard');
+	$f_add_button->set_attribute('jrn',-1);
+	$filter=$g_copro_parameter->categorie_appel;
+	$f_add_button->javascript=" this.filter='$filter';this.jrn=-1;select_card_type(this);";
+	$str_add_appel= $f_add_button->input();
 
 	require_once 'template/appel_fond.php';
 }
