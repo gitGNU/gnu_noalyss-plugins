@@ -21,7 +21,7 @@
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
 
 /*!\file
- * \brief select the mat. to amortize, the ledger and the year 
+ * \brief select the mat. to amortize, the ledger and the year
  */
  ?>
 <form id="gen_amort" method="post">
@@ -49,7 +49,7 @@
 </tr>
 </table>
 
-Cochez ce qu'il faut amortir 
+Cochez ce qu'il faut amortir
 <table class="result">
 <tr>
 	<th>Selection</th>
@@ -62,12 +62,12 @@ Cochez ce qu'il faut amortir
  * get all the material
  */
 $am=new Amortissement_Sql($cn);
-$array=$am->seek ("where a_visible='Y'");
+$array=$am->seek ("where a_visible='Y' ");
 for ( $i =0;$i<count($array);$i++):
 	echo HtmlInput::hidden('a_id[]',$array[$i]->a_id);
 	$ck=new ICheckBox('p_ck'.$i);
 	$fiche=new Fiche($cn,$array[$i]->f_id);
-	
+
 ?>
 <tr>
 <?

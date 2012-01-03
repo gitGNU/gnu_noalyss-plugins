@@ -216,6 +216,7 @@ array
 	    $val=($val=='')?0:$val;
 	    $h=$cn->get_value('select ha_id from amortissement.amortissement_histo where a_id=$1 and h_year=$2',
 			      array($p_array['a_id'][$i],$p_array['p_year']));
+		if ( $cn->count() == 0 ) continue;
 	    $n->ha_id=$h;
 	    $n->load();
 	    $n->h_amount=$val;
