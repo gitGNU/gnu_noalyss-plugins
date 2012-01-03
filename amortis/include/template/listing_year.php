@@ -17,7 +17,7 @@ TABLE {PAGE: landscape;}
   <th style="text-align:right">Reste à amortir</th>
 </tr>
 <?
-$tot_amort=0;$tot_net=0;
+$tot_amort=0;$tot_net=0;bcscale(2);
 for ($i=0;$i < count($array) ; $i++):
 	echo '<tr>';
 	$fiche=new Fiche($cn,$array[$i]['f_id']);
