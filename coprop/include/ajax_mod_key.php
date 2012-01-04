@@ -26,7 +26,7 @@
  * @brief modifie clef
  *
  */
-$key=$cn->get_array("SELECT cr_name, cr_note
+$key=$cn->get_array("SELECT cr_name, cr_note,cr_tantieme
   FROM coprop.clef_repartition where cr_id=$1",array($key_id));
 
 $str_message="Modification ".h($key[0]['cr_name']);
@@ -41,6 +41,10 @@ $note->style='style="border:solid blue 1px;vertical-align:text-top;" ';
 $name=new IText('cr_name');
 $name->value=$key[0]['cr_name'];
 $name->size=60;
+
+$tantieme=new INum('cr_tantieme');
+$tantieme->javascript='onchange="format_number(this,0);"';
+$tantieme->value=round($key[0]['cr_tantieme']);
 
 $alot=$cn->get_array("select lot_fk as f_id,
 	(select ad_value from fiche_detail where f_id=lot_fk and ad_id=1) as name,

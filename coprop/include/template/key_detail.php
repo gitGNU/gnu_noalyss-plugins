@@ -39,6 +39,14 @@
 		<td>
 			<?=$name->input()?>
 		</td>
+        </tr>
+        <tr>
+            <td>
+                Total tantième 
+            </td>
+                <td>
+                    <?=$tantieme->input()?>
+                </td>
 	</tr>
 	
 </table>

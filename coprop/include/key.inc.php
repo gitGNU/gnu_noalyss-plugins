@@ -45,7 +45,7 @@ if ( isset($_POST['mod_key']))
 }
 
 
-$sql="select cr_id,cr_name,cr_note,cr_start,cr_end from coprop.clef_repartition ";
+$sql="select cr_id,cr_name,cr_note,cr_tantieme from coprop.clef_repartition ";
 /**
  * @todo ajouter tri
  */
@@ -60,6 +60,9 @@ $a_key=$cn->get_array($sql);
 		<th>
 			Note
 		</th>
+                <th>
+                    Tantième 
+                </th>
                 <th></th>
 	</tr>
 <?
@@ -79,6 +82,9 @@ for ($i=0;$i < count($a_key);$i++):
                     $js="onclick=remove_key('".$_REQUEST['plugin_code']."','".$_REQUEST['ac']."','".$_REQUEST['gDossier']."','".$a_key[$i]['cr_id']."')";
 			echo HtmlInput::anchor("enlever","",$js);
                         ?>
+                </td>
+                <td>
+                    <?=round($a_key[$i]['cr_tantieme'])?>
                 </td>
 	</tr>
 <?

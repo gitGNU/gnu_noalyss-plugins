@@ -51,8 +51,8 @@ class Copro_key
 		{
                     $this->verify($p_array);
 			$cn->start();
-			$this->cr_id = $cn->get_value("insert into coprop.clef_repartition(cr_note,cr_name)
-				values($1,$2) returning cr_id", array( strip_tags($cr_note), strip_tags($cr_name)));
+			$this->cr_id = $cn->get_value("insert into coprop.clef_repartition(cr_note,cr_name,cr_tantieme)
+				values($1,$2) returning cr_id", array( strip_tags($cr_note), strip_tags($cr_name),$cr_tantieme));
 			for ($i = 0; $i < count($f_id); $i++)
 			{
 				if (${"part" . $f_id[$i]} == '')
@@ -77,9 +77,9 @@ class Copro_key
                     $this->verify($p_array,false);
 			$cn->start();
 			$cn->exec_sql("update coprop.clef_repartition set 
-				cr_note=$1,cr_name=$2
-				where cr_id=$3",
-					array( strip_tags($cr_note), strip_tags($cr_name),$this->cr_id));
+				cr_note=$1,cr_name=$2,cr_tantieme=$3
+				where cr_id=$4",
+					array( strip_tags($cr_note), strip_tags($cr_name),$cr_tantieme,$this->cr_id));
 			$cn->exec_sql("delete from coprop.clef_repartition_detail where cr_id=$1",array($this->cr_id));
 			for ($i = 0; $i < count($f_id); $i++)
 			{
