@@ -40,7 +40,7 @@
 			Lot
 		</th>
 		<th>
-			Pourcentage
+			Description
 		</th>
 	</tr>
 <? for ($i=0;$i<count($acurrent);$i++): ?>
@@ -49,11 +49,7 @@
 			<?=$acurrent[$i]['fiche_name']?>
 		</td>
 		<td>
-			<?
-				$num=new INum("num".$acurrent[$i]['l_id']);
-				$num->value=$acurrent[$i]['l_part'];
-				echo $num->input();
-			?>
+                    <?=$acurrent[$i]['fiche_desc']?>
 		</td>
 		<td id="col<?=$acurrent[$i]['l_id']?>">
 			<?
@@ -85,10 +81,7 @@
 			<?=$not_assigned[$i]['fiche_name']?>
 		</td>
 		<td>
-			<?
-			$par=new Inum("Part".$not_assigned[$i]['f_id']);
-			echo $par->input();
-			?>
+                    <?=$not_assigned[$i]['fiche_name']?>
 		</td>
 		<td>
 			<?

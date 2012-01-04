@@ -96,7 +96,8 @@ $sql=" select distinct
 $a_copro=$cn->get_array($sql);
 
 $sql_lot=$cn->prepare ("lot","select coprop_fk, (select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=1) as lot_name,
-	(select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=23) as lot_qcode,l_part
+	(select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=23) as lot_qcode,
+        (select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=9) as lot_desc
 	from coprop.lot where coprop_fk=$1");
 
 echo $f_add_button->input();

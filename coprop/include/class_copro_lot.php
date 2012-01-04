@@ -51,30 +51,11 @@ class Copro_Lot
 				$flot=new Fiche($cn);
 				$flot->id=$lot[$i];
 
-				$part=${'lot_per'.$lot[$i]};
-
-				if ( trim($part)<>'' && isNumber($part)==0)
-				{
-					// avertissement et mettre à 100%
-					$part=100;
-				}
 				// si w_lot pas inseré alors inserer
 				$cn->exec_sql("insert into coprop.lot(l_fiche_id,l_part,coprop_fk)".
-						" values ($1,$2,$3)",
-						array($flot->id,$part,$coprop->id));
+						" values ($1,$2)",
+						array($flot->id,$coprop->id));
 
-				// si w_lot insérer avec nouveau coprop. calculer somme jcl_part si total de jcl_part > 100 alors
-				// avertissement
-				$tot=$cn->get_value("select sum(l_part) from coprop.lot where l_fiche_id=$1",
-							array($flot->id));
-				if ($tot > 100 )
-				{
-					// avertisement affecté à +100%
-				} elseif ($tot < 100 )
-				{
-					// avertisement affecté à - 100%
-
-				}
 			}
 		}
 		catch (Exception $e)
@@ -105,30 +86,11 @@ class Copro_Lot
 				$flot=new Fiche($cn);
 				$flot->id=$lot[$i];
 
-				$part=${'Part'.$lot[$i]};
-
-				if ( trim($part)<>'' && isNumber($part)==0)
-				{
-					// avertissement et mettre à 100%
-					$part=100;
-				}
 				// si w_lot pas inseré alors inserer
 				$cn->exec_sql("insert into coprop.lot(l_fiche_id,l_part,coprop_fk)".
-						" values ($1,$2,$3)",
-						array($flot->id,$part,$coprop->id));
+						" values ($1,$2)",
+						array($flot->id,$coprop->id));
 
-				// si w_lot insérer avec nouveau coprop. calculer somme jcl_part si total de jcl_part > 100 alors
-				// avertissement
-				$tot=$cn->get_value("select sum(l_part) from coprop.lot where l_fiche_id=$1",
-							array($flot->id));
-				if ($tot > 100 )
-				{
-					// avertisement affecté à +100%
-				} elseif ($tot < 100 )
-				{
-					// avertisement affecté à - 100%
-
-				}
 			}
 		}
 		catch (Exception $e)
@@ -142,51 +104,8 @@ class Copro_Lot
 	}
 	function update_lot($p_array)
 	{
-		global $cn;
-		extract($p_array);
-		try
-		{
-			$lot=$cn->get_array("select l_id,l_fiche_id,l_part from coprop.lot where coprop_fk=$1 ",
-					array($copro_id));
-			// Find the lot.
-			$str_warning="";$n_warning=0;
-			for ($i=0;$i<count($lot);$i++)
-			{
-				$flot=new Fiche($cn);
-				$flot->id=$lot[$i]['l_fiche_id'];
-
-				$part=${'num'.$lot[$i]['l_id']};
-
-				if ( trim($part)<>'' && isNumber($part)==0)
-				{
-					// avertissement et mettre à 100%
-					$part=100;
-				}
-				// si w_lot pas inseré alors inserer
-				$cn->exec_sql("update coprop.lot set l_part=$1 where l_id=$2",
-						array($part,$lot[$i]['l_id']));
-
-				// si w_lot insérer avec nouveau coprop. calculer somme jcl_part si total de jcl_part > 100 alors
-				// avertissement
-				$tot=$cn->get_value("select sum(l_part) from coprop.lot where l_fiche_id=$1",
-							array($flot->id));
-				if ($tot > 100 )
-				{
-					// avertisement affecté à +100%
-				} elseif ($tot < 100 )
-				{
-					// avertisement affecté à - 100%
-
-				}
-			}
-		}
-		catch (Exception $e)
-		{
-			echo $e->getMessage();
-			echo $e->getTraceAsString();
-
-		}
-
+		
+            return;
 
 	}
 

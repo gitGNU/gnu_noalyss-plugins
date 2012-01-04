@@ -69,6 +69,7 @@ echo HtmlInput::hidden('ledger_type','ODS');
 $alot=$cn->get_array("select f_id,
 		(select ad_value from fiche_Detail as e where ad_id=1 and e.f_id=a.f_id) as fname,
 		(select ad_value from fiche_Detail as f where ad_id=23 and f.f_id=a.f_id) as fqcode
+		(select ad_value from fiche_Detail as f where ad_id=9 and f.f_id=a.f_id) as fdesc
 		from fiche as a
 		where
 		fd_id=$1
@@ -81,13 +82,12 @@ if ( count($alot)==0) {
 <table>
 	<tr>
 		<th>Lot</th>
-		<th>Pourcentage</th>
+		<th>Description</th>
 	</tr>
 <?
 for ($i=0;$i<count($alot);$i++):
 
 // Search button for card
-  $num=new INum("lot_per".$i);
   $ck=new ICheckBox("lot[]");
   $ck->value=$alot[$i]['f_id'];
 ?>
@@ -99,7 +99,7 @@ for ($i=0;$i<count($alot);$i++):
 		<?=HtmlInput::card_detail($alot[$i]['fqcode'],$alot[$i]['fname'],' class="line" ')?>
 	</td>
 	<td>
-		<?=$num->input()?>
+		<?=$alot[$i]['fdesc']?>
 	</td>
 </tr>
 <? endfor;?>

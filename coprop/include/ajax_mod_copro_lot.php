@@ -42,14 +42,14 @@ $copro->id=$coprop_id;
 $acurrent=$cn->get_array("select lot.l_id   ,l_fiche_id,
 			(select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=1) as fiche_name,
 			(select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=23) as fiche_qcode,
-			l_part
+			(select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=9) as fiche_desc
 			from coprop.lot where coprop_fk=$1",
 		array($coprop_id));
 
 $not_assigned=$cn->get_array("select a.f_id,
 			(select ad_value from fiche_detail as e where e.f_id=a.f_id and ad_id=1) as fiche_name,
 			(select ad_value from fiche_detail as f where f.f_id=a.f_id and ad_id=23) as fiche_qcode,
-			coalesce(l_part,0) as str_part
+                        (select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=9) as fiche_desc
 			from coprop.lot
 			right join fiche as a on (l_fiche_id=a.f_id)
 			where
