@@ -59,6 +59,11 @@ select
 f_id,vw_name as name,quick_code as qcode, 0 as l_part
 	from vw_fiche_attr where fd_id=$2
 	and f_id not in (select lot_fk from coprop.clef_repartition_detail where cr_id=$1)",array($key_id,$g_copro_parameter->categorie_lot));
+
+$init_tantieme=$cn->get_value("select sum(crd_amount) from 
+		coprop.clef_repartition_detail
+		where cr_id=$1",array($key_id));
+
 echo '<form method="post">';
 echo HtmlInput::hidden('cr_id',$key_id);
 require_once 'template/key_detail.php';

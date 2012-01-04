@@ -77,4 +77,17 @@ Description
 	endfor;
 ?>
 </table>
+Total tantième : <span id="span_tantieme"><?=init_tantieme?></span>
+<?
+if ( bcsub ($init_tantieme,$tantieme->value) != 0):
+?>
+<span id="span_diff" style="color:red"><?=bcsub ($init_tantieme,$tantieme->value)?></span>
+<?
+else:
+    ?>
+<span id="span_diff" style="color:green"><?=bcsub ($init_tantieme,$tantieme->value)?></span>
+<?
+endif;
+
+?>
 </div>

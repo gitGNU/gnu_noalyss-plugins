@@ -39,6 +39,7 @@ $tantieme->value=0;
 $str_message="Ajout d'une clef de répartition";
 $alot=$cn->get_array("select f_id,vw_name as name,quick_code as qcode, vw_description as desc, 0 as l_part
 	from vw_fiche_attr where fd_id=$1",array($g_copro_parameter->categorie_lot));
+$init_tantieme=0;
 echo '<form method="post">';
 require_once 'template/key_detail.php';
 echo HtmlInput::submit("add_key","Ajouter",' onclick="return confirm (\'Vous confirmez?\')"');
