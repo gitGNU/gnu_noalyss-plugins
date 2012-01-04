@@ -48,7 +48,8 @@ for ($i=0;$i<count($a_copro);$i++):
 			$sp="";
 			for ($e=0;$e<$max;$e++):
 				$row=Database::fetch_array($rlot,$e);
-				$js_lot=HtmlInput::card_detail($row['lot_qcode'],$row['lot_name'],$row['lot_desc'],' class="line"');
+				$js_lot=HtmlInput::card_detail($row['lot_qcode'],$row['lot_name'],' class="line"');
+                                $js_lot.=$row['lot_desc'];
 				echo $sp.$js_lot;
 				$sp=" , ";
 			endfor;
