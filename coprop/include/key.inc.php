@@ -60,12 +60,6 @@ $a_key=$cn->get_array($sql);
 		<th>
 			Note
 		</th>
-		<th>
-			Date début
-		</th>
-		<th>
-			Date Fin
-		</th>
 	</tr>
 <?
 for ($i=0;$i < count($a_key);$i++):
@@ -80,11 +74,6 @@ for ($i=0;$i < count($a_key);$i++):
 			<?=$a_key[$i]['cr_note']?>
 		</td>
 		<td>
-			<?=format_date($a_key[$i]['cr_start'])?>
-		</td>
-		<td>
-			<?=format_date($a_key[$i]['cr_end'])?>
-		</td>
 	</tr>
 <?
 endfor;
