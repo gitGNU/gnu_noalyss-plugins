@@ -77,8 +77,8 @@ class Copro_key
                     $this->verify($p_array,false);
 			$cn->start();
 			$cn->exec_sql("update coprop.clef_repartition set 
-				cr_note=$3,cr_name=$4
-				where cr_id=$5",
+				cr_note=$1,cr_name=$2
+				where cr_id=$3",
 					array( strip_tags($cr_note), strip_tags($cr_name),$this->cr_id));
 			$cn->exec_sql("delete from coprop.clef_repartition_detail where cr_id=$1",array($this->cr_id));
 			for ($i = 0; $i < count($f_id); $i++)
