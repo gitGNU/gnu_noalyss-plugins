@@ -77,15 +77,16 @@ for ($i=0;$i < count($a_key);$i++):
 		<td>
 			<?=$a_key[$i]['cr_note']?>
 		</td>
+                <td>
+                    <?=round($a_key[$i]['cr_tantieme'])?>
+                </td>
 		<td id="col<?=$a_key[$i]['cr_id']?>">
                     <?
                     $js="onclick=remove_key('".$_REQUEST['plugin_code']."','".$_REQUEST['ac']."','".$_REQUEST['gDossier']."','".$a_key[$i]['cr_id']."')";
 			echo HtmlInput::anchor("enlever","",$js);
                         ?>
                 </td>
-                <td>
-                    <?=round($a_key[$i]['cr_tantieme'])?>
-                </td>
+                
 	</tr>
 <?
 endfor;

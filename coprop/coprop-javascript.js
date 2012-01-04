@@ -58,6 +58,7 @@ function remove_lot(plugin_code,ac,dossier,lot_id)
 					remove_waiting_box();
 					$("row"+lot_id).style.color="red";
 					$("row"+lot_id).style.textDecoration="line-through";
+                                        $("col"+lot_id).style.textDecoration="none";
 					$("col"+lot_id).innerHTML="Effacé";
 
 					//response.responseText.evalScripts();
@@ -194,6 +195,7 @@ function remove_key(plugin_code,ac,dossier,key_id)
 					remove_waiting_box();
 					$("row"+key_id).style.color="red";
 					$("row"+key_id).style.textDecoration="line-through";
+                                        $("col"+key_id).style.textDecoration="none";
 					$("col"+key_id).innerHTML="Effacé";
 
 					//response.responseText.evalScripts();
