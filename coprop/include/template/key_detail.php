@@ -57,7 +57,7 @@ Description
 		<td>
 			<?
 			$num=new INum('part'.$alot[$i]['f_id']);
-			$num->value=$alot[$i]['l_part'];
+			$num->value=round($alot[$i]['l_part']);
 			echo $num->input();
 			?>
 		</td>
