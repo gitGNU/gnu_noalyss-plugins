@@ -26,8 +26,6 @@
  * @brief ajout clef repartition
  *
  */
-$date_start=new IDate('cr_start');
-$date_end=new IDate('cr_end');
 $note=new ITextarea('cr_note');
 $note->heigh=6;
 $note->width=80;
