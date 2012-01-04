@@ -56,7 +56,7 @@ $alot=$cn->get_array("select lot_fk as f_id,
 		where cr_id=$1
 	union
 select
-f_id,vw_name as name,quick_code as qcode, 0 as l_part
+f_id,vw_name as name,quick_code as qcode,vw_description as desc, 0 as l_part
 	from vw_fiche_attr where fd_id=$2
 	and f_id not in (select lot_fk from coprop.clef_repartition_detail where cr_id=$1)",array($key_id,$g_copro_parameter->categorie_lot));
 
