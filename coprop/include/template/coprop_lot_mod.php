@@ -72,7 +72,7 @@
 			Lot
 		</th>
 		<th>
-			Pourcentage
+			Description
 		</th>
 	</tr>
 <? for ($i=0;$i<count($not_assigned);$i++): ?>
@@ -81,7 +81,7 @@
 			<?=$not_assigned[$i]['fiche_name']?>
 		</td>
 		<td>
-                    <?=$not_assigned[$i]['fiche_name']?>
+                    <?=$not_assigned[$i]['fiche_desc']?>
 		</td>
 		<td>
 			<?
