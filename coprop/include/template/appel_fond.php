@@ -32,9 +32,10 @@
 
 		<td>Journal pour l'appel de fond</td>
 		<td>
-			<?=$f_categorie_appel_bt?>
-			<?=$categorie_appel->input()?>
+			<?=$led_appel_fond->input()?>
 		</td>
+        </tr>
+        <tr>
 		<td><?=$f_categorie_appel_label?></td>
 		<td><?=$str_add_appel?></td>
 	</tr>
