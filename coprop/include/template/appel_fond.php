@@ -37,9 +37,8 @@
         </tr>
         <tr>
             <td> Fiche pour l'appel</td>
-            <td><?=$categorie_appel->input()?></td>
-        </tr>
-        <tr>
+            
+            <td><?=$f_categorie_appel_bt?><?=$categorie_appel->input()?></td>
 		<td><?=$f_categorie_appel_label?></td>
 		<td><?=$str_add_appel?></td>
 	</tr>
