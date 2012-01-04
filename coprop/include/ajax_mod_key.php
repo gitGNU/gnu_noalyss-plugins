@@ -26,16 +26,10 @@
  * @brief modifie clef
  *
  */
-$key=$cn->get_array("SELECT cr_name, cr_note, to_char(cr_start,'DD.MM.YYYY') as str_start,
-	to_char(cr_end,'DD.MM.YYYY') as str_end
+$key=$cn->get_array("SELECT cr_name, cr_note
   FROM coprop.clef_repartition where cr_id=$1",array($key_id));
 
 $str_message="Modification ".h($key[0]['cr_name']);
-$date_start=new IDate('cr_start');
-$date_start->value=$key[0]['str_start'];
-
-$date_end=new IDate('cr_end');
-$date_end->value=$key[0]['str_end'];
 
 $note=new ITextarea('cr_note');
 $note->value=$key[0]['cr_note'];

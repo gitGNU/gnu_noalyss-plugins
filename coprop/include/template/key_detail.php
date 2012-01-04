@@ -34,28 +34,13 @@
 	<tr>
 		<td>
 
-		Nom
+                        Nom
 		</td>
 		<td>
 			<?=$name->input()?>
 		</td>
 	</tr>
-	<tr>
-		<td>
-			Date début
-		</td>
-		<td>
-			<?=$date_start->input()?>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			Date fin
-		</td>
-		<td>
-			<?=$date_end->input()?>
-		</td>
-	</tr>
+	
 </table>
 Description
 <?=$note->input()?>
