@@ -52,7 +52,7 @@ class Copro_Lot
 				$flot->id=$lot[$i];
 
 				// si w_lot pas inseré alors inserer
-				$cn->exec_sql("insert into coprop.lot(l_fiche_id,l_part,coprop_fk)".
+				$cn->exec_sql("insert into coprop.lot(l_fiche_id,coprop_fk)".
 						" values ($1,$2)",
 						array($flot->id,$coprop->id));
 
@@ -87,7 +87,7 @@ class Copro_Lot
 				$flot->id=$lot[$i];
 
 				// si w_lot pas inseré alors inserer
-				$cn->exec_sql("insert into coprop.lot(l_fiche_id,l_part,coprop_fk)".
+				$cn->exec_sql("insert into coprop.lot(l_fiche_id,coprop_fk)".
 						" values ($1,$2)",
 						array($flot->id,$coprop->id));
 
