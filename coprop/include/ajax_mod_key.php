@@ -49,6 +49,7 @@ $tantieme->value=round($key[0]['cr_tantieme']);
 $alot=$cn->get_array("select lot_fk as f_id,
 	(select ad_value from fiche_detail where f_id=lot_fk and ad_id=1) as name,
 	(select ad_value from fiche_detail where f_id=lot_fk and ad_id=23) as qcode,
+	(select ad_value from fiche_detail where f_id=lot_fk and ad_id=9) as desc,
 	crd_amount as l_part
 	from
 		coprop.clef_repartition_detail

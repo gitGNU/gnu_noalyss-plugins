@@ -62,6 +62,9 @@ Description
 			<?=HtmlInput::card_detail($alot[$i]['qcode'],$alot[$i]['name'])?>
 			<?=HtmlInput::hidden('f_id[]',$alot[$i]['f_id'])?>
 		</td>
+                <td>
+                    <?=$a_lot[$i]['desc']?>
+                </td>
 		<td>
 			<?
 			$num=new INum('part'.$alot[$i]['f_id']);
