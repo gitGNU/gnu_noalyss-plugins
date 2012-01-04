@@ -60,20 +60,26 @@ $a_key=$cn->get_array($sql);
 		<th>
 			Note
 		</th>
+                <th></th>
 	</tr>
 <?
 for ($i=0;$i < count($a_key);$i++):
 	$js=sprintf("mod_key('%s','%s','%s','%s')",$gDossier,$_REQUEST['plugin_code'],$_REQUEST['ac'],$a_key[$i]['cr_id']);
 	$mod_key=HtmlInput::anchor($a_key[$i]['cr_name'],"","onclick=\"$js\"");
 ?>
-	<tr>
+	<tr id="row<?=$a_key[$i]['cr_id']?>">
 		<td>
 			<?=$mod_key?>
 		</td>
 		<td>
 			<?=$a_key[$i]['cr_note']?>
 		</td>
-		<td>
+		<td id="col<?=$a_key[$i]['cr_id']?>">
+                    <?
+                    $js="onclick=remove_key('".$_REQUEST['plugin_code']."','".$_REQUEST['ac']."','".$_REQUEST['gDossier']."','".$a_key[$i]['cr_id']."')";
+			echo HtmlInput::anchor("enlever","",$js);
+                        ?>
+                </td>
 	</tr>
 <?
 endfor;

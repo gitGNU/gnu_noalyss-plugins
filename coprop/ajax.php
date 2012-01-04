@@ -21,6 +21,8 @@ switch ($act)
 	case 'modkey':
 		require_once 'include/ajax_mod_key.php';
 		break;
+        case 'removekey':
+            require_once 'include/ajax_remove_key.php';
 
 	default:
 
