@@ -29,7 +29,7 @@
  */
 
 require_once 'class_acc_ledger.php';
-
+Extension::check_version(4600);
 ob_start();
 require_once('coprop-javascript.js');
 $j=ob_get_contents();
