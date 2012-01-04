@@ -63,7 +63,7 @@ Description
 			<?=HtmlInput::hidden('f_id[]',$alot[$i]['f_id'])?>
 		</td>
                 <td>
-                    <?=$a_lot[$i]['desc']?>
+                    <?=$alot[$i]['desc']?>
                 </td>
 		<td>
 			<?
@@ -78,17 +78,20 @@ Description
 ?>
 </table>
 <p>
-Total tantièmes : <span id="span_tantieme"><?=init_tantieme?></span>
+Total tantièmes : <span id="span_tantieme"><?=round($init_tantieme)?></span>
 </p>
+
 <p>
+  Différence :
+
 <?
+ bcscale(0);
 if ( bcsub ($init_tantieme,$tantieme->value) != 0):
 ?>
 <span id="span_diff" style="color:red"><?=bcsub ($init_tantieme,$tantieme->value)?></span>
 <?
 else:
     ?>
-Différence
 <span id="span_diff" style="color:green"><?=bcsub ($init_tantieme,$tantieme->value)?></span>
 <?
 endif;
