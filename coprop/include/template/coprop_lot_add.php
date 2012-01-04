@@ -68,7 +68,7 @@ echo HtmlInput::hidden('p_jrn',$g_copro_parameter->journal_appel);
 echo HtmlInput::hidden('ledger_type','ODS');
 $alot=$cn->get_array("select f_id,
 		(select ad_value from fiche_Detail as e where ad_id=1 and e.f_id=a.f_id) as fname,
-		(select ad_value from fiche_Detail as f where ad_id=23 and f.f_id=a.f_id) as fqcode
+		(select ad_value from fiche_Detail as f where ad_id=23 and f.f_id=a.f_id) as fqcode,
 		(select ad_value from fiche_Detail as f where ad_id=9 and f.f_id=a.f_id) as fdesc
 		from fiche as a
 		where
