@@ -34,7 +34,7 @@
 <h2>Lot affecté à ce copropriétaire</h2>
 <form method="post" onsubmit="return confirm('Vous confirmez ?')">
 		<?=HtmlInput::hidden("copro_id",$copro->id)?>
-<table>
+<table class="result">
 	<tr>
 		<th>
 			Lot
@@ -46,7 +46,7 @@
 <? for ($i=0;$i<count($acurrent);$i++): ?>
 	<tr id="row<?=$acurrent[$i]['l_id']?>">
 		<td>
-			<?=$acurrent[$i]['fiche_name']?>
+			<?=HtmlInput::card_detail($acurrent[$i]['fiche_qcode'],$acurrent[$i]['fiche_name'],' class="line"')?>
 		</td>
 		<td>
                     <?=$acurrent[$i]['fiche_desc']?>
@@ -66,7 +66,7 @@
 <h2>Autre lots</h2>
 <form method="post" onsubmit="return confirm('Vous confirmez ?')">
 	<?=HtmlInput::hidden("copro_id",$copro->id)?>
-<table>
+<table class="result">
 	<tr>
 		<th>
 			Lot
@@ -78,7 +78,7 @@
 <? for ($i=0;$i<count($not_assigned);$i++): ?>
 	<tr >
 		<td>
-			<?=$not_assigned[$i]['fiche_name']?>
+                    		<?=HtmlInput::card_detail($not_assigned[$i]['fiche_qcode'],$not_assigned[$i]['fiche_name'],' class="line"')?>
 		</td>
 		<td>
                     <?=$not_assigned[$i]['fiche_desc']?>
