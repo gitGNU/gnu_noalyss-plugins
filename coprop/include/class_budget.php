@@ -33,6 +33,7 @@ class Budget
                 where b_id=$1",array($this->b_id));
             $a_input=array();
             $fiche_dep=$cn->make_list("select fd_id from fiche_def where frd_id=6");
+            $a_key=$cn->make_array(" select cr_id,cr_name from coprop.clef_repartition order by cr_name");
             for ($i=0;$i<count($array);$i++)
             {
                 $card=new ICard('f_id'.$i);
@@ -69,9 +70,15 @@ class Budget
                 $amount=new INum("bt_amount[]");
                 $amount->value=round($array[$i]['bt_amount'],2);
                 $hidden=HtmlInput::hidden("bt_id[]",$array[$i]["bt_id"]);
+                
+                $ikey=new ISelect("key[]");
+                $ikey->value=$a_key;
+                $ikey->selected=$array[$i]['cr_id'];
+                
                 $a_input[$i]["amount"]=$amount->input();
                 $a_input[$i]["hidden"]=$hidden;
                 $a_input[$i]["card"]=$card->input();
+                $a_input[$i]['key']=$ikey->input();
                 
             }
             require_once 'template/bud_detail.php';
