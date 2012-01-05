@@ -23,8 +23,10 @@ switch ($act)
 		break;
         case 'removekey':
             require_once 'include/ajax_remove_key.php';
+            break;
         case 'buddisplay':
             require_once 'include/ajax_bud_display.php';
+            break;
 	default:
 
 		var_dump($_GET);
