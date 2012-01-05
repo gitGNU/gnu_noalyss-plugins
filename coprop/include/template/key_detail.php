@@ -42,13 +42,13 @@
         </tr>
         <tr>
             <td>
-                Total tantième 
+                Total tantième
             </td>
                 <td>
                     <?=$tantieme->input()?>
                 </td>
 	</tr>
-	
+
 </table>
 Description
 <?=$note->input()?>
@@ -68,7 +68,8 @@ Description
 		<td>
 			<?
 			$num=new INum('part'.$alot[$i]['f_id']);
-			$num->value=round($alot[$i]['l_part']);
+			$num->javascript='onchange="format_number(this,0);"';
+			$num->value=round($alot[$i]['l_part'],0);
 			echo $num->input();
 			?>
 		</td>
