@@ -7,6 +7,7 @@
 <table class="result">
     <tr>
         <th>Fiche dépense</th>
+        <th>Label</th>
         <th>Clef de répartition </th>
         <th>Montant</th>
     </tr>

@@ -32,7 +32,8 @@ class Budget
                 join vw_fiche_attr using (f_id)
                 where b_id=$1",array($this->b_id));
             $a_input=array();
-            $fiche_dep=$cn->make_list("select fd_id from fiche_def where frd_id=6");
+            $fiche_dep=$cn->make_list("select fd_id from fiche_def where frd_id=2");
+	    var_dump($fiche_dep);
             $a_key=$cn->make_array(" select cr_id,cr_name from coprop.clef_repartition order by cr_name");
             for ($i=0;$i<count($array);$i++)
             {
@@ -78,9 +79,10 @@ class Budget
                 $a_input[$i]["amount"]=$amount->input();
                 $a_input[$i]["hidden"]=$hidden;
                 $a_input[$i]["card"]=$card->input().$f_card_bt;
-                $a_input[$i]["card_label"]=$card_label->input();
+                $a_input[$i]["card_label"]=$f_card_label;
                 
                 $a_input[$i]['key']=$ikey->input();
+		var_dump($card);
                 
             }
             require_once 'template/bud_detail.php';
