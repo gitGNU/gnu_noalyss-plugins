@@ -1,6 +1,7 @@
 <?php
 /**
  * @file montre les détails d'un budget
+ * @see Budget::detail()
  */
 ?>
 <table class="result">
