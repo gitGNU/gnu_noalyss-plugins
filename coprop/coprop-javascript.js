@@ -230,7 +230,7 @@ function budget_detail(plugin_code,ac,dossier,bud_id)
 				{
                                     remove_waiting_box();
                                     $('divbuddetail').innerHTML=response.responseText;
-					//response.responseText.evalScripts();
+                                    response.responseText.evalScripts();
 				}
 				catch(e)
 				{
