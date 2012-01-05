@@ -29,6 +29,7 @@ class Budget
             $array=$cn->get_array("select bt_id,bt_amount,f_id,vw_name,quick_code,cr_name,cr_id 
                 from coprop.budget_detail
                 join coprop.clef_repartition using (cr_id)
+                join vw_fiche_attr using (f_id)
                 where b_id=$1",array($this->b_id));
             $a_input=array();
             for ($i=0;$i<count($array);$i++)
