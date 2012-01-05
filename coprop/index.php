@@ -41,7 +41,7 @@ $array=array (
          array($url.'&sa=lot',_('Lot'),_('Listes des lots et liaison copro'),1),
          array($url.'&sa=cle',_('Clef de répartition'),_('Clef de répartition'),2),
          array($url.'&sa=af',_('Appel de fond'),_('Création décompte pour appel de fond'),3),
-         array($url.'&sa=af',_('Budget'),_('budgets'),5),
+         array($url.'&sa=bu',_('Budget'),_('budgets'),5),
          array($url.'&sa=pa',_('Paramètre'),_('Configuration et paramètre'),4)
        );
 
