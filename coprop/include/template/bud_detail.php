@@ -3,6 +3,9 @@
  * @file montre les détails d'un budget
  * @see Budget::detail()
  */
+global  $g_copro_parameter;
+
+echo HtmlInput::hidden('p_jrn',$g_copro_parameter->journal_appel);
 ?>
 <table class="result">
     <tr>
