@@ -68,7 +68,7 @@ Description
 		<td>
 			<?
 			$num=new INum('part'.$alot[$i]['f_id']);
-			$num->javascript='onchange="format_number(this,0);"';
+			$num->javascript='onchange="format_number(this,0);compute_key();"';
 			$num->value=round($alot[$i]['l_part'],0);
 			echo $num->input();
 			?>
@@ -97,5 +97,6 @@ else:
 <?
 endif;
 ?>
+
 </p>
 </div>

@@ -213,32 +213,33 @@ function remove_key(plugin_code,ac,dossier,key_id)
 		alert(e.message);
 	}
 }
-function budget_detail(plugin_code,ac,dossier,bud_id)
+function compute_key()
 {
-	waiting_box();
 	try
 	{
-		var queryString="plugin_code="+plugin_code+"&gDossier="+dossier+"&bud_id="+bud_id+'&ac='+ac+"&act=buddisplay";
-		var action=new Ajax.Request ( 'ajax.php',
-		{
-			method:'get',
-			parameters:queryString,
-			onFailure:null,
-			onSuccess:function (response)
+		str="";
+		var array=$("fkey").getInputs('text');
+		var tot=0;
+		for (i=0;i<array.length;i++)
 			{
-				try
+				if ( array[i].name.search(/part/) > -1)
 				{
-                                    remove_waiting_box();
-                                    $('divbuddetail').innerHTML=response.responseText;
-                                    response.responseText.evalScripts();
-				}
-				catch(e)
-				{
-					alert("Réponse Ajax ="+e.message);
+					if (! isNaN(array[i].value)) {
+						tot+=parseFloat(array[i].value);
+					}
 				}
 			}
+		$("span_tantieme").innerHTML=Math.round(tot);
+		if ( ! isNaN($('cr_tantieme').value)) {
+			var difference=parseFloat($('cr_tantieme').value)-tot;
+			if ( difference != 0 )	{
+					$('span_diff').style.color="red";
+				} else {
+					$('span_diff').style.color="green";
+				}
+			$('span_diff').innerHTML=difference;
 		}
-		);
+
 	}
 	catch(e)
 	{
