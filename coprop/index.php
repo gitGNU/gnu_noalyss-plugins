@@ -61,6 +61,9 @@ switch($sa)
   case 'pa':
     $def=4;
     break;
+  case 'bu':
+      $def=5;
+      break;
   }
 
 $cn=new Database(dossier::id());
