@@ -16,9 +16,13 @@
             <?=$a_input[$i]['card']?>
         </td>
         <td>
+            <?=$a_input[$i]['card_label']?>
+        </td>
+        <td>
             <?=$a_input[$i]['key']?>
             
         </td>
+        
         <td>
             <?=$a_input[$i]['amount']?>
             

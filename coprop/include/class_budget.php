@@ -77,7 +77,9 @@ class Budget
                 
                 $a_input[$i]["amount"]=$amount->input();
                 $a_input[$i]["hidden"]=$hidden;
-                $a_input[$i]["card"]=$card->input();
+                $a_input[$i]["card"]=$card->input().$f_card_bt;
+                $a_input[$i]["card_label"]=$card_label->input();
+                
                 $a_input[$i]['key']=$ikey->input();
                 
             }
