@@ -32,10 +32,40 @@ class Budget
                 join vw_fiche_attr using (f_id)
                 where b_id=$1",array($this->b_id));
             $a_input=array();
+            $fiche_dep=$cn->make_list("select fd_id from fiche_def where frd_id=6");
             for ($i=0;$i<count($array);$i++)
             {
-                $card=new ICard('f_id[]');
+                $card=new ICard('f_id'.$i);
                 $card->value=$array[$i]['quick_code'];
+                $card->table=0;
+
+                 // name of the field to update with the name of the card
+                $card->set_attribute('label','w_card_label'.$i);
+                
+                // Type of card : deb, cred,
+                $card->set_attribute('typecard',$fiche_dep);
+
+                $card->extra=$fiche_dep;
+
+                // Add the callback function to filter the card on the jrn
+                $card->set_callback('filter_card');
+                $card->set_attribute('ipopup','ipopcard');
+                // when value selected in the autcomplete
+                  $card->set_function('fill_data');
+
+                // when the data change
+
+                  $card->javascript=sprintf(' onchange="fill_data_onchange(\'%s\');" ',
+                            $card->name);
+                  $card->set_dblclick("fill_ipopcard(this);");
+
+                  $card_label=new ISpan();
+                  $card_label->table=0;
+                  $f_card_label=$card_label->input("w_card_label".$i,"");
+
+                // Search button for card
+                $f_card_bt=$card->search();
+
                 $amount=new INum("bt_amount[]");
                 $amount->value=round($array[$i]['bt_amount'],2);
                 $hidden=HtmlInput::hidden("bt_id[]",$array[$i]["bt_id"]);
