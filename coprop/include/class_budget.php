@@ -141,6 +141,7 @@ class Budget
 
             }
             require_once 'template/bud_detail.php';
+			echo create_script("compute_budget()");
         }
         catch (Exception $e)
         {

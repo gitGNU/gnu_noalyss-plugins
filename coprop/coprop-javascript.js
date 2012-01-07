@@ -232,6 +232,7 @@ function compute_key()
 		$("span_tantieme").innerHTML=Math.round(tot);
 		if ( ! isNaN($('cr_tantieme').value)) {
 			var difference=parseFloat($('cr_tantieme').value)-tot;
+			difference=Math.round(difference*100)/100;
 			if ( difference != 0 )	{
 					$('span_diff').style.backgroundColor="red";
 				} else {
@@ -295,9 +296,10 @@ function compute_budget()
 					}
 				}
 			}
-		$("sbud_total").innerHTML=Math.round(tot);
+		$("sbud_total").innerHTML=Math.round(tot*100)/100;
 		if ( ! isNaN($('b_amount').value)) {
 			var difference=parseFloat($('b_amount').value)-tot;
+			difference=Math.round(difference*100)/100;
 			if ( difference != 0 )	{
 					$('span_diff').style.backgroundColor="red";
 				} else {
