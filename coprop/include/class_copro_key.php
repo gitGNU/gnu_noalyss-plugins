@@ -32,15 +32,15 @@ class Copro_key
     {
         global $cn;
         extract ($p_array);
-        if (strlen(trim ($cr_name))==0) 
+        if (strlen(trim ($cr_name))==0)
             throw new Exception("Le nom est vide");
         if ($b_dupl )
         {
-            $dupl=$cn->count_sql("select * from copro.clef_repartition where cr_name=$1",$cr_name);
+            $dupl=$cn->count_sql("select * from coprop.clef_repartition where cr_name=$1",array($cr_name));
             if ( $dupl >0 )
                 throw new Exception("Une clef avec ce nom existe déja");
         }
-        
+
     }
 
 	function insert($p_array)
@@ -52,7 +52,7 @@ class Copro_key
                     $this->verify($p_array);
 			$cn->start();
 			$this->cr_id = $cn->get_value("insert into coprop.clef_repartition(cr_note,cr_name,cr_tantieme)
-				values($1,$2) returning cr_id", array( strip_tags($cr_note), strip_tags($cr_name),$cr_tantieme));
+				values($1,$2,$3) returning cr_id", array( strip_tags($cr_note), strip_tags($cr_name),$cr_tantieme));
 			for ($i = 0; $i < count($f_id); $i++)
 			{
 				if (${"part" . $f_id[$i]} == '')
@@ -76,7 +76,7 @@ class Copro_key
 		{
                     $this->verify($p_array,false);
 			$cn->start();
-			$cn->exec_sql("update coprop.clef_repartition set 
+			$cn->exec_sql("update coprop.clef_repartition set
 				cr_note=$1,cr_name=$2,cr_tantieme=$3
 				where cr_id=$4",
 					array( strip_tags($cr_note), strip_tags($cr_name),$cr_tantieme,$this->cr_id));
