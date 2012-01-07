@@ -233,9 +233,9 @@ function compute_key()
 		if ( ! isNaN($('cr_tantieme').value)) {
 			var difference=parseFloat($('cr_tantieme').value)-tot;
 			if ( difference != 0 )	{
-					$('span_diff').style.color="red";
+					$('span_diff').style.backgroundColor="red";
 				} else {
-					$('span_diff').style.color="green";
+					$('span_diff').style.backgroundColor="green";
 				}
 			$('span_diff').innerHTML=difference;
 		}
@@ -268,11 +268,44 @@ function budget_detail(plugin_code,ac,dossier,bud_id)
 				}
 				catch(e)
 				{
-					alert("RÃ©ponse Ajax ="+e.message);
+					alert("Réponse Ajax ="+e.message);
 				}
 			}
 		}
 		);
+	}
+	catch(e)
+	{
+		alert(e.message);
+	}
+}
+function compute_budget()
+{
+	try
+	{
+		str="";
+		var array=$("fbud_update").getInputs('text');
+		var tot=0;
+		for (i=0;i<array.length;i++)
+			{
+				if ( array[i].name.search(/bt_amount/) > -1)
+				{
+					if (! isNaN(array[i].value) && array[i].value!= "") {
+						tot+=parseFloat(array[i].value);
+					}
+				}
+			}
+		$("sbud_total").innerHTML=Math.round(tot);
+		if ( ! isNaN($('b_amount').value)) {
+			var difference=parseFloat($('b_amount').value)-tot;
+			if ( difference != 0 )	{
+					$('span_diff').style.backgroundColor="red";
+				} else {
+					$('span_diff').style.backgroundColor="green";
+				}
+			$('span_diff').innerHTML=difference;
+		}
+
 	}
 	catch(e)
 	{

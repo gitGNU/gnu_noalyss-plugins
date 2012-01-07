@@ -24,15 +24,21 @@ echo HtmlInput::hidden('p_jrn',$g_copro_parameter->journal_appel);
         </td>
         <td>
             <?=$a_input[$i]['key']?>
-            
+
         </td>
-        
+
         <td>
             <?=$a_input[$i]['amount']?>
-            
+
         </td>
-    </tr> 
-    
+    </tr>
+
 <? endfor?>
-    
+
 </table>
+<p>
+	Total <span id="sbud_total"><?=nbm($bud_amount)?></span>
+</p>
+<p>
+Différence <span id="span_diff"></span>
+</p>
