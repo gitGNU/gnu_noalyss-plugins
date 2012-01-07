@@ -38,7 +38,7 @@ echo create_script($j);
 
 $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&ac='.$_REQUEST['ac'];
 $array=array (
-         array($url.'&sa=lot',_('Lot'),_('Listes des lots et liaison copro'),1),
+         array($url.'&sa=lot',_('Immeubles,lots et copropriétaires'),_('Listes des immeubles, copropriétaire et lots '),1),
          array($url.'&sa=cle',_('Clef de répartition'),_('Clef de répartition'),2),
          array($url.'&sa=af',_('Appel de fond'),_('Création décompte pour appel de fond'),3),
          array($url.'&sa=bu',_('Budget'),_('budgets'),5),
@@ -70,7 +70,9 @@ $cn=new Database(dossier::id());
 if ( $cn->exist_schema('coprop') == false)
   {
     require_once('include/class_install_plugin.php');
-
+/**
+ * créer fiche immeuble, lot, copropriétaire, ajouter des select dans catégorie lots pour montrer les copro + immeubles
+ */
     $iplugn=new Install_Plugin($cn);
     $iplugn->install();
     echo_warning(_("L'extension est installée, pourriez-vous en vérifier le paramètrage ?"));

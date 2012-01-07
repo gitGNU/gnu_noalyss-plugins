@@ -75,41 +75,51 @@ $f_add_button=new IButton('add_card');
 $f_add_button->label=_('Créer une nouvelle fiche');
 $f_add_button->set_attribute('ipopup','ipop_newcard');
 $f_add_button->set_attribute('jrn',-1);
-$filter=$g_copro_parameter->categorie_lot.",".$g_copro_parameter->categorie_coprop;
+$filter=$g_copro_parameter->categorie_lot.",".$g_copro_parameter->categorie_coprop.",".$g_copro_parameter->categorie_immeuble;
 $f_add_button->javascript=" this.filter='$filter';this.jrn=-1;select_card_type(this);";
 
 
+
+// liste Immeuble
+
+$sql=" select a.f_id ,
+	(select ad_value from fiche_detail where f_id=a.f_id and ad_id=1) as building_name,
+	(select ad_value from fiche_detail where f_id=a.f_id and ad_id=23) as building_qcode
+	from
+	fiche as a
+	where
+	a.fd_id=$1";
+
 /*
- * Liste
+ * Liste coprop par immeuble
  */
-$sql=" select distinct
-	c_fiche_id,
+$sql=" select f_id,
 	(select ad_value from fiche_detail where f_id=c_fiche_id and ad_id=1) as copro_name,
 	(select ad_value from fiche_detail where f_id=c_fiche_id and ad_id=23) as copro_qcode
-
+	(select ad_value from fiche_detail where f_id=c_fiche_id and ad_id=10) as copro_start,
+	(select ad_value from fiche_detail where f_id=c_fiche_id and ad_id=33) as copro_end
 	from
-	coprop.coproprietaire
+	fiche
+	where
+	fd_id=$1
+	and f_id in ( select f_id from fiche_detail where ad_id=$1 and ad_value=$2)
 	";
 /**
  * @todo ajouter tri
  */
-$a_copro=$cn->get_array($sql);
+$a_copro=$cn->get_array($sql,array($g_copro_parameter->categorie_coprop));
 
-$sql_lot=$cn->prepare ("lot","select coprop_fk, (select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=1) as lot_name,
+$sql_lot=$cn->prepare ("lot","select f_id,
+	(select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=1) as lot_name,
 	(select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=23) as lot_qcode,
         (select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=9) as lot_desc
-	from coprop.lot where coprop_fk=$1");
+	from fiche where f_id in ( select f_id from fiche_detail where ad_id=$1 and ad_value=$2)
+	and fd_id=$3");
 
 echo $f_add_button->input();
-echo '<div class="content" id="listcoprolot">';
-require_once 'template/coprop_lot_list.php';
-echo '</div>';
 
-echo '<div class="content" id="ajoutcopro" style="display:none">';
-require_once('template/coprop_lot_add.php');
 
-echo '</div>';
-echo '<div id="divcopropmod"></div>';
+
 echo $f_add_button->input();
 
 ?>

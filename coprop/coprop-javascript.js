@@ -246,3 +246,36 @@ function compute_key()
 		alert(e.message);
 	}
 }
+
+function budget_detail(plugin_code,ac,dossier,bud_id)
+{
+	waiting_box();
+	try
+	{
+		var queryString="plugin_code="+plugin_code+"&gDossier="+dossier+"&bud_id="+bud_id+'&ac='+ac+"&act=buddisplay";
+		var action=new Ajax.Request ( 'ajax.php',
+		{
+			method:'get',
+			parameters:queryString,
+			onFailure:null,
+			onSuccess:function (response)
+			{
+				try
+				{
+                                    remove_waiting_box();
+                                    $('divbuddetail').innerHTML=response.responseText;
+									response.responseText.evalScripts();
+				}
+				catch(e)
+				{
+					alert("RÃ©ponse Ajax ="+e.message);
+				}
+			}
+		}
+		);
+	}
+	catch(e)
+	{
+		alert(e.message);
+	}
+}

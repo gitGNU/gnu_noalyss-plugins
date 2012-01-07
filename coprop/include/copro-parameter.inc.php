@@ -37,6 +37,7 @@ if ( isset ($_POST['save']))
 		$g_copro_parameter->save('categorie_coprop',$_POST['categorie_coprop']);
 		$g_copro_parameter->save('journal_appel',$_POST['journal_appel']);
 		$g_copro_parameter->save('categorie_appel',$_POST['categorie_appel']);
+		$g_copro_parameter->save('categorie_immeuble',$_POST['categorie_immeuble']);
 	}
 	catch(Exception $e)
 	{
@@ -65,15 +66,18 @@ $categorie_appel=new ISelect('categorie_appel');
 $categorie_appel->value=$cn->make_array("select  fd_id,fd_label from fiche_def order by fd_label ");
 $categorie_appel->selected=$g_copro_parameter->categorie_appel;
 
+$categorie_immeuble=new ISelect('categorie_immeuble');
+$categorie_immeuble->value=$cn->make_array("select  fd_id,fd_label from fiche_def order by fd_label ");
+$categorie_immeuble->selected=$g_copro_parameter->categorie_immeuble;
 ?>
 <form method="POST">
 <table>
 	<tr>
 		<td>
-			Catégorie de fiches pour les lots
+			Catégorie de fiches pour les immeubles
 		</td>
 		<td>
-			<?=$cat_lot->input()?>
+			<?=$categorie_immeuble->input()?>
 		</td>
 	</tr>
 		<tr>
@@ -82,6 +86,14 @@ $categorie_appel->selected=$g_copro_parameter->categorie_appel;
 		</td>
 		<td>
 			<?=$cat_coprop->input();?>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			Catégorie de fiches pour les lots
+		</td>
+		<td>
+			<?=$cat_lot->input()?>
 		</td>
 	</tr>
 		<tr>

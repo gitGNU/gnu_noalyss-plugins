@@ -66,15 +66,19 @@ EOF;
 		$this->cn->exec_sql($sql);
 // load default value
 		$array = array(
-			'categorie_lot' => array(''),
-			'categorie_coprop' => array(''),
-			'poste_appel' => array(''),
-			'journal_appel' => array('0'),
+			'categorie_lot' => 0,
+			'categorie_coprop' => 0,
+			'categorie_immeuble' => 0,
+			'categorie_appel' => 0,
+			'poste_appel' => 0,
+			'journal_appel' => 0,
+			'id_immeuble'=>9002,
+			'id_coprop'=>9003
 		);
 
 		foreach ($array as $code => $value)
 		{
-			$this->cn->exec_sql('insert into coprop.parameter(pr_id,pr_value) values ($1,$2)', array($code, $value[0]));
+			$this->cn->exec_sql('insert into coprop.parameter(pr_id,pr_value) values ($1,$2)', array($code, $value));
 		}
 	}
 
