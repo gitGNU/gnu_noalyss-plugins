@@ -195,8 +195,7 @@ function remove_key(plugin_code,ac,dossier,key_id)
 					remove_waiting_box();
 					$("row"+key_id).style.color="red";
 					$("row"+key_id).style.textDecoration="line-through";
-                                        $("col"+key_id).style.textDecoration="none";
-					$("col"+key_id).innerHTML="Effacé";
+					$("col"+key_id).innerHTML="";
 
 					//response.responseText.evalScripts();
 				}
@@ -308,6 +307,75 @@ function compute_budget()
 			$('span_diff').innerHTML=difference;
 		}
 
+	}
+	catch(e)
+	{
+		alert(e.message);
+	}
+}
+function budget_add(dossier,plugin_code,ac)
+{
+	waiting_box();
+	try
+	{
+		var queryString="plugin_code="+plugin_code+"&gDossier="+dossier+"&bud_id=0&ac="+ac+"&act=budadd";
+		var action=new Ajax.Request ( 'ajax.php',
+		{
+			method:'get',
+			parameters:queryString,
+			onFailure:null,
+			onSuccess:function (response)
+			{
+				try
+				{
+                                    remove_waiting_box();
+                                    $('divbuddetail').innerHTML=response.responseText;
+									response.responseText.evalScripts();
+				}
+				catch(e)
+				{
+					alert("Réponse Ajax ="+e.message);
+				}
+			}
+		}
+		);
+	}
+	catch(e)
+	{
+		alert(e.message);
+	}
+}
+function budget_remove(plugin_code,ac,dossier,bud_id)
+{
+	if (! confirm("Vous voulez effacer ce budget?")) { return;}
+	waiting_box();
+	try
+	{
+		var queryString="plugin_code="+plugin_code+"&gDossier="+dossier+"&bud_id="+bud_id+'&ac='+ac+"&act=removebudget";
+		var action=new Ajax.Request ( 'ajax.php',
+		{
+			method:'get',
+			parameters:queryString,
+			onFailure:null,
+			onSuccess:function (response)
+			{
+				try
+				{
+					remove_waiting_box();
+					$("row"+bud_id).style.color="red";
+					$("row"+bud_id).style.textDecoration="line-through";
+					$("col2"+bud_id).innerHTML="";
+					$("col1"+bud_id).innerHTML="";
+
+					//response.responseText.evalScripts();
+				}
+				catch(e)
+				{
+					alert("Réponse Ajax ="+e.message);
+				}
+			}
+		}
+		);
 	}
 	catch(e)
 	{

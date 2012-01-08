@@ -107,7 +107,7 @@ $sql=" select f_id,
 /**
  * @todo ajouter tri
  */
-$a_copro=$cn->get_array($sql,array($g_copro_parameter->categorie_coprop));
+/*$a_copro=$cn->get_array($sql,array($g_copro_parameter->categorie_coprop));
 
 $sql_lot=$cn->prepare ("lot","select f_id,
 	(select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=1) as lot_name,
@@ -115,7 +115,7 @@ $sql_lot=$cn->prepare ("lot","select f_id,
         (select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=9) as lot_desc
 	from fiche where f_id in ( select f_id from fiche_detail where ad_id=$1 and ad_value=$2)
 	and fd_id=$3");
-
+*/
 echo $f_add_button->input();
 
 
