@@ -44,7 +44,10 @@ class Install_Plugin
 		// create the schema
 		$this->create_schema();
 		// create table + put default values
+		$this->create_card();
+
 		$this->create_table_parameter();
+
 		$this->cn->commit();
 	}
 
@@ -52,7 +55,16 @@ class Install_Plugin
 	{
 		$this->cn->exec_sql('create schema coprop');
 	}
+	function create_card()
+	{
+	$sql="		insert into attr_def (ad_id,ad_text,ad_type,ad_size,ad_extra)
+		values  ('71','Copropriétaire','select','22','select f_id,vw_name from vw_fiche_attr where fd_id = 7 '),
+		('70','Immeuble','select','22','select f_id,vw_name from vw_fiche_attr where fd_id = 21');";
+	// Create categorie pour lot immeuble et coprop
 
+	// creation vue (create_view_summary)
+
+	}
 	function create_table_parameter()
 	{
 		$sql = <<<EOF
@@ -71,9 +83,7 @@ EOF;
 			'categorie_immeuble' => 0,
 			'categorie_appel' => 0,
 			'poste_appel' => 0,
-			'journal_appel' => 0,
-			'id_immeuble'=>9002,
-			'id_coprop'=>9003
+			'journal_appel' => 0
 		);
 
 		foreach ($array as $code => $value)
