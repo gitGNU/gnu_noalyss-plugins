@@ -55,16 +55,72 @@ class Install_Plugin
 	{
 		$this->cn->exec_sql('create schema coprop');
 	}
+
 	function create_card()
 	{
-	$sql="		insert into attr_def (ad_id,ad_text,ad_type,ad_size,ad_extra)
-		values  ('71','Copropriétaire','select','22','select f_id,vw_name from vw_fiche_attr where fd_id = 7 '),
-		('70','Immeuble','select','22','select f_id,vw_name from vw_fiche_attr where fd_id = 21');";
-	// Create categorie pour lot immeuble et coprop
+		// create categorie immeuble, lot et coprop.
+		$fiche_def = new Fiche_Def($this->cn);
 
-	// creation vue (create_view_summary)
+		// Create categorie pour lot immeuble et coprop + attribut
+		$fiche_def->add(array(
+			'FICHE_REF' => 9,
+			'nom_mod' => 'Copropriétaires - plugin',
+			'class_base' => null)
+		);
+		$copro = $fiche_def->id;
+		$lot_def = new Fiche_Def($this->cn);
+
+		$lot_def->add(array(
+			'FICHE_REF' => 15,
+			'nom_mod' => 'Lots - plugin',
+			'class_base' => '')
+		);
+		$lot = $lot_def->id;
+
+		$imm_def = new Fiche_Def($this->cn);
+		$fiche_def->add(array(
+			'FICHE_REF' => 15,
+			'nom_mod' => 'immeuble - plugin',
+			'class_base' => '')
+		);
+		$immeuble = $imm_def->id;
+
+		// creation attribut
+		$this->cn->exec_sql("		insert into attr_def (ad_id,ad_text,ad_type,ad_size,ad_extra)
+		values  ('71','Copropriétaire','select','22','select f_id,vw_name from vw_fiche_attr where fd_id = $1 '),
+		('70','Immeuble','select','22','select f_id,vw_name from vw_fiche_attr where fd_id = $2');", array($copro, $immeuble));
+
+		$lot_def->InsertAttribut(71); // lien vers coprop
+		$lot_def->InsertAttribut(72);// lien vers immeuble
+
+		$imm_def->InsertAttribut(14); // adresse
+		$imm_def->InsertAttribut(15); // code postale
+		$imm_def->InsertAttribut(24); //ville
+		$imm_def->InsertAttribut(16); // pays
+
+		$fiche_def->InsertAttribut(27); // gsm
+		$fiche_def->InsertAttribut(32); // prénom
+		$fiche_def->InsertAttribut(10); // date début
+		$fiche_def->InsertAttribut(33); // date fin
+		//
+		// creation vue (create_view_summary)
+		$this->cn->exec_sql("CREATE OR REPLACE VIEW coprop.summary AS
+				SELECT a.f_id AS lot_id, m.ad_value AS building_id, c.ad_value AS coprop_id
+				FROM fiche_detail a
+				JOIN fiche f1 ON f1.f_id = a.f_id
+				JOIN ( SELECT fd1.f_id, fd1.ad_value
+					FROM fiche_detail fd1
+					WHERE fd1.ad_id = 70) m ON m.f_id = a.f_id
+				JOIN ( SELECT fd1.f_id, fd1.ad_value
+				FROM fiche_detail fd1
+				WHERE fd1.ad_id = 71) c ON c.f_id = a.f_id
+				WHERE f1.fd_id = $1 AND a.ad_id = 1", array($lot));
+		$this->lot_id=$lot;
+		$this->immeuble_id=$immeuble;
+		$this->coprop_id=$coprop;
 
 	}
+
 	function create_table_parameter()
 	{
 		$sql = <<<EOF
@@ -78,9 +134,9 @@ EOF;
 		$this->cn->exec_sql($sql);
 // load default value
 		$array = array(
-			'categorie_lot' => 0,
-			'categorie_coprop' => 0,
-			'categorie_immeuble' => 0,
+			'categorie_lot' => $this->lot_id,
+			'categorie_coprop' => $this->coprop_id,
+			'categorie_immeuble' => $this->immeuble_id,
 			'categorie_appel' => 0,
 			'poste_appel' => 0,
 			'journal_appel' => 0
