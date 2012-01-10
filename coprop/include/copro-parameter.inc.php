@@ -33,11 +33,11 @@ if ( isset ($_POST['save']))
 {
 	$cn->start();
 	try {
-		$g_copro_parameter->save('categorie_lot',$_POST['categorie_lot']);
-		$g_copro_parameter->save('categorie_coprop',$_POST['categorie_coprop']);
+		/*$g_copro_parameter->save('categorie_lot',$_POST['categorie_lot']);
+		$g_copro_parameter->save('categorie_coprop',$_POST['categorie_coprop']);*/
 		$g_copro_parameter->save('journal_appel',$_POST['journal_appel']);
 		$g_copro_parameter->save('categorie_appel',$_POST['categorie_appel']);
-		$g_copro_parameter->save('categorie_immeuble',$_POST['categorie_immeuble']);
+		//$g_copro_parameter->save('categorie_immeuble',$_POST['categorie_immeuble']);
 	}
 	catch(Exception $e)
 	{
@@ -53,10 +53,12 @@ $g_copro_parameter=new Copro_Parameter();
 $cat_lot=new ISelect('categorie_lot');
 $cat_lot->value=$cn->make_array("select fd_id,fd_label from fiche_def order by fd_label");
 $cat_lot->selected=$g_copro_parameter->categorie_lot;
+$cat_lot->readOnly=true;
 
 $cat_coprop=new ISelect('categorie_coprop');
 $cat_coprop->value=$cn->make_array("select fd_id,fd_label from fiche_def order by fd_label ");
 $cat_coprop->selected=$g_copro_parameter->categorie_coprop;
+$cat_coprop->readOnly=true;
 
 $journal_appel=new ISelect('journal_appel');
 $journal_appel->value=$cn->make_array("select jrn_def_id,jrn_def_name from jrn_def where jrn_def_type='ODS' order by 2");
@@ -69,6 +71,7 @@ $categorie_appel->selected=$g_copro_parameter->categorie_appel;
 $categorie_immeuble=new ISelect('categorie_immeuble');
 $categorie_immeuble->value=$cn->make_array("select  fd_id,fd_label from fiche_def order by fd_label ");
 $categorie_immeuble->selected=$g_copro_parameter->categorie_immeuble;
+$categorie_immeuble->readOnly=true;
 ?>
 <form method="POST">
 <table>
