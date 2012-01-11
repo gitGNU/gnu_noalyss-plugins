@@ -23,45 +23,53 @@
 
 /**
  * @file
- * @brief show list between lot et copropriétaire
+ * @brief show list building, lot and copropriétaire
  *
  */
 $gDossier=Dossier::id();
 ?>
-<table class="result">
-	<tr>
-		<th> Nom copropriétaire </th>
-		<th>
-			Lot(s)
-		</th>
-	</tr>
-<?
-for ($i=0;$i<count($a_copro);$i++):
-	$col_copro=HtmlInput::anchor($a_copro[$i]['copro_name'],"","onclick=\"mod_coprop($gDossier,'".$a_copro[$i]['c_fiche_id']."','".$_REQUEST['plugin_code']."','".$_REQUEST['ac']."')\"");
-?>
-	<tr>
-		<td><?=$col_copro?></td>
-	<td>
-		<?
-			$rlot=$cn->execute('lot',array($a_copro[$i]['c_fiche_id']));
-			$max=Database::num_row($rlot);
-			$sp="";
-			for ($e=0;$e<$max;$e++):
-				$row=Database::fetch_array($rlot,$e);
-				$js_lot=HtmlInput::card_detail($row['lot_qcode'],$row['lot_name'],' class="line"');
-                                $js_lot.=$row['lot_desc'];
-				echo $sp.$js_lot;
-				$sp=" , ";
-			endfor;
-		?>
+<h1>Lots affectés</h1>
+<? for ( $i=0;$i<count($a_immeuble);$i++):?>
+<h2><?=HtmlInput::card_detail($a_immeuble[$i]['quick_code'],$a_immeuble[$i]['vw_name'])?></h2>
 
-	</td>
-</tr>
-<?
-endfor;
+<? 
+$ret_coprop=$cn->execute("coprop",array($a_immeuble[$i]['f_id']));
+$max_coprop=Database::nuw_row($ret_coprop);
+if ($max_coprop==0)
+{
+    echo "Pas de copropriétaires pour cet immeuble";
+    continue;
+}
 ?>
+<ul>
+<?for ($e=0;$e<$max_coprop;$e++): 
+    $r=Database::fetch_array($ret_coprop,$e);
+    ?>
+    <li><?=HtmlInput::card_detail($r['copro_qcode'],h($r['copro_name']." ".$r['copro_name']))?></li>
+    <?
+    $ret_lot=$cn->execute("lot",array($a_immeuble[$i]['f_id'],$r['copro_id']));
+   $max_lot=Database::nuw_row($ret_lot);
+    if ($max_lot==0)
+    {
+        echo "Pas de lot pour ce copropriétaires ";
+        continue;
+    }
+    ?>
+    <ul>
+    <?for ($l=0;$e<$max_lot;$l++): 
+    $s=Database::fetch_array($ret_lot,$e);
+    ?>
+    <li><?=HtmlInput::card_detail($s['lot_qcode'],h($r['lot_name']." ".$s['lot_desc']))?></li>
+    <? endfor;?>
+    </ul>
+    <? endfor;?>
+</ul>
 
-</table>
-<?
-echo HtmlInput::button("add_link","Ajout Copropriétaire / lot ","onclick=\"add_coprop()\"");
-?>
+<? endfor; ?>
+
+<h1>Lot sans immeuble ou sans copropriétaires</h1>
+<ul>
+<? for($e=0;$e<count($a_undef_lot);$e++):?>
+    <li><?=HtmlInput::card_detail($a_undef_lot[$e]['lot_qcode'],h($a_undef_lot[$e]['lot_name']." ".$a_undef_lot[$e]['lot_desc']))?></li>
+<? endfor; ?>
+</ul>

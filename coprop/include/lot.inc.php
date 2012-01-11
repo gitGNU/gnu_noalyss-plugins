@@ -26,48 +26,7 @@
  * @brief liaison entre lot et copropriétaires
  *
  */
-require_once 'class_copro_lot.php';
 global $cn,$g_copro_parameter;
-if ( isset($_POST['copro_new']))
-{
-	var_dump($_POST);
-	$cp=new Copro_Lot();
-	try
-	{
-		$cp->insert($_POST);
-	}
-	catch(Exception $e)
-	{
-		echo $e->getTraceAsString();
-	}
-}
-// Ajout de lots
-if (isset($_POST['addlot']))
-{
-	var_dump($_POST);
-	$cp=new Copro_Lot();
-	try
-	{
-		$cp->add_lot($_POST);
-	}
-	catch(Exception $e)
-	{
-		echo $e->getTraceAsString();
-	}
-}
-// Mise à jour lots existants
-if ( isset($_POST['updexist']))
-{
-		var_dump($_POST);
-	$cp=new Copro_Lot();
-	try
-	{
-		$cp->update_lot($_POST);
-	}
-	catch(Exception $e)
-	{
-		echo $e->getTraceAsString();
-	}
 }
 //require_once 'include/class_coprop-lot_coprop.php';
 /* Add button */
@@ -80,42 +39,55 @@ $f_add_button->javascript=" this.filter='$filter';this.jrn=-1;select_card_type(t
 
 
 
+/**
+ * @todo ajouter tri
+ */
+
 // liste Immeuble
 
-$sql=" select a.f_id ,
-	(select ad_value from fiche_detail where f_id=a.f_id and ad_id=1) as building_name,
-	(select ad_value from fiche_detail where f_id=a.f_id and ad_id=23) as building_qcode
-	from
-	fiche as a
-	where
-	a.fd_id=$1";
+$a_immeuble=$cn->get_array(" select f_id,vw_name,quick_code
+    from vw_fiche_attr
+    where
+    fd_id=$1
+    ",array($g_copro_parameter->categorie_immeuble));
 
 /*
  * Liste coprop par immeuble
  */
-$sql=" select f_id,
-	(select ad_value from fiche_detail where f_id=c_fiche_id and ad_id=1) as copro_name,
-	(select ad_value from fiche_detail where f_id=c_fiche_id and ad_id=23) as copro_qcode
-	(select ad_value from fiche_detail where f_id=c_fiche_id and ad_id=10) as copro_start,
-	(select ad_value from fiche_detail where f_id=c_fiche_id and ad_id=33) as copro_end
+$coprop=$cn->prepare("coprop"," select coprop_id,
+	vw_name as copro_name,
+        vw_first_name as copro_first_name,
+	quick_code as copro_qcode
 	from
-	fiche
+	coprop.summary as s join vw_fiche_attr using (f_id)
 	where
-	fd_id=$1
-	and f_id in ( select f_id from fiche_detail where ad_id=$1 and ad_value=$2)
-	";
-/**
- * @todo ajouter tri
+	s.building_id=$1
+	");
+/*
+ * Liste coprop par immeuble
  */
-/*$a_copro=$cn->get_array($sql,array($g_copro_parameter->categorie_coprop));
+$lot=$cn->prepare("lot"," select lot_id,
+	vw_name as lot_name,
+	quick_code as lot_qcode,
+        vw_description as lot_desc
+	from
+	coprop.summary as s join vw_fiche_attr using (f_id)
+	where
+	s.building_id=$1 and s.coprop_id=$2
+	");
+/*
+ * Lot sans immeuble or coprop
+ */
+$a_undef_lot=$cn->get_array(" select lot_id,
+	vw_name as lot_name,
+	quick_code as lot_qcode,
+        vw_description as lot_desc
+	from
+	coprop.summary as s join vw_fiche_attr using (f_id)
+	where
+	coalesce(s.building_id,'')='' or coalesce(s.coprop_id,'')=''
+	");
 
-$sql_lot=$cn->prepare ("lot","select f_id,
-	(select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=1) as lot_name,
-	(select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=23) as lot_qcode,
-        (select ad_value from fiche_detail where f_id=l_fiche_id and ad_id=9) as lot_desc
-	from fiche where f_id in ( select f_id from fiche_detail where ad_id=$1 and ad_value=$2)
-	and fd_id=$3");
-*/
 echo $f_add_button->input();
 
 
