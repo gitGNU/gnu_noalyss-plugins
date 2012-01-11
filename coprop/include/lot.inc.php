@@ -54,26 +54,26 @@ $a_immeuble=$cn->get_array(" select f_id,vw_name,quick_code
 /*
  * Liste coprop par immeuble
  */
-$coprop=$cn->prepare("coprop"," select coprop_id,
+$coprop=$cn->prepare("coprop"," select distinct coprop_id,
 	vw_name as copro_name,
         vw_first_name as copro_first_name,
 	quick_code as copro_qcode
 	from
-	coprop.summary as s join vw_fiche_attr using (f_id)
+	coprop.summary as s join vw_fiche_attr on (coprop_id::numeric=f_id)
 	where
-	s.building_id=$1
+	coalesce(s.building_id,'')=$1 
 	");
 /*
  * Liste coprop par immeuble
  */
-$lot=$cn->prepare("lot"," select lot_id,
+$lot=$cn->prepare("lot"," select distinct lot_id,
 	vw_name as lot_name,
 	quick_code as lot_qcode,
         vw_description as lot_desc
 	from
-	coprop.summary as s join vw_fiche_attr using (f_id)
+	coprop.summary as s join vw_fiche_attr on (lot_id::numeric=f_id)
 	where
-	s.building_id=$1 and s.coprop_id=$2
+	coalesce(s.building_id,'')=$1 and coalesce(s.coprop_id,'')=$2
 	");
 /*
  * Lot sans immeuble or coprop
@@ -83,14 +83,14 @@ $a_undef_lot=$cn->get_array(" select lot_id,
 	quick_code as lot_qcode,
         vw_description as lot_desc
 	from
-	coprop.summary as s join vw_fiche_attr using (f_id)
+	coprop.summary as s join vw_fiche_attr on (lot_id::numeric=f_id)
 	where
 	coalesce(s.building_id,'')='' or coalesce(s.coprop_id,'')=''
 	");
 
 echo $f_add_button->input();
 
-
+require_once 'template/coprop_lot_list.php';
 
 echo $f_add_button->input();
 

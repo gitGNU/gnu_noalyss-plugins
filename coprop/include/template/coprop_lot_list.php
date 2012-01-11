@@ -30,11 +30,11 @@ $gDossier=Dossier::id();
 ?>
 <h1>Lots affectés</h1>
 <? for ( $i=0;$i<count($a_immeuble);$i++):?>
-<h2><?=HtmlInput::card_detail($a_immeuble[$i]['quick_code'],$a_immeuble[$i]['vw_name'])?></h2>
+<h2><?=HtmlInput::card_detail($a_immeuble[$i]['quick_code'],$a_immeuble[$i]['vw_name'],' style="display:inline;text-decoration:underline"')?></h2>
 
 <? 
 $ret_coprop=$cn->execute("coprop",array($a_immeuble[$i]['f_id']));
-$max_coprop=Database::nuw_row($ret_coprop);
+$max_coprop=Database::num_row($ret_coprop);
 if ($max_coprop==0)
 {
     echo "Pas de copropriétaires pour cet immeuble";
@@ -45,10 +45,10 @@ if ($max_coprop==0)
 <?for ($e=0;$e<$max_coprop;$e++): 
     $r=Database::fetch_array($ret_coprop,$e);
     ?>
-    <li><?=HtmlInput::card_detail($r['copro_qcode'],h($r['copro_name']." ".$r['copro_name']))?></li>
+<li><?=HtmlInput::card_detail($r['copro_qcode'],'',' style="display:inline;text-decoration:underline"').' '.h($r['copro_name']." ".$r['copro_first_name'])?></li>
     <?
-    $ret_lot=$cn->execute("lot",array($a_immeuble[$i]['f_id'],$r['copro_id']));
-   $max_lot=Database::nuw_row($ret_lot);
+    $ret_lot=$cn->execute("lot",array($a_immeuble[$i]['f_id'],$r['coprop_id']));
+   $max_lot=Database::num_row($ret_lot);
     if ($max_lot==0)
     {
         echo "Pas de lot pour ce copropriétaires ";
@@ -56,10 +56,10 @@ if ($max_coprop==0)
     }
     ?>
     <ul>
-    <?for ($l=0;$e<$max_lot;$l++): 
-    $s=Database::fetch_array($ret_lot,$e);
+    <?for ($l=0;$l<$max_lot;$l++): 
+    $s=Database::fetch_array($ret_lot,$l);
     ?>
-    <li><?=HtmlInput::card_detail($s['lot_qcode'],h($r['lot_name']." ".$s['lot_desc']))?></li>
+       <li><?=HtmlInput::card_detail($s['lot_qcode'],'',' style="display:inline;text-decoration:underline"')." ".h($s['lot_name']." ".$s['lot_desc'])?></li>
     <? endfor;?>
     </ul>
     <? endfor;?>
@@ -70,6 +70,6 @@ if ($max_coprop==0)
 <h1>Lot sans immeuble ou sans copropriétaires</h1>
 <ul>
 <? for($e=0;$e<count($a_undef_lot);$e++):?>
-    <li><?=HtmlInput::card_detail($a_undef_lot[$e]['lot_qcode'],h($a_undef_lot[$e]['lot_name']." ".$a_undef_lot[$e]['lot_desc']))?></li>
+      <li><?=HtmlInput::card_detail($a_undef_lot[$e]['lot_qcode'],'',' style="display:inline;text-decoration:underline"')." ".h($a_undef_lot[$e]['lot_name']." ".$a_undef_lot[$e]['lot_desc'])?></li>
 <? endfor; ?>
 </ul>
