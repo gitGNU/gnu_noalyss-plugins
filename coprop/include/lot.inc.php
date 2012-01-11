@@ -27,7 +27,7 @@
  *
  */
 global $cn,$g_copro_parameter;
-}
+
 //require_once 'include/class_coprop-lot_coprop.php';
 /* Add button */
 $f_add_button=new IButton('add_card');
