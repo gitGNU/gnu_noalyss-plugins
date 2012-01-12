@@ -83,7 +83,25 @@ else
     $filter = $g_copro_parameter->categorie_appel;
     $f_add_button->javascript = " this.filter='$filter';this.jrn=-1;select_card_type(this);";
     $str_add_appel = $f_add_button->input();
-
+    
+ // Budget
+    $budget_sel=new ISelect("b_id");
+    $budget_sel->value=$cn->make_arrak("select b_id,b_name from coprop.budget order by b_name");
+    
+    // pourcentage
+    $budget_pct=new INum("bud_pct",0);
+    
+    // select between budget or amount
+    $appel_fond_type=new ISelect("aft");
+    $appel_fond_type->value=array(
+        array("value"=>-1,'Faites votre choix'),
+        array("value"=>1,'appel de fond d\'budget'),
+        array("value"=>2,'Appel de fond par montant')
+    );
+    $onchange=" onchange=\"appel_fond_show() \"";
+    $appel_fond_type->javascript=$onchange;
+    
+    
     require_once 'template/appel_fond.php';
 }
 ?>

@@ -1,5 +1,4 @@
 <?php
-
 /*
  *   This file is part of PhpCompta.
  *
@@ -50,6 +49,27 @@
 			<?=$date->input()?>
 		</td>
 	</tr>
+</table>
+appel de fond par <?=$appel_fond_type->input()?>
+<table id="appel_fond_budget">
+        	<tr >
+                    
+		<td>
+			Budget à utiliser
+		</td>
+		<td>
+			<?=$budget_sel->input()?>
+		</td>
+
+		<td>
+			Pourcentage du budget
+		</td>
+		<td>
+			<?=$budget_pct->input()?>
+		</td>
+	</tr>
+</table>
+<table id="appel_fond_amount">
 	<tr>
 
 		<td>
@@ -58,8 +78,6 @@
 		<td>
 			<?=$amount->input()?>
 		</td>
-	</tr>
-	<tr>
 
 		<td>
 			Clef de répartiton à utiliser

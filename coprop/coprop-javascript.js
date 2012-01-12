@@ -382,3 +382,34 @@ function budget_remove(plugin_code,ac,dossier,bud_id)
 		alert(e.message);
 	}
 }
+
+function appel_fond_show()
+{
+    try 
+    {
+        var aft=$('aft');
+        var choice=aft.options[aft.selectedIndex].value;
+        if ( choice == -1 )
+        {
+            $('appel_fond_budget').hide();
+            $('appel_fond_amount').hide();
+            return;
+        }
+        if ( choice == 1 )
+        {
+            $('appel_fond_budget').show();
+            $('appel_fond_amount').hide();
+            return;
+        }
+        if ( choice == 2 )
+        {
+            $('appel_fond_budget').hide();
+            $('appel_fond_amount').show();
+            return;
+        }
+    } catch(e)
+    {
+        alert(e.message);
+    }
+    
+}
