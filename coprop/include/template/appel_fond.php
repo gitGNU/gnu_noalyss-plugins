@@ -28,7 +28,13 @@
 ?>
 <table>
 	<tr>
-
+		<td>
+			Date de l'opération
+		</td>
+		<td>
+			<?=$date->input()?>
+		</td>
+	</tr>
 		<td>Journal pour l'appel de fond</td>
 		<td>
 			<?=$led_appel_fond->input()?>
@@ -41,14 +47,7 @@
 		<td><?=$f_categorie_appel_label?></td>
 		<td><?=$str_add_appel?></td>
 	</tr>
-	<tr>
-		<td>
-			Date de l'opération
-		</td>
-		<td>
-			<?=$date->input()?>
-		</td>
-	</tr>
+
 </table>
 appel de fond par <?=$appel_fond_type->input()?>
 <table id="appel_fond_budget">
@@ -88,3 +87,4 @@ appel de fond par <?=$appel_fond_type->input()?>
 	</tr>
 
 </table>
+<script> appel_fond_show()</script>
