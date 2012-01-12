@@ -50,6 +50,7 @@
 
 </table>
 appel de fond par <?=$appel_fond_type->input()?>
+<div style="margin-left:150px">
 <table id="appel_fond_budget">
         	<tr >
                     
@@ -59,7 +60,8 @@ appel de fond par <?=$appel_fond_type->input()?>
 		<td>
 			<?=$budget_sel->input()?>
 		</td>
-
+        </tr>
+        <tr>
 		<td>
 			Pourcentage du budget
 		</td>
@@ -77,7 +79,8 @@ appel de fond par <?=$appel_fond_type->input()?>
 		<td>
 			<?=$amount->input()?>
 		</td>
-
+        </tr>
+        <tr>
 		<td>
 			Clef de répartiton à utiliser
 		</td>
@@ -87,4 +90,5 @@ appel de fond par <?=$appel_fond_type->input()?>
 	</tr>
 
 </table>
+</div>
 <script> appel_fond_show()</script>
