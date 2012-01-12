@@ -86,7 +86,7 @@ else
     
  // Budget
     $budget_sel=new ISelect("b_id");
-    $budget_sel->value=$cn->make_arrak("select b_id,b_name from coprop.budget order by b_name");
+    $budget_sel->value=$cn->make_array("select b_id,b_name from coprop.budget order by b_name");
     
     // pourcentage
     $budget_pct=new INum("bud_pct",0);
