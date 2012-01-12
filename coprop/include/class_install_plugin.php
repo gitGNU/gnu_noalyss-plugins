@@ -54,6 +54,7 @@ class Install_Plugin
 	function create_schema()
 	{
 		$this->cn->exec_sql('create schema coprop');
+                $this->cn->exec_sql("create sequence coprop.appel_fond_id");
 	}
 
 	function create_card()
