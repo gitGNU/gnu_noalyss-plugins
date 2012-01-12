@@ -94,9 +94,9 @@ else
     // select between budget or amount
     $appel_fond_type=new ISelect("aft");
     $appel_fond_type->value=array(
-        array("value"=>-1,'Faites votre choix'),
-        array("value"=>1,'appel de fond d\'budget'),
-        array("value"=>2,'Appel de fond par montant')
+        array("value"=>-1,'label'=>'Faites votre choix'),
+        array("value"=>1,'label'=>'Appel de fond d\'budget'),
+        array("value"=>2,'label'=>'Appel de fond par montant')
     );
     $onchange=" onchange=\"appel_fond_show() \"";
     $appel_fond_type->javascript=$onchange;
