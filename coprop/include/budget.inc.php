@@ -4,8 +4,8 @@
  * @file gestion des budgets
  */
 
-require_once 'class_budget.php';
-$bud=new Budget();
+require_once 'class_copro_budget.php';
+$bud=new Copro_Budget();
 
 if ( isset ($_POST['bud_update']))
 {

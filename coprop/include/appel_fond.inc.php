@@ -45,17 +45,17 @@ if (isset($calc))
                 break;
             case 1:
                 $appel_fond = new Coprop_Appel_Fond();
-                $error = $appel_fond->compute_budget($_GET);
+                $appel_fond->compute_budget($_GET);
                 break;
             case 2:
                 $appel_fond = new Coprop_Appel_Fond();
-                $error = $appel_fond->compute_amount($_GET);
+                 $appel_fond->compute_amount($_GET);
                 break;
         }
-        
+
         $appel_fond->display_ledger();
-        
-        
+
+
         exit();
     }
     catch (Exception $e)
@@ -63,26 +63,56 @@ if (isset($calc))
         alert($e->getMessage());
     }
 }
+// save
+if ( isset($_POST['confirm']))
+{
+	$ledger=new Acc_Ledger($cn,$_POST['p_jrn']);
+	$ledger->with_concerned=false;
+	$ledger->save($_POST);
+	echo "<h2>Opération sauvée</h2>";
+	echo HtmlInput::detail_op($ledger->jr_id,$ledger->internal);
+	echo $ledger->input($_GET,1);
+	$appel_fond = new Coprop_Appel_Fond();
+	$appel_fond->id=$_POST['af_id'];
+	$appel_fond->confirm();
+	exit();
+}
 // Montre écran confirmation
+if ( isset ($_GET['save']))
+{
+	/**
+	 *@todo manque correction
+	 */
+	echo '<form method="POST">';
+	$ledger=new Acc_Ledger($cn,$_GET['p_jrn']);
+	$ledger->with_concerned=false;
+	echo $ledger->input($_GET,1);
+	echo HtmlInput::submit('confirm','Confirmer');
+	echo '</form>';
+	exit();
+}
 
-
-// confirmation
 
 
 // Detail : propose de faire un appel de fond
 $date = new IDate('p_date');
+$date->value=HtmlInput::default_value('p_date',"",$_GET);
+
 $amount = new INum('amount');
+$amount->value=HtmlInput::default_value('amount',0,$_GET);
 
 $ledger = new Acc_Ledger($cn, 0);
 $led_appel_fond = $ledger->select_ledger('ODS', 3);
-$led_appel_fond->selected = $g_copro_parameter->journal_appel;
+$led_appel_fond->selected = (isset($_GET['p_jrn']))?$_GET['p_jrn']:$g_copro_parameter->journal_appel;
+
 $copro = new ICard();
 $categorie_appel = new ICard();
 $categorie_appel->label = " Appel de fond : " . HtmlInput::infobulle(0);
 $categorie_appel->name = "w_categorie_appel";
 $categorie_appel->tabindex = 1;
-$categorie_appel->value = "";
+$categorie_appel->value = isset($_GET['w_categorie_appel'])?$_GET['w_categorie_appel']:"";
 $categorie_appel->table = 0;
+$categorie_appel->selected=(isset($_GET['key']))?$_GET['key']:-1;
 
 // name of the field to update with the name of the card
 $categorie_appel->set_attribute('label', 'w_categorie_appel_label');
@@ -110,6 +140,7 @@ $f_categorie_appel_bt = $categorie_appel->search();
 
 $key = new ISelect("key");
 $key->value = $cn->make_array("select cr_id,cr_name from coprop.clef_repartition");
+$key->selected=HtmlInput::default_value('key',-1,$_GET);
 
 $f_add_button = new IButton('add_card');
 $f_add_button->label = _('Nouvelle fiche ');
@@ -122,23 +153,25 @@ $str_add_appel = $f_add_button->input();
 // Budget
 $budget_sel = new ISelect("b_id");
 $budget_sel->value = $cn->make_array("select b_id,b_name from coprop.budget order by b_name");
+$budget_sel->selected=HtmlInput::default_value('b_id',-1,$_GET);
 
 // pourcentage
 $budget_pct = new INum("bud_pct", 0);
+$budget_pct->value=HtmlInput::default_value('bud_pct',0,$_GET);
 
 // select between budget or amount
 $appel_fond_type = new ISelect("aft");
 $appel_fond_type->value = array(
     array("value" => -1, 'label' => 'Faites votre choix'),
-    array("value" => 1, 'label' => 'Appel de fond d\'budget'),
+    array("value" => 1, 'label' => 'Appel de fond par budget'),
     array("value" => 2, 'label' => 'Appel de fond par montant')
 );
 $onchange = " onchange=\"appel_fond_show() \"";
 $appel_fond_type->javascript = $onchange;
-
+$appel_fond_type->selected=HtmlInput::default_value('aft',-1,$_GET);
 
 echo '<form method="get">';
-echo HtmlInput::request_to_hidden(array('ac', 'plugin_code', 'sa'));
+echo HtmlInput::request_to_hidden(array('ac', 'plugin_code', 'sa','gDossier'));
 require_once 'template/appel_fond.php';
 echo HtmlInput::submit('calc', "Calculer");
 echo '</form>';

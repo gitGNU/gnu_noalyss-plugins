@@ -20,7 +20,7 @@
 /* $Revision$ */
 
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
-
+require_once 'class_copro_appel_fond_detail.php';
 /**
  * @file
  * @brief Gère les clefs
@@ -99,7 +99,7 @@ class Copro_key
         {
             global $cn;
             $array=$cn->get_array("select * from coprop.clef_repartition where
-                cr_id=$1",$this->cr_id);
+                cr_id=$1",array($this->cr_id));
             if ( $cn->count() == 1 )
             {
                 foreach ( array("cr_id","cr_name","cr_note","cr_tantieme") as $k=>$e) {
