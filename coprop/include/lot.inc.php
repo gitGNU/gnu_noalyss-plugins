@@ -86,6 +86,8 @@ $a_undef_lot=$cn->get_array(" select lot_id,
 	coprop.summary as s join vw_fiche_attr on (lot_id::numeric=f_id)
 	where
 	coalesce(s.building_id,'')='' or coalesce(s.coprop_id,'')=''
+        or coalesce(s.building_id,'') not in (select building_id from coprop.summary) 
+        or coalesce(s.coprop_id,'') not in (select coprop_id from coprop.summary) 
 	");
 
 echo $f_add_button->input();
