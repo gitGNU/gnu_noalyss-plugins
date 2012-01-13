@@ -95,6 +95,25 @@ class Copro_key
 			echo $exc->getTraceAsString();
 		}
 	}
+        function load()
+        {
+            global $cn;
+            $array=$cn->get_array("select * from coprop.clef_repartition where
+                cr_id=$1",$this->cr_id);
+            if ( $cn->count() == 1 )
+            {
+                foreach ( array("cr_id","cr_name","cr_note","cr_tantieme") as $k=>$e) {
+                    $this->$e=$array[0][$e];
+                }
+            }
+        }
+        function get_detail()
+        {
+            global $cn;
+            $array=$cn->get_array("select * from coprop.clef_repartition_detail
+                where cr_id=$1",array($this->cr_id));
+            return $array;
+        }
 
 }
 

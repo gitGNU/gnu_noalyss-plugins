@@ -311,5 +311,12 @@ class Budget
 		}
 
 	}
+       function get_detail()
+       {
+           global $cn;
+           $array=$cn->get_array("select * from coprop.budget_detail where b_id=$1",
+                   array($this->b_id));
+           return $array;
+       }
 }
 ?>

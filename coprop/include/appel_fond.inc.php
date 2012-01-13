@@ -34,23 +34,34 @@ $error = 0;
 // Demande génération
 if (isset($calc))
 {
-// Génére écriture comptable dans journal choisi
-    switch ($aft)
+    try
     {
-        case -1:
-        $error = 1;
-        alert("Choississez le type de calcul");
-        break;
-        case 1:
-            $appel_fond=new Coprop_Appel_Fond();
-            $error=$appel_fond->compute_budget($_GET);
-            break;
-        case 2:
-            $appel_fond=new Coprop_Appel_Fond();
-            $error=$appel_fond->compute_amount($_GET);
-            break;
+
+// Génére écriture comptable dans journal choisi
+        switch ($aft)
+        {
+            case -1:
+                throw  new Exception("Choississez le type de calcul");
+                break;
+            case 1:
+                $appel_fond = new Coprop_Appel_Fond();
+                $error = $appel_fond->compute_budget($_GET);
+                break;
+            case 2:
+                $appel_fond = new Coprop_Appel_Fond();
+                $error = $appel_fond->compute_amount($_GET);
+                break;
+        }
+        
+        $appel_fond->display_ledger();
+        
+        
+        exit();
     }
-    if ($error == 0)        exit();
+    catch (Exception $e)
+    {
+        alert($e->getMessage());
+    }
 }
 // Montre écran confirmation
 
@@ -127,7 +138,7 @@ $appel_fond_type->javascript = $onchange;
 
 
 echo '<form method="get">';
-echo HtmlInput::request_to_hidden('ac', 'plugin_code', 'sa');
+echo HtmlInput::request_to_hidden(array('ac', 'plugin_code', 'sa'));
 require_once 'template/appel_fond.php';
 echo HtmlInput::submit('calc', "Calculer");
 echo '</form>';
