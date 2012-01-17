@@ -85,6 +85,7 @@ if ( isset ($_GET['save']))
 	 */
 	echo '<form method="POST">';
 	$ledger=new Acc_Ledger($cn,$_GET['p_jrn']);
+	echo HtmlInput::hidden('af_id',$_GET['af_id']);
 	$ledger->with_concerned=false;
 	echo $ledger->input($_GET,1);
 	echo HtmlInput::submit('confirm','Confirmer');
