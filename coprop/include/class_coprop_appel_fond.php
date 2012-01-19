@@ -31,7 +31,7 @@ class Coprop_Appel_Fond
         global $cn;
         $this->id=$cn->get_next_seq('coprop.appel_fond_id');
         // clean old
-        $cn->exec_sql("delete from coprop.appel_fond where af_confirmed='N' and tech_per < tech_per - interval '5 hours' ");
+        $cn->exec_sql("delete from coprop.appel_fond where af_confirmed='N' and tech_per < now() - interval '5 hours' ");
 
         // insert new unconfirmed
         $cn->exec_sql("insert into coprop.appel_fond(af_id,af_date,af_confirmed,af_percent,af_amount,af_card,af_ledger,tech_per,b_id,cr_id)
@@ -65,7 +65,7 @@ class Coprop_Appel_Fond
 
                 $afd->afd_amount=  bcmul($fract,$p_amount);
 
-                $afd->insert();
+                if ( $afd->afd_amount != 0 )$afd->insert();
 
             }
 			$cn->commit();
@@ -189,7 +189,7 @@ class Coprop_Appel_Fond
 
 		echo '<FORM METHOD="GET" class="print">';
 		echo $ledger->input($array,0);
-		echo HtmlInput::request_to_hidden(array('ac', 'plugin_code','sa'));
+		echo HtmlInput::request_to_hidden(array('amount','key','w_categorie_appel','b_id','aft','bud_pct','p_date','ac', 'plugin_code','sa'));
 		echo HtmlInput::extension() . dossier::hidden();
 		echo HtmlInput::hidden('action', 'confirm');
 		echo HtmlInput::hidden('af_id', $this->id);
