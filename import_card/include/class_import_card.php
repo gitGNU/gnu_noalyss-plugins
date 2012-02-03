@@ -24,7 +24,7 @@
  * \brief Manage import
  */
 
-class Import_Card 
+class Import_Card
 {
   /**
    *@brief for the form we have here all the hidden variables
@@ -62,7 +62,7 @@ class Import_Card
 
   }
   /**
-   *Test the CSV file, show the choosed delimiter, the CSV parsed, 
+   *Test the CSV file, show the choosed delimiter, the CSV parsed,
    * and replace column header by attribute
    *@return 0 ok,  -1 error
    */
@@ -99,7 +99,7 @@ array
   'rdelimiter' => string ',' (length=1)
   'encodage' => string '' (length=0)
   'record_import' => string 'Valider' (length=7)
-  'head_col' => 
+  'head_col' =>
     array
       0 => string '15' (length=2)
       1 => string '14' (length=2)
@@ -147,7 +147,7 @@ array
 	return -1;
       }
 
-      
+
     /*
      * read the file and record card
      */
@@ -191,7 +191,7 @@ array
 	if ($valid_accounting==0)
 	  {
 	    $attr=sprintf('av_text%d',ATTR_DEF_ACCOUNT);
-	    $array[$attr]='FID';
+	    $array[$attr]='';
 	  }
 	$fiche->insert($rfichedef,$array);
 	echo '</tr>';
