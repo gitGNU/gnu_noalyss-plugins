@@ -112,7 +112,8 @@ array
    */
   static function record_import()
   {
-    global $cn;
+
+    global $cn,$g_failed,$g_succeed;
     extract ($_POST);
     $fd=fopen($filename,'r');
     /*
@@ -193,7 +194,16 @@ array
 	    $attr=sprintf('av_text%d',ATTR_DEF_ACCOUNT);
 	    $array[$attr]='';
 	  }
-	$fiche->insert($rfichedef,$array);
+	  try
+	  {
+		$fiche->insert($rfichedef,$array);
+		echo td($g_succeed);
+	  }
+	  catch(Exception $e)
+	  {
+		  echo td($g_failed);
+		  echo td($e->getMessage());
+	  }
 	echo '</tr>';
       }
     $table_content=ob_get_contents();
