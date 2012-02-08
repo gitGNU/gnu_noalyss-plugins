@@ -31,17 +31,17 @@ $act=new Modop_Operation($cn,'');
 $act->suspend_strict();
 //----------------------------------------------------------------------
 // ACH
-if ( $_GET['jrn_type'] == 'ACH') {
-  $jrn=new Acc_Ledger_Purchase($cn,$_GET['p_jrn']);
+if ( $_POST['jrn_type'] == 'ACH') {
+  $jrn=new Acc_Ledger_Purchase($cn,$_POST['p_jrn']);
   try {
-  echo '<FORM METHOD="GET">';
+  echo '<FORM enctype="multipart/form-data" METHOD="POST">';
   echo HtmlInput::hidden('ac',$_REQUEST['ac']);
   echo HtmlInput::extension().dossier::hidden();
   echo HtmlInput::hidden('action','save');
-  echo HtmlInput::hidden('ext_jr_id',$_GET['ext_jr_id']);
+  echo HtmlInput::hidden('ext_jr_id',$_POST['ext_jr_id']);
   echo HtmlInput::hidden('ext_jr_internal',
-			 $_GET['ext_jr_internal']);
-  echo $jrn->confirm($_GET);
+			 $_POST['ext_jr_internal']);
+  echo $jrn->confirm($_POST);
 
   echo HtmlInput::submit('save','Sauver');
   echo '</FORM>';
@@ -51,17 +51,17 @@ if ( $_GET['jrn_type'] == 'ACH') {
 }
 //----------------------------------------------------------------------
 // VEN
-if ( $_GET['jrn_type'] == 'VEN') {
-  $jrn=new Acc_Ledger_Sold($cn,$_GET['p_jrn']);
+if ( $_POST['jrn_type'] == 'VEN') {
+  $jrn=new Acc_Ledger_Sold($cn,$_POST['p_jrn']);
   try {
-  $a=$jrn->confirm($_GET);
-  echo '<FORM METHOD="GET">';
+  $a=$jrn->confirm($_POST);
+  echo '<FORM enctype="multipart/form-data" METHOD="POST">';
   echo HtmlInput::hidden('ac',$_REQUEST['ac']);
   echo HtmlInput::extension().dossier::hidden();
   echo HtmlInput::hidden('action','save');
-  echo HtmlInput::hidden('ext_jr_id',$_GET['ext_jr_id']);
+  echo HtmlInput::hidden('ext_jr_id',$_POST['ext_jr_id']);
   echo HtmlInput::hidden('ext_jr_internal',
-			 $_GET['ext_jr_internal']);
+			 $_POST['ext_jr_internal']);
   echo $a;
 
   echo HtmlInput::submit('save','Sauver');
@@ -73,20 +73,20 @@ if ( $_GET['jrn_type'] == 'VEN') {
 }
 //----------------------------------------------------------------------
 // ODS
-if ( $_GET['jrn_type'] == 'ODS') {
-  $jrn=new Acc_Ledger($cn,$_GET['p_jrn']);
+if ( $_POST['jrn_type'] == 'ODS') {
+  $jrn=new Acc_Ledger($cn,$_POST['p_jrn']);
   $jrn->with_concerned=false;
   try {
-    $jrn->verify($_GET);
-    $a= $jrn->input($_GET,1);
-    echo '<FORM METHOD="GET">';
+    $jrn->verify($_POST);
+    $a= $jrn->input($_POST,1);
+    echo '<FORM enctype="multipart/form-data" METHOD="POST">';
     echo HtmlInput::hidden('ac',$_REQUEST['ac']);
     echo HtmlInput::extension().dossier::hidden();
     echo HtmlInput::hidden('action','save');
-    echo HtmlInput::hidden('ext_jr_id',$_GET['ext_jr_id']);
+    echo HtmlInput::hidden('ext_jr_id',$_POST['ext_jr_id']);
     echo HtmlInput::hidden('ext_jr_internal',
-			 $_GET['ext_jr_internal']);
-    echo $a;    
+			 $_POST['ext_jr_internal']);
+    echo $a;
 
     echo HtmlInput::submit('save','Sauver');
     echo '</FORM>';

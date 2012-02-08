@@ -29,115 +29,175 @@ require_once('class_modop_operation.php');
 /* ---------------------------------------------------------------------- */
 // Purchase
 /* ---------------------------------------------------------------------- */
-if ( $_GET['jrn_type'] == 'ACH')
+if ( $_POST['jrn_type'] == 'ACH')
 {
-    $jrn=new Acc_Ledger_Purchase($cn,$_GET['p_jrn']);
+    $jrn=new Acc_Ledger_Purchase($cn,$_POST['p_jrn']);
     try
     {
-        $op=new Modop_Operation($cn,$_GET['ext_jr_internal']);
+        $op=new Modop_Operation($cn,$_POST['ext_jr_internal']);
         $op->suspend_receipt();
         $op->suspend_strict();
-        $pj=$_GET['e_pj'];
-        $_GET['e_pj']=microtime();
-        $new_internal=$jrn->insert($_GET);
+        $pj=$_POST['e_pj'];
+		$oldpj=  microtime();
+		$cn->exec_sql('update jrn set jr_pj_number=$1  where jr_id=$2',
+                      array($oldpj,$_POST['ext_jr_id']));
+        $new_internal=$jrn->insert($_POST);
     }
     catch (Exception $e)
     {
         alert($e->getMessage());
         exit();
     }
+	$cn->commit();
+
     /* we delete the old operation */
     $cn->start();
     /* in stock_goods */
     $cn->exec_sql('delete from stock_goods where j_id in (select j_id from jrnx join jrn on (j_grpt=jr_grpt_id) where jr_id=$1)',
-                  array($_GET['ext_jr_id']));
+                  array($_POST['ext_jr_id']));
 
     /* in jrnx */
     $cn->exec_sql('delete from jrnx where j_grpt in (select jr_grpt_id from jrn where jr_id=$1)',
-                  array($_GET['ext_jr_id']));
+                  array($_POST['ext_jr_id']));
 
     /* in jrn */
     $attach=$cn->get_array('select jr_pj,jr_pj_name,jr_pj_type from jrn where jr_id=$1',
-                           array($_GET['ext_jr_id']));
-    $cn->exec_sql('delete from jrn where jr_id=$1',array($_GET['ext_jr_id']));
+                           array($_POST['ext_jr_id']));
+    $cn->exec_sql('delete from jrn where jr_id=$1',array($_POST['ext_jr_id']));
     $cn->exec_sql('update jrn set jr_id=$1,jr_internal=$2,jr_pj_number=$3 where jr_internal=$4',
-                  array($_GET['ext_jr_id'],$_GET['ext_jr_internal'],$pj,$new_internal));
-    if ( $attach[0]['jr_pj_name'] != '')
+                  array($_POST['ext_jr_id'],$_POST['ext_jr_internal'],$pj,$new_internal));
+    if ($_FILES['pj']['name']=='' && $attach[0]['jr_pj_name'] != '' && ! isset ($_POST['gen_invoice']))
     {
         $cn->exec_sql('update jrn set jr_pj=$1,jr_pj_type=$2,jr_pj_name=$3 where jr_id=$4',
-                      array($attach[0]['jr_pj'],$attach[0]['jr_pj_type'],$attach[0]['jr_pj_name'],$_GET['ext_jr_id']));
+                      array($attach[0]['jr_pj'],$attach[0]['jr_pj_type'],$attach[0]['jr_pj_name'],$_POST['ext_jr_id']));
     }
     /* in quant_purchase */
     $cn->exec_sql('update quant_purchase set qp_internal=$1 where qp_internal=$2',
-                  array($_GET['ext_jr_internal'],$new_internal));
+                  array($_POST['ext_jr_internal'],$new_internal));
 
     $cn->commit();
+	echo '<h2 class="info"> Enregistrement </h2>';
+		echo "<h2 >" . _('Opération sauvée') .$_POST['ext_jr_internal'] ;
+		if ($jrn->pj != '')
+			echo ' Piece : ' . h($jrn->pj);
+		echo "</h2>";
+		if (strcmp($jrn->pj, $_POST['e_pj']) != 0)
+		{
+			echo '<h3 class="notice"> ' . _('Attention numéro pièce existante, elle a du être adaptée') . '</h3>';
+		}
+		if (isset($jrn->doc))
+		{
+                     echo '<span class="invoice">';
+                     echo $jrn->doc;
+                     echo '</span>';
+		}
+		/* Save the additional information into jrn_info */
+		$obj = new Acc_Ledger_Info($cn);
+		$obj->save_extra($jrn->jr_id, $_POST);
+		printf('<a class="line" style="display:inline" href="javascript:modifyOperation(%d,%d)">%s</a><hr>', $_POST['ext_jr_id'], dossier::id(), $new_internal);
+		// Feedback
+		echo $jrn->confirm($_POST, true);
+		echo '</div>';
 }
 /* ---------------------------------------------------------------------- */
 // SOLD
 /* ---------------------------------------------------------------------- */
-if ( $_GET['jrn_type'] == 'VEN')
+if ( $_POST['jrn_type'] == 'VEN')
 {
-    $jrn=new Acc_Ledger_Sold($cn,$_GET['p_jrn']);
+    $jrn=new Acc_Ledger_Sold($cn,$_POST['p_jrn']);
+	$pj=$_POST['e_pj'];
     try
-    {
-        $op=new Modop_Operation($cn,$_GET['ext_jr_internal']);
+    {	$cn->start();
+        $op=new Modop_Operation($cn,$_POST['ext_jr_internal']);
         $op->suspend_receipt();
         $op->suspend_strict();
-        $pj=$_GET['e_pj'];
-        $_GET['e_pj']=microtime();
-        $new_internal=$jrn->insert($_GET);
+
+		$oldpj=  microtime();
+		$cn->exec_sql('update jrn set jr_pj_number=$1  where jr_id=$2',
+                      array($oldpj,$_POST['ext_jr_id']));
+        $new_internal=$jrn->insert($_POST);
     }
     catch (Exception $e)
     {
         alert($e->getMessage());
         exit();
     }
+	$cn->commit();
     /* we delete the old operation */
     $cn->start();
 
     /* in stock_goods */
     $cn->exec_sql('delete from stock_goods where j_id in (select j_id from jrnx join jrn on (j_grpt=jr_grpt_id) where jr_id=$1)',
-                  array($_GET['ext_jr_id']));
+                  array($_POST['ext_jr_id']));
 
     /* in jrnx */
     $cn->exec_sql('delete from jrnx where j_grpt in (select jr_grpt_id from jrn where jr_id=$1)',
-                  array($_GET['ext_jr_id']));
+                  array($_POST['ext_jr_id']));
 
     /* in jrn */
     $attach=$cn->get_array('select jr_pj,jr_pj_name,jr_pj_type from jrn where jr_id=$1',
-                           array($_GET['ext_jr_id']));
+                           array($_POST['ext_jr_id']));
 
-    $cn->exec_sql('delete from jrn where jr_id=$1',array($_GET['ext_jr_id']));
+    $cn->exec_sql('delete from jrn where jr_id=$1',array($_POST['ext_jr_id']));
     $cn->exec_sql('update jrn set jr_id=$1,jr_internal=$2,jr_pj_number=$3 where jr_internal=$4',
-                  array($_GET['ext_jr_id'],$_GET['ext_jr_internal'],$pj,$new_internal));
-    if ( $attach[0]['jr_pj_name'] != '')
+                  array($_POST['ext_jr_id'],$_POST['ext_jr_internal'],$pj,$new_internal));
+
+	if ( $_FILES['pj']['name']=='' && $attach[0]['jr_pj_name'] != '' && ! isset ($_POST['gen_invoice']))
     {
         $cn->exec_sql('update jrn set jr_pj=$1,jr_pj_type=$2,jr_pj_name=$3 where jr_id=$4',
-                      array($attach[0]['jr_pj'],$attach[0]['jr_pj_type'],$attach[0]['jr_pj_name'],$_GET['ext_jr_id']));
-    }
+                      array($attach[0]['jr_pj'],$attach[0]['jr_pj_type'],$attach[0]['jr_pj_name'],$_POST['ext_jr_id']));
+	 }
 
     /* in quant_sold */
     $cn->exec_sql('update quant_sold set qs_internal=$1 where qs_internal=$2',
-                  array($_GET['ext_jr_internal'],$new_internal));
+                  array($_POST['ext_jr_internal'],$new_internal));
 
     $cn->commit();
+ /* Show button  */
+            echo '<h2 class="info"> Enregistrement </h2>';
+            $jr_id=$_POST['ext_jr_id'];
 
+            echo "<h2 >"._('Opération sauvée');
+            if ( $jrn->pj != '') echo ' Piece : '.h($jrn->pj);
+            echo "</h2>";
+            if ( strcmp($jrn->pj,$_POST['e_pj']) != 0 )
+            {
+                echo '<h3 class="notice"> '._('Attention numéro pièce existante, elle a du être adaptée').'</h3>';
+            }
+
+            printf ('<a class="line" style="display:inline" href="javascript:modifyOperation(%d,%d)">%s</a><hr>',
+                    $jr_id,dossier::id(),$new_internal);
+			echo $jrn->confirm($_POST,true);
+            /* Show link for Invoice */
+            if (isset ($jrn->doc) )
+            {
+                echo '<span class="invoice">';
+                echo $jrn->doc;
+                echo '</span>';
+            }
+
+
+            /* Save the additional information into jrn_info */
+            $obj=new Acc_Ledger_Info($cn);
+            $obj->save_extra($jr_id,$_POST);
+
+
+            echo '</div>';
 }
 /* ---------------------------------------------------------------------- */
 // ODS
 /* ---------------------------------------------------------------------- */
-if ( $_GET['jrn_type'] == 'ODS')
+if ( $_POST['jrn_type'] == 'ODS')
 {
-    $jrn=new Acc_Ledger($cn,$_GET['p_jrn']);
+    $jrn=new Acc_Ledger($cn,$_POST['p_jrn']);
     try
     {
-        $op=new Modop_Operation($cn,$_GET['ext_jr_internal']);
+        $op=new Modop_Operation($cn,$_POST['ext_jr_internal']);
         $op->suspend_receipt();
         $op->suspend_strict();
-        $pj=$_GET['e_pj'];
-        $_GET['e_pj']=microtime();
-        $jrn->save($_GET);
+        $pj=$_POST['e_pj'];
+        $_POST['e_pj']=microtime();
+        $jrn->save($_POST);
         $new_internal=$jrn->internal;
     }
     catch (Exception $e)
@@ -150,18 +210,18 @@ if ( $_GET['jrn_type'] == 'ODS')
 
     /* in jrnx */
     $cn->exec_sql('delete from jrnx where j_grpt in (select jr_grpt_id from jrn where jr_id=$1)',
-                  array($_GET['ext_jr_id']));
+                  array($_POST['ext_jr_id']));
 
     /* in jrn */
     $attach=$cn->get_array('select jr_pj,jr_pj_name,jr_pj_type from jrn where jr_id=$1',
-                           array($_GET['ext_jr_id']));
-    $cn->exec_sql('delete from jrn where jr_id=$1',array($_GET['ext_jr_id']));
+                           array($_POST['ext_jr_id']));
+    $cn->exec_sql('delete from jrn where jr_id=$1',array($_POST['ext_jr_id']));
     $cn->exec_sql('update jrn set jr_id=$1,jr_internal=$2,jr_pj_number=$3 where jr_internal=$4',
-                  array($_GET['ext_jr_id'],$_GET['ext_jr_internal'],$pj,$new_internal));
+                  array($_POST['ext_jr_id'],$_POST['ext_jr_internal'],$pj,$new_internal));
     if ( $attach[0]['jr_pj_name'] != '')
     {
         $cn->exec_sql('update jrn set jr_pj=$1,jr_pj_type=$2,jr_pj_name=$3 where jr_id=$4',
-                      array($attach[0]['jr_pj'],$attach[0]['jr_pj_type'],$attach[0]['jr_pj_name'],$_GET['ext_jr_id']));
+                      array($attach[0]['jr_pj'],$attach[0]['jr_pj_type'],$attach[0]['jr_pj_name'],$_POST['ext_jr_id']));
     }
 
     $cn->commit();
@@ -171,9 +231,9 @@ if ( $_GET['jrn_type'] == 'ODS')
 /* ---------------------------------------------------------------------- */
 // Purchase
 /* ---------------------------------------------------------------------- */
-if ( $_GET['jrn_type'] == 'FIN')
+if ( $_POST['jrn_type'] == 'FIN')
 {
-    extract ($_GET);
+    extract ($_POST);
     $user=new User($cn);
     try
     {
