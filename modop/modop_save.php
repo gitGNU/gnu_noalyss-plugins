@@ -85,18 +85,19 @@ if ( $_POST['jrn_type'] == 'ACH')
 		{
 			echo '<h3 class="notice"> ' . _('Attention numéro pièce existante, elle a du être adaptée') . '</h3>';
 		}
-		if (isset($jrn->doc))
-		{
-                     echo '<span class="invoice">';
-                     echo $jrn->doc;
-                     echo '</span>';
-		}
 		/* Save the additional information into jrn_info */
 		$obj = new Acc_Ledger_Info($cn);
 		$obj->save_extra($jrn->jr_id, $_POST);
 		printf('<a class="line" style="display:inline" href="javascript:modifyOperation(%d,%d)">%s</a><hr>', $_POST['ext_jr_id'], dossier::id(), $new_internal);
 		// Feedback
 		echo $jrn->confirm($_POST, true);
+		if (isset($jrn->doc))
+		{
+                     echo '<span class="invoice">';
+                     echo $jrn->doc;
+                     echo '</span>';
+		}
+
 		echo '</div>';
 }
 /* ---------------------------------------------------------------------- */
