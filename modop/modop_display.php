@@ -128,7 +128,8 @@ if ($op->ledger_type=='VEN')
     echo HtmlInput::hidden('e_mp',0);
     echo HtmlInput::hidden('ext_jr_id',$op->jr_id);
     echo HtmlInput::hidden('ext_jr_internal',$op->jr_internal);
-    echo HtmlInput::button('add_item',_('Ajout article'),      ' onClick="ledger_add_row()"');
+    //echo HtmlInput::button('add_item',_('Ajout article'),      ' onClick="ledger_add_row()"');
+    echo HtmlInput::button('actualiser',_('Actualiser'),      ' onClick="compute_all_ledger();"');
     echo '</form>';
 
 }
