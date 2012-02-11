@@ -66,6 +66,7 @@ echo  HtmlInput::button('accounting_hide_bt','Annuler','onclick="$(\'div_poste\'
   	$ctarget->set_attribute('label','ctarget_label');
 	$ctarget->javascript=sprintf(' onchange="fill_data_onchange(\'%s\');" ',
 			       $ctarget->name);
+	$ctarget->set_function('fill_data');
 	$ctarget->set_dblclick("fill_ipopcard(this);");
 	$ctarget->set_attribute("typecard",'all');
 
@@ -92,7 +93,48 @@ echo  HtmlInput::button('card_hide_bt','Annuler','onclick="$(\'div_card\').hide(
 ?>
 
 </div>
+<div id="div_card_account" class="inner_box" style="top:230;margin:5;overflow:visible;display:none;">
+<h2 class="info">Changer un poste comptable par une fiche</h2>
+	<p class="notice">Attention, dans les opérations sélectionnées, le poste comptable sera changé par une fiche et par son poste comptable, soyez prudent</p>
+<?
+	$csource=new IPoste('csource1');
+	$csource->set_attribute('gDossier',Dossier::id());
+	$csource->set_attribute('jrn',0);
+	$csource->set_attribute('label','csource1_label');
+	$csource->set_attribute('account','csource1');
+	$csource->table=0;
 
+	$ctarget=new ICard('ctarget1');
+	$ctarget->typecard='all';
+  	$ctarget->set_attribute('label','ctarget1_label');
+	$ctarget->javascript=sprintf(' onchange="fill_data_onchange(\'%s\');" ',
+			       $ctarget->name);
+	$ctarget->set_dblclick("fill_ipopcard(this);");
+	$ctarget->set_attribute("typecard",'all');
+	$ctarget->set_function('fill_data');
+
+
+?>
+<table>
+<TR>
+	<TD>Changer</TD>
+	<TD><?=$csource->input();?></TD>
+	<td><span id="csource1_label"></span></td>
+</tr>
+<tr>
+	<TD>par </TD>
+
+	<TD><?=$ctarget->input()?></TD>
+	<td><?=$ctarget->search()?></td>
+	<td><span id="ctarget1_label"></span></td>
+</tr>
+</table>
+	<? echo HtmlInput::submit('chg_card_account','Changer le poste comptable par la fiche'); ?>
+<?
+echo  HtmlInput::button('card_hide_bt','Annuler','onclick="$(\'div_card_account\').hide();"');
+?>
+
+</div>
 <div id="div_ledger" class="inner_box" style="top:230;margin:5;overflow:visible;display:none;">
 <h2 class="info">Déplacer dans un autre journal </h2>
 	<p class="notice">Attention, pour les opérations sélectionnées,cela  transfèrera les opérations vers le journal choisi mais il faut que ce journal soit de même type (achat vers achat, vente vers vente...), les pièces justificatives ne seront pas mises à jour, soyez prudent</p>
@@ -170,4 +212,5 @@ endfor;
 new Draggable('div_card',{zindex:2});
 new Draggable('div_ledger',{zindex:2});
 new Draggable('div_poste',{zindex:2});
+new Draggable('div_card_account',{zindex:2});
 </script>

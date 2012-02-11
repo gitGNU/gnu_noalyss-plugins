@@ -33,6 +33,13 @@ if (isset($_POST['chg_ledger']))
   {
     change_ledger($cn);
   }
+/*
+ * Change ledger
+ */
+if (isset($_POST['chg_card_account']))
+  {
+    change_card_account($cn);
+  }
 
 //-----------------------------------------------------
 // Display search result
@@ -52,11 +59,12 @@ if ( isset ($_GET['viewsearch']))
 
     // Count nb of line
     $max_line=$cn->count_sql($sql);
-echo HtmlInput::button('accounting_bt','Poste comptable','onclick="$(\'div_poste\').show();$(\'div_card\').hide();$(\'div_ledger\').hide()"');
+echo HtmlInput::button('accounting_bt','Changer poste comptable','onclick="$(\'div_poste\').show();$(\'div_card\').hide();$(\'div_ledger\').hide();$(\'div_card_account\').hide();"');
 
-echo HtmlInput::button('card_bt','Fiche','onclick="$(\'div_poste\').hide();$(\'div_card\').show();$(\'div_ledger\').hide()"');
+echo HtmlInput::button('card_bt','Changer fiche','onclick="$(\'div_poste\').hide();$(\'div_card\').show();$(\'div_ledger\').hide();$(\'div_card_account\').hide();"');
 
-echo HtmlInput::button('ledger_bt','Journal','onclick="$(\'div_poste\').hide();$(\'div_card\').hide();$(\'div_ledger\').show()"');
+echo HtmlInput::button('ledger_bt','Déplacement dans Journal','onclick="$(\'div_poste\').hide();$(\'div_card\').hide();$(\'div_ledger\').show();$(\'div_card_account\').hide();"');
+echo HtmlInput::button('card_acc_bt','Poste > fiche','onclick="$(\'div_poste\').hide();$(\'div_card\').hide();;$(\'div_card_account\').show();$(\'div_ledger\').hide()"');
 
     require_once('template/search_view.php');
 
