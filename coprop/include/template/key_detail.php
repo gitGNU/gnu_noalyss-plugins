@@ -58,10 +58,13 @@ Description
 		<th>QuickCode</th>
 		<th>Nom</th>
 		<th>Description</th>
+		<th>Bâtiment</th>
+		<th>Copropriétaire</th>
 		<th>Montant</th>
 	</tr>
 <?
 	for ($i=0;$i<count($alot);$i++):
+		if ( $alot[$i]['qcode'] == "" ) continue;
 ?>
 	<tr>
 		<td>
