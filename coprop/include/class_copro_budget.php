@@ -91,6 +91,15 @@ class Copro_Budget
 
 			$a_key=$cn->make_array(" select cr_id,cr_name from coprop.clef_repartition order by cr_name");
 			$max=count($array);
+
+			// Ajout bouton ajout charge
+			$f_add_button=new IButton('add_card');
+			$f_add_button->label=_('Créer une nouvelle fiche');
+			$f_add_button->set_attribute('ipopup','ipop_newcard');
+			$f_add_button->set_attribute('jrn',-1);
+			$filter=$cn->make_list("select fd_id from fiche_def where frd_id=2");
+			$f_add_button->javascript=" this.filter='$filter';this.jrn=-1;select_card_type(this);";
+			echo $f_add_button->input();
             for ($i=0;$i<MAXROWBUD;$i++)
             {
 				$label=new IText('bt_label[]');

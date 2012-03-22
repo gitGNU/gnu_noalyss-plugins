@@ -13,11 +13,12 @@ if ( isset ($_POST['bud_update']))
 }
 
 
-
 echo '<div id="bud_list" class="content">';
+
 $bud->to_list();
 echo HtmlInput::button("bud_add_bt","Ajout Budget","onclick=\"budget_add('".$_REQUEST['gDossier']."','".$_REQUEST['plugin_code']."','".$_REQUEST['ac']."')\"");
 echo '</div>';
+
 ?>
 <div id="divbuddetail">
 
