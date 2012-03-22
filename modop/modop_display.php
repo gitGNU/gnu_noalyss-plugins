@@ -85,7 +85,7 @@ if ($op->ledger_type=='ACH')
     $pop_tva->value='';
     echo $pop_tva->input();
 
-    echo '<FORM METHOD="GET" class="print">';
+    echo '<FORM enctype="multipart/form-data"  METHOD="POST" class="print">';
     $op->suspend_receipt();
     echo HtmlInput::hidden('ac',$_REQUEST['ac']);
     echo $jrn->input($op->array);
@@ -119,7 +119,7 @@ if ($op->ledger_type=='VEN')
     echo $pop_tva->input();
     $op->suspend_receipt();
 
-    echo '<FORM METHOD="GET" class="print">';
+    echo '<FORM enctype="multipart/form-data"  METHOD="POST" class="print">';
     echo $jrn->input($op->array);
     echo HtmlInput::hidden('ac',$_REQUEST['ac']);
     echo HtmlInput::extension().dossier::hidden();
@@ -128,7 +128,8 @@ if ($op->ledger_type=='VEN')
     echo HtmlInput::hidden('e_mp',0);
     echo HtmlInput::hidden('ext_jr_id',$op->jr_id);
     echo HtmlInput::hidden('ext_jr_internal',$op->jr_internal);
-    echo HtmlInput::button('add_item',_('Ajout article'),      ' onClick="ledger_add_row()"');
+    //echo HtmlInput::button('add_item',_('Ajout article'),      ' onClick="ledger_add_row()"');
+    echo HtmlInput::button('actualiser',_('Actualiser'),      ' onClick="compute_all_ledger();"');
     echo '</form>';
 
 }
@@ -148,7 +149,7 @@ if ($op->ledger_type=='ODS')
     echo $search_card->input();
     $op->suspend_receipt();
 
-    echo '<FORM METHOD="GET" class="print">';
+    echo '<FORM enctype="multipart/form-data"  METHOD="POST" class="print">';
     echo $jrn->input($op->array);
     echo HtmlInput::hidden('ac',$_REQUEST['ac']);
     echo HtmlInput::extension().dossier::hidden();
@@ -189,7 +190,7 @@ if ($op->ledger_type=='FIN')
     $f_add_button->set_attribute('filter',$jrn->get_all_fiche_def ());
     $f_add_button->javascript=" select_card_type(this);";
     $str_add_button=$f_add_button->input();
-    echo '<FORM METHOD="GET" class="print">';
+    echo '<FORM enctype="multipart/form-data"  METHOD="post" class="print">';
     echo HtmlInput::hidden('ac',$_REQUEST['ac']);
     $Date=new IDate("e_date",$op->array['e_date']);
     $f_date=$Date->input();

@@ -38,7 +38,7 @@ function check_jrid()
     }
   else
     return "Erreur : aucune opération n'est sélectionnée";
-  
+
   return "";
 }
 
@@ -61,7 +61,7 @@ function change_accounting(&$cn)
   $target=$cn->get_value('select pcm_val from tmp_pcmn where pcm_val=$1',array($_POST['tposte']));
   if ( $source == '' || $target == '')
     {
-      echo '<p class="error"> Il manque soit le poste comptable source  soit le poste comptable destination ou l\'un des deux postes n\'existe pas</p>'; 
+      echo '<p class="error"> Il manque soit le poste comptable source  soit le poste comptable destination ou l\'un des deux postes n\'existe pas</p>';
       return;
     }
   $cn->prepare('update_account','update jrnx set j_poste = $1 where j_id in (select j_id from jrnx join jrn on (jr_grpt_id=j_grpt) and jr_id=$2) and j_poste=$3
@@ -91,7 +91,63 @@ function change_accounting(&$cn)
   echo '</table>';
   echo '<p> Nombre d\'opérations changées :'.$count.'</p>';
 }
+ /**
+   *@brief change the accounting in the selected operation by a card (with a possible different accounting
+   *@param $cn database connx
+   *@note use the $_POST variables
+   * - csource1 accounting source
+   * - ctarget1 card target
+   * - jr_id[]
+   */
+function change_card_account(&$cn)
+{
+  $msg= check_jrid();
+  if( $msg != "")
+    {
+      echo " <p class=\"error\">$msg</p>"; return;
+    }
+  $source=$cn->get_value('select pcm_val from tmp_pcmn where pcm_val=$1',array($_POST['csource1']));
+  $target=$cn->get_value('select f_id from fiche_detail where ad_id=23 and ad_value=trim(upper($1))',array($_POST['ctarget1']));
 
+  if ( $source == '' || $target == '')
+    {
+      echo '<p class="error"> Il manque soit le poste comptable source  soit la fiche  destination ou l\'un des deux n\'existe pas</p>';
+      return;
+    }
+
+ // accounting target
+	 $target_account=$cn->get_value('select pcm_val from tmp_pcmn where pcm_val in (select ad_value from fiche_detail where ad_id=5 and f_id=$1)',array($target));
+	if  ($target_account == '') {
+		echo '<p class="error"> Le poste comptable de la fiche n\'existe pas</span>';
+		return;
+	}
+  $cn->prepare('update_account','update jrnx set j_poste = $1,j_qcode=upper($2),f_id=$3 where j_id in (select j_id from jrnx join jrn on (jr_grpt_id=j_grpt) and jr_id=$4) and j_poste=$5
+		RETURNING j_id ');
+  $cn->prepare('retrieve','select jr_date,jr_comment,jr_montant,jr_internal from jrn where jr_id=$1');
+  echo h2info('Opération changée');
+  echo 'compte : '.$_REQUEST['sposte'].' vers '.$_REQUEST['tposte'];
+  $count=0;
+  echo '<table class="result">';
+  foreach ($_POST['jr_id'] as $id)
+    {
+      $update=$cn->execute('update_account',array(trim($target_account),trim($_POST['ctarget1']),$target,$id,trim($_POST['csource1'])));
+      if ( Database::num_row($update) ==0 ) continue;
+      $feedback=$cn->execute('retrieve',array($id));
+      if ( Database::num_row($feedback) != 0)
+	{
+	  $count++;
+	  $row=Database::fetch_array($feedback,0);
+	  echo '<tr>';
+	  echo td(format_date($row['jr_date']));
+	  echo td(HtmlInput::detail_op($id,$row['jr_internal']));
+	  echo td($row['jr_comment']);
+	  echo td(nbm($row['jr_montant'],' class="num"'));
+	  echo '</tr>';
+	}
+    }
+  echo '</table>';
+  echo '<p> Nombre d\'opérations changées :'.$count.'</p>';
+}
 
   /**
    *@brief change the accounting and card in the selected operations
@@ -113,7 +169,7 @@ function change_card(&$cn)
 
   if ( $source == '' || $target == '')
     {
-      echo '<p class="error"> Il manque soit la fiche source  soit le fiche destination ou l\'une des deux fiches n\'existe pas</p>'; 
+      echo '<p class="error"> Il manque soit la fiche source  soit le fiche destination ou l\'une des deux fiches n\'existe pas</p>';
       return;
     }
   /*
@@ -127,7 +183,7 @@ function change_card(&$cn)
    */
   if ( $source_account == '' || $target_account == '')
     {
-      echo '<p class="error"> L\'une des deux fiche n\'a pas de poste comptable</p>'; 
+      echo '<p class="error"> L\'une des deux fiche n\'a pas de poste comptable</p>';
       return;
     }
 
@@ -146,7 +202,7 @@ function change_card(&$cn)
 		j_id in (select j_id from jrnx join jrn on (jr_grpt_id=j_grpt) and jr_id=$2) and qs_client=$3');
 
   /*
-   * Change also in  quant_purchase 
+   * Change also in  quant_purchase
    */
   $cn->prepare('update_pur_mer','update quant_purchase set qp_fiche=$1 where
 		j_id in (select j_id from jrnx join jrn on (jr_grpt_id=j_grpt) and jr_id=$2) and qp_fiche=$3');
@@ -192,7 +248,7 @@ function change_card(&$cn)
 	      $cn->execute('update_fin_bk',array($target,$id,$source));
 	      $cn->execute('update_fin_oth',array($target,$id,$source));
 	      break;
-	      
+
 	    }
 	}
 
@@ -211,7 +267,7 @@ function change_card(&$cn)
 	  echo td(nbm($row['jr_montant'],' class="num"'));
 	  echo '</tr>';
 	}
-  
+
     }
   echo '</table>';
   $cn->commit();
@@ -321,7 +377,7 @@ function display_result_receipt(&$cn)
 	where
 	jr_def_id=$1 and jr_date >= to_date($2,'DD.MM.YYYY')
 	and jr_date <= to_date($3,'DD.MM.YYYY')
-	 order by jr_date asc,substring(jr_pj_number,'\\\\d+$')::numeric asc  
+	 order by jr_date asc,substring(jr_pj_number,'\\\\d+$')::numeric asc
 	";
   $ret=$cn->exec_sql($sql,array($_GET['ledger'],$_GET['dstart'],$_GET['dend']));
   $nb_row=Database::num_row($ret);
@@ -331,7 +387,7 @@ function display_result_receipt(&$cn)
 }
 /**
  *@brief display the prefix + from number
- *@note use the variable from $_GET 
+ *@note use the variable from $_GET
  */
 function display_numb_receipt()
 {

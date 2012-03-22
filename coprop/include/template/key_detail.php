@@ -53,18 +53,48 @@
 Description
 <?=$note->input()?>
 <h2>Détail des lots</h2>
-<table>
+<table class="result">
+	<tr>
+		<th>QuickCode</th>
+		<th>Nom</th>
+		<th>Description</th>
+		<th>Copropriétaire</th>
+		<th>Bâtiment</th>
+		<th>Montant</th>
+	</tr>
 <?
 	for ($i=0;$i<count($alot);$i++):
+		if ( $alot[$i]['qcode'] == "" ) continue;
 ?>
 	<tr>
 		<td>
-			<?=HtmlInput::card_detail($alot[$i]['qcode'],$alot[$i]['name'])?>
+			<?=HtmlInput::card_detail($alot[$i]['qcode'],$alot[$i]['qcode'],' class="line"')?>
 			<?=HtmlInput::hidden('f_id[]',$alot[$i]['f_id'])?>
+		</td>
+		<td>
+			<?=$alot[$i]['name']?>
 		</td>
                 <td>
                     <?=$alot[$i]['desc']?>
                 </td>
+				<td>
+					<?
+						$copro=$cn->get_value ("select ad_value
+							from fiche_Detail
+							where ad_id=1
+							and f_id = (select coprop_id::integer from coprop.summary where lot_id=$1)",array($alot[$i]['f_id']));
+						echo h($copro);
+					?>
+				</td>
+				<td>
+					<?
+						$batiment=$cn->get_value ("select ad_value
+							from fiche_Detail
+							where ad_id=1
+							and f_id = (select building_id::integer from coprop.summary where lot_id=$1)",array($alot[$i]['f_id']));
+						echo h($batiment);
+					?>
+				</td>
 		<td>
 			<?
 			$num=new INum('part'.$alot[$i]['f_id']);

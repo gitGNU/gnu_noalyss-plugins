@@ -45,7 +45,9 @@ echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="ht
 </FORM>
 <hr>
 <?php
-  if ( isset($_GET['seek'])) {
+$action=(isset ($_REQUEST['action']))?$_REQUEST['action']:'end';
+
+  if ( ! isset ($_REQUEST['action']) && isset($_GET['seek'])) {
     /* retrieve and show the accounting */
     if ( trim($_GET['jr_id'])=='') {
       alert('Aucune opération demandé'); exit;}
@@ -53,7 +55,7 @@ echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="ht
     require_once('modop_display.php');
     exit();
   }
-$action=(isset ($_GET['action']))?$_GET['action']:'end';
+
 
 /* we need to confirm it */
 if ( $action=='confirm' ) {
