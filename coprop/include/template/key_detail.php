@@ -58,8 +58,8 @@ Description
 		<th>QuickCode</th>
 		<th>Nom</th>
 		<th>Description</th>
-		<th>Bâtiment</th>
 		<th>Copropriétaire</th>
+		<th>Bâtiment</th>
 		<th>Montant</th>
 	</tr>
 <?
@@ -77,6 +77,24 @@ Description
                 <td>
                     <?=$alot[$i]['desc']?>
                 </td>
+				<td>
+					<?
+						$copro=$cn->get_value ("select ad_value
+							from fiche_Detail
+							where ad_id=1
+							and f_id = (select coprop_id::integer from coprop.summary where lot_id=$1)",array($alot[$i]['f_id']));
+						echo h($copro);
+					?>
+				</td>
+				<td>
+					<?
+						$batiment=$cn->get_value ("select ad_value
+							from fiche_Detail
+							where ad_id=1
+							and f_id = (select building_id::integer from coprop.summary where lot_id=$1)",array($alot[$i]['f_id']));
+						echo h($batiment);
+					?>
+				</td>
 		<td>
 			<?
 			$num=new INum('part'.$alot[$i]['f_id']);
