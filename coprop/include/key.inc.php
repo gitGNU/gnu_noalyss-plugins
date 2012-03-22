@@ -45,10 +45,7 @@ if ( isset($_POST['mod_key']))
 }
 
 
-$sql="select cr_id,cr_name,cr_note,cr_tantieme from coprop.clef_repartition ";
-/**
- * @todo ajouter tri
- */
+$sql="select cr_id,cr_name,cr_note,cr_tantieme from coprop.clef_repartition order by cr_name";
 
 $a_key=$cn->get_array($sql);
 ?>
@@ -61,7 +58,7 @@ $a_key=$cn->get_array($sql);
 			Note
 		</th>
                 <th>
-                    Tantième 
+                    Tantième
                 </th>
                 <th></th>
 	</tr>
@@ -86,7 +83,7 @@ for ($i=0;$i < count($a_key);$i++):
 			echo HtmlInput::anchor("enlever","",$js);
                         ?>
                 </td>
-                
+
 	</tr>
 <?
 endfor;

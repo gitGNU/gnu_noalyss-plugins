@@ -53,14 +53,23 @@
 Description
 <?=$note->input()?>
 <h2>Détail des lots</h2>
-<table>
+<table class="result">
+	<tr>
+		<th>QuickCode</th>
+		<th>Nom</th>
+		<th>Description</th>
+		<th>Montant</th>
+	</tr>
 <?
 	for ($i=0;$i<count($alot);$i++):
 ?>
 	<tr>
 		<td>
-			<?=HtmlInput::card_detail($alot[$i]['qcode'],$alot[$i]['name'])?>
+			<?=HtmlInput::card_detail($alot[$i]['qcode'],$alot[$i]['qcode'],' class="line"')?>
 			<?=HtmlInput::hidden('f_id[]',$alot[$i]['f_id'])?>
+		</td>
+		<td>
+			<?=$alot[$i]['name']?>
 		</td>
                 <td>
                     <?=$alot[$i]['desc']?>
