@@ -177,7 +177,7 @@ class Coprop_Appel_Fond
 		$fiche=new Fiche($cn,$this->af_card);
 		$array['qc_0']=$fiche->get_quick_code();
 		$array['amount0']=$this->af_amount;
-		$array['nb']=count($adetail);
+		$array['nb_item']=count($adetail);
 
 		for ($i=0;$i<count($adetail);$i++){
 			$idx=$i+1;
