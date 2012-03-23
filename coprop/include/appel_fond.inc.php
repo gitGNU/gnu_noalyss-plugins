@@ -63,6 +63,33 @@ if (isset($calc))
         alert($e->getMessage());
     }
 }
+// correct
+
+if ( isset ($_POST['correct']))
+{
+	$appel_fond = new Coprop_Appel_Fond();
+	$appel_fond->id=$_POST['af_id'];
+	$ledger=new Acc_Ledger($cn,$_POST['p_jrn']);
+
+	echo '<FORM METHOD="GET" class="print">';
+		echo $ledger->input($_POST,0);
+		echo HtmlInput::request_to_hidden(array('amount','key','w_categorie_appel','b_id','aft','bud_pct','p_date','ac', 'plugin_code','sa'));
+		echo HtmlInput::extension() . dossier::hidden();
+		echo HtmlInput::hidden('action', 'confirm');
+		echo HtmlInput::hidden('af_id', $appel_fond->id);
+		echo HtmlInput::submit('save', 'Sauve');
+
+		echo HtmlInput::button('add', _('Ajout d\'une ligne'), 'onClick="quick_writing_add_row()"');
+		echo '</form>';
+		echo '<div class="info">' .
+		_('Débit') . ' = <span id="totalDeb"></span>  ' .
+		_('Crédit') . ' = <span id="totalCred"></span>  ' .
+		_('Difference') . ' = <span id="totalDiff"></span></div> ';
+		echo "<script>checkTotalDirect();</script>";
+		echo '</div>';
+
+	exit();
+}
 // save
 if ( isset($_POST['confirm']))
 {
@@ -89,6 +116,7 @@ if ( isset ($_GET['save']))
 	$ledger->with_concerned=false;
 	echo $ledger->input($_GET,1);
 	echo HtmlInput::submit('confirm','Confirmer');
+	echo HtmlInput::submit('correct','Corriger');
 	echo '</form>';
 	exit();
 }
