@@ -1,5 +1,4 @@
 <?php
-
 /*
  *   This file is part of PhpCompta.
  *
@@ -18,16 +17,12 @@
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 /* $Revision$ */
-
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
-
 /* !\file
  * \brief Manage import
  */
-
 class Import_Card
 {
-
 	/**
 	 * @brief for the form we have here all the hidden variables
 	 * @return html string with the hidden dossier, plugin_code,action(sa)
@@ -37,7 +32,6 @@ class Import_Card
 		$r = HtmlInput::extension() . Dossier::hidden();
 		return $r;
 	}
-
 	/**
 	 * @brief show the first screen, you must here enter the date format
 	 * the file, the card category,
@@ -51,19 +45,16 @@ class Import_Card
 		$delimiter = new IText('rdelimiter');
 		$delimiter->size = 1;
 		$delimiter->value = ',';
-
 		$fd = new ISelect('rfichedef');
 		$fd->value = $cn->make_array('select fd_id,fd_label from fiche_def order by 2');
 		$file = new IFile('csv_file');
 		$encodage = new ICheckBox('encodage');
 		$encodage->selected = true;
-
 		require_once('template/input_file.php');
 		$r = ob_get_contents();
 		ob_clean();
 		echo $r;
 	}
-
 	/**
 	 * Test the CSV file, show the choosed delimiter, the CSV parsed,
 	 * and replace column header by attribute
@@ -73,7 +64,6 @@ class Import_Card
 	{
 		global $cn;
 		$hidden = self::hidden() . HtmlInput::hidden('sa', 'record');
-
 		if (trim($_FILES['csv_file']['name']) == '')
 		{
 			alert('Pas de fichier donné');
@@ -81,15 +71,17 @@ class Import_Card
 		}
 		$filename = tempnam($_ENV['TMP'], 'upload_');
 		move_uploaded_file($_FILES["csv_file"]["tmp_name"], $filename);
-
 		$file_cat = $cn->get_value('select fd_label from fiche_def where fd_id=$1', array($_POST['rfichedef']));
 		$encoding = (isset($_REQUEST['encodage'])) ? 'Unicode' : 'latin1';
 		require_once('template/test_file.php');
 		return 0;
 	}
-
 	/**
 	 * @brief record all rows
+	 * @param
+	 * @return
+	 * @note
+	 * @see
 	  @code
 	  array
 	  'plugin_code' => string 'IMPCARD' (length=7)
@@ -107,12 +99,10 @@ class Import_Card
 	  3 => string '-1' (length=2)
 	  4 => string '-1' (length=2)
 	  5 => string '-1' (length=2)
-
 	  @endcode
 	 */
 	static function record_import()
 	{
-
 		global $cn, $g_failed, $g_succeed;
 		extract($_POST);
 		$fd = fopen($filename, 'r');
@@ -134,12 +124,10 @@ class Import_Card
 				$valid_qcode = 1;
 			if ($head_col[$i] == ATTR_DEF_ACCOUNT)
 				$valid_accounting = 1;
-
 			for ($e = $i + 1; $e < count($head_col); $e++)
 				if ($head_col[$i] == $head_col[$e] && $head_col[$e] != -1)
 					$duplicate++;
 		}
-
 		if ($valid_col == 0)
 		{
 			alert("Aucune colonne n'est définie");
@@ -155,19 +143,11 @@ class Import_Card
 			alert('Vous avez défini plusieurs fois la même colonne');
 			return -1;
 		}
-		if ($valid_qcode == 0)
-		{
-			alert("Vous devez donner la colonne quick_code");
-			return 1;
-		}
 		/*
 		 * read the file and record card
 		 */
-
 		$row_count = 0;
-
 		echo '<table>';
-
 		ob_start();
 		while (($row = fgetcsv($fd, 0, $_POST['rdelimiter'], $_POST['rsurround'])) !== false)
 		{
@@ -182,13 +162,19 @@ class Import_Card
 			{
 				if ($head_col[$i] == -1)
 					continue;
-
 				$header[$col_count] = $head_col[$i];
 				$col_count++;
-
 				echo td($row[$i]);
 				$attr = sprintf('av_text%d', $head_col[$i]);
 				$array[$attr] = $row[$i];
+			}
+			/*
+			 * If no quick code is given we compute it ourself
+			 */
+			if ($valid_qcode == 0)
+			{
+				$attr = sprintf('av_text%d', ATTR_DEF_QUICKCODE);
+				$array[$attr] = 'FID';
 			}
 			/*
 			 * Force the creating of an accounting
@@ -200,16 +186,7 @@ class Import_Card
 			}
 			try
 			{
-				// If quick_code already exists then update otherwise insert
-				$quick_code= sprintf('av_text%d',ATTR_DEF_QUICKCODE);
-				if ( $fiche->get_by_qcode($array[$quick_code],false)==0 )
-				{
-					$fiche->update($array);
-				}
-				else
-				{
-					$fiche->insert($rfichedef, $array);
-				}
+				$fiche->insert($rfichedef, $array);
 				echo td($g_succeed);
 			}
 			catch (Exception $e)
@@ -230,7 +207,6 @@ class Import_Card
 		}
 		echo '</tr>';
 		echo $table_content;
-
 		echo '</table>';
 		$name = $cn->get_value('select fd_label from fiche_def where fd_id=$1', array($rfichedef));
 		$cn->get_value('select comptaproc.fiche_attribut_synchro($1)', array($rfichedef));
@@ -239,5 +215,4 @@ class Import_Card
 		echo '</span>';
 		return 0;
 	}
-
 }
