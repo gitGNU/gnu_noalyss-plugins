@@ -177,7 +177,7 @@ class Coprop_Appel_Fond
 		$fiche=new Fiche($cn,$this->af_card);
 		$array['qc_0']=$fiche->get_quick_code();
 		$array['amount0']=$this->af_amount;
-		$max_line=(MAXROWBUD > count($adetail))?MAXROWBUD:count($a_detail);
+		$max_line=(MAXROWBUD > count($adetail))?MAXROWBUD:count($adetail);
 		$max_line+=2;
 		$array['nb_item']=$max_line;
 
