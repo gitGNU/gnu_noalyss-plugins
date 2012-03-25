@@ -30,7 +30,7 @@ class Import_Card
 
 	/**
 	 * @brief for the form we have here all the hidden variables
-	 * @return html string with the hidden dossier, plugin_code,action(sa)
+	 * @return html string with the hidden dossier, plugin_code,action(sb)
 	 */
 	static function hidden()
 	{
@@ -47,7 +47,7 @@ class Import_Card
 	{
 		global $cn;
 		ob_start();
-		$hidden = self::hidden() . HtmlInput::hidden('sa', 'test');
+		$hidden = self::hidden() . HtmlInput::hidden('sb', 'test');
 		$delimiter = new IText('rdelimiter');
 		$delimiter->size = 1;
 		$delimiter->value = ',';
@@ -72,7 +72,7 @@ class Import_Card
 	static function test_import()
 	{
 		global $cn;
-		$hidden = self::hidden() . HtmlInput::hidden('sa', 'record');
+		$hidden = self::hidden() . HtmlInput::hidden('sb', 'record');
 
 		if (trim($_FILES['csv_file']['name']) == '')
 		{
@@ -90,15 +90,11 @@ class Import_Card
 
 	/**
 	 * @brief record all rows
-	 * @param
-	 * @return
-	 * @note
-	 * @see
 	  @code
 	  array
 	  'plugin_code' => string 'IMPCARD' (length=7)
 	  'gDossier' => string '30' (length=2)
-	  'sa' => string 'record' (length=6)
+	  'sb' => string 'record' (length=6)
 	  'rfichedef' => string '17' (length=2)
 	  'rdelimiter' => string ',' (length=1)
 	  'encodage' => string '' (length=0)
@@ -159,8 +155,11 @@ class Import_Card
 			alert('Vous avez défini plusieurs fois la même colonne');
 			return -1;
 		}
-
-
+		if ($valid_qcode == 0)
+		{
+			alert("Vous devez donner la colonne quick_code");
+			return 1;
+		}
 		/*
 		 * read the file and record card
 		 */
@@ -192,14 +191,6 @@ class Import_Card
 				$array[$attr] = $row[$i];
 			}
 			/*
-			 * If no quick code is given we compute it ourself
-			 */
-			if ($valid_qcode == 0)
-			{
-				$attr = sprintf('av_text%d', ATTR_DEF_QUICKCODE);
-				$array[$attr] = 'FID';
-			}
-			/*
 			 * Force the creating of an accounting
 			 */
 			if ($valid_accounting == 0)
@@ -209,7 +200,16 @@ class Import_Card
 			}
 			try
 			{
-				$fiche->insert($rfichedef, $array);
+				// If quick_code already exists then update otherwise insert
+				$quick_code= sprintf('av_text%d',ATTR_DEF_QUICKCODE);
+				if ( $fiche->get_by_qcode($array[$quick_code],false)==0 )
+				{
+					$fiche->update($array);
+				}
+				else
+				{
+					$fiche->insert($rfichedef, $array);
+				}
 				echo td($g_succeed);
 			}
 			catch (Exception $e)

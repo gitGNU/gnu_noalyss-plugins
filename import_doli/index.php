@@ -29,26 +29,76 @@
  */
 require_once('include/class_import_card.php');
 global $cn;
-echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=importation_de_fiche" target="_blank">Aide</a>'.
+echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=importation_dolibarr" target="_blank">Aide</a>'.
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
 '</div>';
 $cn=new Database(dossier::id());
-if ( ! isset($_REQUEST['sa']))
+
+
+Extension::check_version(4600);
+
+// Javascript
+/* ob_start();
+ require_once('impdoli-javascript.js');
+$j=ob_get_contents();
+ob_clean();
+echo create_script($j);
+*/
+
+
+$url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code']."&ac=".$_REQUEST['ac'];
+
+$array=array (
+	array($url.'&sa=fiche',_('Fiches'),_('Importation de nouvelles fiches'),1),
+	array($url.'&sa=opr',_('Opérations'),_('Importation d\'opérations'),1),
+	array($url.'&sa=parm',_('Paramètrage'),_('Paramètrage'),5)
+	);
+
+$sa=(isset($_REQUEST['sa']))?$_REQUEST['sa']:1;
+switch($sa)
   {
-    Import_Card::new_import();
-    exit();
+  case 'fiche':
+    $default=1;
+    break;
+  case 'opr':
+    $default=2;
+    break;
+  case 'parm':
+    $default=3;
+    break;
+  default:
+    $default=0;
   }
 
-if ( $_REQUEST['sa']=='test')
+  if ($cn->exist_schema('import_dolibarr') == false)
   {
-    if (Import_Card::test_import() == 0 )    exit();
-    Import_Card::new_import();
-    exit();
+    /*require_once('include/class_install_plugin.php');
 
+    $iplugn=new Install_Plugin($cn);
+    $iplugn->install();
+*/
   }
+echo ShowItem($array,'H','mtitle','mtitle',$default,' style="width:80%;margin-left:10%"');
 
-if($_REQUEST['sa'] == 'record')
-  {
-    if (Import_Card::record_import() ==0 )     exit();
-    Import_Card::new_import();
+if ($default==1)
+{
+	if ( ! isset($_REQUEST['sb']))
+	{
+		Import_Card::new_import();
+		exit();
+	}
+
+	if ( $_REQUEST['sb']=='test')
+	{
+		if (Import_Card::test_import() == 0 )    exit();
+		Import_Card::new_import();
+		exit();
+
+	}
+
+	if($_REQUEST['sb'] == 'record')
+	{
+		if (Import_Card::record_import() ==0 )     exit();
+		Import_Card::new_import();
   }
+}
