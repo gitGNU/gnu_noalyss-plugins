@@ -38,12 +38,12 @@ $cn=new Database(dossier::id());
 Extension::check_version(4600);
 
 // Javascript
-/* ob_start();
- require_once('impdoli-javascript.js');
+ ob_start();
+ require_once('impdol.js');
 $j=ob_get_contents();
 ob_clean();
 echo create_script($j);
-*/
+
 
 
 $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code']."&ac=".$_REQUEST['ac'];
@@ -70,16 +70,16 @@ switch($sa)
     $default=0;
   }
 
-  if ($cn->exist_schema('import_dolibarr') == false)
+  if ($cn->exist_schema('impdol') == false)
   {
-    /*require_once('include/class_install_plugin.php');
+    require_once('include/class_install_impdol.php');
 
-    $iplugn=new Install_Plugin($cn);
+    $iplugn=new Install_Impdol($cn);
     $iplugn->install();
-*/
+
   }
 echo ShowItem($array,'H','mtitle','mtitle',$default,' style="width:80%;margin-left:10%"');
-
+echo '<div class="content" style="padding:10">';
 if ($default==1)
 {
 	if ( ! isset($_REQUEST['sb']))
@@ -101,4 +101,15 @@ if ($default==1)
 		if (Import_Card::record_import() ==0 )     exit();
 		Import_Card::new_import();
   }
+}
+if ($default == 5)
+{
+	require_once('include/imd_parameter.inc.php');
+	exit();
+
+}
+if ( $default== 2 )
+{
+	require_once 'include/imd_operation.inc.php';
+	exit();
 }
