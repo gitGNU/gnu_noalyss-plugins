@@ -45,15 +45,27 @@ if ( isset ($_POST['upload']))
 	// record the file into the table operation
 	$io->record();
 
-	// show the result + error
+	// show the data
 	$io->check();
+
+	// show the result
 	$io->result();
+	echo '<form method="POST">';
+	echo "<p class=\"notice\">Les opérations qui ne sont pas marquées comme correctes ne seront pas transfèrées </p>";
+	echo HtmlInput::hidden("impid",$io->impid);
+	$l=new Acc_Ledger($cn,0);
+	echo "Vers le journal ".$l->select_ledger("ALL", 3)->input();
+	echo HtmlInput::submit("transfer","Transfert des opérations");
+	echo "</FORM>";
 
 }
 // step 3, insert data into the target ledger
 if ( isset ($_POST['transfer']))
 {
-
+	$io=new Impdol_Operation();
+	$io->impid=$_POST['impid'];
+	$io->transfer();
+	var_dump($_POST);
 }
 
 ?>

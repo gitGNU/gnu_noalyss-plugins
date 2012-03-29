@@ -41,6 +41,7 @@ class install_impdol
 			)
 	");
 		$cn->exec_sql("insert into impdol.version(v_id,v_text", array(1, "Installation"));
+		
 		$cn->exec_sql('
 			CREATE TABLE impdol.parameter_tva
 				(
@@ -50,6 +51,59 @@ class install_impdol
 					CONSTRAINT parameter_tva_pkey PRIMARY KEY (pt_id )
 					)
 			');
+
+		$cn->exec_sql("
+			CREATE TABLE impdol.operation_transfer
+				(
+				ot_id serial NOT NULL,
+				j_id bigint,
+				o_id bigint,
+				CONSTRAINT operation_transfer_pkey PRIMARY KEY (ot_id ),
+				CONSTRAINT operation_transfer_j_id_fkey FOREIGN KEY (j_id)
+					REFERENCES jrnx (j_id) MATCH SIMPLE
+					ON UPDATE CASCADE ON DELETE CASCADE,
+				CONSTRAINT operation_transfer_o_id_fkey FOREIGN KEY (o_id)
+					REFERENCES impdol.operation_tmp (o_id) MATCH SIMPLE
+					ON UPDATE CASCADE ON DELETE CASCADE
+				)");
+
+
+		$cn->exec_sql("
+			CREATE TABLE impdol.operation_tmp
+					(
+					o_id bigserial NOT NULL,
+					o_doli text,
+					o_date text,
+					o_qcode text,
+					f_id text,
+					o_label text,
+					o_pj text,
+					amount_unit text,
+					amount_vat text,
+					number_unit text,
+					vat_rate text,
+					amount_total text,
+					jrn_def_id text,
+					o_message text,
+					i_id bigint,
+					o_result char,
+					tva_id bigint,
+					o_type char,
+					o_poste text,
+					CONSTRAINT operation_tmp_pkey PRIMARY KEY (o_id ),
+					CONSTRAINT operation_tmp_i_id_fkey FOREIGN KEY (i_id)
+						REFERENCES impdol.import (i_id) MATCH SIMPLE
+						ON UPDATE CASCADE ON DELETE CASCADE
+					)
+			");
+		$cn->exec_sql("
+			COMMENT ON COLUMN impdol.operation_tmp.o_result IS 'result is T can be transferrable, N cannot be transferrable';
+			");
+
+		$cn->exec_sql("
+			COMMENT ON COLUMN impdol.operation_tmp.o_type IS 'S = marchandise, serviceT = tiers (fournisseurs, client)
+			");
+
 	}
 
 }

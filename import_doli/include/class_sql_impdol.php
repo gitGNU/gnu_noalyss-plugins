@@ -258,9 +258,12 @@ class impdol_operation_tmp_sql extends sql_impdol
 			"rate"=>"vat_rate",
 			"amount_total"=>"amount_total",
 			"jrn_def_id"=>"jrn_def_id",
-			"o_message"=>"o_message",
+			"message"=>"o_message",
 			"import_id"=>"i_id",
-			"code"=>"o_result"
+			"code"=>"o_result",
+			"tva_id"=>"tva_id",
+			"type"=>"o_type",
+			"poste"=>"o_poste"
 
 		);
 
@@ -280,7 +283,10 @@ class impdol_operation_tmp_sql extends sql_impdol
 			"jrn_def_id"=>"text",
 			"o_message"=>"text",
 			"i_id"=>"numeric",
-			"o_result"=>'text'
+			"o_result"=>'text',
+			"tva_id"=>'numeric',
+			"o_type"=>'text',
+			"o_poste"=>"text"
 			);
 
 		$this->default = array(
@@ -320,6 +326,36 @@ class impdol_import_sql extends sql_impdol
 		$this->default = array(
 			"i_id" => "auto",
 			"i_date" => "auto"
+		);
+		$this->date_format = "DD.MM.YYYY";
+		global $cn;
+
+		parent::__construct($cn,$p_id);
+	}
+}
+
+
+class impdol_operation_transfer_sql extends sql_impdol
+{
+	function __construct($p_id=-1)
+	{
+		$this->table = "impdol.operation_transfer";
+		$this->primary_key = "ot_id";
+
+		$this->name=array(
+			"id"=>"ot_id",
+			"j_id"=>"j_id",
+			"o_id"=>"o_id"
+		);
+
+		$this->type = array(
+			"ot_id"=>'numeric',
+			"j_id"=>'numeric',
+			"o_id"=>'numeric',
+			);
+
+		$this->default = array(
+			"i_id" => "auto"
 		);
 		$this->date_format = "DD.MM.YYYY";
 		global $cn;
