@@ -105,7 +105,7 @@ class Impdol_Operation
                 /*
                  * detect duplicate
                  */
-                $db = $cn->get_value("select count(*) from impdol.operation_tmp where o_doli=$1 and o_id in (select o_id from impdol.import_transfer)", array($dol));
+                $db = $cn->get_value("select count(*) from impdol.operation_tmp where o_doli=$1 and o_id in (select o_id from impdol.operation_transfer)", array($dol));
                 if ($db > 0)
                 {
                     $operation->setp("code", "N");
@@ -248,7 +248,7 @@ class Impdol_Operation
                 $oth_side = 'd';
                 break;
             case 'VEN':
-                $ledger = new Acc_Ledger_Sale($cn, $jrn);
+                $ledger = new Acc_Ledger_Sold($cn, $jrn);
                 $tiers_side = 'd';
                 $oth_side = 'c';
                 break;
@@ -335,7 +335,7 @@ class Impdol_Operation
                             $cn->exec_sql($sql, array(null, $id, $oper->getp("fiche"), $oper->getp("number_unit"), $jrnx->amount, $amount_tva, $tva_id, $oper_tiers->getp("fiche")));
                             break;
                         case 'VEN':
-                            $this->db->exec_sql("insert into quant_sold 
+                            $this->db->exec_sql("insert into quant_sold
                                         (qs_internal,qs_fiche,qs_quantite,qs_price,qs_vat,qs_vat_code,qs_client,j_id,qs_vat_sided,qs_valid)
                                         values
                                         ($1,$2,$3,$4,$5,$6,$7,$8,$9)", array(null, /* 1 */
