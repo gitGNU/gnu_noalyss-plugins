@@ -54,7 +54,7 @@ $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code']."&ac=".$_REQUES
 
 $array=array (
 	array($url.'&sa=fiche',_('Fiches'),_('Importation de nouvelles fiches'),1),
-	array($url.'&sa=opr',_('Opérations'),_('Importation d\'opérations'),2),
+	array($url.'&sa=opr',_('Opérations Ventes/Achats'),_('Importation d\'opérations de vente ou d\'achat'),2),
 	array($url.'&sa=parm',_('Paramètrage'),_('Paramètrage'),5)
 	);
 
