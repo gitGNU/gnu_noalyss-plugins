@@ -31,18 +31,31 @@ class install_impdol
 
 	function install($p_cn)
 	{
-
-		$cn->exec_sql("create schema impdol");
-		$cn->exec_sql("
+		try
+		{
+			$p_cn->start();
+			$p_cn->exec_sql("create schema impdol");
+			$p_cn->exec_sql("
 			create table impdol.version (
 				v_id bigint primary key,
-				v_date now(),
+				v_date date default now(),
 				v_text text
 			)
-	");
-		$cn->exec_sql("insert into impdol.version(v_id,v_text", array(1, "Installation"));
-		
-		$cn->exec_sql('
+				");
+			$p_cn->exec_sql("insert into impdol.version(v_id,v_text) values ($1,$2)", array(1, "Installation"));
+
+			$p_cn->exec_sql("
+				CREATE TABLE impdol.import
+					(
+					i_id serial NOT NULL,
+					temp_file text,
+					send_file text,
+					i_date timestamp with time zone DEFAULT now(),
+					i_row bigint,
+					CONSTRAINT import_pkey PRIMARY KEY (i_id )
+					)");
+
+			$p_cn->exec_sql('
 			CREATE TABLE impdol.parameter_tva
 				(
 					pt_id serial NOT NULL,
@@ -51,24 +64,7 @@ class install_impdol
 					CONSTRAINT parameter_tva_pkey PRIMARY KEY (pt_id )
 					)
 			');
-
-		$cn->exec_sql("
-			CREATE TABLE impdol.operation_transfer
-				(
-				ot_id serial NOT NULL,
-				j_id bigint,
-				o_id bigint,
-				CONSTRAINT operation_transfer_pkey PRIMARY KEY (ot_id ),
-				CONSTRAINT operation_transfer_j_id_fkey FOREIGN KEY (j_id)
-					REFERENCES jrnx (j_id) MATCH SIMPLE
-					ON UPDATE CASCADE ON DELETE CASCADE,
-				CONSTRAINT operation_transfer_o_id_fkey FOREIGN KEY (o_id)
-					REFERENCES impdol.operation_tmp (o_id) MATCH SIMPLE
-					ON UPDATE CASCADE ON DELETE CASCADE
-				)");
-
-
-		$cn->exec_sql("
+			$p_cn->exec_sql("
 			CREATE TABLE impdol.operation_tmp
 					(
 					o_id bigserial NOT NULL,
@@ -96,14 +92,38 @@ class install_impdol
 						ON UPDATE CASCADE ON DELETE CASCADE
 					)
 			");
-		$cn->exec_sql("
+
+			$p_cn->exec_sql("
+			CREATE TABLE impdol.operation_transfer
+				(
+				ot_id serial NOT NULL,
+				j_id bigint,
+				o_id bigint,
+				CONSTRAINT operation_transfer_pkey PRIMARY KEY (ot_id ),
+				CONSTRAINT operation_transfer_j_id_fkey FOREIGN KEY (j_id)
+					REFERENCES jrnx (j_id) MATCH SIMPLE
+					ON UPDATE CASCADE ON DELETE CASCADE,
+				CONSTRAINT operation_transfer_o_id_fkey FOREIGN KEY (o_id)
+					REFERENCES impdol.operation_tmp (o_id) MATCH SIMPLE
+					ON UPDATE CASCADE ON DELETE CASCADE
+				)");
+
+
+
+			$p_cn->exec_sql("
 			COMMENT ON COLUMN impdol.operation_tmp.o_result IS 'result is T can be transferrable, N cannot be transferrable';
 			");
 
-		$cn->exec_sql("
-			COMMENT ON COLUMN impdol.operation_tmp.o_type IS 'S = marchandise, serviceT = tiers (fournisseurs, client)
+			$p_cn->exec_sql("
+			COMMENT ON COLUMN impdol.operation_tmp.o_type IS 'S = marchandise, serviceT = tiers (fournisseurs, client)'
 			");
-
+			$p_cn->commit();
+		}
+		catch (Exception $e)
+		{
+			$p_cn->rollback();
+			print_r($e->getTraceAsString());
+		}
 	}
 
 }

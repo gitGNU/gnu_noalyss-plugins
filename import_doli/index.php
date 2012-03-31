@@ -78,8 +78,8 @@ switch($sa)
   {
     require_once('include/class_install_impdol.php');
 
-    $iplugn=new Install_Impdol($cn);
-    $iplugn->install();
+    $iplugn=new Install_Impdol();
+    $iplugn->install($cn);
 
   }
 echo ShowItem($array,'H','mtitle','mtitle',$default,' style="width:80%;margin-left:10%"');
