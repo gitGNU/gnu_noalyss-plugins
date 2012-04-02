@@ -57,7 +57,7 @@ class Impdol_Operation
         {
             if (count($row) != 11)
             {   
-                $str_row=implode($row);
+                $str_row=implode($row,";");
                 echo "Attention ".h($str_row)." ne contient pas 11 colonnes";
                 continue;
             }
