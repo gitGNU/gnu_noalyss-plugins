@@ -56,8 +56,9 @@ class Impdol_Operation
         while (($row = fgetcsv($foperation, 0, ";", '"')) !== false)
         {
             if (count($row) != 11)
-            {
-                echo "Attention $row ne contient pas 11 colonnes";
+            {   
+                $str_row=implode($row);
+                echo "Attention ".h($str_row)." ne contient pas 11 colonnes";
                 continue;
             }
             $r = new impdol_Operation_tmp_Sql();
