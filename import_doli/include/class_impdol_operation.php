@@ -339,7 +339,7 @@ class Impdol_Operation
                             $this->db->exec_sql("insert into quant_sold
                                         (qs_internal,qs_fiche,qs_quantite,qs_price,qs_vat,qs_vat_code,qs_client,j_id,qs_vat_sided,qs_valid)
                                         values
-                                        ($1,$2,$3,$4,$5,$6,$7,$8,$9)", array(null, /* 1 */
+                                        ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)", array(null, /* 1 */
                                 $oper->getp("fiche"), /* 2 */
                                 $oper->getp("number_unit"), /* 3 */
                                 $jrnx->amount, /* 4 */
@@ -347,9 +347,9 @@ class Impdol_Operation
                                 $tva_id, /* 6 */
                                 $idx_tva, /* 7 */
                                 $oper_tiers->getp('fiche'), /* 8 */
-                                $id,
-                                0,
-                                'Y'
+                                $id,			    /* 9 */
+                                0,			    /* 10 */
+                                'Y'			    /* 11 */
                             ));
 
                             break;
