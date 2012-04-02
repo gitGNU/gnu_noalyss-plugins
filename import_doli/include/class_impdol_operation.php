@@ -57,7 +57,7 @@ class Impdol_Operation
         {
             if (count($row) != 11)
             {
-                echo "Attention $row ne contient pas 10 colonnes";
+                echo "Attention $row ne contient pas 11 colonnes";
                 continue;
             }
             $r = new impdol_Operation_tmp_Sql();
