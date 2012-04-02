@@ -56,7 +56,7 @@ class Impdol_Operation
         while (($row = fgetcsv($foperation, 0, ";", '"')) !== false)
         {
             if (count($row) != 11)
-            {   
+            {
                 $str_row=implode($row,";");
                 echo "Attention ".h($str_row)." ne contient pas 11 colonnes";
                 continue;
@@ -330,13 +330,12 @@ class Impdol_Operation
                     switch ($type)
                     {
                         case 'ACH':
-                            print_r($oper->get_info());
                             $sql = "insert into quant_purchase(qp_internal,j_id,qp_fiche,qp_quantite,qp_price,qp_vat,qp_vat_code,qp_supplier)
 							values($1,$2,$3,$4,$5,$6,$7,$8)";
                             $cn->exec_sql($sql, array(null, $id, $oper->getp("fiche"), $oper->getp("number_unit"), $jrnx->amount, $amount_tva, $tva_id, $oper_tiers->getp("fiche")));
                             break;
                         case 'VEN':
-                            $this->db->exec_sql("insert into quant_sold
+                            $cn->exec_sql("insert into quant_sold
                                         (qs_internal,qs_fiche,qs_quantite,qs_price,qs_vat,qs_vat_code,qs_client,j_id,qs_vat_sided,qs_valid)
                                         values
                                         ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)", array(null, /* 1 */
