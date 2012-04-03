@@ -338,17 +338,16 @@ class Impdol_Operation
                             $cn->exec_sql("insert into quant_sold
                                         (qs_internal,qs_fiche,qs_quantite,qs_price,qs_vat,qs_vat_code,qs_client,j_id,qs_vat_sided,qs_valid)
                                         values
-                                        ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)", array(null, /* 1 */
-                                $oper->getp("fiche"), /* 2 */
-                                $oper->getp("number_unit"), /* 3 */
-                                $jrnx->amount, /* 4 */
-                                $amount_tva, /* 5 */
-                                $tva_id, /* 6 */
-                                $tva_id, /* 7 */
-                                $oper_tiers->getp('fiche'), /* 8 */
-                                $id,			    /* 9 */
-                                0,			    /* 10 */
-                                'Y'			    /* 11 */
+                                        ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)", array(null, /* 1 qs_internal */
+                                $oper->getp("fiche"), /* 2 qs_fiche */
+                                $oper->getp("number_unit"), /* 3 qs_quantite */
+                                $jrnx->amount, /* 4 qs_price */
+                                $amount_tva, /* 5 qs_vat */
+                                $tva_id, /* 6 qs_vat_code */
+                                $oper_tiers->getp('fiche'), /* 7 qs_client */
+                                $id,			    /* 8 j_id */
+                                0,			    /* 9 qs_vat_sided */
+                                'Y'			    /* 10 qs_valid */
                             ));
 
                             break;
