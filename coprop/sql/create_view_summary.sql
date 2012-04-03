@@ -1,4 +1,4 @@
-CREATE OR REPLACE VIEW coprop.summary AS
+CREATE OR REPLACE VIEW coprop.summary AS 
  SELECT a.f_id AS lot_id, m.ad_value AS building_id, c.ad_value AS coprop_id
    FROM fiche_detail a
    JOIN fiche f1 ON f1.f_id = a.f_id
