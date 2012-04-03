@@ -344,7 +344,7 @@ class Impdol_Operation
                                 $jrnx->amount, /* 4 */
                                 $amount_tva, /* 5 */
                                 $tva_id, /* 6 */
-                                $idx_tva, /* 7 */
+                                $tva_id, /* 7 */
                                 $oper_tiers->getp('fiche'), /* 8 */
                                 $id,			    /* 9 */
                                 0,			    /* 10 */
