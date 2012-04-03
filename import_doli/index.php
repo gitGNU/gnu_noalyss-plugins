@@ -39,7 +39,7 @@ echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="ht
 $cn=new Database(dossier::id());
 
 
-Extension::check_version(4600);
+Extension::check_version(4800);
 
 // Javascript
  ob_start();
