@@ -190,25 +190,29 @@ class Import_Card
 				$attr = sprintf('av_text%d', $head_col[$i]);
 				$array[$attr] = $row[$i];
 			}
-			/*
-			 * Force the creating of an accounting
-			 */
-			if ($valid_accounting == 0)
-			{
-				$attr = sprintf('av_text%d', ATTR_DEF_ACCOUNT);
-				$array[$attr] = '';
-			}
+
 			try
 			{
 				// If quick_code already exists then update otherwise insert
 				$quick_code= sprintf('av_text%d',ATTR_DEF_QUICKCODE);
 				if ( $fiche->get_by_qcode($array[$quick_code],false)==0 )
 				{
+                                    // accounting cannot change
+                                        $attr = sprintf('av_text%d', ATTR_DEF_ACCOUNT);
+                                        $array[$attr] = $fiche->strAttribut(ATTR_DEF_ACCOUNT);
 					$fiche->update($array);
 				}
 				else
 				{
-					$fiche->insert($rfichedef, $array);
+                                   /*
+                                    * Force the creating of an accounting
+                                    */
+                                    if ($valid_accounting == 0)
+                                    {
+                                            $attr = sprintf('av_text%d', ATTR_DEF_ACCOUNT);
+                                            $array[$attr] = '';
+                                    }
+				    $fiche->insert($rfichedef, $array);
 				}
 				echo td($g_succeed);
 			}
