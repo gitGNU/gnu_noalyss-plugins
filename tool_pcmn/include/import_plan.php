@@ -35,7 +35,7 @@ Comment votre fichier doit être ?
 <li>Il faut 4 champs</li>
 <li>Les champs sont séparés par des points virgules</li>
 </ul>
-Les champs sont 
+Les champs sont
 <ol>
 <li>Le poste comptable</li>
 <li>Le libellé du poste</li>
@@ -43,13 +43,13 @@ Les champs sont
     <li>Le type de poste : PAS pour passif, ACT pour actif, PRO pour produit, CHA pour charge, CON suivant contexte, pour les comptes inversés ajouter INV à la fin, exemple PROINV (produit compte inversé)</li>
 </ol>
 <?
-  
+
 	echo ' <form method="post" enctype="multipart/form-data" >';
 	echo HtmlInput::hidden('sa',$_GET ['sa']);
 	echo HtmlInput::extension();
 	echo dossier::hidden();
 	$file=new IFile('plan');
-	
+
 	echo '<p>';
 	echo $file->input();
 	echo '</p>';
@@ -65,7 +65,7 @@ Les champs sont
 
 </form>
 <?
-    } 
+    }
 
 // Import the file and ask to confirm
 if (isset($_POST['imp']))
@@ -106,7 +106,7 @@ if (isset($_POST['imp']))
     echo HtmlInput::extension();
     if (isset($_POST['latin'])) echo HtmlInput::hidden('latin',$_POST['latin']);
     if (isset($_POST['over'])) echo HtmlInput::hidden('over',$_POST['over']);
-
+	 echo HtmlInput::hidden('ac',$_REQUEST['ac']);
     echo HtmlInput::submit('confirm','Confirmez');
     echo '</form>';
     }
@@ -116,6 +116,7 @@ if (isset($_POST['imp']))
 if ( isset($_GET['confirm']))
   {
     $cn->start();
+	global $g_failed,$g_succeed;
     if (isset ($_GET ['over']))
       {
 	$cn->exec_sql('delete from tmp_pcmn');
@@ -129,16 +130,12 @@ if ( isset($_GET['confirm']))
 	$count_col=count($row);
 	if ( $count_col == 4)
 	  {
-
+		$dup=$cn->get_value('select * from tmp_pcmn where pcm_val=$1',array($row[0]));
 	    // check duplicate
-	    if ( ! isset($_GET ['over']) )
-	      {
-		if ($cn->get_value('select * from tmp_pcmn where pcm_val=$1',array($row[0])) != 0)
-		  continue;
-	      }
-
+		if ( $dup == 0)
+		{
 	    // insert
-	    if (isset($_POST['latin']))
+	    if (isset($_GET['latin']))
 	      {
 		$cn->exec_sql("insert into tmp_pcmn(pcm_val,pcm_lib,pcm_val_parent,pcm_type) values ($1,$2,$3,$4)",
 			      array(
@@ -147,7 +144,7 @@ if ( isset($_GET['confirm']))
 				    $row[2],
 				    $row[3])
 			      );
-	      } 
+	      }
 	    else
 	      {
 		$cn->exec_sql("insert into tmp_pcmn(pcm_val,pcm_lib,pcm_val_parent,pcm_type) values ($1,$2,$3,$4)",
@@ -159,6 +156,10 @@ if ( isset($_GET['confirm']))
 				    )
 			      );
 	      }
+		  $ok=1;
+		}
+		else
+			$ok=0;
 	    echo '<tr style="border:solid 1px black">';
 	    $row_count++;
 
@@ -167,8 +168,10 @@ if ( isset($_GET['confirm']))
 	      {
 		echo td($row[$i],'style="border:solid 1px black"');
 	      }
-
-	    echo '<td> OK</td>';
+		  if ($ok==1)
+			  echo '<td>'.$g_succeed.'</td>';
+		  else
+			  echo '<td>'.$g_failed.'</td>';
 	  }
 	echo '</tr>';
       }
