@@ -208,7 +208,7 @@ class Coprop_Appel_Fond
 	function confirm()
 	{
 		global $cn;
-		$cn->exec_sql("update coprop.appel_fond set af_confirmed='Y' where af_id=$1",array($this->id));
+		$cn->exec_sql("update coprop.appel_fond set af_confirmed='Y',jr_internal=$2 where af_id=$1",array($this->id,$this->jr_internal));
 	}
 }
 ?>

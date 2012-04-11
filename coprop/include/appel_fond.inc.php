@@ -101,9 +101,10 @@ if (isset($_POST['confirm']))
 		$ledger->save($_POST);
 		echo "<h2>Opération sauvée</h2>";
 		echo HtmlInput::detail_op($ledger->jr_id, $ledger->internal);
-		echo $ledger->input($_POST, 1);
+		echo $ledger->confirm($_POST, true);
 		$appel_fond = new Coprop_Appel_Fond();
 		$appel_fond->id = $_POST['af_id'];
+		$appel_fond->jr_internal=$ledger->internal;
 		$appel_fond->confirm();
 		exit();
 	}
