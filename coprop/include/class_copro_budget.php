@@ -8,8 +8,10 @@ class Copro_Budget
         global $cn;
 
         $array=$cn->get_array("select b_id, b_name,
-                    to_char(b_start,'DD.MM.YYYY') as str_start,
-                    to_char(b_end,'DD.MM.YYYY') as str_end,
+                   b_exercice,
+				   b_type,
+				    case when b_type = 'OPER' then 'Opérationnel'
+					 when b_type = 'PREV' then 'Prévisionnel' else 'inconnu' end as str_type,
                     b_amount
                     from coprop.budget
                     order by b_name
@@ -24,17 +26,14 @@ class Copro_Budget
 		try
 		{
 			if ($this->b_id == '') throw new Exception("Aucun budget demandé");
-			$array=$cn->get_array("select b_id,b_name,b_start,b_end,b_amount,
-				to_char(b_start,'DD.MM.YYYY') as str_b_start,
-				to_char(b_end,'DD.MM.YYYY') as str_b_end
+			$array=$cn->get_array("select b_id,b_name,b_amount,
+				b_type,b_exercice
 				from coprop.budget where b_id=$1",array($this->b_id));
 			if ($cn->count() == 1)
 			{
 				$this->b_name=$array[0]['b_name'];
-				$this->b_start=$array[0]['b_start'];
-				$this->str_b_start=$array[0]['str_b_start'];
-				$this->b_end=$array[0]['b_end'];
-				$this->str_b_end=$array[0]['str_b_end'];
+				$this->b_exercice=$array[0]['b_exercice'];
+				$this->b_type=$array[0]['b_type'];
 				$this->b_amount=$array[0]['b_amount'];
 			}
 			else
@@ -59,17 +58,35 @@ class Copro_Budget
             if ( ! isset ($this->b_id)|| trim($this->b_id)=='')
                     throw new Exception ("Aucun budget demandé");
 			$name=new IText('b_name');
+			$name->size=50;
 			if ($this->b_id <> 0)
 			{
 				$this->load();
 				$name->value=$this->b_name;
-				$start=new IDate('b_start',$this->str_b_start);
-				$end=new IDate('b_end',$this->str_b_end);
+				$exercice=new ISelect('b_exercice');
+				$exercice->value=$cn->make_array("select distinct p_exercice,p_exercice from parm_periode
+					order by 1");
+				$exercice->selected=$this->b_exercice;
+
+				$type=new ISelect('b_type');
+				$type->value=array(
+					array("value"=>"OPER","label"=>"Opérationnel"),
+					array("value"=>"PREV","label"=>"Prévisionnel")
+				);
+				$type->selected=$this->b_type;
+
 				$amount=new INum('b_amount',round($this->b_amount,2));
 
 			}	else {
-				$start=new IDate('b_start');
-				$end=new IDate('b_end');
+				$exercice=new ISelect('b_exercice');
+				$exercice->value=$cn->make_array("select distinct p_exercice,p_exercice from parm_periode
+					order by 1");
+
+				$type=new ISelect('b_type');
+				$type->value=array(
+					array("value"=>"OPER","label"=>"Opérationnel"),
+					array("value"=>"PREV","label"=>"Prévisionnel")
+				);
 				$amount=new INum('b_amount',0);
 
 			}
@@ -204,14 +221,14 @@ class Copro_Budget
 			extract ($p_array);
 			// update coprop.budget
 			$cn->exec_sql("update coprop.budget set b_name=$1,
-					b_start=to_date($2,'DD.MM.YYYY'),
-					b_end=to_date($3,'DD.MM.YYYY'),
+					b_exercice=$2,
+					b_type=$3,
 					b_amount=$4
 					where b_id=$5
 					",array(
 						strip_tags($b_name),
-						$b_start,
-						$b_end,
+						$b_exercice,
+						$b_type,
 						$b_amount,
 						$b_id
 					));
@@ -233,15 +250,15 @@ class Copro_Budget
 		try {
 			extract ($p_array);
 			// update coprop.budget
-			$this->b_id=$cn->get_value("insert into coprop.budget (b_name,b_start,b_end,b_amount)
+			$this->b_id=$cn->get_value("insert into coprop.budget (b_name,b_exercice,b_type,b_amount)
 				values ($1,
-					to_date($2,'DD.MM.YYYY'),
-					to_date($3,'DD.MM.YYYY'),
+					$2,
+					$3,
 					$4) returning b_id
 					",array(
 						strip_tags($b_name),
-						$b_start,
-						$b_end,
+						$b_exercice,
+						$b_type,
 						$b_amount
 					));
 

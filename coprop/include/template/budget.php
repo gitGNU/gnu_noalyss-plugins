@@ -39,18 +39,18 @@
 	</tr>
 	<tr>
 		<td>
-			Date début
+			Exercice
 		</td>
 		<td>
-			<?=$start->input()?>
+			<?=$exercice->input()?>
 		</td>
 	</tr>
 	<tr>
 		<td>
-			Date fin
+			Type de budget
 		</td>
 		<td>
-			<?=$end->input()?>
+			<?=$type->input()?>
 		</td>
 	</tr>
 	<tr>

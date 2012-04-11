@@ -8,8 +8,8 @@
 <table class="result">
     <tr>
         <th> Nom </th>
-        <th> Date début </th>
-        <th> Date Fin </th>
+        <th> Exercice </th>
+        <th> Type de budget </th>
         <th style="text-align: right"> Montant </th>
     </tr>
 <?
@@ -27,10 +27,10 @@ for ($i=0;$i<count($array);$i++):
             <?=$array[$i]['b_name']?>
         </td>
          <td>
-            <?=$array[$i]['str_start']?>
+            <?=$array[$i]['b_exercice']?>
         </td>
         <td>
-            <?=$array[$i]['str_end']?>
+            <?=$array[$i]['str_type']?>
         </td>
         <td CLASS="num">
             <?=nbm($array[$i]['b_amount'])?>
