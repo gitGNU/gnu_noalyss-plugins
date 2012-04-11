@@ -335,28 +335,12 @@ class Import_Bank
 				$fin_ledger->insert_quant_fin($card_bank, $jr_id, $row->f_id, $row->amount);
 
 				// insert rapt
-				if ($cn->get_value('select count(jr_id) from jrn where jr_id=$1', array($row->tp_rec)) == 1)
+				if (trim($row->tp_rec) != '')
 				{
 					$acc_reconc = new Acc_Reconciliation($cn);
 					$acc_reconc->set_jr_id($jr_id);
 					$acc_reconc->insert($row->tp_rec);
-					// lettering
-					$a_rec = $cn->get_array('select j_id
-										from jrnx join jrn on (j_grpt=jr_grpt_id)
-									  where
-									  f_id=$1 and jr_id=$2', array($row->f_id, $row->tp_rec));
-					if (count($a_rec) == 1)
-					{
-						$a_target = $cn->get_array('select j_id
-										from jrnx join jrn on (j_grpt=jr_grpt_id)
-									  where
-									  f_id=$1 and jr_id=$2', array($row->f_id, $jr_id));
-						if (count($a_target) == 1)
-						{
-							$lc = new Lettering_Card($cn);
-							$lc->insert_couple($a_rec[0]['j_id'], $a_target[0]['j_id']);
-						}
-					}
+
 				}
 
 				$sql2 = "update importbank.temp_bank set status = 'T',tp_error_msg=null  where id=$1";
