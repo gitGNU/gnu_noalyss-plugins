@@ -42,6 +42,7 @@ $array=array (
          array($url.'&sa=cle',_('Clef de répartition'),_('Clef de répartition'),2),
          array($url.'&sa=af',_('Appel de fond'),_('Création décompte pour appel de fond'),3),
          array($url.'&sa=bu',_('Budget'),_('budgets'),5),
+         array($url.'&sa=hs',_('Historique'),_('Historique des appels'),6),
          array($url.'&sa=pa',_('Paramètre'),_('Configuration et paramètre'),4)
        );
 
@@ -64,6 +65,9 @@ switch($sa)
   case 'bu':
       $def=5;
       break;
+  case 'hs':
+	  $def=6;
+	  break;
   }
 
 $cn=new Database(dossier::id());
@@ -126,4 +130,10 @@ if ($def==5)
     require_once('include/budget.inc.php');
     exit();
   }
+if ($def==6)
+  {
+    require_once('include/historic.inc.php');
+    exit();
+  }
+
 ?>
