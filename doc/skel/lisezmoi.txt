@@ -1,0 +1,1 @@
+remplacer dans le fichier example PLUGIN_NAME par le nom du plugin
