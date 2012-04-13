@@ -37,6 +37,7 @@ if ( isset ($_POST['save']))
 		$g_copro_parameter->save('categorie_coprop',$_POST['categorie_coprop']);*/
 		$g_copro_parameter->save('journal_appel',$_POST['journal_appel']);
 		$g_copro_parameter->save('categorie_appel',$_POST['categorie_appel']);
+		$g_copro_parameter->save('categorie_charge',$_POST['categorie_charge']);
 		//$g_copro_parameter->save('categorie_immeuble',$_POST['categorie_immeuble']);
 	}
 	catch(Exception $e)
@@ -67,6 +68,10 @@ $journal_appel->selected=$g_copro_parameter->journal_appel;
 $categorie_appel=new ISelect('categorie_appel');
 $categorie_appel->value=$cn->make_array("select  fd_id,fd_label from fiche_def order by fd_label ");
 $categorie_appel->selected=$g_copro_parameter->categorie_appel;
+
+$categorie_charge=new ISelect('categorie_charge');
+$categorie_charge->value=$cn->make_array("select  fd_id,fd_label from fiche_def order by fd_label ");
+$categorie_charge->selected=$g_copro_parameter->categorie_charge;
 
 $categorie_immeuble=new ISelect('categorie_immeuble');
 $categorie_immeuble->value=$cn->make_array("select  fd_id,fd_label from fiche_def order by fd_label ");
@@ -105,6 +110,14 @@ $categorie_immeuble->readOnly=true;
 		</td>
 		<td>
 			<?=$categorie_appel->input();?>
+		</td>
+	</tr>
+		<tr>
+		<td>
+			Catégorie de fiches pour les charges
+		</td>
+		<td>
+			<?=$categorie_charge->input();?>
 		</td>
 	</tr>
 	<tr>

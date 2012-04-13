@@ -144,6 +144,7 @@ EOF;
 			'categorie_immeuble' => $this->immeuble_id,
 			'categorie_appel' => 0,
 			'poste_appel' => 0,
+			'categorie_charge'=>0,
 			'journal_appel' => 0
 		);
 

@@ -51,7 +51,7 @@ class Copro_Budget
 	 */
     function detail()
     {
-        global $cn;
+        global $cn,$g_copro_parameter;
         try
         {
 
@@ -104,7 +104,7 @@ class Copro_Budget
                 join vw_fiche_attr using (f_id)
                 where b_id=$1",array($this->b_id));
             $a_input=array();
-            $fiche_dep=$cn->make_list("select fd_id from fiche_def where frd_id=2");
+            $fiche_dep=$cn->make_list("select fd_id from fiche_def where fd_id=".$g_copro_parameter->categorie_charge);
 
 			$a_key=$cn->make_array(" select cr_id,cr_name from coprop.clef_repartition order by cr_name");
 			$max=count($array);
@@ -114,7 +114,7 @@ class Copro_Budget
 			$f_add_button->label=_('Créer une nouvelle fiche');
 			$f_add_button->set_attribute('ipopup','ipop_newcard');
 			$f_add_button->set_attribute('jrn',-1);
-			$filter=$cn->make_list("select fd_id from fiche_def where frd_id=2");
+			$filter=$cn->make_list("select fd_id from fiche_def where fd_id=".$g_copro_parameter->categorie_charge);
 			$f_add_button->javascript=" this.filter='$filter';this.jrn=-1;select_card_type(this);";
 			echo $f_add_button->input();
             for ($i=0;$i<MAXROWBUD;$i++)
