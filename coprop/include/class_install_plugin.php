@@ -43,10 +43,13 @@ class Install_Plugin
 		$this->cn->start();
 		// create the schema
 		$this->create_schema();
+
 		// create table + put default values
 		$this->create_card();
 
 		$this->create_table_parameter();
+
+		$this->create_table();
 
 		$this->cn->commit();
 	}
@@ -54,7 +57,7 @@ class Install_Plugin
 	function create_schema()
 	{
 		$this->cn->exec_sql('create schema coprop');
-                $this->cn->exec_sql("create sequence coprop.appel_fond_id");
+        $this->cn->exec_sql("create sequence coprop.appel_fond_id");
 	}
 
 	function create_card()
@@ -79,7 +82,7 @@ class Install_Plugin
 		$lot = $lot_def->id;
 
 		$imm_def = new Fiche_Def($this->cn);
-		$fiche_def->add(array(
+		$imm_def->add(array(
 			'FICHE_REF' => 15,
 			'nom_mod' => 'immeuble - plugin',
 			'class_base' => '')
@@ -87,12 +90,13 @@ class Install_Plugin
 		$immeuble = $imm_def->id;
 
 		// creation attribut
-		$this->cn->exec_sql("		insert into attr_def (ad_id,ad_text,ad_type,ad_size,ad_extra)
-		values  ('71','Copropriétaire','select','22','select f_id,vw_name from vw_fiche_attr where fd_id = $1 '),
-		('70','Immeuble','select','22','select f_id,vw_name from vw_fiche_attr where fd_id = $2');", array($copro, $immeuble));
+		$this->cn->exec_sql("insert into attr_def (ad_id,ad_text,ad_type,ad_size,ad_extra)
+		values  ('71','Copropriétaire','select','22','select f_id,vw_name from vw_fiche_attr where fd_id = $copro ')");
+		$this->cn->exec_sql("insert into attr_def (ad_id,ad_text,ad_type,ad_size,ad_extra) values
+		('70','Immeuble','select','22','select f_id,vw_name from vw_fiche_attr where fd_id = $immeuble ');");
 
 		$lot_def->InsertAttribut(71); // lien vers coprop
-		$lot_def->InsertAttribut(72);// lien vers immeuble
+		$lot_def->InsertAttribut(70);// lien vers immeuble
 
 		$imm_def->InsertAttribut(14); // adresse
 		$imm_def->InsertAttribut(15); // code postale
@@ -115,10 +119,10 @@ class Install_Plugin
 				JOIN ( SELECT fd1.f_id, fd1.ad_value
 				FROM fiche_detail fd1
 				WHERE fd1.ad_id = 71) c ON c.f_id = a.f_id
-				WHERE f1.fd_id = $1 AND a.ad_id = 1", array($lot));
+				WHERE f1.fd_id = ".$lot." AND a.ad_id = 1");
 		$this->lot_id=$lot;
 		$this->immeuble_id=$immeuble;
-		$this->coprop_id=$coprop;
+		$this->coprop_id=$copro;
 
 	}
 
@@ -147,6 +151,13 @@ EOF;
 		{
 			$this->cn->exec_sql('insert into coprop.parameter(pr_id,pr_value) values ($1,$2)', array($code, $value));
 		}
+	}
+	function create_table()
+	{
+
+		$file=__DIR__."/../sql/create_table.sql";
+		$this->cn->execute_script($file);
+
 	}
 
 }
