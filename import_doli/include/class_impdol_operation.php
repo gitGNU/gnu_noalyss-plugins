@@ -341,7 +341,7 @@ class Impdol_Operation
 					$jrnx->user = $_SESSION['g_user'];
 					$jrnx->periode = 0;
 					$jrnx->qcode = $oper->getp("qcode");
-					$jrnx->desc = $oper->getp("desc");
+					$jrnx->desc = substr($oper->getp("desc"),0,80);
 					$id = $jrnx->insert_jrnx();
 
 					$transfer = new impdol_operation_transfer_sql();
@@ -402,7 +402,7 @@ class Impdol_Operation
 				$jtiers->user = $_SESSION['g_user'];
 				$jtiers->periode = 0;
 				$jtiers->qcode = $oper_tiers->getp("qcode");
-				$jtiers->desc = $oper_tiers->getp("desc");
+				$jtiers->desc = substr($oper_tiers->getp("desc"),0,80);
 				$jtiers->insert_jrnx();
 
 				/* Record the vat 1 */
@@ -429,7 +429,7 @@ class Impdol_Operation
 				$acc_jrn = new Acc_Operation($cn);
 				$acc_jrn->jrn = $jrn;
 				$acc_jrn->amount = $sum;
-				$acc_jrn->desc = $oper_tiers->getp("desc");
+				$acc_jrn->desc = substr($oper_tiers->getp("desc"),0,80);
 				$acc_jrn->date = $date;
 				$acc_jrn->grpt = $grpt;
 				$acc_jrn->periode = 0;
