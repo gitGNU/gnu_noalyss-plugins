@@ -73,6 +73,7 @@ if ( isset ($_POST['transfer']))
 	$io=new Impdol_Operation();
 	$io->impid=$_POST['impid'];
 	$io->transfer();
+	$io->result_transfer();
 }
 
 ?>
