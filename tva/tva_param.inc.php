@@ -52,10 +52,7 @@ echo $a->input();
 require_once('class_iposte.php');
 echo IPoste::ipopup('ipop_account');
 
-echo '<form method="post">';
 echo dossier::hidden();
 echo HtmlInput::extension();
 echo $tvap->display();
-echo HtmlInput::submit('RECORD','Sauve');
-echo '</form>';
 

@@ -25,7 +25,7 @@
  */
 
 
-/*!\brief 
+/*!\brief
  *
  *
  */
@@ -40,7 +40,7 @@ class  Tva_Parameter
       $idx=self::$variable[$p_string];
       return $this->$idx;
     }
-    else 
+    else
       exit (__FILE__.":".__LINE__.$p_string.' Erreur attribut inexistant');
   }
   public function set_parameter($p_string,$p_value) {
@@ -48,10 +48,10 @@ class  Tva_Parameter
       $idx=self::$variable[$p_string];
       $this->$idx=$p_value;
     }
-    else 
+    else
       exit (__FILE__.":".__LINE__.$p_string.' Erreur attribut inexistant');
-    
-    
+
+
   }
   public function get_info() {    return var_export(self::$variable,true);  }
   public function verify() {
@@ -60,7 +60,7 @@ class  Tva_Parameter
   /**
    *@brief retrieve * row thanks a condition
    */
-   public function seek($cond,$p_array=null) 
+   public function seek($cond,$p_array=null)
    {
    /*
      $sql="select * from * where $cond";
@@ -97,7 +97,7 @@ class  Tva_Parameter
 
   public function load() {
 
-   $sql="select pcode,pvalue,paccount from tva_belge.parameter where pcode=$1"; 
+   $sql="select pcode,pvalue,paccount from tva_belge.parameter where pcode=$1";
 
     $res=$this->cn->get_array(
 		 $sql,
@@ -121,12 +121,9 @@ class  Tva_Parameter
    *@brief show the content of the table tva_belge.parameter
    */
   public function display() {
-    if ( $this->cn->get_value("select pcode from tva_belge.parameter where pcode='CRTVA'")=='')
-	 $this->cn->exec_sql("insert into tva_belge.parameter(pcode,pvalue,paccount) values ('CRTVA','','4119')");
-    if ( $this->cn->get_value("select pcode from tva_belge.parameter where pcode='DTTVA'")=='')
-	 $this->cn->exec_sql("insert into tva_belge.parameter(pcode,pvalue,paccount) values ('DTTVA','','4519')");
+	 global $cn;$cn=$this->cn;
 
-    $res=$this->cn->get_array("select pcode,pvalue,paccount from tva_belge.parameter");
+	$res=$this->cn->get_array("select pcode from tva_belge.parameter");
 
     ob_start();
     require_once('form_parameter.php');
@@ -140,10 +137,10 @@ class  Tva_Parameter
    *\note
    *\see
    *\todo
-   */	
+   */
   static function test_me() {
   }
-  
+
 }
 
 /* test::test_me(); */

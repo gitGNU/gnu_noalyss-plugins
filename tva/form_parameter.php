@@ -1,264 +1,141 @@
 <?php
 
-function show($p_res,$p_code,$p_desc) {
-static $a=0;
-$a++;
-
- for ($i=0;$i<count($p_res);$i++) {
-	if ( $p_res[$i]['pcode']==$p_code ) {
-		$cn=new Database(dossier::id());
-		echo '<td>';
-		echo HtmlInput::hidden('tvacode[]',$p_code);
-		echo "$p_code</td>";
-		echo "<td>";
-		if ($p_code != 'ATVA') {
-			$text=new ITva_Popup('value['.$i.']');
-			$text->value=$p_res[$i]['pvalue'];
-			$text->add_label("code".$i,$cn);
-			$text->js='onchange="set_tva_label(this);"';
-
-			$text->with_button(true);
-			echo $text->input();
-		} else {
-		  echo HtmlInput::hidden('value['.$i.']','');
-		}
-		$msg="";
-
-
-
-		echo '</td>';
-
-		echo '<td>';
-		$text=new IPoste('account['.$i.']');
-		$text->value=$p_res[$i]['paccount'];
-		$text->set_attribute('ipopup','ipop_account');
-		$text->set_attribute('gDossier',Dossier::id());
-		$text->set_attribute('jrn',0);
-		$text->set_attribute('account','account['.$i.']');
-		$tvap=new Tva_Parameter($cn);
-		if (strpos($p_res[$i]['paccount'],',') != 0 ) {
-			$aPoste=explode(',',$p_res[$i]['paccount']);
-			foreach ($aPoste as $e) {
-				if ( $tvap->exist_pcmn($e) ==0 ) {
-					$msg='<span class="notice">'.$e._(" n'existe pas dans PCMN")."</span>";
-				} else
-					if ( $tvap->exist_pcmn($p_res[$i]['pvalue']) ==0 ) {
-						$msg='<span class="notice">'.$p_res[$i]['pvalue']._(" n'existe pas dans PCMN")."</span>";
-				}
-
-			}
-		}
-		echo $text->input();
-		echo '</td>';
-
-		echo "<td>$p_desc $msg</td>";
-		break;
+function show($p_code,$p_desc) {
+	global $cn;
+	echo "<h2>".h($p_code)." ".$p_desc."</h2>";
+	$a_code=$cn->get_array("
+			select pi_id, pc.tva_id,tva_label,tva_comment,tva_rate, pcm_val
+			from tva_belge.parameter_chld as pc
+			left join tva_rate as tv on (pc.tva_id=tv.tva_id)
+			where pcode=$1 order by pi_id",
+			array($p_code));
+	if (sizeof($a_code) == 0) {
+		echo '<span class="notice" style="display:block">Aucun paramètre donné </span>';
+		echo HtmlInput::button("Ajout paramètre","Ajout paramètre");
+		return;
 	}
-    }
-}
-
-/**
- *@brief show parameters need a TVA code instead of an accounting
- *@param $p_res (result of Tva_Parameter.display
- *@param $p_code (GRILxx)
- *@param $p_desc description of the account
- *@return string with HTML code
- */
-function show_account($p_res,$p_code,$p_desc) {
- for ($i=0;$i<count($p_res);$i++) {
-	if ( $p_res[$i]['pcode']==$p_code ) {
-		echo '<td>';
-		echo HtmlInput::hidden('tvacode[]',$p_code);
-		echo HtmlInput::hidden('value[]','');
-		echo "$p_code</td>";
-		echo "<td>";
-		// The popup a
-
-		$text=new IPoste('account['.$i.']');
-		$text->value=$p_res[$i]['paccount'];
-		$text->set_attribute('ipopup','ipop_account');
-		$text->set_attribute('gDossier',Dossier::id());
-		$text->set_attribute('jrn',0);
-		$text->set_attribute('account','account['.$i.']');
-
-		echo $text->input();
-		$cn=new Database(Dossier::id());
-		$tvap=new Tva_Parameter($cn);
-		$msg='';
-		if (strpos($p_res[$i]['paccount'],',') != 0 ) {
-			$aPoste=explode(',',$p_res[$i]['paccount']);
-			foreach ($aPoste as $e) {
-
-				if ( trim($e) != '' && strpos('%',$e) === false && $tvap->exist_pcmn($e) ==0 ) {
-					$msg.='<span class="notice">'.$e._(" n'existe pas dans PCMN")."</span>";
-				}
-
-			}
-		}else
-		if ( trim($p_res[$i]['paccount']) != '' && strpos("%",$p_res[$i]['paccount']) == false && $tvap->exist_pcmn($p_res[$i]['paccount']) ==0 ) {
-			$msg.='<span class="notice">'.$p_res[$i]['paccount']._(" n'existe pas dans PCMN")."</span>";
-		}
-		echo '</td>';
-		echo '<td>';
-		echo 'Donnez un poste comptable';
-		echo '</td>';
-		echo "<td>$p_desc $msg</td>";
-		break;
+	$n_max=sizeof($a_code);
+	echo "<table class=\"result\">";
+	echo "<tr>";
+	echo th("Code TVA");
+	echo th("Label");
+	echo th("Description");
+	echo th("Taux");
+	echo th("utilisant le poste comptable");
+	echo "</tr>";
+	for ($i=0;$i<$n_max;$i++)
+	{
+		echo "<tr>";
+		echo td($a_code[$i]['tva_id']);
+		echo td($a_code[$i]['tva_label']);
+		echo td($a_code[$i]['tva_comment']);
+		echo td($a_code[$i]['tva_rate']);
+		echo td("Poste comptable :".$a_code[$i]['pcm_val']);
+		echo td("Effacer");
+		echo td("modifier");
+		echo "</tr>";
 	}
-    }
+	echo "</table>";
+	echo HtmlInput::button("Ajout paramètre","Ajout paramètre");
 }
 ?>
-<span class="notice">
-<?=_('Vous pouvez mettre plusieurs postes comptables séparés par une virgule dans une grille')?>
-</span>
+<h1><?=_("Opération à la sortie");?></h1>
+<?=show("GRIL00",_("Grille 00 : opérations soumises à un régime particulier"))?>
+<?=show("GRIL01",_("Grille 01 : Opérations pour lesquelles la TVA est due (6%)"))?>
+<?=show("GRIL02",_("Grille 02 : Opérations pour lesquelles la TVA est due (12%)"))?>
+<?=show("GRIL03",_("Grille 03 : Opérations pour lesquelles la TVA est due (21%)"))?>
+<?=show("GRIL44",_("Grille 44 : Opérations pour lesquelles la TVA étrangère est due par le cocontractant"))?>
+<?=show("GRIL45",_("Grille 45 : Opérations pour lesquelles la TVA est due par le cocontractant"))?>
+<?=show("GRIL46",_("Grille 46 : Livraisons intracommunautaires exemptées effectuées en Belgique et ventes ABC"))?>
+<?=show("GRIL47",_("Grille 47 :Autres opérations exemptées et autres opérations effectuées à l’étranger"))?>
+<?=show("GRIL48",_("Grille 48 : Opérations relatives aux notes de crédit des grilles 44 et 48"))?>
+<?=show("GRIL49",_("Grille 49 : Opérations relatives aux notes de crédit"))?>
 
-<fieldset> <legend><?=_("Opération à la sortie");?></legend>
-<TABLE class="result">
-<TR>
-	<TH><?=_("code")?></TH>
-	<TH><?=_('Poste comptable TVA')?></TH>
-	<TH><?=_('Poste comptable Montant')?></TH>
-	<TH><?=_('Description')?></TH>
-</TR>
-<TR>
-<?=show($res,"GRIL00",_("Grille 00 : opérations soumises à un régime particulier"))?>
-</tr>
-<TR>
-<?=show($res,"GRIL01",_("Grille 01 : Opérations pour lesquelles la TVA est due (6%)"))?>
-</tr>
-<TR>
-<?=show($res,"GRIL02",_("Grille 02 : Opérations pour lesquelles la TVA est due (12%)"))?>
-</tr>
-<TR>
-<?=show($res,"GRIL03",_("Grille 03 : Opérations pour lesquelles la TVA est due (21%)"))?>
-</tr>
-<TR>
-<?=show($res,"GRIL44",_("Grille 44 : Opérations pour lesquelles la TVA étrangère est due par le cocontractant"))?>
-</tr>
-<TR>
-<?=show($res,"GRIL45",_("Grille 45 : Opérations pour lesquelles la TVA est due par le cocontractant"))?>
-</tr>
-<TR>
-<?=show($res,"GRIL46",_("Grille 46 : Livraisons intracommunautaires exemptées effectuées en Belgique et ventes ABC"))?>
-</tr>
-<TR>
-<?=show($res,"GRIL47",_("Grille 47 :Autres opérations exemptées et autres opérations effectuées à l’étranger"))?>
-</tr>
-<TR>
-<?=show($res,"GRIL48",_("Grille 48 : Opérations relatives aux notes de crédit des grilles 44 et 48"))?>
-</tr>
-<TR>
-<?=show($res,"GRIL49",_("Grille 49 : Opérations relatives aux notes de crédit"))?>
-</tr>
-</TABLE>
-</fieldset>
+<h1><?=_("Opération à l'entrée");?></h1>
+<?=show("GRIL81",_("Grille 81 : Opération sur les marchandises, matières premières..."))?>
+<?=show("GRIL82",_("Grille 82 : Opération sur les services et biens divers"))?>
+<?=show("GRIL83",_("Grille 83 : Opération sur les biens d'investissements"))?>
+<?=show("GRIL84",_("Grille 84 : Montant des notes de crédit reçues et des corrections négatives relatif aux opérations inscrites en grilles 86 et 88"))?>
+<?=show("GRIL85",_("Grille 85 : Montant des notes de crédit reçues et des corrections négatives relatif aux autres opérations du cadre III  "))?>
+<?=show("GRIL86",_("Grille 86 : Acquisitions intracommunautaires effectuées en Belgique et ventes ABC  "))?>
+<?=show("GRIL87",_(" Autres opérations à l'entrée pour lesquelles la T.V.A. est due par le déclarant "))?>
+<?=show("GRIL88",_("Services intracommunautaires avec report de perception"))?>
 
-<fieldset><legend> <?=_("Opération à l'entrée");?></legend>
-<TABLE class="result">
-<TR>
-	<TH><?=_("code")?></TH>
-	<TH><?=_('Poste comptable')?></TH>
-	<TH><?=_('Poste comptable Montant')?></TH>
-	<TH><?=_('Description')?></TH>
-</TR>
-<TR>
-<?=show($res,"GRIL81",_("Grille 81 : Opération sur les marchandises, matières premières..."))?>
-</tr>
-<TR>
-<?=show($res,"GRIL82",_("Grille 82 : Opération sur les services et biens divers"))?>
-</tr>
-<TR>
-<?=show($res,"GRIL83",_("Grille 83 : Opération sur les biens d'investissements"))?>
-</tr>
-<TR>
-<?=show($res,"GRIL84",_("Grille 84 : Montant des notes de crédit reçues et des corrections négatives relatif aux opérations inscrites en grilles 86 et 88"))?>
-</tr>
-<TR>
-<?=show($res,"GRIL85",_("Grille 85 : Montant des notes de crédit reçues et des corrections négatives relatif aux autres opérations du cadre III  "))?>
-</tr>
+<h1><?=_("TVA Due");?></h1>
+<?=show("GRIL54",_("Grille 54 : tva due sur opération grille 01,02 et 03"))?>
+<?=show("GRIL55",_("Grille 55 : tva due sur opération grille 86 et 88"))?>
+<?=show("GRIL56",_("Grille 56 : tva due sur opération grille 87"))?>
+<?=show("GRIL57",_("Grille 57 :T.V.A. relative aux importations avec report de perception "))?>
+<?=show("GRIL61",_("Grille 61 :Diverses régularisations T.V.A. en faveur de l'Etat"))?>
+<?=show("GRIL63",_("Grille 63 :T.V.A. à reverser mentionnée sur les notes de crédit reçues"))?>
 
-<TR>
-<?=show($res,"GRIL86",_("Grille 86 : Acquisitions intracommunautaires effectuées en Belgique et ventes ABC  "))?>
-</tr>
-
-<TR>
-<?=show($res,"GRIL87",_(" Autres opérations à l'entrée pour lesquelles la T.V.A. est due par le déclarant "))?>
-</tr>
-
-<TR>
-<?=show($res,"GRIL88",_("Services intracommunautaires avec report de perception"))?>
-</tr>
-
-</TABLE>
-</fieldset>
-
-<fieldset><legend> <?=_("TVA Due");?></legend>
-<TABLE class="result">
-<TR>
-	<TH><?=_("code")?></TH>
-	<TH><?=_('Poste comptable')?></TH>
-	<TH><?=_('Poste comptable Montant')?></TH>
-	<TH><?=_('Description')?></TH>
-</TR>
-<TR>
-<?=show($res,"GRIL54",_("Grille 54 : tva due sur opération grille 01,02 et 03"))?>
-</tr>
-<TR>
-<?=show($res,"GRIL55",_("Grille 55 : tva due sur opération grille 86 et 88"))?>
-</tr>
-<TR>
-<?=show($res,"GRIL56",_("Grille 56 : tva due sur opération grille 87"))?>
-</tr>
-<TR>
-<?=show($res,"GRIL57",_("Grille 57 :T.V.A. relative aux importations avec report de perception "))?>
-</tr>
-<TR>
-<?=show($res,"GRIL61",_("Grille 61 :Diverses régularisations T.V.A. en faveur de l'Etat"))?>
-</tr>
-<TR>
-<?=show($res,"GRIL63",_("Grille 63 :T.V.A. à reverser mentionnée sur les notes de crédit reçues"))?>
-</tr>
-
-
-</TABLE>
-</fieldset>
-<fieldset><legend> <?=_("TVA Déductible");?></legend>
-<TABLE class="result">
-<TR>
-	<TH><?=_("code")?></TH>
-	<TH><?=_('Poste comptable')?></TH>
-	<TH><?=_('Poste comptable Montant')?></TH>
-	<TH><?=_('Description')?></TH>
-</TR>
-<TR>
-<?=show($res,"GRIL59",_("Grille 59 : taxe déductible"))?>
-</tr>
-<TR>
-<?=show($res,"GRIL62",_("Grille 62 : Diverses régularisations T.V.A. en faveur du déclarant"))?>
-</tr>
-<TR>
-<?=show($res,"GRIL64",_("Grille 56 : T.V.A. à récupérer mentionnée sur les notes de crédit délivrées "))?>
-</tr>
-
-</TABLE>
-</fieldset>
+<h1> <?=_("TVA Déductible");?></h1>
+<?=show("GRIL59",_("Grille 59 : taxe déductible"))?>
+<?=show("GRIL62",_("Grille 62 : Diverses régularisations T.V.A. en faveur du déclarant"))?>
+<?=show("GRIL64",_("Grille 56 : T.V.A. à récupérer mentionnée sur les notes de crédit délivrées "))?>
 
 <fieldset>
 <legend><?=_('Divers')?></legend>
 <TABLE class="result">
 <TR>
-	<TH><?=_("code")?></TH>
 	<TH><?=_('Poste comptable')?></TH>
 	<TH><?=_('Description')?></TH>
+	<th></th>
 </TR>
 <TR>
-<?=show_account($res,"ATVA",_("Poste comptable utilisé pour les avances faites à la TVA"))?>
+
+	<TD>
+	<?
+	$atva=$cn->get_value("select pcm_val from tva_belge.parameter_chld where pcode='ATVA'");
+	$ip_tva=new IPoste('ATVA',$atva);
+	$ip_tva->set_attribute('gDossier',Dossier::id());
+	$ip_tva->set_attribute('jrn',0);
+	$ip_tva->set_attribute('account','ATVA');
+	$ip_tva->set_attribute('label','ATVA_label');
+	echo $ip_tva->input();
+	$lib=$cn->get_value("select pcm_lib from tmp_pcmn where pcm_val=$1",array($atva));
+	?>
+	</TD>
+	<TD>
+		<SPAN ID="ATVA_label"><?=h($lib)?></SPAN>
+	</td>
+	<?=td(_("Poste comptable utilisé pour les avances faites à la TVA"))?>
 </tr>
 <TR>
-<?=show_account($res,"CRTVA",_("Poste comptable utilisé pour les créances sur la  TVA"))?>
+	<TD>
+	<?
+	$crtva=$cn->get_value("select pcm_val from tva_belge.parameter_chld where pcode='CRTVA'");
+	$ip_tva=new IPoste('CRTVA',$crtva);
+	$ip_tva->set_attribute('gDossier',Dossier::id());
+	$ip_tva->set_attribute('jrn',0);
+	$ip_tva->set_attribute('account','CRTVA');
+	$ip_tva->set_attribute('label','CRTVA_label');
+	echo $ip_tva->input();
+	$lib=$cn->get_value("select pcm_lib from tmp_pcmn where pcm_val=$1",array($crtva));
+	?>
+	</TD>
+	<TD>
+		<SPAN ID="CRTVA_label"><?=h($lib)?></SPAN>
+	</td>
+<?=td(("Poste comptable utilisé pour les créances sur la  TVA"))?>
 </tr>
 <TR>
-<?=show_account($res,"DTTVA",_("Poste comptable utilisé pour les dettes envers la TVA"))?>
+<TD>
+	<?
+	$dttva=$cn->get_value("select pcm_val from tva_belge.parameter_chld where pcode='DTTVA'");
+	$ip_tva=new IPoste('DTTVA',$dttva);
+	$ip_tva->set_attribute('gDossier',Dossier::id());
+	$ip_tva->set_attribute('jrn',0);
+	$ip_tva->set_attribute('account','DTTVA');
+	$ip_tva->set_attribute('label','DTTVA_label');
+	echo $ip_tva->input();
+	$lib=$cn->get_value("select pcm_lib from tmp_pcmn where pcm_val=$1",array($dttva));
+	?>
+	</TD>
+	<TD>
+		<SPAN ID="DTTVA_label"><?=h($lib)?></SPAN>
+	</td>
+	<?=td(_("Poste comptable utilisé pour les dettes envers la TVA"))?>
 </tr>
 
 </TABLE>
