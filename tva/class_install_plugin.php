@@ -24,7 +24,7 @@
  * \brief this class manages the installation and the patch of the plugin
  */
 
-class Install_Plugin 
+class Install_Plugin
 {
 
   function __construct($p_cn) {
@@ -119,7 +119,7 @@ $sql=<<<EOF
 CREATE TABLE tva_belge.intracomm_chld
 (
   ic_id serial,
-  i_id bigint, 
+  i_id bigint,
   ic_tvanum text NOT NULL,
   ic_amount numeric(20,4) NOT NULL,
   ic_code character varying(1) NOT NULL,
@@ -230,7 +230,7 @@ $array=array(
 	     'GRIL59'=>array('1,2,3','6%,22%,23%,24%,25%'),
 	     'GRIL62'=>array('',''),
 	     'GRIL64'=>array('',''),
-	     'ATVA'=>array('4117','')
+	     'ATVA'=>array('','4117')
 	     );
 
 foreach ($array as $code=>$value) {
