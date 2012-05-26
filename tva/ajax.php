@@ -184,6 +184,37 @@ case 'rm_form':
   $r.=HtmlInput::button_close($ctl);
   $html=escape_xml($r);
   break;
+case 'add_param':
+	$ctl="paramadd_id";
+	$r=HtmlInput::title_box("Ajout paramètre",$ctl);
+	$r.='<h3>'._('Pour la grille ').$pcode.'</h3>';
+	// TVA input
+	$text = new ITva_Popup('tva_id');
+	$text->add_label('tva_label');
+	$text->js = 'onchange="set_tva_label(this);"';
+	$text->with_button(true);
+
+	// Accounting
+	$iposte=new IPoste('paccount');
+	$iposte->set_attribute('gDossier',Dossier::id());
+	$iposte->set_attribute('jrn',0);
+	$iposte->set_attribute('account','paccount');
+	$iposte->set_attribute('label','paccount_label');
+
+
+	$r.='<form method="POST" id="faddparm"onsubmit="return confirm(\'Vous confirmez ?\');" style="margin-left:15px">';
+	$r.=HtmlInput::request_to_hidden(array("gDossier","plugin_code","ac","pcode"));
+	$r.=_(" Code TVA ");
+	$r.=$text->input();
+	$r.='<span id="tva_label" style="display:block"></span>';
+	$r.=" Poste comptable";
+	$r.=$iposte->input();
+	$r.='<span id="paccount_label" style="display:inline"></span>';
+	$r.='<span style="display:block"></span>';
+	$r.=HtmlInput::submit("save_addparam","Sauver");
+	$r.=HtmlInput::button_close($ctl);
+	$r.='</form>';
+	break;
 default:
   $r=var_export($_REQUEST,true);
 }

@@ -3,7 +3,7 @@ function show_declaration(p_type,p_id) {
 	$('detail').innerHTML='<image src="image/loading.gif" border="0" alt="Chargement...">';
 	$('detail').show();
 	$('main').hide();
-	var gDossier=$('gDossier').value; var code=$('plugin_code').value;
+	var gDossier=$('gDossier').value;var code=$('plugin_code').value;
 	var queryString='act=dsp_decl&gDossier='+gDossier+'&plugin_code='+code;
 	queryString+='&type='+p_type+'&id='+p_id;
 	var action=new Ajax.Request ( 'ajax.php',
@@ -14,19 +14,19 @@ function show_declaration(p_type,p_id) {
 				 onSuccess:success_show_declaration
 			       }
 			       );
-    } catch(e) { alert('show_declaration '+e.message);}
+    } catch(e) {alert('show_declaration '+e.message);}
 }
 function success_show_declaration(answer) {
     try {
 	var xml=answer.responseXML;
 	var html=xml.getElementsByTagName('code');
-	if ( html.length == 0 ) { var rec=answer.responseText;alert ('erreur :'+rec);}
+	if ( html.length == 0 ) {var rec=answer.responseText;alert ('erreur :'+rec);}
 	var code_html=getNodeText(html[0]);
 	code_html=unescape_xml(code_html);
 	$('detail').innerHTML=code_html;
 	code_html.evalScripts();
 
-    } catch(e) { alert('success_show_declaration '+e.message);}
+    } catch(e) {alert('success_show_declaration '+e.message);}
 }
 function error_show_declaration() {
     alert('error_show_declaration : ajax not supported');
@@ -51,7 +51,7 @@ function success_record_writing(req) {
 	var answer=req.responseXML;
 	var a=answer.getElementsByTagName('ctl');
 	var html=answer.getElementsByTagName('code');
-	if ( a.length == 0 ) { var rec=req.responseText;alert ('erreur :'+rec);}
+	if ( a.length == 0 ) {var rec=req.responseText;alert ('erreur :'+rec);}
 	var name_ctl=a[0].firstChild.nodeValue;
 	var code_html=getNodeText(html[0]);
 
@@ -82,7 +82,7 @@ function success_save_write(req){
 	var answer=req.responseXML;
 	var a=answer.getElementsByTagName('ctl');
 	var html=answer.getElementsByTagName('code');
-	if ( a.length == 0 ) { var rec=req.responseText;alert ('erreur :'+rec);}
+	if ( a.length == 0 ) {var rec=req.responseText;alert ('erreur :'+rec);}
 	var name_ctl=a[0].firstChild.nodeValue;
 	var code_html=getNodeText(html[0]);
 
@@ -95,4 +95,57 @@ function success_save_write(req){
 	code_html.evalScripts();}
     catch(e){
 	alert("answer_box Impossible executer script de la reponse\n"+e.message);}
+}
+function show_addparam(pcode,plugin_code,dossier)
+{
+	try {
+		waiting_box();
+		 var action=new Ajax.Request ( 'ajax.php',
+				  {
+				      method:'get',
+				      parameters:"act=add_param&pcode="+pcode+"&gDossier="+dossier+"&plugin_code="+plugin_code,
+				      onFailure:null,
+				      onSuccess:success_showaddparam
+				  });
+	}catch (e){
+		alert(e.message);
+	}
+}
+
+function success_showaddparam(req) {
+  try{
+		remove_waiting_box();
+		var sx=0;
+		if ( window.scrollY)
+		{
+			sx=window.scrollY+120;
+		}
+		else
+		{
+			sx=document.body.scrollTop+120;
+		}
+
+		var div_style="top:"+sx+";width:60%;heigth:80%";
+		removeDiv("paramadd_id");
+		add_div({
+			"id":'paramadd_id',
+			"drag":"1",
+			"cssclass":"inner_box",
+			"style":div_style
+		});
+		var answer=req.responseXML;
+		var html=answer.getElementsByTagName('code');
+		var code_html=getNodeText(html[0]);
+		code_html=unescape_xml(code_html);
+		g("paramadd_id").innerHTML=code_html;
+	}
+	catch (e) {
+		alert("success_box "+e.message);
+	}
+	try{
+		code_html.evalScripts();
+	}
+	catch(e){
+		alert("answer_box Impossible executer script de la reponse\n"+e.message);
+	}
 }

@@ -3,6 +3,8 @@
 function show($p_code,$p_desc) {
 	global $cn;
 	echo "<h2>".h($p_code)." ".$p_desc."</h2>";
+	$plugin_code=$_REQUEST['plugin_code'];
+	$dossier=Dossier::id();
 	$a_code=$cn->get_array("
 			select pi_id, pc.tva_id,tva_label,tva_comment,tva_rate, pcm_val
 			from tva_belge.parameter_chld as pc
@@ -11,7 +13,8 @@ function show($p_code,$p_desc) {
 			array($p_code));
 	if (sizeof($a_code) == 0) {
 		echo '<span class="notice" style="display:block">Aucun paramètre donné </span>';
-		echo HtmlInput::button("Ajout paramètre","Ajout paramètre");
+
+		echo HtmlInput::button("add_param","Ajout paramètre","onclick=\"show_addparam('$p_code','$plugin_code','$dossier');\"");
 		return;
 	}
 	$n_max=sizeof($a_code);
@@ -31,12 +34,16 @@ function show($p_code,$p_desc) {
 		echo td($a_code[$i]['tva_comment']);
 		echo td($a_code[$i]['tva_rate']);
 		echo td("Poste comptable :".$a_code[$i]['pcm_val']);
-		echo td("Effacer");
-		echo td("modifier");
+		echo '<td>';
+		echo '<form id="f'.$a_code[$i]['pi_id'].'" method="POST">';
+		echo HtmlInput::hidden("pi_id",$a_code[$i]['pi_id']);
+		echo HtmlInput::anchor("Effacer","","onclick=\"if ( confirm('Vous confirmez?')) { $('f".$a_code[$i]['pi_id']."').submit(this);} else {return false;}\"");
+		echo "</form>";
+		echo '</td>';
 		echo "</tr>";
 	}
 	echo "</table>";
-	echo HtmlInput::button("Ajout paramètre","Ajout paramètre");
+	echo HtmlInput::button("add_param","Ajout paramètre","onclick=\"show_addparam('$p_code','$plugin_code','$dossier');\"");
 }
 ?>
 <h1><?=_("Opération à la sortie");?></h1>
@@ -76,6 +83,8 @@ function show($p_code,$p_desc) {
 
 <fieldset>
 <legend><?=_('Divers')?></legend>
+<form method="POST">
+
 <TABLE class="result">
 <TR>
 	<TH><?=_('Poste comptable')?></TH>
@@ -139,52 +148,9 @@ function show($p_code,$p_desc) {
 </tr>
 
 </TABLE>
+	<?=HtmlInput::submit("save_misc","Sauver")?>
+</form>
 </fieldset>
-<fieldset><legend><?=_('Aide')?></legend>
-<span class="notice">
-<?=_('Vous pouvez mettre plusieurs postes comptables séparées par une virgule dans une grille')?>
-<?=_("Vous devez ajouter dans paramètre->tva les codes TVA nécessaires pour les cocontractants, les opérations à l'export, les opérations intracommunautaire... Ainsi que les postes comptables dans les paramètres->plan comptable")?>
-<br>
-<?=_('Exemple')?>
-<table>
-<tr>
-<th>code</th>
-<Th>
-Label 	</Th><th>Taux</th><th> 	Commentaire 	</th><th>Poste</th>
-</tr>
-<tr>
-<td>4</td>
-<TD>
-0%	</TD><td>0.0000	</TD><td>Aucune tva n'est applicable	</TD><td>4114,4514	</td></tr>
-<tr>
-<td>2</td>
-<TD>
-
-12%	</TD><td>0.1200	</TD><td>Tva 	</TD><td>4112,4512	</td></tr>
-<tr>
-<td>1</td>
-<TD>
-21%	</TD><td>0.2100	</TD><td>Tva applicable à tout ce qui bien et service divers	</TD><td>4111,4511</td></tr>
-<tr>
-<td>3</td>
-<TD>
-6%	</TD><td>0.0600	</TD><td>Tva applicable aux journaux et livres	</TD><td>4113,4513	</td></tr>
-<tr>
-<td> ??? </td>
-<TD>
-ART44	</TD><td>0.0000	</TD><td>Opérations pour les opérations avec des assujettis à l\'art 44 Code TVA	</TD><td>41143,45143	</td></tr>
-<tr>
-<td> ??? </td>
-<TD>
-COC	</TD><td>0.0000	</TD><td>Opérations avec des cocontractants	</TD><td>41144,45144	</td></tr>
-<tr>
-<td>6</td>
-<TD>
-EXPORT	</TD><td>0.0000	</TD><td>Tva pour les exportations	</TD><td>41141,45144</td></tr>
-<tr>
-<td>5</td>
-<TD>
-INTRA	</TD><td>0.0000	</TD><td>Tva pour les livraisons / acquisition intra communautaires	</TD><td>41142,45142</td></tr>
-</table>
-</span>
+<fieldset><legend>Listing intracommunautaires</legend>
+<?=show("CLINTRA",_("Code TVA pour clients  Intracommunataire"))?>
 </fieldset>

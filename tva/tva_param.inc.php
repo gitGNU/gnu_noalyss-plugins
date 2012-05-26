@@ -24,26 +24,38 @@
  * \brief set up the parameters
  */
 require_once('class_tva_parameter.php');
+$cn=new Database(dossier::id());
 
 // save all the parameters
-if ( isset ($_REQUEST['RECORD']))  {
-  $aCode=$_POST['tvacode'];
-  $aValue=$_POST['value'];
-  $aAccount=$_POST['account'];
-  for ($i=0;$i<count($aCode);$i++) {
-    $code=new Tva_Parameter($cn);
-    $code->set_parameter('code',$aCode[$i]);
-    $code->set_parameter('value',$aValue[$i]);
-    if ( isset($aAccount[$i]))
-      $code->set_parameter('account',$aAccount[$i]);
-    else
-      $code->set_parameter('account','');
-    $code->update();
-  }
+if ( isset ($_POST['save_misc']))  {
+	extract($_POST);
+
+	foreach ( array('CRTVA','ATVA','DTTVA') as $i){
+		$value=${$i};
+		if ( trim(${$i})=='') $value=null;
+		$cn->exec_sql("update tva_belge.parameter_chld set pcm_val=$1::account_type where pcode=$2",
+				array($value,$i));
+	}
+
+	unset($_POST['save_misc']);
 }
 
+if ( isset ($_POST['save_addparam'])){
+	extract ($_POST);
+	try {
+		if ( trim($tva_id)=="")			throw new Exception("TVA n'existe pas");
+		if ( trim($paccount)=="")			throw new Exception("Poste comptable vide");
+		if ( $cn->get_value("select count(tva_id) from tva_rate where tva_id=$1",array($tva_id))==0) throw new Exception("TVA $tva_id n'existe pas");
+		$cn->exec_sql("insert into tva_belge.parameter_chld(pcode,tva_id,pcm_val) values ($1,$2,$3::account_type)",
+		array($pcode,$tva_id,$paccount));
+	} catch(Exception $e) {
+		alert("Ne peut sauver : ".$e->getMessage());
+	}
+}
+if ( isset ($_POST['pi_id'])){
+	$cn->exec_sql("delete from tva_belge.parameter_chld where pi_id=$1",array($_POST['pi_id']));
+}
 /* show all the possible parameters */
-$cn=new Database(dossier::id());
 $tvap=new Tva_Parameter($cn);
 require_once('class_itva_popup.php');
 $a=new IPopup('popup_tva');
