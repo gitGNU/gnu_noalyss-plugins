@@ -341,7 +341,7 @@ class Impdol_Operation
 					$jrnx->user = $_SESSION['g_user'];
 					$jrnx->periode = 0;
 					$jrnx->qcode = $oper->getp("qcode");
-					$jrnx->desc = substr($oper->getp("desc"),0,80);
+					$jrnx->desc = mb_substr($oper->getp("desc"),0,80,'UTF8');
 					$id = $jrnx->insert_jrnx();
 
 					$transfer = new impdol_operation_transfer_sql();
@@ -402,7 +402,7 @@ class Impdol_Operation
 				$jtiers->user = $_SESSION['g_user'];
 				$jtiers->periode = 0;
 				$jtiers->qcode = $oper_tiers->getp("qcode");
-				$jtiers->desc = substr($oper_tiers->getp("desc"),0,80);
+				$jtiers->desc = mb_substr($oper_tiers->getp("desc"),0,80,'UTF8');
 				$jtiers->insert_jrnx();
 
 				/* Record the vat 1 */
@@ -429,7 +429,7 @@ class Impdol_Operation
 				$acc_jrn = new Acc_Operation($cn);
 				$acc_jrn->jrn = $jrn;
 				$acc_jrn->amount = $sum;
-				$acc_jrn->desc = substr($oper_tiers->getp("desc"),0,80);
+				$acc_jrn->desc = mb_substr($oper_tiers->getp("desc"),0,80,'UTF8');
 				$acc_jrn->date = $date;
 				$acc_jrn->grpt = $grpt;
 				$acc_jrn->periode = 0;
@@ -456,7 +456,7 @@ class Impdol_Operation
 		catch (Exception $e)
 		{
 			print_r($e->getTraceAsString());
-			$cn->rollback;
+			$cn->rollback();
 		}
 	}
 
