@@ -33,8 +33,15 @@ if ( isset ($_POST['save_misc']))  {
 	foreach ( array('CRTVA','ATVA','DTTVA') as $i){
 		$value=${$i};
 		if ( trim(${$i})=='') $value=null;
+		if ( $cn->get_value("select count(*) from tva_belge.parameter_chld where pcode=$1",array($i))==0)
+		{
+			$cn->exec_sql("insert into tva_belge.parameter_chld(pcode,pcm_val) values($1,$2) ",
+					array($i,$value));
+		}else {
+
 		$cn->exec_sql("update tva_belge.parameter_chld set pcm_val=$1::account_type where pcode=$2",
 				array($value,$i));
+		}
 	}
 
 	unset($_POST['save_misc']);
