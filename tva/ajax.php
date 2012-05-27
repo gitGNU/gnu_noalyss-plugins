@@ -203,7 +203,7 @@ case 'add_param':
 
 
 	$r.='<form method="POST" id="faddparm"onsubmit="return confirm(\'Vous confirmez ?\');" style="margin-left:15px">';
-	$r.=HtmlInput::request_to_hidden(array("gDossier","plugin_code","ac","pcode"));
+	$r.=HtmlInput::request_to_hidden(array("tab","gDossier","plugin_code","ac","pcode"));
 	$r.=_(" Code TVA ");
 	$r.=$text->input();
 	$r.='<span id="tva_label" style="display:block"></span>';

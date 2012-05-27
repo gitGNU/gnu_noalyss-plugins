@@ -1,7 +1,7 @@
 <?php
-
+global $tab;
 function show($p_code,$p_desc) {
-	global $cn;
+	global $cn,$tab;
 	echo "<h2>".h($p_code)." ".$p_desc."</h2>";
 	$plugin_code=$_REQUEST['plugin_code'];
 	$dossier=Dossier::id();
@@ -14,7 +14,7 @@ function show($p_code,$p_desc) {
 	if (sizeof($a_code) == 0) {
 		echo '<span class="notice" style="display:block">Aucun paramètre donné </span>';
 
-		echo HtmlInput::button("add_param","Ajout paramètre","onclick=\"show_addparam('$p_code','$plugin_code','$dossier');\"");
+		echo HtmlInput::button("add_param","Ajout paramètre","onclick=\"show_addparam('$p_code','$plugin_code','$dossier','$tab');\"");
 		return;
 	}
 	$n_max=sizeof($a_code);
@@ -37,23 +37,34 @@ function show($p_code,$p_desc) {
 		echo '<td>';
 		echo '<form id="f'.$a_code[$i]['pi_id'].'" method="POST">';
 		echo HtmlInput::hidden("pi_id",$a_code[$i]['pi_id']);
+		echo HtmlInput::hidden("tab",$tab);
 		echo HtmlInput::anchor("Effacer","","onclick=\"if ( confirm('Vous confirmez?')) { $('f".$a_code[$i]['pi_id']."').submit(this);} else {return false;}\"");
 		echo "</form>";
 		echo '</td>';
 		echo "</tr>";
 	}
 	echo "</table>";
-	echo HtmlInput::button("add_param","Ajout paramètre","onclick=\"show_addparam('$p_code','$plugin_code','$dossier');\"");
+	echo HtmlInput::button("add_param","Ajout paramètre","onclick=\"show_addparam('$p_code','$plugin_code','$dossier','$tab');\"");
 }
+?>
+<?
+	$tab_default=(isset ($_REQUEST['tab']))?$_REQUEST['tab']:'opout';
 ?>
 <a href="javascript:void(0)" class="line" onclick="tva_show_param('opout')">Opération à la sortie</a>&nbsp;
 <a href="javascript:void(0)" class="line" style="" onclick="tva_show_param('opin')">Opération à l'entrée </a>&nbsp;
 <a href="javascript:void(0)" class="line" onclick="tva_show_param('tvadue')">TVA Due</a>&nbsp;
 <a href="javascript:void(0)" class="line" onclick="tva_show_param('tvaded')">TVA Déductible</a>&nbsp;
-<a href="javascript:void(0)" class="line" onclick="tva_show_param('lintra')">Listing Intracomm.</a>&nbsp;
+<a href="javascript:void(0)" class="line" onclick="tva_show_param('lintra')">Listing Client Intracomm.</a>&nbsp;
+<a href="javascript:void(0)" class="line" onclick="tva_show_param('assujetti')">Listing Client assujetti.</a>&nbsp;
 <a href="javascript:void(0)" class="line" onclick="tva_show_param('divers')">Divers</a>
+<form method="POST">
+	<?
+	echo HtmlInput::hidden('tab',$tab_default);
+	echo HtmlInput::request_to_hidden(array('gDossier','ac','plugin_code','sa'));
+	?>
 <div style="display:none" id="opout">
 <h1><?=_("Opération à la sortie");?></h1>
+<? $tab="opout";?>
 <?=show("GRIL00",_("Grille 00 : opérations soumises à un régime particulier"))?>
 <?=show("GRIL01",_("Grille 01 : Opérations pour lesquelles la TVA est due (6%)"))?>
 <?=show("GRIL02",_("Grille 02 : Opérations pour lesquelles la TVA est due (12%)"))?>
@@ -66,6 +77,7 @@ function show($p_code,$p_desc) {
 <?=show("GRIL49",_("Grille 49 : Opérations relatives aux notes de crédit"))?>
 </div>
 <div style="display:none" id="opin">
+	<? $tab="opin";?>
 <h1><?=_("Opération à l'entrée");?></h1>
 <?=show("GRIL81",_("Grille 81 : Opération sur les marchandises, matières premières..."))?>
 <?=show("GRIL82",_("Grille 82 : Opération sur les services et biens divers"))?>
@@ -77,7 +89,7 @@ function show($p_code,$p_desc) {
 <?=show("GRIL88",_("Services intracommunautaires avec report de perception"))?>
 </div>
 <div style="display:none" id="tvadue">
-
+<? $tab="tvadue";?>
 <h1><?=_("TVA Due");?></h1>
 <?=show("GRIL54",_("Grille 54 : tva due sur opération grille 01,02 et 03"))?>
 <?=show("GRIL55",_("Grille 55 : tva due sur opération grille 86 et 88"))?>
@@ -87,15 +99,17 @@ function show($p_code,$p_desc) {
 <?=show("GRIL63",_("Grille 63 :T.V.A. à reverser mentionnée sur les notes de crédit reçues"))?>
 </div>
 <div style="display:none" id="tvaded">
+	<? $tab="tvaded";?>
 <h1> <?=_("TVA Déductible");?></h1>
 <?=show("GRIL59",_("Grille 59 : taxe déductible"))?>
 <?=show("GRIL62",_("Grille 62 : Diverses régularisations T.V.A. en faveur du déclarant"))?>
 <?=show("GRIL64",_("Grille 56 : T.V.A. à récupérer mentionnée sur les notes de crédit délivrées "))?>
 </div>
 <div style="display:none" id="divers">
+	<? $tab="divers";?>
 <fieldset>
 <legend><?=_('Divers')?></legend>
-<form method="POST">
+
 
 <TABLE class="result">
 <TR>
@@ -161,11 +175,21 @@ function show($p_code,$p_desc) {
 
 </TABLE>
 	<?=HtmlInput::submit("save_misc","Sauver")?>
-</form>
 </fieldset>
 </div>
 <div style="display:none" id="lintra">
+	<? $tab="lintra";?>
 <fieldset><legend>Listing intracommunautaires</legend>
 <?=show("CLINTRA",_("Code TVA pour clients  Intracommunataire"))?>
 </fieldset>
-<div>
+</div>
+	<div style="display:none" id="assujetti">
+	<? $tab="assujetti";?>
+<fieldset><legend>Listing Client nationaux</legend>
+<?=show("ASSUJETTI",_("Code TVA pour clients  nationaux"))?>
+</fieldset>
+</div>
+	</form>
+<script charset="UTF-8" lang="javascript">
+	tva_show_param('<?=$tab_default?>');
+	</script>

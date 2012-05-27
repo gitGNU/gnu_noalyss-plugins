@@ -96,14 +96,14 @@ function success_save_write(req){
     catch(e){
 	alert("answer_box Impossible executer script de la reponse\n"+e.message);}
 }
-function show_addparam(pcode,plugin_code,dossier)
+function show_addparam(pcode,plugin_code,dossier,tab)
 {
 	try {
 		waiting_box();
 		 var action=new Ajax.Request ( 'ajax.php',
 				  {
 				      method:'get',
-				      parameters:"act=add_param&pcode="+pcode+"&gDossier="+dossier+"&plugin_code="+plugin_code,
+				      parameters:"act=add_param&pcode="+pcode+"&gDossier="+dossier+"&plugin_code="+plugin_code+'&tab='+tab,
 				      onFailure:null,
 				      onSuccess:success_showaddparam
 				  });
@@ -153,9 +153,10 @@ function success_showaddparam(req) {
 function tva_show_param(p_div)
 {
 	try{
-		var div=['opin','opout','tvadue','tvaded','divers','lintra'];
-		for (var r =0;r<6;r++ ) {$(div[r]).hide();  }
+		var div=['opin','opout','tvadue','tvaded','divers','lintra','assujetti'];
+		for (var r =0;r<div.length;r++ ) {$(div[r]).hide();  }
 		$(p_div).show();
+		$('tab').value=p_div;
 	} catch(e)
 	{
 		alert(e.message)
