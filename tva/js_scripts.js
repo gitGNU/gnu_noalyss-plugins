@@ -149,3 +149,15 @@ function success_showaddparam(req) {
 		alert("answer_box Impossible executer script de la reponse\n"+e.message);
 	}
 }
+
+function tva_show_param(p_div)
+{
+	try{
+		var div=['opin','opout','tvadue','tvaded','divers','lintra'];
+		for (var r =0;r<6;r++ ) {$(div[r]).hide();  }
+		$(p_div).show();
+	} catch(e)
+	{
+		alert(e.message)
+	}
+}

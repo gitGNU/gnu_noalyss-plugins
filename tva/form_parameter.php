@@ -46,6 +46,13 @@ function show($p_code,$p_desc) {
 	echo HtmlInput::button("add_param","Ajout paramètre","onclick=\"show_addparam('$p_code','$plugin_code','$dossier');\"");
 }
 ?>
+<a href="javascript:void(0)" class="line" style="" onclick="tva_show_param('opin')">Opération à l'entrée </a>
+<a href="javascript:void(0)" class="line" onclick="tva_show_param('opout')">Opération à la sortie</a>
+<a href="javascript:void(0)" class="line" onclick="tva_show_param('tvadue')">TVA Due</a>
+<a href="javascript:void(0)" class="line" onclick="tva_show_param('tvaded')">TVA Déductible</a>
+<a href="javascript:void(0)" class="line" onclick="tva_show_param('lintra')">Listing Intracomm.</a>
+<a href="javascript:void(0)" class="line" onclick="tva_show_param('divers')">Divers</a>
+<div style="display:none" id="opout">
 <h1><?=_("Opération à la sortie");?></h1>
 <?=show("GRIL00",_("Grille 00 : opérations soumises à un régime particulier"))?>
 <?=show("GRIL01",_("Grille 01 : Opérations pour lesquelles la TVA est due (6%)"))?>
@@ -57,7 +64,8 @@ function show($p_code,$p_desc) {
 <?=show("GRIL47",_("Grille 47 :Autres opérations exemptées et autres opérations effectuées à l’étranger"))?>
 <?=show("GRIL48",_("Grille 48 : Opérations relatives aux notes de crédit des grilles 44 et 48"))?>
 <?=show("GRIL49",_("Grille 49 : Opérations relatives aux notes de crédit"))?>
-
+</div>
+<div style="display:none" id="opin">
 <h1><?=_("Opération à l'entrée");?></h1>
 <?=show("GRIL81",_("Grille 81 : Opération sur les marchandises, matières premières..."))?>
 <?=show("GRIL82",_("Grille 82 : Opération sur les services et biens divers"))?>
@@ -67,6 +75,8 @@ function show($p_code,$p_desc) {
 <?=show("GRIL86",_("Grille 86 : Acquisitions intracommunautaires effectuées en Belgique et ventes ABC  "))?>
 <?=show("GRIL87",_(" Autres opérations à l'entrée pour lesquelles la T.V.A. est due par le déclarant "))?>
 <?=show("GRIL88",_("Services intracommunautaires avec report de perception"))?>
+</div>
+<div style="display:none" id="tvadue">
 
 <h1><?=_("TVA Due");?></h1>
 <?=show("GRIL54",_("Grille 54 : tva due sur opération grille 01,02 et 03"))?>
@@ -75,12 +85,14 @@ function show($p_code,$p_desc) {
 <?=show("GRIL57",_("Grille 57 :T.V.A. relative aux importations avec report de perception "))?>
 <?=show("GRIL61",_("Grille 61 :Diverses régularisations T.V.A. en faveur de l'Etat"))?>
 <?=show("GRIL63",_("Grille 63 :T.V.A. à reverser mentionnée sur les notes de crédit reçues"))?>
-
+</div>
+<div style="display:none" id="tvaded">
 <h1> <?=_("TVA Déductible");?></h1>
 <?=show("GRIL59",_("Grille 59 : taxe déductible"))?>
 <?=show("GRIL62",_("Grille 62 : Diverses régularisations T.V.A. en faveur du déclarant"))?>
 <?=show("GRIL64",_("Grille 56 : T.V.A. à récupérer mentionnée sur les notes de crédit délivrées "))?>
-
+</div>
+<div style="display:none" id="divers">
 <fieldset>
 <legend><?=_('Divers')?></legend>
 <form method="POST">
@@ -151,6 +163,9 @@ function show($p_code,$p_desc) {
 	<?=HtmlInput::submit("save_misc","Sauver")?>
 </form>
 </fieldset>
+</div>
+<div style="display:none" id="lintra">
 <fieldset><legend>Listing intracommunautaires</legend>
 <?=show("CLINTRA",_("Code TVA pour clients  Intracommunataire"))?>
 </fieldset>
+<div>
