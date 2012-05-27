@@ -168,7 +168,7 @@ for ($e=0;$e<count($this->aChild);$e++){
     $code_customer=new Acc_Parm_Code($this->db);
     $code_customer->p_code='CUSTOMER';
     $code_customer->load();
-    $a=$this->find_tva_code(array('GRIL44','GRIL46'));
+    $a=$this->find_tva_code('LINTRA');
 
     if (trim($a)=='') $a=-1;
     $sql=<<<EOF
@@ -189,21 +189,21 @@ EOF;
 
     // retrieve missing and compute an array
     for ($i=0;$i<count($all);$i++){
-      $child=new Ext_List_Intra_Child($this->db);
-      $child->set_parameter('amount',$all[$i]['amount']);
-      switch ($this->flag_periode) {
-      case 1:
-	// by month
-	$child->set_parameter('periode',sprintf('%02d%s',$this->periode_dec,$this->exercice));
-	break;
-      case 2:
-	/* quaterly */
-	$child->set_parameter('periode',sprintf('3%d%s',$this->periode_dec,$this->exercice));
-	break;
-      case 3:
-	/* yearly */
-	$child->set_parameter('periode',sprintf('00%s',$this->periode_dec,$this->exercice));
-	break;
+		$child=new Ext_List_Intra_Child($this->db);
+		$child->set_parameter('amount',$all[$i]['amount']);
+		switch ($this->flag_periode) {
+		case 1:
+		// by month
+		$child->set_parameter('periode',sprintf('%02d%s',$this->periode_dec,$this->exercice));
+		break;
+		case 2:
+		/* quaterly */
+		$child->set_parameter('periode',sprintf('3%d%s',$this->periode_dec,$this->exercice));
+		break;
+		case 3:
+		/* yearly */
+		$child->set_parameter('periode',sprintf('00%s',$this->periode_dec,$this->exercice));
+		break;
       } // end switch
 
       $child->set_parameter('qcode',$all[$i]['j_qcode']);
@@ -211,7 +211,7 @@ EOF;
       $fiche->get_by_qcode($all[$i]['j_qcode'],false);
       $num_tva=$fiche->strAttribut(ATTR_DEF_NUMTVA);
 
-      if ( strpos($num_tva,'BE') === 0) { echo "pas bon";continue;}
+      if ( trim($num_tva) === "") {continue;}
       $child->set_parameter('tva_num',$num_tva);
 
       $child->set_parameter('name_child',$fiche->strAttribut(ATTR_DEF_NAME));

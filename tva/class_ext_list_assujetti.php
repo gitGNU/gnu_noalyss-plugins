@@ -185,8 +185,7 @@ EOF;
     $code_customer=new Acc_Parm_Code($this->db);
     $code_customer->p_code='CUSTOMER';
     $code_customer->load();
-    $a=$this->find_tva_code(array('GRIL01','GRIL02','GRIL03'));
-    echo $a;
+    $a=$this->find_tva_code('ASSUJETTI');
     if (trim($a)=='') $a=-1;
     $sql=<<<EOF
       select sum(j_montant) as amount,j_qcode
@@ -281,14 +280,6 @@ where qs_client = $1 and j_id in (select distinct j_id from jrnx where  j_date >
       $res.=tr($r);
 
     }
-    $r=td('');
-    $r.=td('');
-    $r.=td(hb('Total'));
-    $r.=td(hb(sprintf('%.02f',$amount)));
-    $r.=td(hb(sprintf('%.02f',$amount_vat)));
-
-
-    $res.=tr($r);
     $res.='</table>';
     $res.='</fieldset>';
     return $res;

@@ -26,21 +26,15 @@
 require_once('class_ext_tvagen.php');
 require_once('class_acc_parm_code.php');
 class Listing extends Ext_Tva_Gen {
-  function find_tva_code($p_array) {
-    $a='';$and='';
-    for ($e=0;$e<count($p_array);$e++){
-      $tva_parameter=new Tva_Parameter($this->db);
-      if ( $tva_parameter->set_parameter('code',$p_array[$e]) == -1 )
-	throw new Exception ("code : $p_array[$e] non trouve");
-      $tva_parameter->load();
-      if ( ($c=$tva_parameter->get_parameter('value')) != ''){
-	$a=$and.$c;$and=',';
-      }
-    }//end for
-    $aa=get_array_nodup($a);
-    $a=join(',',$aa);
-    return $a;
-  }
+  function find_tva_code($p_array)
+	{
+		$array=$this->db->make_list("
+			select distinct tva_id  from tva_belge.parameter_chld
+			where
+			pcode=$1",
+				array($p_array));
 
-  
+		return $array;
+	}
+
 }
