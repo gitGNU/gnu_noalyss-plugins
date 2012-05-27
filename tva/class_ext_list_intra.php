@@ -168,7 +168,7 @@ for ($e=0;$e<count($this->aChild);$e++){
     $code_customer=new Acc_Parm_Code($this->db);
     $code_customer->p_code='CUSTOMER';
     $code_customer->load();
-    $a=$this->find_tva_code('LINTRA');
+    $a=$this->find_tva_code('CLINTRA');
 
     if (trim($a)=='') $a=-1;
     $sql=<<<EOF
@@ -224,7 +224,7 @@ EOF;
   /**
    *@todo finish it
    */
-  function display_declaration_amount() {
+  function display_declaration_amount($p_readonly=false) {
     $res='<fieldset><legend>Listing</legend>';
 
     $res.= '<table id="tb_dsp" class="result" style="width:80%;">';
@@ -257,19 +257,22 @@ EOF;
       $r.=td($d->input());
       $r.=td($e->input());
       $r.=td($f->input());
-      $r.=td($clean->input());
+      if (! $p_readonly) $r.=td($clean->input());
       $res.=tr($r);
 
     }
-    $r=td('');
-    $r.=td('');
-    $r.=td('');
-    $r.=td(hb('Total'));
-    $r.=td(hb(sprintf('%.02f',$amount)));
-    $r.=td('');
-    $r.=td('');
-    $res.=tr($r);
-    $res.='</table>';
+	if ( $p_readonly)
+	{
+		$r=td('');
+		$r.=td('');
+		$r.=td('');
+		$r.=td(hb('Total'));
+		$r.=td(hb(sprintf('%.02f',$amount)));
+		$r.=td('');
+		$r.=td('');
+		$res.=tr($r);
+	}
+	$res.='</table>';
     $res.='</fieldset>';
     return $res;
   }

@@ -102,7 +102,7 @@ class Ext_List_Assujetti extends Listing {
     $r= '<form class="print" id="readonly">';
 	$r.=HtmlInput::request_to_hidden(array('ac'));
     $r.=$this->display_info();
-    $r.=$this->display_declaration_amount();
+    $r.=$this->display_declaration_amount(true);
     $r.='</form>';
     $js_remove=sprintf("onclick=\"if ( confirm('%s')){remove_form('%s',%d,%d,'lc');}\"",
 		       "Vous confirmez vouloir effacer ?",
@@ -246,10 +246,10 @@ where qs_client = $1 and j_id in (select distinct j_id from jrnx where  j_date >
   /**
    *@todo finish it
    */
-  function display_declaration_amount() {
+  function display_declaration_amount($readonly=false) {
     $res='<fieldset><legend>Listing</legend>';
     $res.= '<table id="tb_dsp" class="result" style="width:80%;">';
-    $clean=new IButton();
+    $clean=new IButton('rm_b');
     $clean->label='Efface ligne';
     $clean->javascript="deleteRow('tb_dsp',this);";
 
@@ -276,10 +276,20 @@ where qs_client = $1 and j_id in (select distinct j_id from jrnx where  j_date >
       $r.=td($c->input());
       $r.=td($e->input());
       $r.=td($d->input());
-      $r.=td($clean->input());
+     if (! $readonly) $r.=td($clean->input());
       $res.=tr($r);
 
     }
+	if ( $readonly )
+	{
+		$r=td('');
+		$r.=td('');
+		$r.=td(hb('Total'));
+		$r.=td(hb(sprintf('%.02f',$amount)));
+		$r.=td(hb(sprintf('%.02f',$amount_vat)));
+	}
+
+    $res.=tr($r);
     $res.='</table>';
     $res.='</fieldset>';
     return $res;
