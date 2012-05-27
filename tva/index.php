@@ -67,6 +67,7 @@ if ( $cn->exist_schema('tva_belge') == false) {
   echo_warning(_("L'extension est installée, pourriez-vous en vérifier le paramètrage ?"));
   $def=5;
 }
+
 // check schema
 $a=$cn->exist_column('assujetti_chld','ac_periode','tva_belge');
 if ( $a == false)
@@ -87,7 +88,11 @@ if ( $a == false)
 $a=$cn->exist_column('assujetti','exercice','tva_belge');
 if ( $a == false)
   $cn->exec_sql("alter table tva_belge.assujetti add exercice text");
-
+if ( $cn->exist_table("version","tva_belge")==false)
+{
+		$file=__DIR__."/sql/patch2.sql";
+		$cn->execute_script($file);
+}
 echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=tva" target="_blank">Aide</a>'.
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
 '</div>';

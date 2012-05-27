@@ -1,3 +1,4 @@
+begin;
 create table tva_belge.version (
 	id serial primary key,
 	vdate timestamp default now(),
@@ -88,29 +89,21 @@ declare
 
 begin
 
-for i in select distinct pvalue from tva_belge.parameter WHERE pcode in ('GRILL00','GRIL02','GRIL03')
+for i in select distinct pvalue from tva_belge.parameter WHERE pcode in ('GRIL00','GRIL01','GRIL02','GRIL03')
 loop
-	if length(trim(i.pvalue)) = 0 or length(trim(i.paccount)) = 0 then
+	if length(trim(i.pvalue)) = 0  then
 		continue;
 	end if;
 
-	a_account := string_to_array(i.paccount, ',');
 	a_tva_id  := string_to_array(i.pvalue,',');
 
 	n_size_tva := array_upper(a_tva_id,1);
-	n_size_account := array_upper(a_account,1);
 
 
 	while n_size_tva <> 0 loop
 
-		while n_size_account <> 0 loop
-
-			insert into tva_belge.parameter_chld (pcode,tva_id)
-				values ('ASSUJETTI',a_tva_id[n_size_tva]::numeric);
-
-			n_size_account := n_size_account -1;
-		end loop;
-		n_size_account := array_upper(a_account,1);
+		insert into tva_belge.parameter_chld (pcode,tva_id)
+			values ('ASSUJETTI',a_tva_id[n_size_tva]::numeric);
 		n_size_tva := n_size_tva -1;
 	end loop;
 
@@ -128,5 +121,7 @@ select tva_belge.fill_parameter_chld_assujetti();
 insert into tva_belge.parameter_chld (pcode,pcm_val) select pcode,paccount from tva_belge.parameter where pcode in ('ATVA','CRTVA','DTTVA');
 drop function tva_belge.fill_parameter_chld();
 drop function tva_belge.fill_parameter_chld_assujetti();
-alter table tva_belge.parameter drop column paccount;
-alter table tva_belge.parameter drop column pvalue;
+ alter table tva_belge.parameter drop column paccount;
+ alter table tva_belge.parameter drop column pvalue;
+insert into tva_belge.version(vdesc) values ('Version 2 : amélioration plugin');
+commit;
