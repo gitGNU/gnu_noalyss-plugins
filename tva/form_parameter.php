@@ -46,11 +46,11 @@ function show($p_code,$p_desc) {
 	echo HtmlInput::button("add_param","Ajout paramètre","onclick=\"show_addparam('$p_code','$plugin_code','$dossier');\"");
 }
 ?>
-<a href="javascript:void(0)" class="line" style="" onclick="tva_show_param('opin')">Opération à l'entrée </a>
-<a href="javascript:void(0)" class="line" onclick="tva_show_param('opout')">Opération à la sortie</a>
-<a href="javascript:void(0)" class="line" onclick="tva_show_param('tvadue')">TVA Due</a>
-<a href="javascript:void(0)" class="line" onclick="tva_show_param('tvaded')">TVA Déductible</a>
-<a href="javascript:void(0)" class="line" onclick="tva_show_param('lintra')">Listing Intracomm.</a>
+<a href="javascript:void(0)" class="line" onclick="tva_show_param('opout')">Opération à la sortie</a>&nbsp;
+<a href="javascript:void(0)" class="line" style="" onclick="tva_show_param('opin')">Opération à l'entrée </a>&nbsp;
+<a href="javascript:void(0)" class="line" onclick="tva_show_param('tvadue')">TVA Due</a>&nbsp;
+<a href="javascript:void(0)" class="line" onclick="tva_show_param('tvaded')">TVA Déductible</a>&nbsp;
+<a href="javascript:void(0)" class="line" onclick="tva_show_param('lintra')">Listing Intracomm.</a>&nbsp;
 <a href="javascript:void(0)" class="line" onclick="tva_show_param('divers')">Divers</a>
 <div style="display:none" id="opout">
 <h1><?=_("Opération à la sortie");?></h1>

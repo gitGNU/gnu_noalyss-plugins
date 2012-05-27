@@ -207,8 +207,9 @@ case 'add_param':
 	$r.=_(" Code TVA ");
 	$r.=$text->input();
 	$r.='<span id="tva_label" style="display:block"></span>';
-	$r.=" Poste comptable";
+	$r.=" Poste comptable (utilisez le % pour inclure les postes qui en dépendent)";
 	$r.=$iposte->input();
+
 	$r.='<span id="paccount_label" style="display:inline"></span>';
 	$r.='<span style="display:block"></span>';
 	$r.=HtmlInput::submit("save_addparam","Sauver");

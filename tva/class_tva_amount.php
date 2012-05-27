@@ -25,7 +25,7 @@
  */
 
 
-/*!\brief 
+/*!\brief
  *
  *
  */
@@ -51,7 +51,7 @@ class Tva_Amount
       $idx=self::$variable[$p_string];
       return $this->$idx;
     }
-    else 
+    else
       exit (__FILE__.":".__LINE__.'Erreur attribut inexistant');
   }
   public function set_parameter($p_string,$p_value) {
@@ -59,25 +59,24 @@ class Tva_Amount
       $idx=self::$variable[$p_string];
       $this->$idx=$p_value;
     }
-    else 
+    else
       exit (__FILE__.":".__LINE__.'Erreur attribut inexistant');
-    
-    
+
+
   }
   public function get_info() {    return var_export(self::$variable,true);  }
   public function verify() {
     // Verify that the elt we want to add is correct
   }
   /**
-   *@brief load parameter and set param to a object to tva_parameter
+   *@brief load parameters and set param to a array of value from parameter_chld
    */
   public function load_parameter() {
-    // first get the vat code
-     $ctva=new Tva_Parameter($this->db);
-     $ctva->set_parameter('code',$this->grid);
-     if ( $ctva->load() == -1 ) {
-       throw new Exception (_("code $this->grid non trouvé"));
-     }    
+    //  get the vat code
+     $ctva=$this->db->get_array("select tva_id,pcm_val from tva_belge.parameter_chld where pcode=$1",array($this->grid));
+     if ( count($ctva)== 0 ) {
+       $this->param=null;
+     }
      $this->param=$ctva;
   }
   /**
@@ -91,48 +90,28 @@ class Tva_Amount
     // get the VAT code
     $this->load_parameter();
     $result=0;
-    // filter on accounting
-    $vat_code=$this->param->get_parameter('value');
-    $account=$this->param->get_parameter('account');
-    // if vat code contains a "," then split it and recall get_amount
-    if ( strpos($vat_code,',') == true ) {
-      $aVat_code=explode(',',$vat_code);
-    }else {
-      $aVat_code=array($vat_code);
-    }
-    if (strpos($account,',') == true) 
-      $aAccount=explode(',',$account);
-    else
-      $aAccount=array($account);
-    for ($i=0;$i<count($aVat_code);$i++) {
-      for ($j=0;$j<count($aAccount);$j++)
-	$result+=round($this->get_amount_filter($aVat_code[$i],$aAccount[$j]),2);
-    }
+	bcscale(4);
+	for ($i=0;$i<count($this->param);$i++)
+	{
+		$tmp_calc=$this->get_amount_filter($this->param[$i]['tva_id'],$this->param[$i]['pcm_val']);
+		$result=bcadd($result,$tmp_calc);
+
+	}
     return round($result,2);
 
 
   }
   function amount_vat() {
     // get the VAT code
-    $this->load_parameter();
+   $this->load_parameter();
     $result=0;
-    // filter on accounting
-    $vat_code=$this->param->get_parameter('value');
-    $account=$this->param->get_parameter('account');
-    // if vat code contains a "," then split it and recall get_amount
-    if ( strpos($vat_code,',') == true ) {
-      $aVat_code=explode(',',$vat_code);
-    }else {
-      $aVat_code=array($vat_code);
-    }
-    if (strpos($account,',') == true) 
-      $aAccount=explode(',',$account);
-    else
-      $aAccount=array($account);
-    for ($i=0;$i<count($aVat_code);$i++) {
-      for ($j=0;$j<count($aAccount);$j++)
-	$result+=round($this->get_vat_filter($aVat_code[$i],$aAccount[$j]),2);
-    }
+	bcscale(4);
+	for ($i=0;$i<count($this->param);$i++)
+	{
+		$tmp_calc=$this->get_vat_filter($this->param[$i]['tva_id'],$this->param[$i]['pcm_val']);
+		$result=bcadd($result,$tmp_calc);
+
+	}
     return round($result,2);
 
 
@@ -144,24 +123,14 @@ class Tva_Amount
    */
   private function get_amount_filter($p_code,$p_account) {
     if ( $this->dir == 'out' && trim($p_account) !='' && trim($p_code) !='' ) {
-      $sql="select coalesce(sum(qs_price),0) as amount from quant_sold join jrnx using (j_id)
+      $sql="select coalesce(sum(qs_price),0) as amount from quant_sold
+		  join jrnx using (j_id)
            where qs_vat_code=$1 and  (j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))
            and j_poste::text like ($4)";
       $res=$this->db->get_array($sql,array($p_code,
 					   $this->start_periode,
 					   $this->end_periode,
 					   $p_account));
-      return $res[0]['amount'];      
-    }
-    if ( $this->dir == 'out' && trim($p_account) ==''  && trim($p_code) !='' ) {
-      $sql="select coalesce(sum(qs_price),0) as amount from quant_sold join jrnx using (j_id)
-           where qs_vat_code=$1 and  (j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))
-           ";
-      $res=$this->db->get_array($sql,array($p_code,
-					   $this->start_periode,
-					   $this->end_periode));
-
-			     
       return $res[0]['amount'];
     }
 
@@ -173,17 +142,6 @@ class Tva_Amount
 					   $this->start_periode,
 					   $this->end_periode,
 					   $p_account));
-      return $res[0]['amount'];      
-    }
-    if ( $this->dir == 'in' && trim($p_account) ==''  && trim($p_code) !='' ) {
-      $sql="select coalesce(sum(qp_price),0) as amount from quant_purchase join jrnx using (j_id)
-           where qp_vat_code=$1 and  (j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))
-           ";
-      $res=$this->db->get_array($sql,array($p_code,
-					   $this->start_periode,
-					   $this->end_periode));
-
-			     
       return $res[0]['amount'];
     }
 
@@ -204,17 +162,6 @@ class Tva_Amount
 					   $this->start_periode,
 					   $this->end_periode,
 					   $p_account));
-      return $res[0]['amount'];      
-    }
-    if ( $this->dir == 'out' && trim($p_account) ==''  && trim($p_code) !='' ) {
-      $sql="select coalesce(sum(qs_vat),0) as amount from quant_sold join jrnx using (j_id)
-           where qs_vat_code=$1 and  (j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))
-           ";
-      $res=$this->db->get_array($sql,array($p_code,
-					   $this->start_periode,
-					   $this->end_periode));
-
-			     
       return $res[0]['amount'];
     }
 
@@ -226,17 +173,6 @@ class Tva_Amount
 					   $this->start_periode,
 					   $this->end_periode,
 					   $p_account));
-      return $res[0]['amount'];      
-    }
-    if ( $this->dir == 'in' && trim($p_account) ==''  && trim($p_code) !='' ) {
-      $sql="select coalesce(sum(qp_vat),0) as amount from quant_purchase join jrnx using (j_id)
-           where qp_vat_code=$1 and  (j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))
-           ";
-      $res=$this->db->get_array($sql,array($p_code,
-					   $this->start_periode,
-					   $this->end_periode));
-
-			     
       return $res[0]['amount'];
     }
 
@@ -246,7 +182,7 @@ class Tva_Amount
 
 /**
  *@brief
- * record into the ledger the operation for purging the  
+ * record into the ledger the operation for purging the
  * the vat accouting
  */
 function record_ledger() {
@@ -259,10 +195,10 @@ function record_ledger() {
    *\note
    *\see
    *\todo
-   */	
+   */
   static function test_me() {
   }
-  
+
 }
 
 /* test::test_me(); */

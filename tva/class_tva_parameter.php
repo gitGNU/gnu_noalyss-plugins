@@ -97,7 +97,7 @@ class  Tva_Parameter
 
   public function load() {
 
-   $sql="select pcode,pvalue,paccount from tva_belge.parameter where pcode=$1";
+   $sql="select pcode from tva_belge.parameter where pcode=$1";
 
     $res=$this->cn->get_array(
 		 $sql,
