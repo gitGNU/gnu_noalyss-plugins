@@ -155,8 +155,8 @@ EOF;
 	}
 	function create_table()
 	{
-
-		$file=__DIR__."/../sql/create_table.sql";
+	  
+	       $file=dirname(__FILE__)."/../sql/create_table.sql";
 		$this->cn->execute_script($file);
 
 	}
