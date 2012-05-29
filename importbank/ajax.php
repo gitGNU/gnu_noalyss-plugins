@@ -73,7 +73,7 @@ case 'show':
 	      
 	  $msg="Attente";
 	  $bi->show_item($ctl);
-	  $extra='{"id":"'.$id.'","msg":"<span style=\"color:red\">Attente</span>"}';
+	  $extra='{"id":"'.$id.'","msg":"<span style=\"color:red;background-color:white\">Attente</span>"}';
 	}
       else
 	$bi->show_item($ctl);
