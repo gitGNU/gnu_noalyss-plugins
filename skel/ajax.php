@@ -29,5 +29,5 @@ echo '<data>';
 echo "<ctl>$ctl</ctl>";
 echo "<html>$html</html>";
 echo "<extra>$extra</extra>";
-eco "</data>";
+echo "</data>";
 ?>
