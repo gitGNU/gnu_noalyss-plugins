@@ -1,4 +1,5 @@
 <?php
+
 /*
  *   This file is part of PhpCompta.
  *
@@ -15,21 +16,22 @@
  *   You should have received a copy of the GNU General Public License
  *   along with PhpCompta; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 /* $Revision$ */
 
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
 
-/*!\file
+/* !\file
  * \brief raw file for backup
  */
-$cmd=escapeshellcmd (PG_DUMP);
-putenv("PGPASSWORD=".phpcompta_password);
-putenv("PGUSER=".phpcompta_user);
-
-$database=domaine."dossier".Dossier::id();
-$args= " -Fc -Z9 --no-owner -p ".phpcompta_psql_port." ".$database;
+$cmd = escapeshellcmd(PG_DUMP);
+putenv("PGPASSWORD=" . phpcompta_password);
+putenv("PGUSER=" . phpcompta_user);
+putenv("PGHOST=" . phpcompta_psql_host);
+putenv("PGPORT=" . phpcompta_psql_port);
+$database = domaine . "dossier" . Dossier::id();
+$args = " -Fc -Z9 --no-owner -p " . phpcompta_psql_port . " " . $database;
 header('Content-type: application/octet');
-header('Content-Disposition:attachment;filename="'.$database.'.bin"',FALSE);
+header('Content-Disposition:attachment;filename="' . $database . '.bin"', FALSE);
 
-passthru ($cmd.$args,$a);
+passthru($cmd . $args, $a);
