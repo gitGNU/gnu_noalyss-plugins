@@ -7,9 +7,7 @@ require_once ('class_ext_list_assujetti.php');
 require_once('class_acc_ledger.php');
 
 extract($_GET);
-global $g_parameter;
-$cn=new Database($gDossier);
-$g_parameter=new Own($cn);
+global $g_parameter,$cn;
 
 $html='';$extra='';$ctl='';
 switch($act) {
