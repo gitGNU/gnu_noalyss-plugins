@@ -287,9 +287,9 @@ where qs_client = $1 and j_id in (select distinct j_id from jrnx where  j_date >
 		$r.=td(hb('Total'));
 		$r.=td(hb(sprintf('%.02f',$amount)));
 		$r.=td(hb(sprintf('%.02f',$amount_vat)));
+		$res.=tr($r);
 	}
 
-    $res.=tr($r);
     $res.='</table>';
     $res.='</fieldset>';
     return $res;
