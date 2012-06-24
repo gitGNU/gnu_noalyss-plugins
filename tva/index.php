@@ -23,7 +23,7 @@
 /*!\file
  * \brief main file for tva
  */
-Extension::check_version(4400);
+Extension::check_version(4900);
 
 $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code']."&ac=".$_REQUEST['ac'];
 $array=array (
@@ -57,11 +57,11 @@ case 'param':
   break;
 
 }
-
+$install=0;
 $cn=new Database(dossier::id());
 if ( $cn->exist_schema('tva_belge') == false) {
   require_once('class_install_plugin.php');
-
+  $install=1;
   $iplugn=new Install_Plugin($cn);
   $iplugn->install();
   echo_warning(_("L'extension est installée, pourriez-vous en vérifier le paramètrage ?"));
@@ -92,6 +92,8 @@ if ( $cn->exist_table("version","tva_belge")==false)
 {
 		$file=__DIR__."/sql/patch2.sql";
 		$cn->execute_script($file);
+		if ( $install == 0 ) echo_warning(_("Mise à jour du plugin, pourriez-vous en vérifier le paramètrage ?"));
+		$def=5;
 }
 echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=tva" target="_blank">Aide</a>'.
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
