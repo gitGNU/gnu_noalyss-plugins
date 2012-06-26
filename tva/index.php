@@ -23,6 +23,8 @@
 /*!\file
  * \brief main file for tva
  */
+global $version_plugin;
+$version_plugin=SVNINFO;
 Extension::check_version(4900);
 
 $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code']."&ac=".$_REQUEST['ac'];

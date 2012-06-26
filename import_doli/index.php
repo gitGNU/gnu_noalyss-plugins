@@ -37,7 +37,8 @@ echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="ht
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
 '</div>';
 $cn=new Database(dossier::id());
-
+global $version_plugin;
+$version_plugin=SVNINFO;
 
 Extension::check_version(4802);
 

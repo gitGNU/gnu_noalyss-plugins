@@ -27,11 +27,15 @@
 /*
  * load javascript
  */
+
 ob_start();
 require_once('skel_javascript.js');
 $j=ob_get_contents();
 ob_clean();
 echo create_script($j);
+global $version_plugin;
+$version_plugin=SVNINFO;
+Extension::check_version(4400);
 
 $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&ac='.$_REQUEST['ac'];
 

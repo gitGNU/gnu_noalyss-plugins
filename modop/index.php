@@ -23,6 +23,8 @@
 /*!\file
  * \brief modify a operation
  */
+global $version_plugin;
+$version_plugin=SVNINFO;
 Extension::check_version(4400);
 $str=new IConcerned("jr_id");
 $str->value=(isset($_GET['jr_id']))?strtoupper($_GET['jr_id']):'';

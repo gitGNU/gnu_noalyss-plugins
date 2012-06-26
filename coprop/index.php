@@ -29,6 +29,8 @@
  */
 
 require_once 'class_acc_ledger.php';
+global $version_plugin;
+$version_plugin=SVNINFO;
 Extension::check_version(4600);
 ob_start();
 require_once('coprop-javascript.js');

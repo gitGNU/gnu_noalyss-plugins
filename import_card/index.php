@@ -23,10 +23,13 @@
 /*!\file
  * \brief main file for importing card
  */
-
+global $version_plugin;
+$version_plugin=SVNINFO;
+Extension::check_version(4400);
 /*
  * load javascript
  */
+
 require_once('include/class_import_card.php');
 global $cn;
 echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=importation_de_fiche" target="_blank">Aide</a>'.

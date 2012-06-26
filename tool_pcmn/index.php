@@ -27,6 +27,8 @@
 /*
  * load javascript
  */
+global $version_plugin;
+$version_plugin=SVNINFO;
 Extension::check_version(4400);
 global $cn;
 echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=importation_de_plan_comptable" target="_blank">Aide</a>'.
