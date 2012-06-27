@@ -92,7 +92,8 @@ if ( $a == false)
   $cn->exec_sql("alter table tva_belge.assujetti add exercice text");
 if ( $cn->exist_table("version","tva_belge")==false)
 {
-		$file=__DIR__."/sql/patch2.sql";
+
+  $file=dirname(__FILE__)."/sql/patch2.sql";
 		$cn->execute_script($file);
 		if ( $install == 0 ) echo_warning(_("Mise à jour du plugin, pourriez-vous en vérifier le paramètrage ?"));
 		$def=5;
