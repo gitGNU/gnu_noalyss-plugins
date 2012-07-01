@@ -59,7 +59,7 @@ loop
 			select count(*) into n_exist_tva from tva_rate where tva_id=a_tva_id[n_size_tva]::numeric;
 
 			if n_exist_tva != 0 then
-				raise notice 'TVA % exist count = %',a_tva_id[n_size_tva],n_exist_tva;
+				
 					insert into tva_belge.parameter_chld (pcode,tva_id,pcm_val)
 						values (i.pcode,a_tva_id[n_size_tva]::numeric,a_account[n_size_account]::account_type);
 			end if;
@@ -106,7 +106,7 @@ loop
 
 	while n_size_tva <> 0 loop
 		select count(*) into n_exist_tva from tva_rate where tva_id=a_tva_id[n_size_tva]::numeric;
-		raise notice 'TVA % exist count = %',a_tva_id[n_size_tva],n_exist_tva;
+
 		if n_exist_tva != 0 then
 			insert into tva_belge.parameter_chld (pcode,tva_id)
 				values ('ASSUJETTI',a_tva_id[n_size_tva]::numeric);
