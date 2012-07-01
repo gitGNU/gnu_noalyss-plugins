@@ -131,4 +131,4 @@ drop function tva_belge.fill_parameter_chld_assujetti();
  alter table tva_belge.parameter drop column paccount;
  alter table tva_belge.parameter drop column pvalue;
 insert into tva_belge.version(vdesc) values ('Version 2 : amélioration plugin');
--- commit;
+commit;
