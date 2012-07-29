@@ -25,7 +25,7 @@
  */
 global $version_plugin;
 $version_plugin=SVNINFO;
-Extension::check_version(4400);
+Extension::check_version(5082);
 
 /*
  * load javascript
@@ -39,7 +39,8 @@ echo create_script($j);
 $url='?'.dossier::get()."&plugin_code=".$_REQUEST['plugin_code']."&ac=".$_REQUEST['ac'];
 $array=array (
          array($url.'&sa=op',_('Opération'),_('Changer poste comptable ou fiche'),1),
-         array($url.'&sa=pj',_('Pièce'),_('Rénuméroter des pièces justificative'),2)
+         array($url.'&sa=pj',_('Pièce'),_('Rénuméroter des pièces justificative'),2),
+         array($url.'&sa=exe',_('Exercice'),_('Ajouter des années comptables'),3)
        );
 
 $sa=(isset($_REQUEST['sa']))?$_REQUEST['sa']:"";
@@ -52,6 +53,9 @@ switch($sa)
   case 'pj':
     $def=2;
     break;
+  case 'exe':
+	  $def=3;
+	  break;
   }
 
 $cn=new Database(dossier::id());
@@ -75,5 +79,11 @@ if ($def==2)
   {
     require_once('include/receipt.inc.php');
     exit();
+  }
+/* Exercice */
+  if ($def == 3 )
+  {
+	  require_once 'include/tools_exercice.inc.php';
+	  exit();
   }
 ?>
