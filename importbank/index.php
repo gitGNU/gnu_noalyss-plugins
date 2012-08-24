@@ -42,7 +42,7 @@ $cn=new Database(dossier::id());
 ob_start();
 require_once('bank_js.js');
 $j=ob_get_contents();
-ob_clean();
+ob_end_clean();
 echo create_script($j);
 
 /*

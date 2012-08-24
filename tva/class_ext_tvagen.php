@@ -125,7 +125,7 @@ class Ext_Tva_Gen
     ob_start();
     require_once('form_periode.php');
     $r=ob_get_contents();
-    ob_clean();
+    ob_end_clean();
     return $r;
   }
 
@@ -200,7 +200,7 @@ class Ext_Tva_Gen
     ob_start();
     require_once('form_decl_info.php');
     $r=ob_get_contents();
-    ob_clean();
+    ob_end_clean();
     return $r;
   }
 

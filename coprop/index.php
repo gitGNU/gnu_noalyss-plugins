@@ -35,7 +35,7 @@ Extension::check_version(4600);
 ob_start();
 require_once('coprop-javascript.js');
 $j=ob_get_contents();
-ob_clean();
+ob_end_clean();
 echo create_script($j);
 
 $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&ac='.$_REQUEST['ac'];

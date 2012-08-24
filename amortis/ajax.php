@@ -43,7 +43,7 @@ switch($op)
     echo $close;
     require_once('include/material_add.inc.php');
     $html=ob_get_contents();
-    ob_clean();
+    ob_end_clean();
     break;
     /*
      * save the new material
@@ -53,13 +53,13 @@ switch($op)
     echo $close;
     require_once('include/material_new.inc.php');
     $html=ob_get_contents();
-    ob_clean();
+    ob_end_clean();
     break;
   case 'display_modify':
     ob_start();
     require_once('include/material_modify.inc.php');
     $html=ob_get_contents();
-    ob_clean();
+    ob_end_clean();
     break;
 
   case 'save_modify':
@@ -70,13 +70,13 @@ switch($op)
     $f=$cn->get_value("select f_id from fiche join fiche_detail using (f_id) where ad_id=23 and ad_value=$1",array($_POST['p_card']));
     require_once('include/material_modify.inc.php');
     $html=ob_get_contents();
-    ob_clean();
+    ob_end_clean();
     break;
   case 'rm':
     ob_start();
     require_once('include/material_delete.inc.php');
     $html=ob_get_contents();
-    ob_clean();
+    ob_end_clean();
     break;
 
   }

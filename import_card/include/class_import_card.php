@@ -52,7 +52,7 @@ class Import_Card
 		$encodage->selected = true;
 		require_once('template/input_file.php');
 		$r = ob_get_contents();
-		ob_clean();
+		ob_end_clean();
 		echo $r;
 	}
 	/**
@@ -197,7 +197,7 @@ class Import_Card
 			echo '</tr>';
 		}
 		$table_content = ob_get_contents();
-		ob_clean();
+		ob_end_clean();
 		echo '<tr>';
 		echo th('');
 		for ($e = 0; $e < count($header); $e++)

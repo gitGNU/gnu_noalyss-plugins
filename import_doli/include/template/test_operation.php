@@ -64,7 +64,7 @@ while (($row=fgetcsv($fcard,0,$_POST['rdelimiter'],$_POST['rsurround'])) !== fal
       echo '</tr>';
   }
 $table=ob_get_contents();
-ob_clean();
+ob_end_clean();
 
 
 echo '<table style="border:solid 1px black;width:100%">

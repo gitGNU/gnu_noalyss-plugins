@@ -95,7 +95,7 @@ while( ($row=fgetcsv($fbank,0,$sp)) !== false)
 
 echo '</table>';
 $table=ob_get_contents();
-ob_clean();
+ob_end_clean();
 $cn->commit();
 $nb_col->value=($nb_col->value=='')?$max:$nb_col->value;
 ?>

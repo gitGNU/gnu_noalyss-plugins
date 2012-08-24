@@ -35,7 +35,7 @@ while( ($row=fgetcsv($fbank,0,$sp)) !== false)
       echo '</tr>';
 }
 $table=ob_get_contents();
-ob_clean();
+ob_end_clean();
 
 
 $nb_col->value=($nb_col->value=='')?$max:$nb_col->value;

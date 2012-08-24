@@ -31,7 +31,7 @@
 ob_start();
 require_once('skel_javascript.js');
 $j=ob_get_contents();
-ob_clean();
+ob_end_clean();
 echo create_script($j);
 global $version_plugin;
 $version_plugin=SVNINFO;
