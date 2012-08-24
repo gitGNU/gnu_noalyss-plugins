@@ -27,6 +27,7 @@
  *
  */
 require_once 'class_tool_exercice.php';
+global $g_succeed;
 if (isset ($_POST['save']))
 {
 	try
@@ -34,6 +35,8 @@ if (isset ($_POST['save']))
 		$exercice=new Tool_Exercice($cn);
 		$exercice->fromPost();
 		$exercice->save();
+		printf (_("%s Vous avez ajouté %d mois depuis le %d/%d pour l'exercice %d "),$g_succeed,$_POST['nb_month'],$_POST['from_month'],$_POST['year'],$_POST['p_exercice']);
+		exit();
 	}
 	catch (Exception $e)
 	{
