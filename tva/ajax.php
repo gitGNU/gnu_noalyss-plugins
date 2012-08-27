@@ -159,7 +159,7 @@ case 'sw':
     echo alert($e->getMessage());
   }
   $r=ob_get_contents();
-  ob_clean();
+  ob_end_clean();
    break;
 case 'rm_form':
   switch($type)

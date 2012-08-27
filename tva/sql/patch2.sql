@@ -36,7 +36,7 @@ declare
    f record;
    n_size_tva int;
    n_size_account int;
-
+   n_exist_tva int;
 begin
 
 for i in select pcode,pvalue,paccount from tva_belge.parameter
@@ -56,9 +56,13 @@ loop
 
 		while n_size_account <> 0 loop
 
-			insert into tva_belge.parameter_chld (pcode,tva_id,pcm_val)
-				values (i.pcode,a_tva_id[n_size_tva]::numeric,a_account[n_size_account]::account_type);
+			select count(*) into n_exist_tva from tva_rate where tva_id=a_tva_id[n_size_tva]::numeric;
 
+			if n_exist_tva != 0 then
+				
+					insert into tva_belge.parameter_chld (pcode,tva_id,pcm_val)
+						values (i.pcode,a_tva_id[n_size_tva]::numeric,a_account[n_size_account]::account_type);
+			end if;
 			n_size_account := n_size_account -1;
 		end loop;
 		n_size_account := array_upper(a_account,1);
@@ -86,7 +90,7 @@ declare
    f record;
    n_size_tva int;
    n_size_account int;
-
+   n_exist_tva int;
 begin
 
 for i in select distinct pvalue from tva_belge.parameter WHERE pcode in ('GRIL00','GRIL01','GRIL02','GRIL03')
@@ -101,9 +105,12 @@ loop
 
 
 	while n_size_tva <> 0 loop
+		select count(*) into n_exist_tva from tva_rate where tva_id=a_tva_id[n_size_tva]::numeric;
 
-		insert into tva_belge.parameter_chld (pcode,tva_id)
-			values ('ASSUJETTI',a_tva_id[n_size_tva]::numeric);
+		if n_exist_tva != 0 then
+			insert into tva_belge.parameter_chld (pcode,tva_id)
+				values ('ASSUJETTI',a_tva_id[n_size_tva]::numeric);
+		end if;
 		n_size_tva := n_size_tva -1;
 	end loop;
 

@@ -50,7 +50,7 @@ while( ($row=fgetcsv($fbank,0,$sp)) !== false)
       			$libelle=utf8_encode($array_row[$i]);
       			break;
 		 case 3:
-      			$operation_nb=$array_row[$i];
+      			$operation_nb=preg_replace('/[^[:print:]]/','',$array_row[$i]);
       			break;
 		 case 4:
 			$third=utf8_encode($array_row[$i]);
@@ -95,7 +95,7 @@ while( ($row=fgetcsv($fbank,0,$sp)) !== false)
 
 echo '</table>';
 $table=ob_get_contents();
-ob_clean();
+ob_end_clean();
 $cn->commit();
 $nb_col->value=($nb_col->value=='')?$max:$nb_col->value;
 ?>

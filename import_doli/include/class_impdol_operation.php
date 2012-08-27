@@ -434,6 +434,7 @@ class Impdol_Operation
 				$acc_jrn->grpt = $grpt;
 				$acc_jrn->periode = 0;
 				$acc_jrn->insert_jrn();
+				$cn->exec_sql('update jrn set jr_pj_number=$1 where jr_id=$2',array($oper->getp('pj'),$acc_jrn->jr_id));
 
 				/* Update info */
 				$ledger->grpt_id = $grpt;

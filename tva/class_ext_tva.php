@@ -319,7 +319,7 @@ class Ext_Tva extends Ext_Tva_Gen
      ob_start();
      require_once('form_decl.php');
      $r=ob_get_contents();
-     ob_clean();
+     ob_end_clean();
      $r.=HtmlInput::hidden('periode_dec',$this->periode_dec);
      return $r;
 

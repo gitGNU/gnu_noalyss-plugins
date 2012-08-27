@@ -21,7 +21,7 @@ case 'dsp_decl':
 
 $html=ob_get_contents();
 
-ob_clean();
+ob_end_clean();
 
 $html=escape_xml($html);
 

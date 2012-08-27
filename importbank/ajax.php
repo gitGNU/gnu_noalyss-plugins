@@ -78,7 +78,7 @@ case 'show':
       else
 	$bi->show_item($ctl);
   $r=ob_get_contents();
-  ob_clean();
+  ob_end_clean();
 }
 
 $html=escape_xml($r);

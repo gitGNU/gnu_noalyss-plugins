@@ -46,7 +46,7 @@ Extension::check_version(4802);
  ob_start();
  require_once('impdol.js');
 $j=ob_get_contents();
-ob_clean();
+ob_end_clean();
 echo create_script($j);
 
 
