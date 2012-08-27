@@ -30,7 +30,7 @@ $gDossier=Dossier::id();
 ?>
 <h1>Lots affectés</h1>
 <? for ( $i=0;$i<count($a_immeuble);$i++):?>
-<h2><?=HtmlInput::card_detail($a_immeuble[$i]['quick_code'],$a_immeuble[$i]['vw_name'],' style="display:inline;text-decoration:underline"')?></h2>
+<h2>Immeuble : <?=HtmlInput::card_detail($a_immeuble[$i]['quick_code'],$a_immeuble[$i]['vw_name'],' style="display:inline;text-decoration:underline"')?></h2>
 
 <?
 $ret_coprop=$cn->execute("coprop",array($a_immeuble[$i]['f_id']));
@@ -46,7 +46,7 @@ if ($max_coprop==0)
     $r=Database::fetch_array($ret_coprop,$e);
     ?>
 <li style="margin-top:4px;margin-bottom:4px;">
-<?=HtmlInput::card_detail($r['copro_qcode'],'',' style="display:inline;text-decoration:underline"').' '.h($r['copro_name']." ".$r['copro_first_name'])?>
+Copropriétaire : <?=HtmlInput::card_detail($r['copro_qcode'],'',' style="display:inline;text-decoration:underline"').' '.h($r['copro_name']." ".$r['copro_first_name'])?>
 </li>
     <?
     $ret_lot=$cn->execute("lot",array($a_immeuble[$i]['f_id'],$r['coprop_id']));
@@ -61,7 +61,7 @@ if ($max_coprop==0)
     <?for ($l=0;$l<$max_lot;$l++):
     $s=Database::fetch_array($ret_lot,$l);
     ?>
-       <li style="list-style-type: square;margin-top:2px;margin-bottom:2px;"><?=HtmlInput::card_detail($s['lot_qcode'],'',' style="display:inline;text-decoration:underline"')." ".h($s['lot_name']." ".$s['lot_desc'])?></li>
+       <li style="list-style-type: square;margin-top:2px;margin-bottom:2px;">Lot : <?=HtmlInput::card_detail($s['lot_qcode'],'',' style="display:inline;text-decoration:underline"')." ".h($s['lot_name']." ".$s['lot_desc'])?></li>
     <? endfor;?>
     </ul>
     <? endfor;?>
