@@ -109,6 +109,7 @@ function copro_show_list()
  */
 function add_key(dossier,plugin_code,ac)
 {
+    $('key_list').hide();
 	waiting_box();
 	try
 	{
@@ -144,6 +145,7 @@ function add_key(dossier,plugin_code,ac)
  */
 function mod_key(dossier,plugin_code,ac,key_id)
 {
+    $('key_list').hide();
 	waiting_box();
 	try
 	{

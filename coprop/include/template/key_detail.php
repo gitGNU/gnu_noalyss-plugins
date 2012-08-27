@@ -29,6 +29,8 @@
 ?>
 <div class="content" style="margin-left: 20px">
 <h1><?=$str_message?></h1>
+<?=HtmlInput::button('rlist','Retour list',' onclick="$(\'key_list\').show()"')?>
+
 <h2> Caractéristique</h2>
 <table>
 	<tr>
