@@ -32,6 +32,9 @@ global $cn,$gDossier;
 // ajout nouvelle clef
 if ( isset($_POST['add_key']))
 {
+    /**
+     * @todo ajout verification double chargement
+     */
 	$a=new Copro_key();
 	$a->insert($_POST);
 }
@@ -45,10 +48,17 @@ if ( isset($_POST['mod_key']))
 }
 
 
-$sql="select cr_id,cr_name,cr_note,cr_tantieme from coprop.clef_repartition order by cr_name";
+$sql="select cr_id,cr_name,cr_note,cr_tantieme,
+    coalesce(  (select sum(crd_amount) from
+		coprop.clef_repartition_detail as crd
+		where crd.cr_id=cr.cr_id) ,0) as delta
+    from 
+    coprop.clef_repartition as cr
+    order by cr_name";
 
 $a_key=$cn->get_array($sql);
 ?>
+<div id="key_list">
 <table class="result">
 	<tr>
 		<th>
@@ -60,7 +70,12 @@ $a_key=$cn->get_array($sql);
                 <th>
                     Tantième
                 </th>
-                <th></th>
+                <th>
+                    Différence
+                </th>
+                <th>
+                    
+                </th>
 	</tr>
 <?
 for ($i=0;$i < count($a_key);$i++):
@@ -69,13 +84,16 @@ for ($i=0;$i < count($a_key);$i++):
 ?>
 	<tr id="row<?=$a_key[$i]['cr_id']?>">
 		<td>
-			<?=$mod_key?>
+			<?=h($mod_key)?>
 		</td>
 		<td>
-			<?=$a_key[$i]['cr_note']?>
+			<?=h($a_key[$i]['cr_note'])?>
 		</td>
-                <td>
-                    <?=round($a_key[$i]['cr_tantieme'])?>
+                <td class="num">
+                    <?=nbm($a_key[$i]['cr_tantieme'])?>
+                </td>
+                <td class="num">
+                    <?=nbm($a_key[$i]['delta'])?>
                 </td>
 		<td id="col<?=$a_key[$i]['cr_id']?>">
                     <?
@@ -89,6 +107,7 @@ for ($i=0;$i < count($a_key);$i++):
 endfor;
 ?>
 </table>
+ </div>
 <? $js=sprintf("add_key('%s','%s','%s')",$gDossier,$_REQUEST['plugin_code'],$_REQUEST['ac']);
  echo HtmlInput::button("add_key","Ajout clef","onclick=\"$js\"");
 	?>
