@@ -93,7 +93,7 @@ case when periodicity ='1' then 'Mensuel'
 when periodicity = '2' then 'Trimestriel'
 end as fmt_periodicity,
 periode_dec,exercice
-from tva_belge.declaration_amount order by date_decl desc
+from tva_belge.declaration_amount 
 ";
 		break;
 	case 2:
