@@ -36,6 +36,13 @@ if (isset ($_POST['form_param_sub']))
 {
 	RAPAV_Formulaire::save_parameter($_POST);
 }
+if (isset ($_POST['add_form']))
+{
+	$form= new RAPAV_Formulaire();
+	$form->f_title=trim($_POST['titre']);
+	$form->f_description=trim($_POST['description']);
+	$form->insert();
+}
 RAPAV_formulaire::listing();
-var_dump($_POST);
+
 ?>

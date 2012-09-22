@@ -56,7 +56,7 @@ class RAPAV_Formulaire extends Formulaire_Sql
 	function load_definition()
 	{
 		$f = new Formulaire_Param_Sql();
-		$ret = $f->seek(" order by p_order ");
+		$ret = $f->seek(" where f_id=".sql_string($this->f_id) ." order by p_order ");
 		$max = Database::num_row($ret);
 
 		for ($i = 0; $i < $max; $i++)
@@ -143,6 +143,7 @@ class RAPAV_Formulaire extends Formulaire_Sql
 			$form_param->p_type = $p_array['p_type'][$i];
 			$form_param->p_order = $p_array['p_order'][$i];
 			$form_param->t_id = $p_array['t_id'][$i];
+			$form_param->f_id = $p_array['f_id'];
 			// update or insert the row
 			if ($p_array['p_id'][$i] == -1)
 				$form_param->insert();

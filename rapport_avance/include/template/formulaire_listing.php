@@ -55,6 +55,20 @@
 
 <?	endfor; ?>
 </table>
+	<?
+	echo HtmlInput::button("add_form_bt","Ajout d'un formulaire",'onclick="$(\'add_form_div\').show();$(\'add_form_bt\').hide()"');
+echo '<div id="add_form_div" style="display:none">';
+echo '<form method="POST">';
+$name=new IText("titre");
+$description=new IText("description");
+echo '<table>';
+echo tr(td("Titre : ").td($name->input()));
+echo tr(td('Description').td($description->input()));
+echo '</table>';
+echo HtmlInput::submit ("add_form","Sauver");
+echo '</form>';
+?>
+</div>
 </div>
 <div id="form_mod_div">
 
