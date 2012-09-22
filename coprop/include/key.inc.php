@@ -52,7 +52,7 @@ $sql="select cr_id,cr_name,cr_note,cr_tantieme,
     coalesce(  (select sum(crd_amount) from
 		coprop.clef_repartition_detail as crd
 		where crd.cr_id=cr.cr_id) ,0) as delta
-    from 
+    from
     coprop.clef_repartition as cr
     order by cr_name";
 
@@ -74,7 +74,7 @@ $a_key=$cn->get_array($sql);
                     Différence
                 </th>
                 <th>
-                    
+
                 </th>
 	</tr>
 <?
@@ -84,7 +84,7 @@ for ($i=0;$i < count($a_key);$i++):
 ?>
 	<tr id="row<?=$a_key[$i]['cr_id']?>">
 		<td>
-			<?=h($mod_key)?>
+			<?=$mod_key?>
 		</td>
 		<td>
 			<?=h($a_key[$i]['cr_note'])?>

@@ -676,7 +676,18 @@ INPUT                  = ../amortis \
                         ../skel \
                         ../tool_pcmn \
                         ../tools \
-                        ../tva
+                        ../tva \
+			../importbank/include \
+			../tool_pcmn/include \
+			../import_card/include \
+			../import_doli/include \
+			../coprop/include \
+			../amortis/include \
+			../rapport_avance/include \
+			../skel/include \
+			../tools/include \
+			../backup_noadmin/include
+
 
 
 # This tag can be used to specify the character encoding of the source files
@@ -809,25 +820,25 @@ SOURCE_BROWSER         = NO
 # Setting the INLINE_SOURCES tag to YES will include the body
 # of functions and classes directly in the documentation.
 
-INLINE_SOURCES         = NO
+INLINE_SOURCES         = YES
 
 # Setting the STRIP_CODE_COMMENTS tag to YES (the default) will instruct
 # doxygen to hide any special comment blocks from generated source code
 # fragments. Normal C, C++ and Fortran comments will always remain visible.
 
-STRIP_CODE_COMMENTS    = YES
+STRIP_CODE_COMMENTS    = NO
 
 # If the REFERENCED_BY_RELATION tag is set to YES
 # then for each documented function all documented
 # functions referencing it will be listed.
 
-REFERENCED_BY_RELATION = NO
+REFERENCED_BY_RELATION = YES
 
 # If the REFERENCES_RELATION tag is set to YES
 # then for each documented function all documented entities
 # called/used by that function will be listed.
 
-REFERENCES_RELATION    = NO
+REFERENCES_RELATION    = YES
 
 # If the REFERENCES_LINK_SOURCE tag is set to YES (the default)
 # and SOURCE_BROWSER tag is set to YES, then the hyperlinks from

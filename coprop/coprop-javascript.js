@@ -125,6 +125,7 @@ function add_key(dossier,plugin_code,ac)
 				{
 					remove_waiting_box();
 					$('keydetail_div').innerHTML=response.responseText;
+					$('keydetail_div').show();
 					response.responseText.evalScripts();
 				}
 				catch(e)
@@ -161,6 +162,7 @@ function mod_key(dossier,plugin_code,ac,key_id)
 				{
 					remove_waiting_box();
 					$('keydetail_div').innerHTML=response.responseText;
+					$('keydetail_div').show();
 					response.responseText.evalScripts();
 
 				}
@@ -387,7 +389,7 @@ function budget_remove(plugin_code,ac,dossier,bud_id)
 
 function appel_fond_show()
 {
-    try 
+    try
     {
         var aft=$('aft');
         var choice=aft.options[aft.selectedIndex].value;
@@ -413,5 +415,5 @@ function appel_fond_show()
     {
         alert(e.message);
     }
-    
+
 }

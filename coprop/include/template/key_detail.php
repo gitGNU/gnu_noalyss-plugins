@@ -29,7 +29,7 @@
 ?>
 <div class="content" style="margin-left: 20px">
 <h1><?=$str_message?></h1>
-<?=HtmlInput::button('rlist','Retour list',' onclick="$(\'key_list\').show()"')?>
+<?=HtmlInput::button('rlist','Retour liste',' onclick="$(\'key_list\').show();$(\'keydetail_div\').hide()"')?>
 
 <h2> Caractéristique</h2>
 <table>
