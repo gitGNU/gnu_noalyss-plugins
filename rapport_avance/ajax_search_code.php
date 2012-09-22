@@ -27,7 +27,7 @@
  *
  */
 global $cn;
-$array=$cn->get_array("select p_id,p_code,p_libelle from rapport_advanced.formulaire_param where p_type=3 order by 2");
+$array=$cn->get_array("select p_id,p_code,p_libelle from rapport_advanced.formulaire_param where p_type=3 and f_id=$1 order by 2",array($f_id));
 echo HtmlInput::title_box('Code Formulaire','search_code_div');
 ?>
 <table>
