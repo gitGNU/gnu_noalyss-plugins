@@ -113,16 +113,6 @@ class RAPAV_Formulaire extends Formulaire_Sql
 	}
 
 	/**
-	 * insert into formulaire and formulaire_param
-	 * @see save_definition
-	 * @param type $p_array
-	 */
-	static function insert_definition($p_array)
-	{
-
-	}
-
-	/**
 	 *
 	 * @see save_definition
 	 * @param type $p_array
@@ -169,66 +159,6 @@ class RAPAV_Formulaire extends Formulaire_Sql
 		}
 	}
 
-	static function save_parameter($p_array)
-	{
-		$param = new RAPAV_Formulaire($p_array['f_id']);
-		$param->load_definition();
-		// save everything
-		$max = count($p_array['fp_id']);
-
-		// update
-		for ($i = 0; $i < $max; $i++)
-		{
-			// update
-			if (isset($p_array['fp_id'][$i]))
-			{
-				$fp_id = $p_array['fp_id'][$i];
-				$old_frm = new Formulaire_Param_Detail($p_array['fp_id'][$i]);
-				$new_frm = new Formulaire_Param_Detail();
-				$new_frm->p_id = $old_frm->p_id;
-				$new_frm->fp_id = $p_array['fp_id'][$i];
-				// update formula
-				$new_frm->fp_formula = $p_array['frm' . $fp_id];
-				$new_frm->tmp_val = (isset($p_array['code_frm' . $fp_id])) ? $p_array['code_frm' . $fp_id] : null;
-				$new_frm->tva_id = (isset($p_array['code_tva' . $fp_id])) ? $p_array['code_tva' . $fp_id] : null;
-				$new_frm->jrn_def_type = (isset($p_array['code_jrn' . $fp_id])) ? $p_array['code_jrn' . $fp_id] : null;
-				$new_frm->tt_id = (isset($p_array['code_base' . $fp_id])) ? $p_array['code_base' . $fp_id] : null;
-				$new_frm->update();
-			}
-		}
-		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// insert fp_id
-		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		if (isset($p_array['new']))
-		{
-			$max_new = count($p_array['new']);
-			for ($i = 0; $i < $max_new; $i++)
-			{
-				$new_frm = new Formulaire_Param_Detail();
-				$new_frm->p_id = $p_array['new'][$i];
-				// if it is a formula
-				$new_frm->fp_formula = (isset($p_array['new_frm'][$i])) ? $p_array['new_frm'][$i] : null;
-				$new_frm->tmp_val = (isset($p_array['new_code_frm'][$i])) ? $p_array['new_code_frm'][$i] : null;
-				$new_frm->tva_id = (isset($p_array['new_code_tva'][$i])) ? $p_array['new_code_tva'][$i] : null;
-				$new_frm->jrn_def_type = (isset($p_array['new_code_jrn'][$i])) ? $p_array['new_code_jrn'][$i] : null;
-				$new_frm->tt_id = (isset($p_array['new_code_base'][$i])) ? $p_array['new_code_base'][$i] : null;
-				$new_frm->insert();
-			}
-		}
-		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		// Delete fp_id
-		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		if (isset($p_array['delete']))
-		{
-			//delete
-			$max_del = count($p_array['delete']);
-			for ($i = 0; $i < $max_del; $i++)
-			{
-				$frm = new Formulaire_Param_Detail($p_array['delete'][$i]);
-				$frm->delete();
-			}
-		}
-	}
 
 }
 

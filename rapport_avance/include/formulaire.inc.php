@@ -30,11 +30,6 @@ require_once 'class_rapav_formulaire.php';
 if ( isset($_POST['form_def_sub']))
 {
 	RAPAV_formulaire::save_definition($_POST);
-	exit();
-}
-if (isset ($_POST['form_param_sub']))
-{
-	RAPAV_Formulaire::save_parameter($_POST);
 }
 if (isset ($_POST['add_form']))
 {

@@ -84,12 +84,8 @@ switch ($act)
 		echo '<h1>Paramètre </h1>';
 		$form = new RAPAV_formulaire($_REQUEST['f_id']);
 		$form->load_definition();
-		echo '<form method="POST" class="print">';
-		echo HtmlInput::hidden('f_id', $_REQUEST['f_id']);
 		$form->echo_formulaire();
 		$form->input_parameter();
-		echo HtmlInput::submit('form_param_sub', 'Sauve');
-		echo '</form>';
 		break;
 
 	/******************************************************************************************************************

@@ -3,7 +3,9 @@
 content[200]="Le code doit être unique pour ce formulaire";
 content[201]="Formula TODO";
 
-
+/**
+ *@brief show the definition of a form and let it modify it
+ */
 function rapav_form_def(plugin_code,ac,dossier,f_id)
 {
 	try
@@ -105,6 +107,9 @@ function add_param_detail(plugin_code,ac,dossier,p_id)
 		alert("add_param_detail"+e.message);
 	}
 }
+/**
+ *@brief display a popup and let you select an existing code
+ */
 function rapav_search_code(ac,plugin_code,dossier,f_id)
 {
 	try
@@ -140,6 +145,9 @@ function rapav_search_code(ac,plugin_code,dossier,f_id)
 		alert("add_param_detail"+e.message);
 	}
 }
+/**
+ *@brief delete a parameter detail
+ */
 function delete_param_detail(plugin_code,ac,dossier,fp_id)
 {
 	try
@@ -167,108 +175,6 @@ function delete_param_detail(plugin_code,ac,dossier,fp_id)
 		alert(e);
 	}
 }
-/**
- *@brief Sauve les données
- */
-/*function  show_poste(answer) {
-	try{
-		var answer=req.responseXML;
-		var a=answer.getElementsByTagName('ctl');
-		var html=answer.getElementsByTagName('code');
-		if ( a.length == 0 ) {
-			var rec=req.responseText;
-			alert ('erreur :'+rec);
-		}
-		var name_ctl=a[0].firstChild.nodeValue;
-		var code_html=html[0].firstChild.nodeValue;
-		// ou mieux
-		var code_html=getNodeText(html[0]); // Firefox ne prend que les 4096 car.
-		code_html=unescape_xml(code_html);
-		$(name_ctl).innerHTML=code_html;
-	}
-	catch (e) {
-		alert(e.message);
-	}
-	try{
-		code_html.evalScripts();
-	}
-	catch(e){
-		alert("Impossible executer script de la reponse\n"+e.message);
-	}
-
-}*/
-/**
- * @brief Add a row to the table in formulaire_parametre
- * table id = table p_id
- */
-/*function row_add_code_tva(plugin_code,ac,dossier,p_id)
-{
-try
-	{
-		var max=parseFloat($('count_'+p_id).value);
-		var querystring='plugin_code='+plugin_code+'&ac='+ac+'&gDossier='+dossier+'&act=row_add_code_tva'+"&p_id="+p_id+"&max="+max;
-		waiting_box();
-		var action=new Ajax.Request(
-			"ajax.php",
-			{
-				method:'get',
-				parameters:querystring,
-				onFailure:error_get_predef,
-				onSuccess:function(req){
-					remove_waiting_box();
-					var answer=req.responseText;
-					var mytable=g("table_"+p_id).tBodies[0];
-					var nNumberRow=mytable.rows.length;
-					var oRow=mytable.insertRow(nNumberRow);
-					oRow.innerHTML=answer;
-					var max2=parseFloat($('count_'+p_id).value)+1;
-					$('count_'+p_id).value=max2;
-					answer.evalScripts();
-				}
-			}
-			);
-
-	}catch (e)
-	{
-		alert(e.message);
-	}
-}*/
-/**
- * @brief Add a row to the table in formulaire_parametre, with total
- * table id = table p_id
- */
-/*function row_add_compute(plugin_code,ac,dossier,p_id)
-{
-try
-	{
-		var max=parseFloat($('count_'+p_id).value);
-		var querystring='plugin_code='+plugin_code+'&ac='+ac+'&gDossier='+dossier+'&act=row_add_compute'+"&p_id="+p_id+"&max="+max;
-		waiting_box();
-		var action=new Ajax.Request(
-			"ajax.php",
-			{
-				method:'get',
-				parameters:querystring,
-				onFailure:error_get_predef,
-				onSuccess:function(req){
-					remove_waiting_box();
-					var answer=req.responseText;
-					var mytable=g("table_"+p_id).tBodies[0];
-					var nNumberRow=mytable.rows.length;
-					var oRow=mytable.insertRow(nNumberRow);
-					oRow.innerHTML=answer;
-					var max2=parseFloat($('count_'+p_id).value)+1;
-					$('count_'+p_id).value=max2;
-					answer.evalScripts();
-				}
-			}
-			);
-
-	}catch (e)
-	{
-		alert(e.message);
-	}
-}*/
 /**
  * @brief  montre les détails d'un formulaire
  */
@@ -363,6 +269,7 @@ function save_param_detail(p_form_id)
 								var oRow=mytable.insertRow(nNumberRow);
 								oRow.id="tr_"+fp_id;
 								oRow.innerHTML=code_html;
+								removeDiv('param_detail_div');
 
 							}
 						if (code == 'nok')

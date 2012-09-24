@@ -67,11 +67,6 @@ class Formulaire_Row
 
 	}
 
-	function compute()
-	{
-
-	}
-
 	/**
 	 * @brief load all the row from formulaire_param_detail, children of formulaire_param
 	 *  return an array of objects Formulaire_Param_Detail
@@ -95,10 +90,6 @@ class formulaire_title1 extends Formulaire_Row
 		echo h1($this->obj->p_libelle, "");
 	}
 
-	function compute()
-	{
-
-	}
 
 	function input()
 	{
@@ -115,10 +106,6 @@ class formulaire_title2 extends Formulaire_Row
 		echo h2($this->obj->p_libelle, 'class="title"');
 	}
 
-	function compute()
-	{
-
-	}
 
 	function input()
 	{
@@ -135,10 +122,6 @@ class formulaire_title3 extends Formulaire_Row
 		echo "<h3>" . $this->obj->p_libelle . "</h3>";
 	}
 
-	function compute()
-	{
-
-	}
 
 	function input()
 	{

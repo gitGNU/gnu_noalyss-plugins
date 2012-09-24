@@ -41,6 +41,7 @@ switch($tab)
 		$acc_tva->jrn_def_type=$code_jrn;
 		$acc_tva->p_id=$p_id;
 		$acc_tva->type_detail=2;
+		$acc_tva->tt_id=$code_base;
 		if ($acc_tva->verify() == 1)
 		{
 			$code='nok';
