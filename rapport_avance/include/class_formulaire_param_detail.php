@@ -83,7 +83,10 @@ class RAPAV_Account_Tva extends Formulaire_Param_Detail
 
 	function display_row()
 	{
-		printf("Poste comptable %s avec le code tva %s (%s) dans le journal %s", $this->tmp_val, $this->tva_id, $this->tva_id, $this->jrn_def_type);
+		global $cn;
+		$type_total=$cn->get_value("select tt_label from rapport_advanced.total_type where tt_id=$1",array($this->tt_id));
+		printf("Poste comptable %s avec le code tva %s (%s) dans le journal %s [ %s ]",
+				$this->tmp_val, $this->tva_id, $this->tva_id, $this->jrn_def_type,$type_total);
 	}
 
 	static function new_row()
