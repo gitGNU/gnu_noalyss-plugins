@@ -195,7 +195,9 @@ function __construct($p_id=-1)
 			"dr_libelle"=>"dr_libelle",
 			"dr_order"=>"dr_order",
 			"dr_code"=>"dr_code",
-			"dr_amount"=>"dr_amount"
+			"dr_amount"=>"dr_amount",
+			"dr_type"=>"dr_type",
+			"dr_info"=>"dr_info"
 		);
 
 		$this->type = array(
@@ -204,7 +206,9 @@ function __construct($p_id=-1)
 			"dr_libelle"=>"text",
 			"dr_order"=>"text",
 			"dr_code"=>"numeric",
-			"dr_amount"=>"numeric"
+			"dr_amount"=>"numeric",
+			"dr_type"=>"numeric",
+			"dr_info"=>'text'
 
 		);
 

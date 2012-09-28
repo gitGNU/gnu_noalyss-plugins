@@ -105,4 +105,6 @@ CREATE TABLE rapport_advanced.declaration_row_detail
       REFERENCES rapport_advanced.declaration_row (dr_id) MATCH SIMPLE
       ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED
 );
+ALTER TABLE rapport_advanced.declaration_row ADD COLUMN dr_type integer;
+ALTER TABLE rapport_advanced.declaration_row ADD COLUMN dr_info text;
 

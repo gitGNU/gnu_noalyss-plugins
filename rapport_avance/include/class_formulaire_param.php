@@ -23,15 +23,22 @@
 
 /**
  * @file
- * @brief factory
+ * @brief factory display the definition and parameters of a form
  *
  */
 require_once 'class_rapport_avance_sql.php';
 require_once 'class_formulaire_param_detail.php';
 
+/**
+ * @brief manage the table rapport_avance.formulaire_param
+ */
 class Formulaire_Param extends Formulaire_Param_Sql
 {
-
+	/**
+	 * Factory, create an object following the $form->p_type,
+	 * @param Formulaire_Param_Sql $form
+	 * @return \Formulaire_Title1|\Formulaire_Title2|\Formulaire_Title3|\Formulaire_Formula
+	 */
 	static function factory(Formulaire_Param_Sql $form)
 	{
 		switch ($form->p_type)
@@ -48,7 +55,9 @@ class Formulaire_Param extends Formulaire_Param_Sql
 	}
 
 }
-
+/**
+ * @brief mother class of \Formulaire_Title1|\Formulaire_Title2|\Formulaire_Title3|\Formulaire_Formula
+ */
 class Formulaire_Row
 {
 
@@ -81,7 +90,9 @@ class Formulaire_Row
 	}
 
 }
-
+/**
+ * @brief display title level 1
+ */
 class formulaire_title1 extends Formulaire_Row
 {
 
@@ -97,6 +108,9 @@ class formulaire_title1 extends Formulaire_Row
 	}
 
 }
+/**
+ * @brief display title level 2
+ */
 
 class formulaire_title2 extends Formulaire_Row
 {
@@ -113,6 +127,9 @@ class formulaire_title2 extends Formulaire_Row
 	}
 
 }
+/**
+ * @brief display title level 3
+ */
 
 class formulaire_title3 extends Formulaire_Row
 {
@@ -129,6 +146,10 @@ class formulaire_title3 extends Formulaire_Row
 	}
 
 }
+/**
+ * @brief display the formula : depending of the type of formula, a factory is used and an object RAPAV_Formula, RAPAV_Account_TVA
+ * or RAPAV_compute will be used for the display of the details
+ */
 
 class Formulaire_Formula extends Formulaire_Row
 {
@@ -144,7 +165,12 @@ class Formulaire_Formula extends Formulaire_Row
 	{
 		echo $this->obj->p_libelle;
 	}
-
+	/**
+	 * @brief return an object following the key type_detail of the array passed in parameter
+	 *
+	 * @param type $p_index
+	 * @return \RAPAV_Formula|\RAPAV_Account_Tva|\RAPAV_Compute
+	 */
 	function make_object($p_index)
 	{
 		$elt=$this->parametre[$p_index]['type_detail'];
@@ -161,7 +187,9 @@ class Formulaire_Formula extends Formulaire_Row
 				break;
 		}
 	}
-
+	/**
+	 * @brief input value
+	 */
 	function input()
 	{
 		echo '<h4 class="title">' . $this->obj->p_libelle . "(" . $this->obj->p_code . ")" . '</h4>';

@@ -28,6 +28,22 @@
  */
 require_once 'class_rapav_declaration.php';
 global $cn;
+
+/*
+ * Save the date (update them)
+ */
+if ( isset($_POST['save']))
+{
+	$decl=new Rapav_Declaration();
+	$decl->d_id=$_POST['d_id'];
+	$decl->load();
+	$decl->save();
+	$decl->display();
+	exit();
+}
+/*
+ * compute and propose to modify and save
+ */
 if (isset($_GET['compute']))
 {
 	$decl=new Rapav_Declaration();
@@ -35,6 +51,11 @@ if (isset($_GET['compute']))
 	 * @todo verifier date
 	 */
 	$decl->compute($_GET['p_form'],$_GET['p_start'],$_GET['p_end']);
+	echo '<form class="print" method="POST">';
+	$decl->display();
+	echo HtmlInput::submit('save','Sauver');
+	echo '</form>';
+	exit();
 }
 $date_start=new IDate('p_start');
 $date_end=new IDate('p_end');
