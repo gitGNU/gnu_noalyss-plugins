@@ -1,5 +1,4 @@
 <?php
-
 /*
  *   This file is part of PhpCompta.
  *
@@ -32,10 +31,10 @@ global $cn;
 /*
  * Save the date (update them)
  */
-if ( isset($_POST['save']))
+if (isset($_POST['save']))
 {
-	$decl=new Rapav_Declaration();
-	$decl->d_id=$_POST['d_id'];
+	$decl = new Rapav_Declaration();
+	$decl->d_id = $_POST['d_id'];
 	$decl->load();
 	$decl->save();
 	$decl->display();
@@ -46,49 +45,59 @@ if ( isset($_POST['save']))
  */
 if (isset($_GET['compute']))
 {
-	$decl=new Rapav_Declaration();
-	/**
-	 * @todo verifier date
-	 */
-	$decl->compute($_GET['p_form'],$_GET['p_start'],$_GET['p_end']);
-	echo '<form class="print" method="POST">';
-	$decl->display();
-	echo HtmlInput::submit('save','Sauver');
-	echo '</form>';
-	exit();
+	$decl = new Rapav_Declaration();
+	if (isDate($_GET['p_start']) == 0 || isDate($_GET['p_end']) == 0)
+	{
+		alert('Date invalide');
+	}
+	else
+	{
+		$decl->compute($_GET['p_form'], $_GET['p_start'], $_GET['p_end']);
+		echo '<form class="print" method="POST">';
+		$decl->display();
+		echo HtmlInput::submit('save', 'Sauver');
+		echo '</form>';
+		exit();
+	}
 }
-$date_start=new IDate('p_start');
-$date_end=new IDate('p_end');
-$hidden=HtmlInput::array_to_hidden(array('gDossier','ac','plugin_code','sa'),$_GET);
-$select=new ISelect('p_form');
-$select->value=$cn->make_array('select f_id,f_title from rapport_advanced.formulaire order by 2');
+$date_start = new IDate('p_start');
+$date_end = new IDate('p_end');
+$hidden = HtmlInput::array_to_hidden(array('gDossier', 'ac', 'plugin_code', 'sa'), $_GET);
+$select = new ISelect('p_form');
+$select->value = $cn->make_array('select f_id,f_title from rapport_advanced.formulaire order by 2');
 ?>
-<form method="GET">
-	<?=$hidden?>
+<form id="declaration_form_id" method="GET" onsubmit="return validate()">
+	<?= $hidden?>
 	<table>
 		<tr>
 			<td>
 				Déclaration
 			</td>
 			<td>
-				<?=$select->input()?>
+				<?= $select->input()?>
 			</td>
 		<tr>
 			<td>
 				Date de début
 			</td>
 			<td>
-				<?=$date_start->input()?>
+				<?= $date_start->input()?>
 			</td>
 		</tr>
 		<tr>
 			<td>
-			Date de fin
+				Date de fin
 			</td>
 			<td>
-				<?=$date_end->input()?>
+				<?= $date_end->input()?>
 			</td>
 		</tr>
 	</table>
-	<?=HtmlInput::submit('compute','Générer')?>
+	<?= HtmlInput::submit('compute', 'Générer')?>
 </form>
+<script charset="UTF8" lang="javascript">
+	function validate() {
+		if ( check_date_id('<?=$date_start->id?>') == false ) {alert('Date de début incorrecte');return false;}
+		if ( check_date_id('<?=$date_end->id?>') == false ) {alert('Date de fin incorrecte');return false;}
+	}
+</script>
