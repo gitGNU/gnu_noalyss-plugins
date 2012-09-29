@@ -299,3 +299,60 @@ function save_param_detail(p_form_id)
 
 	return false;
 }
+function rapav_declaration_display(plugin_code,ac,dossier,d_id)
+{
+	try
+	{
+		$('declaration_list_div').hide();
+		$('declaration_display_div').innerHTML="";
+		$('declaration_display_div').show();
+		waiting_box();
+		var querystring='plugin_code='+plugin_code+'&ac='+ac+'&gDossier='+dossier+'&act=rapav_declaration_display'+"&d_id="+d_id;
+		var action=new Ajax.Request(
+			"ajax.php",
+			{
+				method:'get',
+				parameters:querystring,
+				onFailure:error_get_predef,
+				onSuccess:function(req){
+					remove_waiting_box();
+					var answer=req.responseText;
+					$('declaration_display_div').innerHTML=answer;
+					answer.evalScripts()
+				}
+			}
+			);
+	}
+	catch(e)
+	{
+		alert(e.message);
+	}
+}
+function rapav_declaration_delete(plugin_code,ac,dossier,d_id)
+{
+	try
+	{
+		if ( confirm('Confirmez-vous l\'effacement ?') == false) { return;}
+		waiting_box();
+		var querystring='plugin_code='+plugin_code+'&ac='+ac+'&gDossier='+dossier+'&act=rapav_declaration_delete'+"&d_id="+d_id;
+		var action=new Ajax.Request(
+			"ajax.php",
+			{
+				method:'get',
+				parameters:querystring,
+				onFailure:error_get_predef,
+				onSuccess:function(req){
+					remove_waiting_box();
+					$('tr_'+d_id).style.textDecoration="line-through";
+					$('tr_'+d_id).style.color="red";
+					$('del_'+d_id).innerHTML="";
+					$('mod_'+d_id).innerHTML="";
+				}
+			}
+			);
+	}
+	catch(e)
+	{
+		alert(e.message);
+	}
+}

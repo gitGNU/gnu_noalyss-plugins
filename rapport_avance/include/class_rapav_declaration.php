@@ -119,6 +119,7 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 			{
 				$cn->exec_sql('update rapport_advanced.declaration_row set dr_amount=$2 where dr_id=$1',array($code[$i],$amount[$i]));
 			}
+			$cn->commit();
 		}
 		catch(Exception $e)
 		{

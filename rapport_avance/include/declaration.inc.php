@@ -36,8 +36,10 @@ if (isset($_POST['save']))
 	$decl = new Rapav_Declaration();
 	$decl->d_id = $_POST['d_id'];
 	$decl->load();
+	$decl->to_keep='Y';
 	$decl->save();
 	$decl->display();
+	echo '<h2 class="notice"> Sauvé</h2>';
 	exit();
 }
 /*
