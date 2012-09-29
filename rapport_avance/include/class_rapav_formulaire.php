@@ -131,7 +131,7 @@ class RAPAV_Formulaire extends Formulaire_Sql
 			$form_param->p_code = $p_array['p_code'][$i];
 			$form_param->p_libelle = $p_array['p_libelle'][$i];
 			$form_param->p_type = $p_array['p_type'][$i];
-			$form_param->p_order = $p_array['p_order'][$i];
+			$form_param->p_order = (isNumber($p_array['p_order'][$i])==0)?$i*10:$p_array['p_order'][$i];
 			$form_param->t_id = $p_array['t_id'][$i];
 			$form_param->f_id = $p_array['f_id'];
 			// update or insert the row

@@ -89,7 +89,11 @@ $type_periode=$cn->make_array("select t_id,t_description from rapport_advanced.p
 		</td>
 		<td>
 			<?
-				$p_order=new INum('p_order[]',$this->definition[$i]->p_order);
+				if ($this->definition[$i]->p_order=='')
+					$value=$i*10;
+				else
+					$value=$this->definition[$i]->p_order;
+				$p_order=new INum('p_order[]',$value);
 				$p_order->prec=0;
 				$p_order->size=4;
 				echo $p_order->input();
