@@ -17,6 +17,10 @@ switch ($act)
 		echo '<form method="POST" class="print">';
 		$form->input_formulaire();
 		$form->input_definition();
+		echo '<p>';
+		$delete = new ICheckBox('delete');
+		echo "Cochez la case pour effacer ce formulaire " . $delete->input();
+		echo '</p>';
 		echo HtmlInput::submit('form_def_sub', 'Sauve');
 		echo '</form>';
 		break;
@@ -88,7 +92,7 @@ switch ($act)
 		$form->input_parameter();
 		break;
 
-	/******************************************************************************************************************
+	/*	 * ****************************************************************************************************************
 	 * Montre un écran pour ajouter une ligne de formulaire dans les paramètre de formulaires
 	 */
 	case 'add_param_detail':
@@ -110,7 +114,7 @@ switch ($act)
 	// Delete un formulaire_param_detail
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	case 'delete_param_detail':
-		$cn->exec_sql("delete from rapport_advanced.formulaire_param_detail where fp_id=$1",array($fp_id));
+		$cn->exec_sql("delete from rapport_advanced.formulaire_param_detail where fp_id=$1", array($fp_id));
 		break;
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	// Display a saved declaration from history
@@ -122,10 +126,9 @@ switch ($act)
 	// Delete a saved declaration (from history)
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	case 'rapav_declaration_delete':
-		$cn->exec_sql("delete from rapport_advanced.declaration where d_id=$1",array($_GET['d_id']));
+		$cn->exec_sql("delete from rapport_advanced.declaration where d_id=$1", array($_GET['d_id']));
 		break;
 	default:
 		break;
-
 }
 ?>

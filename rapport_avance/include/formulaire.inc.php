@@ -29,7 +29,15 @@
 require_once 'class_rapav_formulaire.php';
 if ( isset($_POST['form_def_sub']))
 {
-	RAPAV_formulaire::save_definition($_POST);
+	if (isset($_POST['delete']))
+	{
+		$cn->exec_sql('delete from rapport_advanced.formulaire where f_id=$1',array($_POST['f_id']));
+	}
+	else
+	{
+		RAPAV_formulaire::save_definition($_POST);
+
+	}
 }
 if (isset ($_POST['add_form']))
 {
