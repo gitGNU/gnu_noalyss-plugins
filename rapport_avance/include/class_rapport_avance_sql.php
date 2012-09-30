@@ -157,7 +157,8 @@ class RAPAV_Declaration_SQL extends phpcompta_sql
 			"d_start"=>"d_start",
 			"d_end"=>"d_end",
 			"to_keep"=>"to_keep",
-			"d_generated"=>"d_generated"
+			"d_generated"=>"d_generated",
+			"f_id"=>"f_id"
 		);
 
 		$this->type = array(
@@ -166,7 +167,8 @@ class RAPAV_Declaration_SQL extends phpcompta_sql
 			"d_start"=>"date",
 			"d_end"=>"date",
 			"to_keep"=>"text",
-			"d_generated"=>"date"
+			"d_generated"=>"date",
+			"f_id"=>"numeric"
 		);
 
 		$this->default = array(
