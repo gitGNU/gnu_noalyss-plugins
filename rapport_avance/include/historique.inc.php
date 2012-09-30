@@ -27,6 +27,7 @@
  * take data from rapport_avance.declaration and display via ajax
  */
 global $cn;
+$cn->exec_sql("delete from rapport_advanced.declaration where to_keep='N' and d_generated < now() - interval '5 hours'");
 $data=$cn->get_array("select d_id,d_title,
 		d_start,d_end
 		from rapport_advanced.declaration
@@ -49,7 +50,7 @@ $data=$cn->get_array("select d_id,d_title,
 
 		</th>
 		<th>
-			
+
 		</th>
 	</tr>
 	<? for ($i=0;$i<count($data);$i++) :?>
