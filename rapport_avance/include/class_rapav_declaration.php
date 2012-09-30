@@ -117,11 +117,11 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 			$amount = $_POST['amount'];
 			for ($i = 0; $i < count($code); $i++)
 			{
-				$cn->exec_sql('update rapport_advanced.declaration_row set dr_amount=$2 where dr_id=$1',array($code[$i],$amount[$i]));
+				$cn->exec_sql('update rapport_advanced.declaration_row set dr_amount=$2 where dr_id=$1', array($code[$i], $amount[$i]));
 			}
 			$cn->commit();
 		}
-		catch(Exception $e)
+		catch (Exception $e)
 		{
 			alert($e->getTraceAsString());
 		}
@@ -142,7 +142,7 @@ class Rapav_Declaration_Param
 	function insert()
 	{
 		$data = new RAPAV_Declaration_Row_SQL();
-		$data->dr_info=$this->param->p_info;
+		$data->dr_info = $this->param->p_info;
 		$data->dr_code = $this->param->p_code;
 		$data->dr_libelle = $this->param->p_libelle;
 		$data->dr_order = $this->param->p_order;
@@ -247,7 +247,7 @@ class Rapav_Declaration_Param
 	{
 		global $cn;
 		bcscale(2);
-		$this->amount = 0;
+		$this->amount = "0";
 
 		$array = $cn->get_array("select fp_id,p_id,tmp_val,tva_id,fp_formula,fp_signed,jrn_def_type,tt_id,type_detail
 			from rapport_advanced.formulaire_param_detail where p_id=$1", array($this->param->p_id));
@@ -258,7 +258,7 @@ class Rapav_Declaration_Param
 			$row_detail->dr_id = $this->dr_id;
 			$row_detail->d_id = $this->d_id;
 			$tmp_amount = $row_detail->compute($this->start, $this->end);
-			$this->amount = bcadd($tmp_amount, $this->amount);
+			$this->amount = bcadd("$tmp_amount", "$this->amount");
 			$row_detail->insert();
 		}
 	}
@@ -334,8 +334,8 @@ class Rapav_dd_Formula extends Rapav_Declaration_Detail
 	function compute($p_start, $p_end)
 	{
 		global $cn;
-		$amount = Impress::parse_formula($cn, "", $this->form->fp_formula, $p_start, $p_end, false, 1);
-		return $amount;
+		$amount = Impress::parse_formula($cn, "", $this->form->fp_formula, $p_start, $p_end, true, 1);
+		return $amount['montant'];
 	}
 
 }
@@ -412,8 +412,8 @@ class Rapav_dd_Account_Tva extends Rapav_Declaration_Detail
 		{
 			$sql = "select coalesce(sum(qs_vat),0) as amount
 						from quant_sold join jrnx using (j_id)
-						where qs_vat_code=$1 and
-						(j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))
+						where qs_vat_code=$1
+						and (j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))
 						and j_poste::text like ($4)";
 			$amount = $this->cn->get_value($sql, array($this->form->tva_id,
 				$p_start,
@@ -425,9 +425,10 @@ class Rapav_dd_Account_Tva extends Rapav_Declaration_Detail
 		{
 			$sql = "select coalesce(sum(qs_vat),0) as amount
 						from quant_sold join jrnx using (j_id)
-						where qs_vat_code=$1
-						and (j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))
+						where qs_vat_code=$1 and
+						(j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))
 						and j_poste::text like ($4)";
+
 			$amount = $this->cn->get_value($sql, array($this->form->tva_id,
 				$p_start,
 				$p_end,
@@ -453,10 +454,10 @@ class Rapav_dd_Account_Tva extends Rapav_Declaration_Detail
 	{
 		if ($this->form->jrn_def_type == 'ACH')
 		{
-			$sql = "select coalesce(sum(qs_price),0) as amount from quant_sold
-					join jrnx using (j_id)
-					where qs_vat_code=$1 and (j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))
+			$sql = "select coalesce(sum(qp_price),0) as amount from quant_purchase join jrnx using (j_id)
+					where qp_vat_code=$1 and (j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))
 					and j_poste::text like ($4)";
+
 			$amount = $this->cn->get_value($sql, array($this->form->tva_id,
 				$p_start,
 				$p_end,
@@ -465,8 +466,9 @@ class Rapav_dd_Account_Tva extends Rapav_Declaration_Detail
 		}
 		if ($this->form->jrn_def_type == 'VEN')
 		{
-			$sql = "select coalesce(sum(qp_price),0) as amount from quant_purchase join jrnx using (j_id)
-					where qp_vat_code=$1 and (j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))
+			$sql = "select coalesce(sum(qs_price),0) as amount from quant_sold
+					join jrnx using (j_id)
+					where qs_vat_code=$1 and (j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))
 					and j_poste::text like ($4)";
 			$amount = $this->cn->get_value($sql, array($this->form->tva_id,
 				$p_start,
