@@ -110,5 +110,7 @@ $type_periode=$cn->make_array("select t_id,t_description from rapport_advanced.p
 	<?endfor;?>
 	</tbody>
 </table>
+<p>
 <?=HtmlInput::button_anchor("Ajout d'une ligne","javascript:void(0)","add_def",
 		sprintf('onclick="add_row_definition(\'%s\',\'%s\',\'%s\')"',$_REQUEST['plugin_code'],$_REQUEST['ac'],$_REQUEST['gDossier']))?>
+</p>
