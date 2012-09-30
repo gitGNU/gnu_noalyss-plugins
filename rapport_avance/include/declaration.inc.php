@@ -37,6 +37,7 @@ if (isset($_POST['save']))
 	$decl->d_id = $_POST['d_id'];
 	$decl->load();
 	$decl->to_keep='Y';
+	$decl->f_id=$_POST['p_form'];
 	$decl->save();
 	$decl->display();
 	echo '<h2 class="notice"> Sauvé</h2>';
@@ -56,6 +57,7 @@ if (isset($_GET['compute']))
 	{
 		$decl->compute($_GET['p_form'], $_GET['p_start'], $_GET['p_end']);
 		echo '<form class="print" method="POST">';
+		echo HtmlInput::hidden('p_form',$_GET['p_form']);
 		$decl->display();
 		echo HtmlInput::submit('save', 'Sauver');
 		echo '</form>';
