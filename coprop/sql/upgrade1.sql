@@ -13,7 +13,7 @@ alter table coprop.budget drop column b_end;
 alter table coprop.budget drop column b_start;
 alter table coprop.budget add column b_exercice bigint;
 alter table coprop.budget add column b_type varchar(8);
-
+insert into coprop.parameter values ('categorie_charge','0');
 
 
 commit;
