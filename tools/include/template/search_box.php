@@ -19,7 +19,13 @@
 </FORM>
 <script charset="UTF8" lang="javascript">
 	function validate() {
-		if ( check_date_id('<?=$idate_start->id?>') == false ) {alert('Date de début incorrecte');return false;}
-		if ( check_date_id('<?=$idate_end->id?>') == false ) {alert('Date de fin incorrecte');return false;}
+		if ( check_date_id('<?=$idate_start->id?>') == false ) {
+			alert('Date de début incorrecte');
+			$('<?=$idate_start->id?>').style.borderColor='red';
+			return false;}
+		if ( check_date_id('<?=$idate_end->id?>') == false ) {
+			alert('Date de fin incorrecte');
+			$('<?=$idate_end->id?>').style.borderColor='red';
+			return false;}
 	}
 </script>
