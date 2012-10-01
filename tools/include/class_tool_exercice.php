@@ -86,8 +86,7 @@ class Tool_Exercice
 		}
 		catch (Exception $e)
 		{
-			alert($e->getMessage());
-			return -1;
+			throw new Exception($e->getMessage());
 		}
 		$this->cn->start();
 		try
