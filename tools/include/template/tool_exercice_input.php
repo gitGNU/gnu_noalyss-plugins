@@ -27,7 +27,7 @@
  *
  */
 ?>
-<form method="POST">
+<form method="POST" onsubmit="return validate()">
 	<table>
 		<tr>
 			<td>
@@ -67,3 +67,23 @@ echo HtmlInput::submit('save','Valider');
 echo HtmlInput::request_to_hidden(array('sa','ac','plugin_code','gDossier'));
 ?>
 </form>
+<script charset="UTF8" lang="javascript">
+	function validate()
+	{
+		if (trim($('<?=$exercice->id?>').value)=='') {
+						$('<?=$exercice->id?>').style.borderColor='red';
+						alert('Exercice invalide');
+						return false;
+					}
+		if (trim($('<?=$nb_month->id?>').value)=='') {
+						$('<?=$nb_month->id?>').style.borderColor='red';
+						alert('Nombre de mois invalide');
+						return false;
+					}
+		if (trim($('<?=$year->id?>').value)=='') {
+						$('<?=$year->id?>').style.borderColor='red';
+						alert('Année invalide');
+						return false;
+					}
+	}
+</script>
