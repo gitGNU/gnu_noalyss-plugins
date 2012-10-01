@@ -1,4 +1,4 @@
-<FORM METHOD="GET">
+<FORM METHOD="GET" onsubmit="return validate();">
 <?=$hidden?>
 <table>
 	<TR>
@@ -17,3 +17,9 @@
 	<?=HtmlInput::request_to_hidden(array('ac','plugin_code'));?>
 <?=$submit?>
 </FORM>
+<script charset="UTF8" lang="javascript">
+	function validate() {
+		if ( check_date_id('<?=$idate_start->id?>') == false ) {alert('Date de début incorrecte');return false;}
+		if ( check_date_id('<?=$idate_end->id?>') == false ) {alert('Date de fin incorrecte');return false;}
+	}
+</script>
