@@ -40,7 +40,7 @@ if (isset ($_POST['save']))
 	}
 	catch (Exception $e)
 	{
-		var_dump($e->getTraceAsString());
+		alert($e->getMessage());
 	}
 
 }
