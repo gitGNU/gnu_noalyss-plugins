@@ -155,10 +155,20 @@ EOF;
 	}
 	function create_table()
 	{
-	  
+
 	       $file=dirname(__FILE__)."/../sql/create_table.sql";
 		$this->cn->execute_script($file);
 
+	}
+	function upgrade()
+	{
+		global $cn;
+		$version=$cn->get_value('select max(v_id) from coprop.version');
+		for ($i=$version+1;$i<=COPROP_VERSION;$i++)
+		{
+			$file=dirname(__FILE__)."/../sql/upgrade$i.sql";
+			$this->cn->execute_script($file);
+		}
 	}
 
 }

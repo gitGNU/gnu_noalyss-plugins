@@ -68,5 +68,6 @@ echo '<form id="fkey" method="post">';
 echo HtmlInput::hidden('cr_id',$key_id);
 require_once 'template/key_detail.php';
 echo HtmlInput::submit("mod_key","Modifier",' onclick="return confirm (\'Vous confirmez?\')"');
+echo HtmlInput::button('rlist','Retour liste',' onclick="$(\'key_list\').show();$(\'keydetail_div\').hide()"');
 echo '</form>';
 ?>

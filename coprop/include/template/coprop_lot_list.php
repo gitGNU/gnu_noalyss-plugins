@@ -28,16 +28,16 @@
  */
 $gDossier=Dossier::id();
 ?>
-<h1>Lots affectés</h1>
+<h1 class="title">Lots affectés</h1>
 <? for ( $i=0;$i<count($a_immeuble);$i++):?>
-<h2>Immeuble : <?=HtmlInput::card_detail($a_immeuble[$i]['quick_code'],$a_immeuble[$i]['vw_name'],' style="display:inline;text-decoration:underline"')?></h2>
+<h2 class="title">Immeuble : <?=HtmlInput::card_detail($a_immeuble[$i]['quick_code'],$a_immeuble[$i]['vw_name'],' style="display:inline;text-decoration:underline"')?></h2>
 
 <?
 $ret_coprop=$cn->execute("coprop",array($a_immeuble[$i]['f_id']));
 $max_coprop=Database::num_row($ret_coprop);
 if ($max_coprop==0)
 {
-    echo "Pas de copropriétaires pour cet immeuble";
+    echo '<p class="notice">Pas de copropriétaires pour cet immeuble</p>';
     continue;
 }
 ?>
@@ -53,7 +53,7 @@ Copropriétaire : <?=HtmlInput::card_detail($r['copro_qcode'],'',' style="displa
    $max_lot=Database::num_row($ret_lot);
     if ($max_lot==0)
     {
-        echo "Pas de lot pour ce copropriétaires ";
+        echo '<p class="notice">Pas de lot pour ce copropriétaires </p>';
         continue;
     }
     ?>
@@ -69,7 +69,7 @@ Copropriétaire : <?=HtmlInput::card_detail($r['copro_qcode'],'',' style="displa
 
 <? endfor; ?>
 
-<h1>Lot sans immeuble ou sans copropriétaires</h1>
+<h1 class="title">Lot sans immeuble ou sans copropriétaires</h1>
 <ul>
 <? for($e=0;$e<count($a_undef_lot);$e++):?>
       <li><?=HtmlInput::card_detail($a_undef_lot[$e]['lot_qcode'],'',' style="display:inline;text-decoration:underline"')." ".h($a_undef_lot[$e]['lot_name']." ".$a_undef_lot[$e]['lot_desc'])?></li>

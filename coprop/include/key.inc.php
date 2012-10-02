@@ -107,9 +107,10 @@ for ($i=0;$i < count($a_key);$i++):
 endfor;
 ?>
 </table>
- </div>
-<? $js=sprintf("add_key('%s','%s','%s')",$gDossier,$_REQUEST['plugin_code'],$_REQUEST['ac']);
+	<? $js=sprintf("add_key('%s','%s','%s')",$gDossier,$_REQUEST['plugin_code'],$_REQUEST['ac']);
  echo HtmlInput::button("add_key","Ajout clef","onclick=\"$js\"");
 	?>
+ </div>
+
 
 <div id="keydetail_div"></div>

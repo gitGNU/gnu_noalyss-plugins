@@ -85,7 +85,15 @@ if ( $cn->exist_schema('coprop') == false)
 	// Affiche paramètre
     $def=4;
   }
-require_once('coprop-constant.php');
+  require_once('coprop-constant.php');
+  $version=$cn->get_value('select max(v_id) from coprop.version');
+ if ( $version < COPROP_VERSION)
+ {
+	   require_once('include/class_install_plugin.php');
+	  $iplugin=new Install_Plugin($cn);
+	  $iplugin->upgrade();
+ }
+
 // show menu
 echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=plugin:copropriété" target="_blank">Aide</a>'.
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.

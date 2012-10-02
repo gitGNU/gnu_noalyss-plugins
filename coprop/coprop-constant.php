@@ -17,4 +17,5 @@ $gDossier=Dossier::id();
 $g_copro_parameter=new Copro_Parameter();
 define ("COPRO_MAX_LOT",19);
 define("MAXROWBUD",15);
+define ('COPROP_VERSION',1);
 ?>
