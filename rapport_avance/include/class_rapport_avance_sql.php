@@ -118,7 +118,9 @@ class Formulaire_Param_Detail_SQL extends phpcompta_sql
 			"fp_signed"=>"fp_signed",
 			"jrn_def_type"=>"jrn_def_type",
 			"tt_id"=>"tt_id",
-			"type_detail"=>"type_detail"
+			"type_detail"=>"type_detail",
+			"with_tmp_val"=>"with_tmp_val",
+			"type_sum_account"=>"type_sum_account"
 		);
 
 		$this->type = array(
@@ -130,7 +132,10 @@ class Formulaire_Param_Detail_SQL extends phpcompta_sql
 			"fp_signed"=>"numeric",
 			"jrn_def_type"=>"text",
 			"tt_id"=>"numeric",
-			"type_detail"=>"numeric"
+			"type_detail"=>"numeric",
+			"with_tmp_val"=>"text",
+			"type_sum_account"=>"numeric"
+
 		);
 
 		$this->default = array(

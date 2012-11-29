@@ -185,6 +185,9 @@ class Formulaire_Formula extends Formulaire_Row
 			case '3':
 				return new RAPAV_Compute($this->parametre[$p_index]['fp_id']);
 				break;
+			case '4':
+				return new RAPAV_Account($this->parametre[$p_index]['fp_id']);
+				break;
 		}
 	}
 	/**
@@ -196,7 +199,7 @@ class Formulaire_Formula extends Formulaire_Row
 		echo HtmlInput::hidden('p_id[]', $this->obj->p_id);
 		$max = count($this->parametre);
 		echo HtmlInput::hidden("count_" . $this->id, $max);
-		echo '<h5 class="title">' . 'code ' . $this->obj->p_code . '</h5>';
+		//echo '<h5 class="title">' . 'code ' . $this->obj->p_code . '</h5>';
 		echo '<p>';
 		echo '<table id="table_' . $this->id . '">';
 		for ($i = 0; $i < $max; $i++)

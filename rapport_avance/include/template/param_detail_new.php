@@ -47,6 +47,11 @@
 			Poste comptable et code TVA
 		</a>
 	</td>
+	<td id="new_account_id_bt"  class="tool" style="background:inherit">
+		<a class="mtitle" href="javascript:void(0)"   onclick="show_type_formula('new_account_id')">
+			Poste comptable
+		</a>
+	</td>
 </tr>
 </table>
 <div style="width:100%;height:290px;margin:1px">
@@ -91,6 +96,17 @@
 
 	<?=HtmlInput::hidden('tab','compute_id')?>
 		<?=RAPAV_Compute::new_row($p_id)?>
+<?=HtmlInput::submit('save','Sauve')?>
+
+</form>
+</div>
+	<div id="new_account_id" style="display: none">
+<form id="new_paded" method="POST" onsubmit="save_param_detail('new_paded');return false">
+
+	<?=HtmlInput::request_to_hidden(array('gDossier','ac','plugin_code','p_id'))?>
+
+	<?=HtmlInput::hidden('tab','new_account_id')?>
+		<?=RAPAV_Account::new_row($p_id)?>
 <?=HtmlInput::submit('save','Sauve')?>
 
 </form>

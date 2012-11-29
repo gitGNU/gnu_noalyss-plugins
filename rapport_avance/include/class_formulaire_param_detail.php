@@ -35,7 +35,8 @@ class Formulaire_Param_Detail extends Formulaire_Param_Detail_SQL
 	function input_new($p_id)
 	{
 		$parent = new Formulaire_Param($p_id);
-		echo HtmlInput::title_box($parent->p_code . " " . $parent->p_libelle, 'param_detail_div');
+		echo HtmlInput::title_box('Formule', 'param_detail_div');
+		echo '<h2>'.$parent->p_code . " " . $parent->p_libelle.'</h2>';
 		require_once 'template/param_detail_new.php';
 	}
 
@@ -184,6 +185,63 @@ class RAPAV_Compute extends Formulaire_Param_Detail
 		if ($formula != '')
 		{
 			$this->errcode=" Erreur dans la formule ".$formula;
+			return 1;
+		}
+		return 0;
+	}
+
+}
+/**
+ * @TODO poste comptable utilisé avec le poste comptable, choix entre diff crédit - debit, diff débit-crédit, crédit, débit
+ */
+class RAPAV_Account extends Formulaire_Param_Detail
+{
+
+	function display_row()
+	{
+		global $cn;
+		$total_type_account=$cn->get_value('select tt_label from rapport_advanced.total_type_account where tt_id=$1',
+				array($this->type_sum_account));
+		printf("Total %s poste comptable %s utilisé avec le poste comptable %s",
+				$total_type_account,$this->tmp_val,$this->with_tmp_val);
+	}
+
+	static function new_row($p_id)
+	{
+		global $cn;
+		$sum_type=new ISelect('account_sum_type');
+		$sum_type->value=$cn->make_array("select tt_id, tt_label from rapport_advanced.total_type_account ");
+
+		$account = new IPoste("account_first", "", "account_first_id");
+		$account->size = 10;
+		$account->label = _("Recherche poste");
+		$account->set_attribute('gDossier', dossier::id());
+		$account->set_attribute('account', $account->id);
+
+		$account_second = new IPoste("account_second", "", "account_second_id");
+		$account_second->size = 10;
+		$account_second->label = _("Recherche poste");
+		$account_second->set_attribute('gDossier', dossier::id());
+		$account_second->set_attribute('account', $account_second->id);
+		echo '<p>';
+		echo 'Calculer ';
+		echo $sum_type->input();
+		echo '</p>';
+		echo '<p>';
+		echo 'du poste comptable ';
+		echo $account->input();
+		echo '</p>';
+		echo '<p>';
+		echo ' utilisé avec le poste comptable ';
+		echo $account_second->input();
+		echo '</p>';
+	}
+	function verify()
+	{
+
+		if ( trim($this->tmp_val)=="" || trim($this->with_tmp_val)=="")
+		{
+			$this->errcode=" Un poste comptable est manquant";
 			return 1;
 		}
 		return 0;

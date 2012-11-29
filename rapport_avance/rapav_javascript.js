@@ -214,7 +214,7 @@ function show_type_formula(p_toshow)
 {
 	try
 	{
-		var div=['new_account_tva_id','new_formula_id','new_compute_id'];
+		var div=['new_account_tva_id','new_formula_id','new_compute_id','new_account_id'];
 		for (var r =0;r<div.length;r++ ) {
 			$(div[r]).hide();
 			$(div[r]+'_bt').style.backgroundColor="inherit";
