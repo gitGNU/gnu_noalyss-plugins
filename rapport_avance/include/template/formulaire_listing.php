@@ -34,6 +34,7 @@
 		<th>Description</th>
 		<th></th>
 		<th></th>
+		<th></th>
 	</tr>
 <?
 	for ($i=0;$i<count($alist);$i++):
@@ -51,6 +52,9 @@
 		<td>
 			<?=HtmlInput::anchor('Paramètre', "",sprintf('onclick="rapav_form_param(\'%s\',\'%s\',\'%s\',\'%s\')"',$_REQUEST['plugin_code'],$_REQUEST['ac'],dossier::id(),$alist[$i]['f_id']))?>
 		</td>
+		<td>
+			<?=HtmlInput::anchor('Export définition', sprintf("extension.raw.php?plugin_code=%s&ac=%s&gDossier=%s&d_id=%s&act=rapav_form_export",$_REQUEST['plugin_code'],$_REQUEST['ac'],dossier::id(),$alist[$i]['f_id']))?>
+		</td>
 	</tr>
 
 <?	endfor; ?>
@@ -59,6 +63,7 @@
 	echo HtmlInput::button("add_form_bt","Ajout d'un formulaire",'onclick="$(\'add_form_div\').show();$(\'add_form_bt\').hide()"');
 echo '<div id="add_form_div" style="display:none">';
 echo '<form method="POST">';
+echo '<h2> Nouveau formulaire</h2>';
 $name=new IText("titre");
 $description=new IText("description");
 echo '<table>';
@@ -66,6 +71,12 @@ echo tr(td("Titre : ").td($name->input()));
 echo tr(td('Description').td($description->input()));
 echo '</table>';
 echo HtmlInput::submit ("add_form","Sauver");
+echo '</form>';
+echo '<form enctype="multipart/form-data"  method="POST"> ';
+echo '<h2> Depuis un fichier</h2>';
+$file=new IFile('form');
+echo $file->input();
+echo HtmlInput::submit ("restore_form","Sauver");
 echo '</form>';
 ?>
 </div>

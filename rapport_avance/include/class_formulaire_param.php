@@ -34,6 +34,7 @@ require_once 'class_formulaire_param_detail.php';
  */
 class Formulaire_Param extends Formulaire_Param_Sql
 {
+
 	/**
 	 * Factory, create an object following the $form->p_type,
 	 * @param Formulaire_Param_Sql $form
@@ -54,7 +55,115 @@ class Formulaire_Param extends Formulaire_Param_Sql
 		}
 	}
 
+	/**
+	 * @brief export a form to CSV to stdout
+	 * @global type $cn database connx
+	 * @param type $p_id the formulaire.f_id
+	 */
+	static function to_csv($p_id)
+	{
+		global $cn;
+		$form = new formulaire_sql($p_id);
+		$form->load();
+		$title = mb_strtolower($form->f_title, 'UTF-8');
+		$title = str_replace(array('/', '*', '<', '>', '*', '.', '+', ':', '?', '!', " ", ";"), "_", $title);
+
+		$out = fopen("php://output", "w");
+		header('Pragma: public');
+		header('Content-type: application/bin');
+		header('Content-Disposition: attachment;filename="' . $title . '.bin"', FALSE);
+		fputcsv($out, array("RAPAV", '2'), ";");
+		fputcsv($out, array($form->f_title, $form->f_description));
+		$array = $cn->get_array("select p_id,p_code, p_libelle, p_type, p_order, f_id, p_info, t_id
+			from rapport_advanced.formulaire_param where f_id=$1", array($p_id));
+		for ($i = 0; $i < count($array); $i++)
+		{
+			fputcsv($out, $array[$i], ";");
+		}
+		fputcsv($out, array('RAPAV_DETAIL'), ";");
+		$array = $cn->get_array("select
+			fp_id, p_id, tmp_val, tva_id, fp_formula, fp_signed, jrn_def_type,
+			tt_id, type_detail, with_tmp_val, type_sum_account, operation_pcm_val
+			from rapport_advanced.formulaire_param_detail where p_id in (select p_id from rapport_advanced.formulaire_param where f_id=$1)", array($p_id));
+		for ($i = 0; $i < count($array); $i++)
+		{
+			fputcsv($out, $array[$i], ";");
+		}
+	}
+
+	static function from_csv($filename)
+	{
+		global $cn;
+		$in = fopen($filename, "r");
+		$cn->start();
+		try
+		{
+			$a = fgetcsv($in, 0, ";");
+			if ($a[0] != "RAPAV")
+			{
+				throw new Exception('Formulaire invalide');
+			}
+			// $a[1] contains the version
+			// first line is the title and description
+			$form = new formulaire_sql();
+			$first = fgetcsv($in, 0, ";");
+			var_dump($first);
+			$form->f_title = $first[0];
+			if (isset($first[1]))
+				$form->f_description = $first[1];
+			$form->insert();
+			// now come the formulaire_param until the keyword RAPAV_DETAIL is met
+			while (($csv = fgetcsv($in, 0, ";")) != FALSE)
+			{
+				if ($csv[0] != "RAPAV_DETAIL")
+				{
+					$csv[5]=$form->f_id;
+					$cn->get_array("INSERT INTO rapport_advanced.restore_formulaire_param(
+						    p_id, p_code, p_libelle, p_type, p_order, f_id, p_info, t_id)
+								VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", $csv);
+				} else
+					break;
+			}
+			while (($csv = fgetcsv($in, 0, ";")) != FALSE)
+			{
+				$t = array();
+				for ($o = 0; $o < count($csv); $o++)
+				{
+					if ($csv[$o] == "")
+						$t[$o] = null;
+					else
+					{
+						$t[$o] = $csv[$o];
+					}
+				}
+				$cn->get_array("INSERT INTO rapport_advanced.restore_formulaire_param_detail(
+            fp_id, p_id, tmp_val, tva_id, fp_formula, fp_signed, jrn_def_type,
+            tt_id, type_detail, with_tmp_val, type_sum_account, operation_pcm_val)
+				VALUES ($1, $2, $3, $4, $5, $6, $7,$8, $9, $10, $11, $12)", $t);
+			}
+			/// Update now the table  rapport_advanced.restore_formulaire_param and set the correct pk
+			$cn->exec_sql("update rapport_advanced.restore_formulaire_param set p_id=nextval('rapport_advanced.formulaire_param_p_id_seq')");
+			$cn->exec_sql("update rapport_advanced.restore_formulaire_param_detail set fp_id=nextval('rapport_advanced.formulaire_param_detail_fp_id_seq')");
+
+			$cn->exec_sql('insert into rapport_advanced.formulaire_param select  p_id, p_code, p_libelle, p_type, p_order, f_id, p_info, t_id
+				from rapport_advanced.restore_formulaire_param where f_id=$1',array($form->f_id));
+
+			$cn->exec_sql('insert into rapport_advanced.formulaire_param_detail select fp_id, p_id, tmp_val, tva_id, fp_formula, fp_signed, jrn_def_type,
+            tt_id, type_detail, with_tmp_val, type_sum_account, operation_pcm_val from  rapport_advanced.restore_formulaire_param_detail where p_id in (
+			select p_id from rapport_advanced.restore_formulaire_param where f_id=$1)',array($form->f_id));
+
+			$cn->exec_sql('delete from  rapport_advanced.restore_formulaire_param where f_id=$1',array($form->f_id));
+			$cn->commit();
+		}
+		catch (Exception $exc)
+		{
+			echo $exc->getTraceAsString();
+			throw $exc;
+		}
+	}
+
 }
+
 /**
  * @brief mother class of \Formulaire_Title1|\Formulaire_Title2|\Formulaire_Title3|\Formulaire_Formula
  */
@@ -84,12 +193,12 @@ class Formulaire_Row
 	static function load_all($p_id)
 	{
 		global $cn;
-		$a_value = $cn->get_array("select fp_id,type_detail from rapport_advanced.formulaire_param_detail where p_id=$1",
-				array($p_id));
+		$a_value = $cn->get_array("select fp_id,type_detail from rapport_advanced.formulaire_param_detail where p_id=$1", array($p_id));
 		return $a_value;
 	}
 
 }
+
 /**
  * @brief display title level 1
  */
@@ -101,17 +210,16 @@ class formulaire_title1 extends Formulaire_Row
 		echo h1($this->obj->p_libelle, "");
 	}
 
-
 	function input()
 	{
 		echo h1($this->obj->p_libelle, ' class="title"');
 	}
 
 }
+
 /**
  * @brief display title level 2
  */
-
 class formulaire_title2 extends Formulaire_Row
 {
 
@@ -120,17 +228,16 @@ class formulaire_title2 extends Formulaire_Row
 		echo h2($this->obj->p_libelle, 'class="title"');
 	}
 
-
 	function input()
 	{
 		echo h2($this->obj->p_libelle, 'class="title"');
 	}
 
 }
+
 /**
  * @brief display title level 3
  */
-
 class formulaire_title3 extends Formulaire_Row
 {
 
@@ -139,18 +246,17 @@ class formulaire_title3 extends Formulaire_Row
 		echo "<h3>" . $this->obj->p_libelle . "</h3>";
 	}
 
-
 	function input()
 	{
 		echo "<h3 class=\"title\">" . $this->obj->p_libelle . "</h3>";
 	}
 
 }
+
 /**
  * @brief display the formula : depending of the type of formula, a factory is used and an object RAPAV_Formula, RAPAV_Account_TVA
  * or RAPAV_compute will be used for the display of the details
  */
-
 class Formulaire_Formula extends Formulaire_Row
 {
 
@@ -165,6 +271,7 @@ class Formulaire_Formula extends Formulaire_Row
 	{
 		echo $this->obj->p_libelle;
 	}
+
 	/**
 	 * @brief return an object following the key type_detail of the array passed in parameter
 	 *
@@ -173,7 +280,7 @@ class Formulaire_Formula extends Formulaire_Row
 	 */
 	function make_object($p_index)
 	{
-		$elt=$this->parametre[$p_index]['type_detail'];
+		$elt = $this->parametre[$p_index]['type_detail'];
 		switch ($elt)
 		{
 			case '1':
@@ -193,6 +300,7 @@ class Formulaire_Formula extends Formulaire_Row
 				break;
 		}
 	}
+
 	/**
 	 * @brief input value
 	 */
@@ -207,30 +315,27 @@ class Formulaire_Formula extends Formulaire_Row
 		echo '<table id="table_' . $this->id . '">';
 		for ($i = 0; $i < $max; $i++)
 		{
-			$formula=$this->make_object($i);
+			$formula = $this->make_object($i);
 
-			echo '<tr id="tr_'.$formula->fp_id.'">';
+			echo '<tr id="tr_' . $formula->fp_id . '">';
 			echo '<td>';
 			echo $formula->display_row();
 			echo '</td>';
-			echo "<td id=\"del_".$formula->fp_id."\">";
-			echo HtmlInput::anchor("Effacer","",sprintf("onclick=\"delete_param_detail('%s','%s','%s','%s')\""
-					, $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $formula->fp_id));
+			echo "<td id=\"del_" . $formula->fp_id . "\">";
+			echo HtmlInput::anchor("Effacer", "", sprintf("onclick=\"delete_param_detail('%s','%s','%s','%s')\""
+							, $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $formula->fp_id));
 			echo '</td>';
 			echo '</tr>';
 		}
-		if ($max==0) echo '<tr></tr>';
+		if ($max == 0)
+			echo '<tr></tr>';
 		echo "</table>";
 		echo '</p>';
 		echo HtmlInput::button_anchor(
-				"Ajout d'une ligne", "javascript:void(0)", "add_row" . $this->id, sprintf("onclick=\"add_param_detail('%s','%s','%s','%s');\"",
-						$_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $this->id)
+				"Ajout d'une ligne", "javascript:void(0)", "add_row" . $this->id, sprintf("onclick=\"add_param_detail('%s','%s','%s','%s');\"", $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $this->id)
 		);
 	}
 
 }
-
-
-
 
 ?>

@@ -27,6 +27,7 @@
  *
  */
 require_once 'class_rapav_formulaire.php';
+require_once 'class_formulaire_param.php';
 if ( isset($_POST['form_def_sub']))
 {
 	if (isset($_POST['delete']))
@@ -45,6 +46,15 @@ if (isset ($_POST['add_form']))
 	$form->f_title=trim($_POST['titre']);
 	$form->f_description=trim($_POST['description']);
 	$form->insert();
+}
+if ( isset ($_POST['restore_form'])) {
+	// Sauver fichier
+	if ( $_FILES['form']['name']==""||$_FILES["form"]["error"] != 0)
+	{
+		echo "Fichier non chargé";
+	}
+	Formulaire_Param::from_csv($_FILES['form']['tmp_name']);
+
 }
 RAPAV_formulaire::listing();
 

@@ -357,3 +357,22 @@ function rapav_declaration_delete(plugin_code,ac,dossier,d_id)
 		alert(e.message);
 	}
 }
+function rapav_form_export(plugin_code,ac,dossier,d_id)
+{
+	try {
+		var querystring='plugin_code='+plugin_code+'&ac='+ac+'&gDossier='+dossier+'&act=rapav_form_export'+"&d_id="+d_id;
+		var action=new Ajax.Request(
+			"ajax.php",
+			{
+				method:'get',
+				parameters:querystring,
+				onFailure:error_get_predef,
+				onSuccess:null
+			}
+			);
+
+	}catch (e)
+	{
+		alert(e.message);
+	}
+}
