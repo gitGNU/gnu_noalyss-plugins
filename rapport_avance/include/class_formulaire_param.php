@@ -188,6 +188,9 @@ class Formulaire_Formula extends Formulaire_Row
 			case '4':
 				return new RAPAV_Account($this->parametre[$p_index]['fp_id']);
 				break;
+			case '5':
+				return new RAPAV_Reconcile($this->parametre[$p_index]['fp_id']);
+				break;
 		}
 	}
 	/**

@@ -250,7 +250,7 @@ class Rapav_Declaration_Param
 		$this->amount = "0";
 
 		$array = $cn->get_array("select fp_id,p_id,tmp_val,tva_id,fp_formula,fp_signed,jrn_def_type,tt_id,type_detail,
-			with_tmp_val,type_sum_account
+			with_tmp_val,type_sum_account,operation_pcm_val
 			from rapport_advanced.formulaire_param_detail where p_id=$1", array($this->param->p_id));
 		$this->compute_date($p_start, $p_end);
 		for ($e = 0; $e < count($array); $e++)
@@ -294,6 +294,9 @@ class Rapav_Declaration_Detail extends RAPAV_Declaration_Row_Detail_SQL
 			case '4':
 				$ret = new Rapav_dd_Account();
 				break;
+			case '5':
+				$ret = new Rapav_dd_Reconcile();
+				break;
 			default:
 				throw new Exception("Type inconnu");
 		}
@@ -311,7 +314,8 @@ class Rapav_Declaration_Detail extends RAPAV_Declaration_Row_Detail_SQL
 	function from_array($p_array)
 	{
 		$this->form = new Formulaire_Param_Detail();
-		$attribute = explode(',', 'fp_id,p_id,tmp_val,tva_id,fp_formula,fp_signed,jrn_def_type,tt_id,type_detail,with_tmp_val,type_sum_account');
+		$attribute = explode(',',
+				'fp_id,p_id,tmp_val,tva_id,fp_formula,fp_signed,jrn_def_type,tt_id,type_detail,with_tmp_val,type_sum_account,operation_pcm_val');
 		foreach ($attribute as $e)
 		{
 			$this->form->$e = $p_array[$e];
@@ -635,5 +639,135 @@ class Rapav_dd_Account extends Rapav_Declaration_Detail
 	}
 
 }
+/**
+ * @brief handle the param_detail type Account
+ * The type_sum_account gives the type of total
+ *   - 0 D-C
+ *   - 1 C-D
+ *   - 2 D
+ *   - 4 C
+ * it uses tmp_val, with_tmp_val and type_sum_account
+ * @see RAPAV_Account
+ */
+class Rapav_dd_Reconcile extends Rapav_Declaration_Detail
+{
 
+	function compute($p_start, $p_end)
+	{
+		global $cn;
+		bcscale(2);
+		switch ($this->form->type_sum_account)
+		{
+			// Saldo
+			case 1:
+			case 2:
+				// Compute D-C
+				$sql = "
+						select sum(tv_amount.jrnx_amount)
+							from (
+								select distinct jrn1.j_id,j1.jr_id,
+								case when jrn1.j_debit = 't' then jrn1.j_montant else jrn1.j_montant*(-1) end as jrnx_amount
+								from jrnx as jrn1
+								join jrnx as jrn2 on (jrn1.j_grpt=jrn2.j_grpt)
+								join jrn as j1 on (jrn1.j_grpt=j1.jr_grpt_id)
+								where
+								jrn1.j_poste like $1
+								and	jrn2.j_poste like $2
+								) as tv_amount
+							join jrn_rapt as rap1 on (rap1.jr_id=tv_amount.jr_id or rap1.jra_concerned=tv_amount.jr_id)
+							join (select distinct jrn3.j_id,j2.jr_id
+								from jrnx as jrn3
+								join jrn as j2 on (j2.jr_grpt_id=jrn3.j_grpt)
+								where
+							(jrn3.j_date >= to_date($3,'DD.MM.YYYY') and jrn3.j_date <= to_date($4,'DD.MM.YYYY')) and
+								 jrn3.j_poste like $5) as reconc on (rap1.jr_id=reconc.jr_id or rap1.jra_concerned=reconc.jr_id)
+
+							 ";
+				$amount=$cn->get_value($sql,array(
+					$this->form->tmp_val,
+					$this->form->with_tmp_val,
+					$p_start,
+					$p_end,
+					$this->form->operation_pcm_val
+					));
+				// if C-D is asked then reverse the result
+				if ($this->form->type_sum_account==2) $amount=bcmul($amount,-1);
+				break;
+			// Only DEBIT
+			case 3:
+					$sql = "
+						select sum(tv_amount.jrnx_amount)
+							from (
+								select distinct jrn1.j_id,j1.jr_id,
+								jrn1.j_montant as jrnx_amount
+								from jrnx as jrn1
+								join jrnx as jrn2 on (jrn1.j_grpt=jrn2.j_grpt)
+								join jrn as j1 on (jrn1.j_grpt=j1.jr_grpt_id)
+								where
+								jrn1.j_poste like $1
+								and	jrn2.j_poste like $2
+								and jrn1.j_debit='t'
+								) as tv_amount
+							join jrn_rapt as rap1 on (rap1.jr_id=tv_amount.jr_id or rap1.jra_concerned=tv_amount.jr_id)
+							join (select distinct jrn3.j_id,j2.jr_id
+								from jrnx as jrn3
+								join jrn as j2 on (j2.jr_grpt_id=jrn3.j_grpt)
+								where
+							(jrn3.j_date >= to_date($3,'DD.MM.YYYY') and jrn3.j_date <= to_date($4,'DD.MM.YYYY')) and
+								 jrn3.j_poste like $5) as reconc on (rap1.jr_id=reconc.jr_id or rap1.jra_concerned=reconc.jr_id)
+
+							 ";
+				$amount=$cn->get_value($sql,array(
+					$this->form->tmp_val,
+					$this->form->with_tmp_val,
+					$p_start,
+					$p_end,
+					$this->form->operation_pcm_val
+					));
+				break;
+			// Only CREDIT
+			case 4:
+					$sql = "
+					select sum(tv_amount.jrnx_amount)
+							from (
+								select distinct jrn1.j_id,j1.jr_id,
+								jrn1.j_montant  as jrnx_amount
+								from jrnx as jrn1
+								join jrnx as jrn2 on (jrn1.j_grpt=jrn2.j_grpt)
+								join jrn as j1 on (jrn1.j_grpt=j1.jr_grpt_id)
+								where
+								jrn1.j_poste like $1
+								and	jrn2.j_poste like $2
+								and jrn1.j_debit='f'
+								) as tv_amount
+							join jrn_rapt as rap1 on (rap1.jr_id=tv_amount.jr_id or rap1.jra_concerned=tv_amount.jr_id)
+							join (select distinct jrn3.j_id,j2.jr_id
+								from jrnx as jrn3
+								join jrn as j2 on (j2.jr_grpt_id=jrn3.j_grpt)
+								where
+							(jrn3.j_date >= to_date($3,'DD.MM.YYYY') and jrn3.j_date <= to_date($4,'DD.MM.YYYY')) and
+								 jrn3.j_poste like $5) as reconc on (rap1.jr_id=reconc.jr_id or rap1.jra_concerned=reconc.jr_id)
+
+							 ";
+				$amount=$cn->get_value($sql,array(
+					$this->form->tmp_val,
+					$this->form->with_tmp_val,
+					$p_start,
+					$p_end,
+					$this->form->operation_pcm_val
+					));
+				break;
+
+			default:
+				if ( DEBUG) var_dump($this);
+				die (__FILE__.":".__LINE__." UNKNOW SUM TYPE");
+				break;
+		}
+		/*
+		 * 4 possibilities with type_sum_account
+		 */
+		return $amount;
+	}
+
+}
 ?>

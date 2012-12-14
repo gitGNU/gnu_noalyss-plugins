@@ -120,7 +120,8 @@ class Formulaire_Param_Detail_SQL extends phpcompta_sql
 			"tt_id"=>"tt_id",
 			"type_detail"=>"type_detail",
 			"with_tmp_val"=>"with_tmp_val",
-			"type_sum_account"=>"type_sum_account"
+			"type_sum_account"=>"type_sum_account",
+			"operation_pcm_val"=>"operation_pcm_val"
 		);
 
 		$this->type = array(
@@ -134,7 +135,8 @@ class Formulaire_Param_Detail_SQL extends phpcompta_sql
 			"tt_id"=>"numeric",
 			"type_detail"=>"numeric",
 			"with_tmp_val"=>"text",
-			"type_sum_account"=>"numeric"
+			"type_sum_account"=>"numeric",
+			"operation_pcm_val"=>"text"
 
 		);
 

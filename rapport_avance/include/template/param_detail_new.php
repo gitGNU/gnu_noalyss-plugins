@@ -52,10 +52,17 @@
 			Poste comptable
 		</a>
 	</td>
+	<td id="new_reconcile_id_bt"  class="tool" style="background:inherit">
+		<a class="mtitle" href="javascript:void(0)"   onclick="show_type_formula('new_reconcile_id')">
+			Opérations rapprochées
+		</a>
+	</td>
 </tr>
 </table>
 <div style="width:100%;height:290px;margin:1px">
 	<span class="error" id="param_detail_info_div"></span>
+
+	<div style="padding: 10px">
 <div id="new_formula_id" style="display: block">
 	<p>
 	Entrer une formule avec des postes comptables, la syntaxe est la même que celle des "rapports"
@@ -111,4 +118,16 @@
 
 </form>
 </div>
+		<div id="new_reconcile_id" style="display: none">
+<form id="new_padee" method="POST" onsubmit="save_param_detail('new_padee');return false">
+
+	<?=HtmlInput::request_to_hidden(array('gDossier','ac','plugin_code','p_id'))?>
+
+	<?=HtmlInput::hidden('tab','new_reconcile_id')?>
+		<?=RAPAV_Reconcile::new_row($p_id)?>
+<?=HtmlInput::submit('save','Sauve')?>
+
+</form>
+</div>
+	</div>
 </div>

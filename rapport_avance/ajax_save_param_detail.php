@@ -147,6 +147,37 @@ switch ($tab)
 			$html.='</td>';
 		}
 		break;
+
+		case 'new_reconcile_id':
+		$acc_account = new RAPAV_Reconcile();
+		$acc_account->tmp_val = $acrec_first;
+		$acc_account->with_tmp_val = $acrec_second;
+		$acc_account->operation_pcm_val = $acrec_third;
+		$acc_account->p_id = $p_id;
+		$acc_account->type_detail = 5;
+		$acc_account->type_sum_account= $account_sum_type;
+		if ($acc_account->verify() == 1)
+		{
+			$code = 'nok';
+			$html = $acc_account->errcode;
+		}
+		else
+		{
+			$acc_account->insert();
+			$fp_id = $acc_account->fp_id;
+			$code = 'ok';
+			$html = '<td>';
+			ob_start();
+			$acc_account->display_row();
+			$html.=ob_get_contents();
+			ob_end_clean();
+			$html.= '</td>';
+			$html.='<td id="del_' . $acc_account->fp_id . '">';
+			$html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"delete_param_detail('%s','%s','%s','%s')\""
+									, $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $acc_account->fp_id));
+			$html.='</td>';
+		}
+		break;
 }
 //echo $html;exit();
 $html = escape_xml($html);

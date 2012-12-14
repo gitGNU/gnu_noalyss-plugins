@@ -2,6 +2,7 @@
 
 content[200]="Le code doit être unique pour ce formulaire";
 content[201]="Formula TODO";
+content[203]="Utiliser le % pour indiquer les postes comptables qui en dépendent ex: 70% pour reprendre tous les comptes commençant par 70";
 
 /**
  *@brief show the definition of a form and let it modify it
@@ -87,9 +88,9 @@ function add_param_detail(plugin_code,ac,dossier,p_id)
 				onSuccess:function(req){
 					remove_waiting_box();
 					removeDiv('param_detail_div');
-					var nTop=calcy(100);
+					var nTop=calcy(90);
 					var nLeft="200px";
-					var str_style="top:"+nTop+"px;left:"+nLeft+";width:50em;height:auto";
+					var str_style="top:"+nTop+"px;left:"+nLeft+";width:70em;height:auto";
 					add_div({
 						id:'param_detail_div',
 						style:str_style,
@@ -214,7 +215,7 @@ function show_type_formula(p_toshow)
 {
 	try
 	{
-		var div=['new_account_tva_id','new_formula_id','new_compute_id','new_account_id'];
+		var div=['new_account_tva_id','new_formula_id','new_compute_id','new_account_id','new_reconcile_id'];
 		for (var r =0;r<div.length;r++ ) {
 			$(div[r]).hide();
 			$(div[r]+'_bt').style.backgroundColor="inherit";
