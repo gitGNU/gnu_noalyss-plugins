@@ -213,6 +213,11 @@ class Rapav_Declaration_Param
 				$exercice = $g_user->get_exercice();
 				$exercice-=3;
 				break;
+			case 6:
+				list($this->start, $this->end) = $g_user->get_limit_current_exercice();
+				$this->end=$p_end;
+				return;
+				break;
 			default:
 				throw new Exception('compute_date : t_id est incorrect');
 		}
