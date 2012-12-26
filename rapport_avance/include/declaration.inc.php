@@ -36,11 +36,15 @@ if (isset($_POST['save']))
 	$decl = new Rapav_Declaration();
 	$decl->d_id = $_POST['d_id'];
 	$decl->load();
-	$decl->to_keep='Y';
-	$decl->f_id=$_POST['p_form'];
+	$decl->to_keep = 'Y';
+	$decl->f_id = $_POST['p_form'];
 	$decl->save();
 	$decl->display();
 	echo '<h2 class="notice"> Sauvé</h2>';
+
+	$ref = HtmlInput::array_to_string(array('gDossier', 'plugin_code', 'd_id'), $_REQUEST, 'extension.raw.php?');
+	$ref.="&amp;act=export_decla_csv";
+	echo HtmlInput::button_anchor("Export CSV", $ref, 'export_id');
 	exit();
 }
 /*
@@ -57,7 +61,7 @@ if (isset($_GET['compute']))
 	{
 		$decl->compute($_GET['p_form'], $_GET['p_start'], $_GET['p_end']);
 		echo '<form class="print" method="POST">';
-		echo HtmlInput::hidden('p_form',$_GET['p_form']);
+		echo HtmlInput::hidden('p_form', $_GET['p_form']);
 		$decl->display();
 		echo HtmlInput::submit('save', 'Sauver');
 		echo '</form>';
@@ -101,7 +105,7 @@ $select->value = $cn->make_array('select f_id,f_title from rapport_advanced.form
 </form>
 <script charset="UTF8" lang="javascript">
 	function validate() {
-		if ( check_date_id('<?=$date_start->id?>') == false ) {alert('Date de début incorrecte');return false;}
-		if ( check_date_id('<?=$date_end->id?>') == false ) {alert('Date de fin incorrecte');return false;}
+		if ( check_date_id('<?= $date_start->id?>') == false ) {alert('Date de début incorrecte');return false;}
+		if ( check_date_id('<?= $date_end->id?>') == false ) {alert('Date de fin incorrecte');return false;}
 	}
 </script>

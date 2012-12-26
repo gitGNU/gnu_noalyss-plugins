@@ -42,7 +42,38 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 		$this->form = new RAPAV_Formulaire();
 		parent::__construct();
 	}
+	static function to_csv($p_id)
+	{
+		global $cn;
+		$a_row=$cn->get_array('select dr_code,dr_libelle,dr_amount,dr_info from rapport_advanced.declaration_row
+			where d_id=$1 order by dr_order',array($p_id));
 
+		$a_title=$cn->get_array("select d_title
+			,to_char(d_start,'DD.MM.YYYY') as start
+			,to_char(d_end,'DD.MM.YYYY') as end
+			from
+			rapport_advanced.declaration
+			where
+			d_id=$1",array($p_id));
+		$title=$a_title[0]['d_title']."-".$a_title[0]['start']."-".$a_title[0]['end'];
+		$title = mb_strtolower($title, 'UTF-8');
+		$title = str_replace(array('/', '*', '<', '>', '*', '.', '+', ':', '?', '!', " ", ";"), "_", $title);
+		$out = fopen("php://output", "w");
+
+		header('Pragma: public');
+		header('Content-type: application/csv');
+		header('Content-Disposition: attachment;filename="' . $title . '.csv"', FALSE);
+		fputcsv($out, $a_title[0], ";");
+
+		for ($i = 0; $i < count($a_row); $i++)
+		{
+			printf ('"%s";"%s";%s;"%s"'."\r\n",
+					$a_row[$i]['dr_code'],
+					$a_row[$i]['dr_libelle'],
+					nb($a_row[$i]['dr_amount']),
+					$a_row[$i]['dr_info']);
+		}
+	}
 	function compute($p_id, $p_start, $p_end)
 	{
 		global $cn;

@@ -24,8 +24,14 @@
  * \brief raw file for PDF ewa
  */
 require_once 'include/class_formulaire_param.php';
+require_once 'include/class_rapav_declaration.php';
 extract ($_REQUEST);
 if ( $act=='rapav_form_export') {
 	Formulaire_Param::to_csv($d_id);
+	exit();
+}
+if ($act=='export_decla_csv') {
+	 Rapav_Declaration::to_csv($d_id);
+	exit();
 }
 ?>
