@@ -28,7 +28,7 @@
  */
 ?>
 <h1><?=$this->d_title?></h1>
-Du <?=$this->d_start?> au <?=$this->d_end?>
+<h2> Du <?=$this->d_start?> au <?=$this->d_end?></h2>
 <?
 	if ( empty($array) ) { echo 'Aucune donnée'; exit();}
 
