@@ -9,6 +9,7 @@
 
 require_once ('class_database.php');
 
-global $cn;
+global $cn,$rapav_version;
 $cn=new Database (dossier::id());
+$rapav_version=2;
 ?>

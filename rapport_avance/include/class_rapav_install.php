@@ -37,6 +37,16 @@ class RAPAV_Install
 		$file=dirname(__FILE__);
 		$this->db->execute_script($file.'/../sql/install.sql');
 	}
+		function upgrade($p_version)
+	{
+		global $cn;
+		$cur_version=$cn->get_value('select max(version_id) from rapport_advanced.version');
+		$cur_version++;
+		$file=dirname(__FILE__);
+		for ($e=$cur_version;$e<=$p_version;$e++) {
+			$this->db->execute_script($file.'/../sql/upgrade'.$e.'.sql');
+		}
+	}
 }
 
 ?>

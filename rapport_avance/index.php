@@ -38,6 +38,12 @@ if ($cn->exist_schema('rapport_advanced') == false )
 	$iplugn->install();
 	echo_warning(_("L'extension est installée, pourriez-vous en vérifier le paramètrage ?"));
 }
+if ( $cn->get_value('select max(version_id) from rapport_advanced.version') < $rapav_version )
+{
+	require_once('include/class_rapav_install.php');
+	$iplugn = new Rapav_Install($cn);
+	$iplugn->upgrade($rapav_version);
+}
 /*
  * load javascript
  */
