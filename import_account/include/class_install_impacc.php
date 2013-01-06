@@ -26,7 +26,7 @@
  * @brief
  *
  */
-class install_impdol
+class install_impacc
 {
 
 	function install($p_cn)
@@ -34,18 +34,18 @@ class install_impdol
 		try
 		{
 			$p_cn->start();
-			$p_cn->exec_sql("create schema impdol");
+			$p_cn->exec_sql("create schema impacc");
 			$p_cn->exec_sql("
-			create table impdol.version (
+			create table impacc.version (
 				v_id bigint primary key,
 				v_date date default now(),
 				v_text text
 			)
 				");
-			$p_cn->exec_sql("insert into impdol.version(v_id,v_text) values ($1,$2)", array(1, "Installation"));
+			$p_cn->exec_sql("insert into impacc.version(v_id,v_text) values ($1,$2)", array(1, "Installation"));
 
 			$p_cn->exec_sql("
-				CREATE TABLE impdol.import
+				CREATE TABLE impacc.import
 					(
 					i_id serial NOT NULL,
 					temp_file text,
@@ -56,7 +56,7 @@ class install_impdol
 					)");
 
 			$p_cn->exec_sql('
-			CREATE TABLE impdol.parameter_tva
+			CREATE TABLE impacc.parameter_tva
 				(
 					pt_id serial NOT NULL,
 					tva_id bigint,
@@ -65,7 +65,7 @@ class install_impdol
 					)
 			');
 			$p_cn->exec_sql("
-			CREATE TABLE impdol.operation_tmp
+			CREATE TABLE impacc.operation_tmp
 					(
 					o_id bigserial NOT NULL,
 					o_doli text,
@@ -88,13 +88,13 @@ class install_impdol
 					o_poste text,
 					CONSTRAINT operation_tmp_pkey PRIMARY KEY (o_id ),
 					CONSTRAINT operation_tmp_i_id_fkey FOREIGN KEY (i_id)
-						REFERENCES impdol.import (i_id) MATCH SIMPLE
+						REFERENCES impacc.import (i_id) MATCH SIMPLE
 						ON UPDATE CASCADE ON DELETE CASCADE
 					)
 			");
 
 			$p_cn->exec_sql("
-			CREATE TABLE impdol.operation_transfer
+			CREATE TABLE impacc.operation_transfer
 				(
 				ot_id serial NOT NULL,
 				j_id bigint,
@@ -104,18 +104,18 @@ class install_impdol
 					REFERENCES jrnx (j_id) MATCH SIMPLE
 					ON UPDATE CASCADE ON DELETE CASCADE,
 				CONSTRAINT operation_transfer_o_id_fkey FOREIGN KEY (o_id)
-					REFERENCES impdol.operation_tmp (o_id) MATCH SIMPLE
+					REFERENCES impacc.operation_tmp (o_id) MATCH SIMPLE
 					ON UPDATE CASCADE ON DELETE CASCADE
 				)");
 
 
 
 			$p_cn->exec_sql("
-			COMMENT ON COLUMN impdol.operation_tmp.o_result IS 'result is T can be transferrable, N cannot be transferrable';
+			COMMENT ON COLUMN impacc.operation_tmp.o_result IS 'result is T can be transferrable, N cannot be transferrable';
 			");
 
 			$p_cn->exec_sql("
-			COMMENT ON COLUMN impdol.operation_tmp.o_type IS 'S = marchandise, serviceT = tiers (fournisseurs, client)'
+			COMMENT ON COLUMN impacc.operation_tmp.o_type IS 'S = marchandise, serviceT = tiers (fournisseurs, client)'
 			");
 			$p_cn->commit();
 		}

@@ -44,7 +44,7 @@ Extension::check_version(4802);
 
 // Javascript
  ob_start();
- require_once('impdol.js');
+ require_once('impacc.js');
 $j=ob_get_contents();
 ob_end_clean();
 echo create_script($j);
@@ -75,9 +75,9 @@ switch($sa)
     $default=0;
   }
 
-  if ($cn->exist_schema('impdol') == false)
+  if ($cn->exist_schema('impacc') == false)
   {
-    require_once('include/class_install_impdol.php');
+    require_once('include/class_install_impacc.php');
 
     $iplugn=new Install_Impdol();
     $iplugn->install($cn);

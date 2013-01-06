@@ -1,6 +1,6 @@
 <?php
 
-class sql_impdol
+class Sql_Impacc
 {
 
 	function __construct($p_cn, $p_id = -1)
@@ -178,12 +178,12 @@ class sql_impdol
 
 }
 
-class impdol_operation_sql extends sql_impdol
+class impacc_operation_sql extends sql_impacc
 {
 
 	function __construct($p_id=-1)
 	{
-		$this->table = "impdol.operation";
+		$this->table = "impacc.operation";
 		$this->primary_key = "o_id";
 
 		$this->name=array(
@@ -236,12 +236,12 @@ class impdol_operation_sql extends sql_impdol
 
 }
 
-class impdol_operation_tmp_sql extends sql_impdol
+class impacc_operation_tmp_sql extends sql_impacc
 {
 
 	function __construct($p_id=-1)
 	{
-		$this->table = "impdol.operation_tmp";
+		$this->table = "impacc.operation_tmp";
 		$this->primary_key = "o_id";
 
 		$this->name=array(
@@ -300,11 +300,11 @@ class impdol_operation_tmp_sql extends sql_impdol
 
 }
 
-class impdol_import_sql extends sql_impdol
+class impacc_import_sql extends sql_impacc
 {
 	function __construct($p_id=-1)
 	{
-		$this->table = "impdol.import";
+		$this->table = "impacc.import";
 		$this->primary_key = "i_id";
 
 		$this->name=array(
@@ -335,11 +335,11 @@ class impdol_import_sql extends sql_impdol
 }
 
 
-class impdol_operation_transfer_sql extends sql_impdol
+class impacc_operation_transfer_sql extends sql_impacc
 {
 	function __construct($p_id=-1)
 	{
-		$this->table = "impdol.operation_transfer";
+		$this->table = "impacc.operation_transfer";
 		$this->primary_key = "ot_id";
 
 		$this->name=array(

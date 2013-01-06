@@ -26,9 +26,9 @@
  * @brief
  *
  */
-require_once 'class_sql_impdol.php';
+require_once 'class_sql_impacc.php';
 
-class Impdol_Operation
+class Impacc_Operation
 {
 
 	function save_file()
@@ -41,7 +41,7 @@ class Impdol_Operation
 		$this->filename = tempnam($_ENV['TMP'], 'upload_');
 		move_uploaded_file($_FILES["csv_operation"]["tmp_name"], $this->filename);
 
-		$imp = new Impdol_Import_sql();
+		$imp = new Impacc_Import_sql();
 		$imp->setp('temp_file', $this->filename);
 		$imp->setp('send_file', $_FILES['csv_operation']['name']);
 		$imp->insert();
@@ -61,7 +61,7 @@ class Impdol_Operation
 				echo "Attention " . h($str_row) . " ne contient pas 11 colonnes";
 				continue;
 			}
-			$r = new impdol_Operation_tmp_Sql();
+			$r = new impacc_Operation_tmp_Sql();
 			$r->setp('dolibarr', $row[0]);
 			$r->setp('date', $row[1]);
 			$r->setp('type', $row[2]);
@@ -78,13 +78,13 @@ class Impdol_Operation
 			$this->row_count++;
 		}
 		echo "Nombre de lignes enregistrées : " . $this->row_count;
-		$import = new impdol_import_sql($this->impid);
+		$import = new impacc_import_sql($this->impid);
 		$import->setp("nbrow", $this->row_count);
 		$import->update();
 	}
 
 	/**
-	 * Check data contained into impdol.operation_tmp. Update the column o_result (T = ok N no ok)
+	 * Check data contained into impacc.operation_tmp. Update the column o_result (T = ok N no ok)
 	 * Put in o_message the reason of the problem
 	 */
 	function check()
@@ -93,12 +93,12 @@ class Impdol_Operation
 		try
 		{
 			$cn->start();
-			$array = $cn->get_array("select o_id from impdol.operation_tmp where i_id=$1 order by o_id", array($this->impid));
+			$array = $cn->get_array("select o_id from impacc.operation_tmp where i_id=$1 order by o_id", array($this->impid));
 			$nb_row = count($array);
 			for ($i = 0; $i < $nb_row; $i++)
 			{
 				$msg = "";
-				$operation = new impdol_operation_tmp_sql();
+				$operation = new impacc_operation_tmp_sql();
 				$operation->setp("id", $array[$i]['o_id']);
 				$operation->load();
 				$operation->setp("code", 'T');
@@ -106,7 +106,7 @@ class Impdol_Operation
 				/*
 				 * detect duplicate
 				 */
-				$db = $cn->get_value("select count(*) from impdol.operation_tmp where o_doli=$1 and o_id in (select o_id from impdol.operation_transfer)", array($dol));
+				$db = $cn->get_value("select count(*) from impacc.operation_tmp where o_doli=$1 and o_id in (select o_id from impacc.operation_transfer)", array($dol));
 				if ($db > 0)
 				{
 					$operation->setp("code", "N");
@@ -165,7 +165,7 @@ class Impdol_Operation
 
 				if ($operation->getp("type") != "T")
 				{
-					$tva_id = $cn->get_array("select tva_id from impdol.parameter_tva where pt_rate/100=$1", array($operation->getp("rate")));
+					$tva_id = $cn->get_array("select tva_id from impacc.parameter_tva where pt_rate/100=$1", array($operation->getp("rate")));
 					if (count($tva_id) > 1)
 					{
 						$operation->setp("code", 'N');
@@ -183,8 +183,8 @@ class Impdol_Operation
 				}
 				// a supplier and one service at least is needed
 				$code_op = $operation->getp("dolibarr");
-				$nb_customer = $cn->get_value("select count(*) from impdol.operation_tmp where o_type='T' and o_doli=$1 and i_id=$2", array($code_op, $this->impid));
-				$nb_good = $cn->get_value("select count(*) from impdol.operation_tmp where o_type='S' and o_doli=$1 and i_id=$2", array($code_op, $this->impid));
+				$nb_customer = $cn->get_value("select count(*) from impacc.operation_tmp where o_type='T' and o_doli=$1 and i_id=$2", array($code_op, $this->impid));
+				$nb_good = $cn->get_value("select count(*) from impacc.operation_tmp where o_type='S' and o_doli=$1 and i_id=$2", array($code_op, $this->impid));
 				if ($nb_customer == 0)
 				{
 					$operation->setp("code", 'N');
@@ -215,8 +215,8 @@ class Impdol_Operation
 			/*
 			 *  If a part is N then the whole operation is N
 			 */
-			$sql = "update impdol.operation_tmp  set o_result='N' where i_id=$1 and
-				o_doli in (select o_doli from impdol.operation_tmp  where o_result='N' and i_id=$1)";
+			$sql = "update impadd.operation_tmp  set o_result='N' where i_id=$1 and
+				o_doli in (select o_doli from impacc.operation_tmp  where o_result='N' and i_id=$1)";
 			$cn->exec_sql($sql, array($this->impid));
 			$cn->commit();
 		}
@@ -241,7 +241,7 @@ class Impdol_Operation
 			amount_total,
 			case when o_result='T' then '" . $g_succeed . "' else '" . $g_failed . "' end as result,
 			o_message
-			from impdol.operation_tmp where i_id=" . $this->impid . " order by o_id";
+			from impacc.operation_tmp where i_id=" . $this->impid . " order by o_id";
 		echo Html_Table::sql2table($cn, array(
 			array('name' => 'n° ligne',
 				'style' => 'style="text-align:right"'),
@@ -288,7 +288,7 @@ class Impdol_Operation
 		 */
 		$array = $cn->get_array("select
 					distinct o_doli
-				from impdol.operation_tmp
+				from impacc.operation_tmp
 				where i_id=$1 and o_result='T'
 				order by o_doli  asc", array($this->impid));
 		$nb_row = count($array);
@@ -301,8 +301,8 @@ class Impdol_Operation
 				/*
 				 * For each operation (same o_doli code)
 				 */
-				$adetail = $cn->get_array("select o_id from impdol.operation_tmp where o_doli=$1 and i_id=$2 and o_type='S'", array($array[$i]['o_doli'], $this->impid));
-				$atiers = $cn->get_array("select o_id from impdol.operation_tmp where o_doli=$1 and i_id=$2  and o_type='T'", array($array[$i]['o_doli'], $this->impid));
+				$adetail = $cn->get_array("select o_id from impacc.operation_tmp where o_doli=$1 and i_id=$2 and o_type='S'", array($array[$i]['o_doli'], $this->impid));
+				$atiers = $cn->get_array("select o_id from impacc.operation_tmp where o_doli=$1 and i_id=$2  and o_type='T'", array($array[$i]['o_doli'], $this->impid));
 				if (count($atiers) > 1)
 				{
 					echo "Plusieurs clients pour l' opération, code " . $array[$i]['o_doli'];
@@ -314,7 +314,7 @@ class Impdol_Operation
 					continue;
 				}
 
-				$oper_tiers = new Impdol_Operation_Tmp_Sql($atiers[0]['o_id']);
+				$oper_tiers = new Impacc_Operation_Tmp_Sql($atiers[0]['o_id']);
 				$nb_detail = count($adetail);
 				$sum = 0;
 				$grpt = $cn->get_value("select nextval('s_grpt');");
@@ -325,7 +325,7 @@ class Impdol_Operation
 				for ($e = 0; $e < $nb_detail; $e++)
 				{
 					/* Record service */
-					$oper = new Impdol_Operation_Tmp_Sql($adetail[$e]['o_id']);
+					$oper = new Impacc_Operation_Tmp_Sql($adetail[$e]['o_id']);
 					$oper->from_array($array[$i]);
 					$date = format_date($oper->getp("date"), "YYYY-MM-DD", "DD.MM.YYYY");
 					$oper->setp("date", $date);
@@ -344,7 +344,7 @@ class Impdol_Operation
 					$jrnx->desc = mb_substr($oper->getp("desc"),0,80,'UTF8');
 					$id = $jrnx->insert_jrnx();
 
-					$transfer = new impdol_operation_transfer_sql();
+					$transfer = new impacc_operation_transfer_sql();
 					$transfer->setp("j_id", $id);
 					$transfer->setp("o_id", $oper->getp("id"));
 					$transfer->insert();
@@ -470,7 +470,7 @@ class Impdol_Operation
 		from jrn
 		where jr_grpt_id in (
 		select j_grpt
-		from impdol.operation_tmp as otmp join impdol.operation_transfer as ot on (ot.o_id = otmp.o_id) join jrnx on (jrnx.j_id = ot.j_id)
+		from impacc.operation_tmp as otmp join impacc.operation_transfer as ot on (ot.o_id = otmp.o_id) join jrnx on (jrnx.j_id = ot.j_id)
 		and i_id=$1  ) order by jr_date ";
 		$arow=$cn->get_array($sql,array($this->impid));
 		echo h2("Opérations sauvées",'info');

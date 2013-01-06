@@ -1,1 +1,1 @@
-Import data from dolibarr
+Import data from CSV files

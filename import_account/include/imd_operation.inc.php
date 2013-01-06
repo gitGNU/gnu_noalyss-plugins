@@ -26,7 +26,7 @@
  * @brief upload operation
  *
  */
-require_once 'class_impdol_operation.php';
+require_once 'class_impacc_operation.php';
 
 // step 1, select a file
 if ( ! isset ($_POST['upload']) && ! isset ($_POST['check']) && ! isset($_POST['transfer']))
@@ -39,7 +39,7 @@ if ( ! isset ($_POST['upload']) && ! isset ($_POST['check']) && ! isset($_POST['
 if ( isset ($_POST['upload']))
 {
 	// save the file
-	$io=new Impdol_Operation();
+	$io=new Impacc_Operation();
 	$io->save_file();
 
 	// record the file into the table operation
