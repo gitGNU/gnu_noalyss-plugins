@@ -39,7 +39,7 @@ if (isset($_POST['ftvaadd']))
 		$tva = new Acc_Tva($cn, $tva_id);
 		if ($tva->load() == -1)
 			throw new Exception('Cette tva est invalide');
-		$sql = "insert into impdol.parameter_tva(tva_id,pt_rate) values ($1,$2)";
+		$sql = "insert into impacc.parameter_tva(tva_id,pt_rate) values ($1,$2)";
 		$cn->exec_sql($sql, array($_POST['tva_id'], $_POST['pt_rate']));
 	}
 	catch (Exception $e)
@@ -50,7 +50,7 @@ if (isset($_POST['ftvaadd']))
 if (isset($_POST['mod']))
 {
 	extract ($_POST);
-	$aparm = $cn->get_array("select pt_id from impdol.parameter_tva");
+	$aparm = $cn->get_array("select pt_id from impacc.parameter_tva");
 	try
 	{
 		for ($i = 0; $i < count($aparm); $i++)
@@ -66,7 +66,7 @@ if (isset($_POST['mod']))
 				$tva = new Acc_Tva($cn, $tva_id);
 				if ($tva->load() == -1)
 					throw new Exception('Cette tva est invalide');
-				$sql = "update impdol.parameter_tva set tva_id = $1, pt_rate = $2 where pt_id=$3";
+				$sql = "update impacc.parameter_tva set tva_id = $1, pt_rate = $2 where pt_id=$3";
 				$cn->exec_sql($sql, array($tva_id, $pt_rate,$aparm[$i]['pt_id']));
 			}
 		}
@@ -79,7 +79,7 @@ if (isset($_POST['mod']))
 /**
  * get data from database
  */
-$atva = $cn->get_array("select * from impdol.parameter_tva order by pt_rate");
+$atva = $cn->get_array("select * from impacc.parameter_tva order by pt_rate");
 require 'template/parameter_tva_add.php';
 echo '<form method="POST">';
 require 'template/parameter.php';

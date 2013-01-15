@@ -215,7 +215,7 @@ class Impacc_Operation
 			/*
 			 *  If a part is N then the whole operation is N
 			 */
-			$sql = "update impadd.operation_tmp  set o_result='N' where i_id=$1 and
+			$sql = "update impacc.operation_tmp  set o_result='N' where i_id=$1 and
 				o_doli in (select o_doli from impacc.operation_tmp  where o_result='N' and i_id=$1)";
 			$cn->exec_sql($sql, array($this->impid));
 			$cn->commit();

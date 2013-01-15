@@ -79,7 +79,7 @@ switch($sa)
   {
     require_once('include/class_install_impacc.php');
 
-    $iplugn=new Install_Impdol();
+    $iplugn=new Install_ImpAcc();
     $iplugn->install($cn);
 
   }
