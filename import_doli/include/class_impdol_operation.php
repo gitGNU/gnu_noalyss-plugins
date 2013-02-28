@@ -334,6 +334,7 @@ class Impdol_Operation
 					$amount_tva = $oper->getp("amount_vat");
 					$amount_tvac = $oper->getp("amount_total");
 					$jrnx->amount = bcsub($amount_tvac, $amount_tva);
+					$save_amount=$jrnx->amount;
 					$jrnx->poste = $oper->getp('poste');
 					$jrnx->grpt = $grpt;
 					$jrnx->type = $oth_side;
@@ -359,7 +360,7 @@ class Impdol_Operation
 						case 'ACH':
 							$sql = "insert into quant_purchase(qp_internal,j_id,qp_fiche,qp_quantite,qp_price,qp_vat,qp_vat_code,qp_supplier)
 							values($1,$2,$3,$4,$5,$6,$7,$8)";
-							$cn->exec_sql($sql, array(null, $id, $oper->getp("fiche"), $oper->getp("number_unit"), $jrnx->amount, $amount_tva, $tva_id, $oper_tiers->getp("fiche")));
+							$cn->exec_sql($sql, array(null, $id, $oper->getp("fiche"), $oper->getp("number_unit"), $save_amount, $amount_tva, $tva_id, $oper_tiers->getp("fiche")));
 							break;
 						case 'VEN':
 							$cn->exec_sql("insert into quant_sold
@@ -428,7 +429,7 @@ class Impdol_Operation
 				/* record into jrn */
 				$acc_jrn = new Acc_Operation($cn);
 				$acc_jrn->jrn = $jrn;
-				$acc_jrn->amount = $sum;
+				$acc_jrn->amount =abs ($sum);
 				$acc_jrn->desc = mb_substr($oper_tiers->getp("desc"),0,80,'UTF8');
 				$acc_jrn->date = $date;
 				$acc_jrn->grpt = $grpt;
