@@ -8,7 +8,7 @@
  */
 
 require_once ('class_database.php');
-require_once 'include/class_SKEL_parameter.php');
+require_once 'include/class_SKEL_parameter.php';
 
 global $cn,$g_SKEL_parameter;
 $cn=new Database (dossier::id());
