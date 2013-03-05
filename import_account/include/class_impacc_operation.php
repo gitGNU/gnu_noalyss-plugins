@@ -334,6 +334,7 @@ class Impacc_Operation
 					$amount_tva = $oper->getp("amount_vat");
 					$amount_tvac = $oper->getp("amount_total");
 					$jrnx->amount = bcsub($amount_tvac, $amount_tva);
+                                        $save_amount=$jrnx->amount;
 					$jrnx->poste = $oper->getp('poste');
 					$jrnx->grpt = $grpt;
 					$jrnx->type = $oth_side;
@@ -359,7 +360,7 @@ class Impacc_Operation
 						case 'ACH':
 							$sql = "insert into quant_purchase(qp_internal,j_id,qp_fiche,qp_quantite,qp_price,qp_vat,qp_vat_code,qp_supplier)
 							values($1,$2,$3,$4,$5,$6,$7,$8)";
-							$cn->exec_sql($sql, array(null, $id, $oper->getp("fiche"), $oper->getp("number_unit"), $jrnx->amount, $amount_tva, $tva_id, $oper_tiers->getp("fiche")));
+							$cn->exec_sql($sql, array(null, $id, $oper->getp("fiche"), $oper->getp("number_unit"), $save_amount, $amount_tva, $tva_id, $oper_tiers->getp("fiche")));
 							break;
 						case 'VEN':
 							$cn->exec_sql("insert into quant_sold
@@ -368,7 +369,7 @@ class Impacc_Operation
                                         ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)", array(null, /* 1 qs_internal */
 								$oper->getp("fiche"), /* 2 qs_fiche */
 								$oper->getp("number_unit"), /* 3 qs_quantite */
-								$jrnx->amount, /* 4 qs_price */
+								$save_amount, /* 4 qs_price */
 								$amount_tva, /* 5 qs_vat */
 								$tva_id, /* 6 qs_vat_code */
 								$oper_tiers->getp('fiche'), /* 7 qs_client */
@@ -394,7 +395,7 @@ class Impacc_Operation
 
 				$jtiers = new Acc_Operation($cn);
 				$jtiers->date = $date;
-				$jtiers->amount = $sum;
+				$jtiers->amount = abs($sum);
 				$jtiers->poste = $oper_tiers->getp('poste');
 				$jtiers->grpt = $grpt;
 				$jtiers->type = $tiers_side;
