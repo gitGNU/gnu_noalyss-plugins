@@ -37,13 +37,13 @@ class Am_Generate
    */
   function input($p_array)
   {
-    global $cn;
+    global $cn,$g_user;
     /*
      * select ledger
      */
 
-    $legder = new Acc_Ledger($cn,0);
-    $sel_ledger=$legder->select_ledger('ODS',2);
+    $ledger = new Acc_Ledger($cn,0);
+    $sel_ledger=$ledger->select_ledger('ODS',2);
     $sel_ledger->selected=(isset($p_array['p_jrn']))?$p_array['p_jrn']:'';
     /*
      * Operation Date
@@ -63,6 +63,33 @@ class Am_Generate
      */
     $pj=new IText('p_pj');
     $pj->size=10;
+	/*
+	 * If we use the periode
+	 */
+	if ($ledger->check_periode() == true)
+		{
+			$l_user_per = $g_user->get_periode();
+			$def = (isset($periode)) ? $periode : $l_user_per;
+			$period = new IPeriod("period");
+			$period->user = $g_user;
+			$period->cn = $cn;
+			$period->value = $def;
+			$period->type = OPEN;
+			try
+			{
+				$l_form_per = $period->input();
+			}
+			catch (Exception $e)
+			{
+				if ($e->getCode() == 1)
+				{
+					echo _("Aucune période ouverte");
+					exit();
+				}
+			}
+			$label = HtmlInput::infobulle(3);
+			$f_periode = _("Période comptable") . " $label " ;
+		}
     /*
      * show all the visible material
      */
@@ -94,8 +121,8 @@ array
     if ( isDate($p_array['p_date']) == null) $msg.="Date invalide ";
     if ( $msg != '')
       {
-	echo alert($msg);
-	return false;
+		echo alert($msg);
+		return false;
       }
 
     $array=array(
@@ -107,6 +134,9 @@ array
 		 'e_pj_suggest' => $p_array['p_pj'] ,
 
 		 );
+	if ( isset($p_array['period'])) {
+		$array['period']=$p_array['period'];
+	}
     $idx=0;
     for ($i =0;$i<count($p_array['a_id']);$i++)
       {
@@ -158,7 +188,7 @@ array
       }
 
     echo '</form>';
-    /*
+	/*
      * correct
      */
     echo '<form method="POST" style="display:inline">';

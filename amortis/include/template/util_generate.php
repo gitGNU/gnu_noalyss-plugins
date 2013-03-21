@@ -43,6 +43,16 @@
 <td>Date de l'opération</td>
 <td><?=$p_date->input()?></td>
 </tr>
+<? if ( isset ($f_periode)) : ?>
+<tr>
+	<td>
+		<?=$f_periode?>
+	</td>
+	<td>
+		 <?=$l_form_per?>
+	</td>
+</tr>
+<? endif; ?>
 <tr>
 <td>Pièce</td>
 <td><?=$pj->input()?></td>
