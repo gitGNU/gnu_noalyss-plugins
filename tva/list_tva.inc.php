@@ -25,7 +25,7 @@ require_once 'class_sort_table.php';
 echo '<div id="detail" style="display:none; width:80%;margin-left:10%">';
 echo '<image src="image/loading.gif" border="0" alt="Chargement...">';
 echo '</div>';
-/* !\file
+/**\file
  * \brief show all the declaration by date
  */
 

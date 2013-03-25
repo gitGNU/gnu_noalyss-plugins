@@ -21,7 +21,7 @@
 
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
 
-/* !\file
+/**\file
  * \brief this class manages the installation and the patch of the plugin
  */
 

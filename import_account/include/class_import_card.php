@@ -21,7 +21,7 @@
 
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
 
-/* !\file
+/**\file
  * \brief Manage import
  */
 

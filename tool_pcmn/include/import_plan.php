@@ -20,7 +20,7 @@
 
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
 
-/* !\file
+/**\file
  * \brief import Accountancy plan
  */
 echo '<div style="width:80%;margin-left:10%;border-collapse: separate;border-spacing:  5px;">';
