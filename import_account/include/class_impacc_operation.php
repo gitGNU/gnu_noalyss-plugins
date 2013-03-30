@@ -316,7 +316,7 @@ class Impacc_Operation
 
 				$oper_tiers = new Impacc_Operation_Tmp_Sql($atiers[0]['o_id']);
 				$nb_detail = count($adetail);
-				$sum = 0;
+				$sum = 0;$sum_side=0;
 				$grpt = $cn->get_value("select nextval('s_grpt');");
 				$internal = $ledger->compute_internal_code($grpt);
 
@@ -361,6 +361,7 @@ class Impacc_Operation
 							$sql = "insert into quant_purchase(qp_internal,j_id,qp_fiche,qp_quantite,qp_price,qp_vat,qp_vat_code,qp_supplier)
 							values($1,$2,$3,$4,$5,$6,$7,$8)";
 							$cn->exec_sql($sql, array(null, $id, $oper->getp("fiche"), $oper->getp("number_unit"), $save_amount, $amount_tva, $tva_id, $oper_tiers->getp("fiche")));
+							$sum_side = ($save_amount > 0) ? bcadd($sum_side, $amount_tvac):$sum_side;
 							break;
 						case 'VEN':
 							$cn->exec_sql("insert into quant_sold
@@ -378,6 +379,7 @@ class Impacc_Operation
 								'Y' /* 10 qs_valid */
 							));
 
+							$sum_side = ($save_amount > 0) ? bcadd($sum_side, $amount_tvac):$sum_side;
 							break;
 					}
 					/* save VAT into an array */
@@ -429,7 +431,7 @@ class Impacc_Operation
 				/* record into jrn */
 				$acc_jrn = new Acc_Operation($cn);
 				$acc_jrn->jrn = $jrn;
-				$acc_jrn->amount = $sum;
+				$acc_jrn->amount = abs($sum_side);
 				$acc_jrn->desc = mb_substr($oper_tiers->getp("desc"),0,80,'UTF8');
 				$acc_jrn->date = $date;
 				$acc_jrn->grpt = $grpt;
