@@ -316,7 +316,7 @@ class Impdol_Operation
 
 				$oper_tiers = new Impdol_Operation_Tmp_Sql($atiers[0]['o_id']);
 				$nb_detail = count($adetail);
-				$sum = 0;
+				$sum = 0; $sum_side=0;
 				$grpt = $cn->get_value("select nextval('s_grpt');");
 				$internal = $ledger->compute_internal_code($grpt);
 
@@ -361,6 +361,7 @@ class Impdol_Operation
 							$sql = "insert into quant_purchase(qp_internal,j_id,qp_fiche,qp_quantite,qp_price,qp_vat,qp_vat_code,qp_supplier)
 							values($1,$2,$3,$4,$5,$6,$7,$8)";
 							$cn->exec_sql($sql, array(null, $id, $oper->getp("fiche"), $oper->getp("number_unit"), $save_amount, $amount_tva, $tva_id, $oper_tiers->getp("fiche")));
+							$sum_side = ($save_amount > 0) ? bcadd($sum_side, $amount_tvac):$sum_side;
 							break;
 						case 'VEN':
 							$cn->exec_sql("insert into quant_sold
@@ -369,7 +370,7 @@ class Impdol_Operation
                                         ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)", array(null, /* 1 qs_internal */
 								$oper->getp("fiche"), /* 2 qs_fiche */
 								$oper->getp("number_unit"), /* 3 qs_quantite */
-								$jrnx->amount, /* 4 qs_price */
+								$save_amount, /* 4 qs_price */
 								$amount_tva, /* 5 qs_vat */
 								$tva_id, /* 6 qs_vat_code */
 								$oper_tiers->getp('fiche'), /* 7 qs_client */
@@ -378,6 +379,7 @@ class Impdol_Operation
 								'Y' /* 10 qs_valid */
 							));
 
+							$sum_side = ($save_amount > 0) ? bcadd($sum_side, $amount_tvac):$sum_side;
 							break;
 					}
 					/* save VAT into an array */
@@ -390,6 +392,7 @@ class Impdol_Operation
 						$tva[$tva_id] = $amount_tva;
 					}
 					$sum = bcadd($sum, $amount_tvac);
+
 				}  // loop e
 				// Record the tiers
 
@@ -429,7 +432,7 @@ class Impdol_Operation
 				/* record into jrn */
 				$acc_jrn = new Acc_Operation($cn);
 				$acc_jrn->jrn = $jrn;
-				$acc_jrn->amount =abs ($sum);
+				$acc_jrn->amount =abs ($sum_side);
 				$acc_jrn->desc = mb_substr($oper_tiers->getp("desc"),0,80,'UTF8');
 				$acc_jrn->date = $date;
 				$acc_jrn->grpt = $grpt;
