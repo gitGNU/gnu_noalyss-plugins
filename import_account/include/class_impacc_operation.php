@@ -383,13 +383,14 @@ class Impacc_Operation
 							break;
 					}
 					/* save VAT into an array */
-					if (isset($tva[$tva_id]))
+					$side=($amount_tva > 0)?1:0
+					if (isset($tva[$tva_id][$side]))
 					{
-						$tva[$tva_id] = bcadd($tva[$tva_id], $amount_tva);
+						$tva[$tva_id][$side] = bcadd($tva[$tva_id][$side], $amount_tva);
 					}
 					else
 					{
-						$tva[$tva_id] = $amount_tva;
+						$tva[$tva_id][$side] = $amount_tva;
 					}
 					$sum = bcadd($sum, $amount_tvac);
 				}  // loop e
@@ -409,23 +410,26 @@ class Impacc_Operation
 				$jtiers->insert_jrnx();
 
 				/* Record the vat 1 */
-				foreach ($tva as $key => $value)
+				foreach ($tva as $key => $atva)
 				{
-					$tva = new Acc_TVA($cn, $key);
-					$tva->load();
-					$poste = $tva->get_side($oth_side);
-					$op_tva = new Acc_Operation($cn);
-					$op_tva->date = $date;
-					$op_tva->amount = $value;
-					$op_tva->poste = $poste;
-					$op_tva->grpt = $grpt;
-					$op_tva->type = $oth_side;
-					$op_tva->jrn = $jrn;
-					$op_tva->user = $_SESSION['g_user'];
-					$op_tva->periode = 0;
-					$op_tva->qcode = null;
-					$op_tva->desc = $tva->tva_label;
-					$op_tva->insert_jrnx();
+					foreach ($atva as $tvaid=>$tva_value )
+					{
+						$tva = new Acc_TVA($cn, $key);
+						$tva->load();
+						$poste = $tva->get_side($oth_side);
+						$op_tva = new Acc_Operation($cn);
+						$op_tva->date = $date;
+						$op_tva->amount = $tva_value;
+						$op_tva->poste = $poste;
+						$op_tva->grpt = $grpt;
+						$op_tva->type = $oth_side;
+						$op_tva->jrn = $jrn;
+						$op_tva->user = $_SESSION['g_user'];
+						$op_tva->periode = 0;
+						$op_tva->qcode = null;
+						$op_tva->desc = $tva->tva_label;
+						$op_tva->insert_jrnx();
+					}
 				}
 
 				/* record into jrn */
