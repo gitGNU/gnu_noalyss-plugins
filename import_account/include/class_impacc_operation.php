@@ -383,7 +383,7 @@ class Impacc_Operation
 							break;
 					}
 					/* save VAT into an array */
-					$side=($amount_tva > 0)?1:0
+					$side=($amount_tva > 0)?1:0;
 					if (isset($tva[$tva_id][$side]))
 					{
 						$tva[$tva_id][$side] = bcadd($tva[$tva_id][$side], $amount_tva);
