@@ -316,7 +316,7 @@ class Impdol_Operation
 
 				$oper_tiers = new Impdol_Operation_Tmp_Sql($atiers[0]['o_id']);
 				$nb_detail = count($adetail);
-				$sum = 0;
+				$sum = 0; $sum_side=0;
 				$grpt = $cn->get_value("select nextval('s_grpt');");
 				$internal = $ledger->compute_internal_code($grpt);
 
@@ -361,6 +361,7 @@ class Impdol_Operation
 							$sql = "insert into quant_purchase(qp_internal,j_id,qp_fiche,qp_quantite,qp_price,qp_vat,qp_vat_code,qp_supplier)
 							values($1,$2,$3,$4,$5,$6,$7,$8)";
 							$cn->exec_sql($sql, array(null, $id, $oper->getp("fiche"), $oper->getp("number_unit"), $save_amount, $amount_tva, $tva_id, $oper_tiers->getp("fiche")));
+							$sum_side = ($save_amount > 0) ? bcadd($sum_side, $amount_tvac):$sum_side;
 							break;
 						case 'VEN':
 							$cn->exec_sql("insert into quant_sold
@@ -369,7 +370,7 @@ class Impdol_Operation
                                         ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)", array(null, /* 1 qs_internal */
 								$oper->getp("fiche"), /* 2 qs_fiche */
 								$oper->getp("number_unit"), /* 3 qs_quantite */
-								$jrnx->amount, /* 4 qs_price */
+								$save_amount, /* 4 qs_price */
 								$amount_tva, /* 5 qs_vat */
 								$tva_id, /* 6 qs_vat_code */
 								$oper_tiers->getp('fiche'), /* 7 qs_client */
@@ -378,18 +379,21 @@ class Impdol_Operation
 								'Y' /* 10 qs_valid */
 							));
 
+							$sum_side = ($save_amount > 0) ? bcadd($sum_side, $amount_tvac):$sum_side;
 							break;
 					}
 					/* save VAT into an array */
-					if (isset($tva[$tva_id]))
+					$side=($amount_tva > 0)?1:0;
+					if (isset($tva[$tva_id][$side]))
 					{
-						$tva[$tva_id] = bcadd($tva[$tva_id], $amount_tva);
+						$tva[$tva_id][$side] = bcadd($tva[$tva_id][$side], $amount_tva);
 					}
 					else
 					{
-						$tva[$tva_id] = $amount_tva;
+						$tva[$tva_id][$side] = $amount_tva;
 					}
 					$sum = bcadd($sum, $amount_tvac);
+
 				}  // loop e
 				// Record the tiers
 
@@ -405,31 +409,32 @@ class Impdol_Operation
 				$jtiers->qcode = $oper_tiers->getp("qcode");
 				$jtiers->desc = mb_substr($oper_tiers->getp("desc"),0,80,'UTF8');
 				$jtiers->insert_jrnx();
-
 				/* Record the vat 1 */
-				foreach ($tva as $key => $value)
+				foreach ($tva as $key => $atva)
 				{
-					$tva = new Acc_TVA($cn, $key);
-					$tva->load();
-					$poste = $tva->get_side($oth_side);
-					$op_tva = new Acc_Operation($cn);
-					$op_tva->date = $date;
-					$op_tva->amount = $value;
-					$op_tva->poste = $poste;
-					$op_tva->grpt = $grpt;
-					$op_tva->type = $oth_side;
-					$op_tva->jrn = $jrn;
-					$op_tva->user = $_SESSION['g_user'];
-					$op_tva->periode = 0;
-					$op_tva->qcode = null;
-					$op_tva->desc = $tva->tva_label;
-					$op_tva->insert_jrnx();
+					foreach ($atva as $tvaid=>$tva_value)
+					{
+						$tva = new Acc_TVA($cn, $key);
+						if ( $tva->load() == -1 ) die ("Code TVA inconnu $tvaid");
+						$poste = $tva->get_side($oth_side);
+						$op_tva = new Acc_Operation($cn);
+						$op_tva->date = $date;
+						$op_tva->amount = $tva_value;
+						$op_tva->poste = $poste;
+						$op_tva->grpt = $grpt;
+						$op_tva->type = $oth_side;
+						$op_tva->jrn = $jrn;
+						$op_tva->user = $_SESSION['g_user'];
+						$op_tva->periode = 0;
+						$op_tva->qcode = null;
+						$op_tva->desc = $tva->tva_label;
+						$op_tva->insert_jrnx();
+					}
 				}
-
 				/* record into jrn */
 				$acc_jrn = new Acc_Operation($cn);
 				$acc_jrn->jrn = $jrn;
-				$acc_jrn->amount =abs ($sum);
+				$acc_jrn->amount =abs ($sum_side);
 				$acc_jrn->desc = mb_substr($oper_tiers->getp("desc"),0,80,'UTF8');
 				$acc_jrn->date = $date;
 				$acc_jrn->grpt = $grpt;

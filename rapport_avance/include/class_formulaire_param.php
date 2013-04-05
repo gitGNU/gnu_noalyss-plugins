@@ -107,7 +107,6 @@ class Formulaire_Param extends Formulaire_Param_Sql
 			// first line is the title and description
 			$form = new formulaire_sql();
 			$first = fgetcsv($in, 0, ";");
-			var_dump($first);
 			$form->f_title = $first[0];
 			if (isset($first[1]))
 				$form->f_description = $first[1];
