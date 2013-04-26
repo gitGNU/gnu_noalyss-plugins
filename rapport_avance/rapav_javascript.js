@@ -6,6 +6,10 @@ content[203]="Utiliser le % pour indiquer les postes comptables qui en dépenden
 
 /**
  *@brief show the definition of a form and let it modify it
+ *@param plugin_code code of plugin
+ *@param ac code AD
+ *@param dossier gDossier
+ *@param f_id pk of form_def
  */
 function rapav_form_def(plugin_code,ac,dossier,f_id)
 {
@@ -378,6 +382,10 @@ function rapav_form_export(plugin_code,ac,dossier,d_id)
 }
 /**
  * @brief Remove a template
+ * @param plugin_code code of plugin
+ * @param ac code AD
+ * @param dossier gDossier
+ * @param f_id pk of form_def
  *
  * @note sprintf("rapav_remove_doc_template('%s','%s','%s','%s')",
 						$_REQUEST['plugin_code'],
