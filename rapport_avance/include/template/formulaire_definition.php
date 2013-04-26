@@ -114,3 +114,25 @@ $type_periode=$cn->make_array("select t_id,t_description from rapport_advanced.p
 <?=HtmlInput::button_anchor("Ajout d'une ligne","javascript:void(0)","add_def",
 		sprintf('onclick="add_row_definition(\'%s\',\'%s\',\'%s\')"',$_REQUEST['plugin_code'],$_REQUEST['ac'],$_REQUEST['gDossier']))?>
 </p>
+<p>
+	<?php
+	$file=new IFile('rapav_template');
+	?>
+	Modèle :
+	<?php
+	if ( $this->f_filename == "")
+		echo $file->input();
+	else {
+		$remove_doc=  HtmlInput::anchor("Efface", "",
+				sprintf("onclick=\"rapav_remove_doc_template('%s','%s','%s','%s')\"",
+						$_REQUEST['plugin_code'],
+						$_REQUEST['ac'],
+						$_REQUEST['gDossier'],
+						$this->f_id
+				));
+		echo '<span id="rapav_template"> '.$this->f_filename.'</span>';
+		echo '<span id="rapav_template_ctl"> '.$remove_doc.'</span>';
+		echo '<span id="rapav_new_file" style="display:none"> '.$file->input().'</span>';
+	}
+		?>
+</p>

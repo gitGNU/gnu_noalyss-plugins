@@ -376,3 +376,40 @@ function rapav_form_export(plugin_code,ac,dossier,d_id)
 		alert(e.message);
 	}
 }
+/**
+ * @brief Remove a template
+ *
+ * @note sprintf("rapav_remove_doc_template('%s','%s','%s','%s')",
+						$_REQUEST['plugin_code'],
+						$_REQUEST['ac'],
+						$_REQUEST['gDossier'],
+						$this->f_id
+*/
+function rapav_remove_doc_template(plugin_code,ac,dossier,f_id)
+{
+	if ( ! confirm ("Confirmez-vous l'effacement de ce modèle ?"))
+		{
+			return;
+		}
+	try {
+		var querystring='plugin_code='+plugin_code+'&ac='+ac+'&gDossier='+dossier+'&act=rapav_remove_doc_template'+"&f_id="+f_id;
+		var action=new Ajax.Request(
+			"ajax.php",
+			{
+				method:'get',
+				parameters:querystring,
+				onFailure:error_get_predef,
+				onSuccess:function() {
+					$('rapav_template').style.textDecoration='line-through';
+					$('rapav_template').style.color='red';
+					$('rapav_template_ctl').innerHTML='';
+					$('rapav_new_file').style.display='block';
+				}
+			}
+			);
+
+	}catch (e)
+	{
+		alert(e.message);
+	}
+}

@@ -14,7 +14,7 @@ switch ($act)
 		echo '<h1>Définition </h1>';
 		$form = new RAPAV_formulaire($_REQUEST['f_id']);
 		$form->load_definition();
-		echo '<form method="POST" class="print">';
+		echo '<form method="POST" enctype="multipart/form-data" class="print">';
 		$form->input_formulaire();
 		$form->input_definition();
 		echo '<p>';
@@ -128,7 +128,14 @@ switch ($act)
 	case 'rapav_declaration_delete':
 		$cn->exec_sql("delete from rapport_advanced.declaration where d_id=$1", array($_GET['d_id']));
 		break;
-	default:
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Remove a template
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	case 'rapav_remove_doc_template':
+		require_once 'include/class_rapav_formulaire.php';
+		$rapav=new Rapav_Formulaire($_GET['f_id']);
+		$rapav->remove_doc_template();
+		defaut:
 		break;
 }
 ?>

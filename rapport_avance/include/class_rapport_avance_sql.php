@@ -81,13 +81,21 @@ class formulaire_sql extends phpcompta_sql
 		$this->name = array(
 			"f_id" => "f_id",
 			"f_title" => "f_title",
-			"f_description" => "f_description"
+			"f_description" => "f_description",
+			"f_lob"=>"f_lob",
+			"f_mimetype"=>"f_mimetype",
+			"f_filename"=>"f_filename",
+			"f_size"=>"f_size"
 		);
 
 		$this->type = array(
 			"f_id" => "numeric",
 			"f_title" => "text",
-			"f_description" => "text"
+			"f_description" => "text",
+			"f_lob"=>"oid",
+			"f_mimetype"=>"text",
+			"f_filename"=>"text",
+			"f_size"=>"numeric"
 		);
 
 		$this->default = array(

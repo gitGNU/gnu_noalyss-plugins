@@ -43,7 +43,8 @@ class RAPAV_Formulaire extends Formulaire_Sql
 	 *  show a list of all existing declaration
 	 * @global type $cn database connection
 	 */
-	static function listing()
+	static
+			function listing()
 	{
 		global $cn;
 		$alist = $cn->get_array("select f_id,f_title,f_description from rapport_advanced.formulaire order by 2");
@@ -56,7 +57,7 @@ class RAPAV_Formulaire extends Formulaire_Sql
 	function load_definition()
 	{
 		$f = new Formulaire_Param_Sql();
-		$ret = $f->seek(" where f_id=".sql_string($this->f_id) ." order by p_order ");
+		$ret = $f->seek(" where f_id=" . sql_string($this->f_id) . " order by p_order ");
 		$max = Database::num_row($ret);
 
 		for ($i = 0; $i < $max; $i++)
@@ -100,16 +101,8 @@ class RAPAV_Formulaire extends Formulaire_Sql
 	 */
 	static function save_definition($p_array)
 	{
-		if ($p_array['f_id'] == -1)
-		{
-			self::insert_definition($p_array);
-			return;
-		}
-		else
-		{
-			self::update_definition($p_array);
-			return;
-		}
+		self::update_definition($p_array);
+		return;
 	}
 
 	/**
@@ -131,7 +124,7 @@ class RAPAV_Formulaire extends Formulaire_Sql
 			$form_param->p_code = $p_array['p_code'][$i];
 			$form_param->p_libelle = $p_array['p_libelle'][$i];
 			$form_param->p_type = $p_array['p_type'][$i];
-			$form_param->p_order = (isNumber($p_array['p_order'][$i])==0)?$i*10:$p_array['p_order'][$i];
+			$form_param->p_order = (isNumber($p_array['p_order'][$i]) == 0) ? $i * 10 : $p_array['p_order'][$i];
 			$form_param->t_id = $p_array['t_id'][$i];
 			$form_param->f_id = $p_array['f_id'];
 			// update or insert the row
@@ -140,6 +133,46 @@ class RAPAV_Formulaire extends Formulaire_Sql
 			else
 				$form_param->update();
 		}
+		self::load_file($rapav);
+	}
+
+	static function load_file(RAPAV_Formulaire $p_rapav)
+	{
+		global $cn;
+		var_dump($p_rapav);
+		var_dump($_FILES);
+		// nothing to save
+		if (sizeof($_FILES) == 0)
+			return;
+
+		// Start Transaction
+		$cn->start();
+		$name = $_FILES['rapav_template']['name'];
+		$new_name = tempnam($_ENV['TMP'], 'rapav_template');
+		// check if a file is submitted
+		if (strlen($_FILES['rapav_template']['tmp_name']) != 0)
+		{
+			// upload the file and move it to temp directory
+			if (move_uploaded_file($_FILES['rapav_template']['tmp_name'], $new_name))
+			{
+				$oid = $cn->lo_import($new_name);
+				// check if the lob is in the database
+				if ($oid == false)
+				{
+					$cn->rollback();
+					return 1;
+				}
+			}
+			// the upload in the database is successfull
+			$p_rapav->f_lob = $oid;
+			$p_rapav->f_filename = $_FILES['rapav_template']['name'];
+			$p_rapav->f_mimetype = $_FILES['rapav_template']['type'];
+			$p_rapav->f_size= $_FILES['rapav_template']['size'];
+
+			// update rapav
+			$p_rapav->update();
+		}
+		$cn->commit();
 	}
 
 	function echo_formulaire()
@@ -158,8 +191,19 @@ class RAPAV_Formulaire extends Formulaire_Sql
 			$obj->input();
 		}
 	}
-
-
+	/**
+	 * @brief remove a doc template
+	 */
+	function remove_doc_template()
+	{
+		global $cn;
+		$cn->lo_unlink($this->f_lob);
+		$this->f_filename=null;
+		$this->f_size=null;
+		$this->f_mimetype=null;
+		$this->f_lob=null;
+		$this->update();
+	}
 }
 
 ?>
