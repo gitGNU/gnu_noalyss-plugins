@@ -131,8 +131,11 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 
 		list($file_to_parse,$dirname,$type)=$this->get_file_to_parse();
 
-		 // parse the document - return the doc number ?
+		 // parse the document
         $this->parse_document($dirname,$file_to_parse,$type);
+
+		// Add special tag
+        $this->special_tag($dirname,$file_to_parse,$type);
 
 		// if the doc is a OOo, we need to re-zip it
         if ($type=='OOo' )
@@ -201,6 +204,79 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 					$buffer=str_replace($searched, $replaced, $buffer);
 				}
 				$buffer=str_replace($value['code'],$value['dr_amount'],$buffer);
+			}
+			// write to output
+			fwrite($ofile,$buffer);
+		}
+
+		// copy the output to input
+		fclose($ifile);
+		fclose($ofile);
+
+		if ( ($ret=copy ($oname,$p_dir.'/'.$p_filename)) == FALSE )
+		{
+			echo _('Ne peut pas sauver '.$oname.' vers '.$p_dir.'/'.$p_filename.' code d\'erreur ='.$ret);
+		}
+		/**
+		 * @todo clean files
+		 */
+		// unlink ($oname);
+
+	}
+	function special_tag($p_dir,$p_filename,$p_type)
+	{
+		global $cn,$g_parameter;
+		// Retrieve all the code + libelle
+		$array[]=array('code'=>'PERIODE_DECLARATION','value'=>  format_date($this->d_end)." - ".format_date($this->d_start));
+		$array[]=array('code'=>'TITRE','value'=>$this->d_title);
+		$array[]=array('code'=>'DOSSIER','value'=>$cn->format_name($_REQUEST['gDossier'],'dos'));
+		$array[]=array('code'=>'NAME','value'=>$g_parameter->MY_NAME);
+		$array[]=array('code'=>'STREET','value'=>$g_parameter->MY_STREET);
+		$array[]=array('code'=>'NUMBER','value'=>$g_parameter->MY_NUMBER);
+		$array[]=array('code'=>'LOCALITE','value'=>$g_parameter->MY_COMMUNE);
+		$array[]=array('code'=>'COUNTRY','value'=>$g_parameter->MY_PAYS);
+		$array[]=array('code'=>'PHONE','value'=>$g_parameter->MY_TEL);
+		$array[]=array('code'=>'CEDEX','value'=>$g_parameter->MY_CP);
+		$array[]=array('code'=>'FAX','value'=>$g_parameter->MY_FAX);
+
+		// open the files
+		$ifile=fopen($p_dir.'/'.$p_filename,'r');
+
+		// check if tmpdir exist otherwise create it
+		$temp_dir=$_SERVER["DOCUMENT_ROOT"].DIRECTORY_SEPARATOR.'tmp';
+		if ( is_dir($temp_dir) == false )
+		{
+			if ( mkdir($temp_dir) == false )
+				{
+					echo "Ne peut pas créer le répertoire ".$temp_dir;
+					exit();
+				}
+		}
+		// Compute output_name
+		$oname=tempnam($temp_dir,"rapport_avance_");
+		$ofile=fopen($oname,"w+");
+
+		// read ifile
+		while (! feof ($ifile))
+		{
+			$buffer=fgets($ifile);
+			// for each code replace in p_filename the code surrounded by << >> by the amount (value) or &lt; or &gt;
+			foreach ($array as $key=>$value)
+			{
+				if ( $p_type=='OOo')
+				{
+					$replace='&lt;&lt;'.$value['code'].'&gt;&gt;';
+					$fmt_value=$value['value'];
+					$fmt_value=str_replace('<','&lt;',$fmt_value);
+					$fmt_value=str_replace('>','&gt;',$fmt_value);
+					$fmt_value=str_replace('&','&amp;',$fmt_value);
+					$fmt_value=str_replace('"','&quot;',$fmt_value);
+					$fmt_value=str_replace("'",'&apos;',$fmt_value);
+				} else {
+					$replace='<<'.$value['code'].'>>';
+					$fmt_value=  $value['value'];
+				}
+				$buffer=str_replace($replace,$fmt_value,$buffer);
 			}
 			// write to output
 			fwrite($ofile,$buffer);
