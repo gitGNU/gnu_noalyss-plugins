@@ -194,6 +194,12 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 			// for each code replace in p_filename the code surrounded by << >> by the amount (value) or &lt; or &gt;
 			foreach ($array as $key=>$value)
 			{
+				 if ( is_numeric($value['dr_amount']) )
+				{
+					$searched='office:value-type="string"><text:p>'.$value['code'];
+					$replaced='office:value-type="float" office:value="'.$value['dr_amount'].'"><text:p>'.$value['code'];
+					$buffer=str_replace($searched, $replaced, $buffer);
+				}
 				$buffer=str_replace($value['code'],$value['dr_amount'],$buffer);
 			}
 			// write to output
