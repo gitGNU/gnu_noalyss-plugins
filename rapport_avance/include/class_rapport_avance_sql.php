@@ -171,6 +171,10 @@ class RAPAV_Declaration_SQL extends phpcompta_sql
 			"d_end"=>"d_end",
 			"to_keep"=>"to_keep",
 			"d_generated"=>"d_generated",
+			"d_lob"=>"d_lob",
+			"d_filename"=>"d_filename",
+			"d_mimetype"=>"d_mimetype",
+			"d_size"=>"d_size",
 			"f_id"=>"f_id"
 		);
 
@@ -181,7 +185,12 @@ class RAPAV_Declaration_SQL extends phpcompta_sql
 			"d_end"=>"date",
 			"to_keep"=>"text",
 			"d_generated"=>"date",
-			"f_id"=>"numeric"
+			"f_id"=>"numeric",
+			"d_lob"=>"oid",
+			"d_filename"=>"text",
+			"d_mimetype"=>"text",
+			"d_size"=>"numeric",
+
 		);
 
 		$this->default = array(

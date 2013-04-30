@@ -42,6 +42,11 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 		$this->form = new RAPAV_Formulaire();
 		parent::__construct();
 	}
+	/**
+	 * @brief export a declaration to CSV
+	 * @global $cn database conx
+	 * @param $p_id pk of rapav_declaration
+	 */
 	static function to_csv($p_id)
 	{
 		global $cn;
@@ -74,6 +79,159 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 					);
 		}
 	}
+	function get_file_to_parse()
+	{
+		global $cn;
+		// create a temp directory in /tmp to unpack file and to parse it
+        $dirname=tempnam($_ENV['TMP'],'rapav_');
+
+
+        unlink($dirname);
+        mkdir ($dirname);
+        chdir($dirname);
+        // Retrieve the lob and save it into $dirname
+        $cn->start();
+
+
+        $filename=$this->d_filename;
+        $exp=$cn->lo_export($this->d_lob,$dirname.DIRECTORY_SEPARATOR.$filename);
+
+		if ( $exp === false ) echo_warning( __FILE__.":".__LINE__."Export NOK $filename");
+
+        $type="n";
+        // if the doc is a OOo, we need to unzip it first
+        // and the name of the file to change is always content.xml
+        if ( strpos($this->d_mimetype,'vnd.oasis') != 0 )
+        {
+            ob_start();
+			$zip = new Zip_Extended;
+			if ($zip->open($filename) === TRUE) {
+				$zip->extractTo($dirname.DIRECTORY_SEPARATOR);
+				$zip->close();
+			} else {
+				echo __FILE__.":".__LINE__."cannot unzip model ".$filename;
+			}
+
+            // Remove the file we do  not need anymore
+            unlink($filename);
+            ob_end_clean();
+            $file_to_parse="content.xml";
+            $type="OOo";
+        }
+        else
+            $file_to_parse=$filename;
+
+		$cn->commit();
+		return array($file_to_parse,$dirname,$type);
+	}
+	function generate_document()
+	{
+		global $cn;
+		if ( $this->d_filename == "") return;
+
+		list($file_to_parse,$dirname,$type)=$this->get_file_to_parse();
+
+		 // parse the document - return the doc number ?
+        $this->parse_document($dirname,$file_to_parse,$type);
+
+		// if the doc is a OOo, we need to re-zip it
+        if ($type=='OOo' )
+        {
+            ob_start();
+			 $zip = new Zip_Extended;
+            $res = $zip->open($this->d_filename, ZipArchive::CREATE);
+            if($res !== TRUE)
+			{
+				echo __FILE__.":".__LINE__."cannot recreate zip";
+				exit;
+			}
+			$zip->add_recurse_folder($dirname.DIRECTORY_SEPARATOR);
+			$zip->close();
+
+            ob_end_clean();
+
+            $file_to_save=$this->d_filename;
+        }
+		else
+		{
+			$file_to_save=$file_to_parse;
+		}
+
+        $this->load_document($dirname.DIRECTORY_SEPARATOR.$file_to_save);
+	}
+	function parse_document($p_dir,$p_filename,$p_type)
+	{
+		global $cn;
+		// Retrieve all the code + amount
+		if ($p_type == "OOo")	{
+			$array=$cn->get_array("select '&lt;&lt;'||dr_code||'&gt;&gt;' as code,dr_amount from rapport_advanced.declaration_row where d_id=$1 and dr_type=3",array($this->d_id));
+		}
+		else {
+			$array=$cn->get_array("select '<<'||dr_code||'>>' as code,dr_amount from rapport_advanced.declaration_row where d_id=$1 and dr_type=3",array($this->d_id));
+		}
+
+		// open the files
+		$ifile=fopen($p_dir.'/'.$p_filename,'r');
+
+		// check if tmpdir exist otherwise create it
+		$temp_dir=$_SERVER["DOCUMENT_ROOT"].DIRECTORY_SEPARATOR.'tmp';
+		if ( is_dir($temp_dir) == false )
+		{
+			if ( mkdir($temp_dir) == false )
+				{
+					echo "Ne peut pas créer le répertoire ".$temp_dir;
+					exit();
+				}
+		}
+		// Compute output_name
+		$oname=tempnam($temp_dir,"rapport_avance_");
+		$ofile=fopen($oname,"w+");
+
+		// read ifile
+		while (! feof ($ifile))
+		{
+			$buffer=fgets($ifile);
+			// for each code replace in p_filename the code surrounded by << >> by the amount (value) or &lt; or &gt;
+			foreach ($array as $key=>$value)
+			{
+				$buffer=str_replace($value['code'],$value['dr_amount'],$buffer);
+			}
+			// write to output
+			fwrite($ofile,$buffer);
+		}
+
+		// copy the output to input
+		fclose($ifile);
+		fclose($ofile);
+
+		if ( ($ret=copy ($oname,$p_dir.'/'.$p_filename)) == FALSE )
+		{
+			echo _('Ne peut pas sauver '.$oname.' vers '.$p_dir.'/'.$p_filename.' code d\'erreur ='.$ret);
+		}
+		/**
+		 * @todo clean files
+		 */
+		// unlink ($oname);
+
+	}
+	function load_document($p_file)
+	{
+		global $cn;
+		$cn->start();
+		$this->d_lob=$cn->lo_import($p_file);
+		if ( $this->d_lob == false )
+			{
+				echo "ne peut pas importer [$p_file]";
+				return 1;
+			}
+		$this->d_size=  filesize($p_file);
+		$date=date('ymd-Hi');
+		$this->d_filename=$date.'-'.$this->d_filename;
+		$this->update();
+		$cn->commit();
+
+
+	}
 	function compute($p_id, $p_start, $p_end)
 	{
 		global $cn;
@@ -88,6 +246,10 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 		$this->d_start = $p_start;
 		$this->d_end = $p_end;
 		$this->to_keep = 'N';
+		$this->d_lob=$this->form->f_lob;
+		$this->d_filename=$this->form->f_filename;
+		$this->d_mimetype=$this->form->f_mimetype;
+		$this->d_size=$this->form->f_size;
 		$this->insert();
 		/*
 		 * First we compute the formula and tva_code for each detail
@@ -128,7 +290,12 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 
 		$cn->commit();
 	}
-
+	function anchor_document()
+	{
+		$url=HtmlInput::request_to_string(array('gDossier','ac','plugin_code'));
+		$url='extension.raw.php'.$url.'&amp;act=export_decla_document&amp;id='.$this->d_id;
+		return HtmlInput::anchor($this->d_filename,$url);
+	}
 	function display()
 	{
 		global $cn;

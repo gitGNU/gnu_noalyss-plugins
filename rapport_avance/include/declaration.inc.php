@@ -39,12 +39,14 @@ if (isset($_POST['save']))
 	$decl->to_keep = 'Y';
 	$decl->f_id = $_POST['p_form'];
 	$decl->save();
+	$decl->generate_document();
 	$decl->display();
-	echo '<h2 class="notice"> Sauvé</h2>';
+	echo '<h2 class="notice">'._(' Sauvé ').date('d-m-Y H:i').'</h2>';
 
-	$ref = HtmlInput::array_to_string(array('gDossier', 'plugin_code', 'd_id'), $_REQUEST, 'extension.raw.php?');
-	$ref.="&amp;act=export_decla_csv";
-	echo HtmlInput::button_anchor("Export CSV", $ref, 'export_id');
+	$ref_csv = HtmlInput::array_to_string(array('gDossier', 'plugin_code', 'd_id'), $_REQUEST, 'extension.raw.php?');
+	$ref_csv.="&amp;act=export_decla_csv";
+	echo HtmlInput::button_anchor("Export CSV", $ref_csv, 'export_id');
+	if ( $decl->d_filename != '' ) echo $decl->anchor_document();
 	exit();
 }
 /*

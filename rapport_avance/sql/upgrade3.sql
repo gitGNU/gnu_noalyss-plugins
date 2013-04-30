@@ -18,3 +18,15 @@ insert into rapport_advanced.formulaire_param(p_code,p_libelle,p_type,p_order,f_
 
 alter table rapport_advanced.formulaire_param drop p_info;
 ALTER TABLE rapport_advanced.declaration_row DROP COLUMN dr_info ;
+
+ALTER TABLE rapport_advanced.declaration ADD COLUMN d_lob oid;
+COMMENT ON COLUMN rapport_advanced.declaration.d_lob IS 'OID for file';
+
+ALTER TABLE rapport_advanced.declaration ADD COLUMN d_filename text;
+COMMENT ON COLUMN rapport_advanced.declaration.d_filename IS 'filename';
+
+ALTER TABLE rapport_advanced.declaration ADD COLUMN d_mimetype text;
+COMMENT ON COLUMN rapport_advanced.declaration.d_mimetype IS 'Mimetype of the file';
+
+ALTER TABLE rapport_advanced.declaration ADD COLUMN d_size bigint;
+COMMENT ON COLUMN rapport_advanced.declaration.d_size IS 'Size of the file';
