@@ -45,7 +45,7 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 	static function to_csv($p_id)
 	{
 		global $cn;
-		$a_row=$cn->get_array('select dr_code,dr_libelle,dr_amount,dr_info from rapport_advanced.declaration_row
+		$a_row=$cn->get_array('select dr_code,dr_libelle,dr_amount from rapport_advanced.declaration_row
 			where d_id=$1 order by dr_order',array($p_id));
 
 		$a_title=$cn->get_array("select d_title
@@ -67,11 +67,11 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 
 		for ($i = 0; $i < count($a_row); $i++)
 		{
-			printf ('"%s";"%s";%s;"%s"'."\r\n",
+			printf ('"%s";"%s";%s'."\r\n",
 					$a_row[$i]['dr_code'],
 					$a_row[$i]['dr_libelle'],
-					nb($a_row[$i]['dr_amount']),
-					$a_row[$i]['dr_info']);
+					nb($a_row[$i]['dr_amount'])
+					);
 		}
 	}
 	function compute($p_id, $p_start, $p_end)
@@ -92,7 +92,7 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 		/*
 		 * First we compute the formula and tva_code for each detail
 		 */
-		$array = $cn->get_array("select p_id,p_code,p_libelle,p_type,p_order,f_id,p_info,t_id
+		$array = $cn->get_array("select p_id,p_code,p_libelle,p_type,p_order,f_id,t_id
 			from rapport_advanced.formulaire_param
 			where
 			f_id=$1
@@ -111,11 +111,11 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 		/**
 		 * Add the lines missing lines
 		 */
-		$array = $cn->get_array("select fp.p_id,p_code,p_libelle,p_type,p_order,f_id,p_info,t_id
+		$array = $cn->get_array("select fp.p_id,p_code,p_libelle,p_type,p_order,f_id,t_id
 			from rapport_advanced.formulaire_param as fp
 			where
 			f_id=$1
-			and p_type in (1,2,6)", array($p_id));
+			and p_type in (1,2,6,7,8)", array($p_id));
 		for ($i = 0; $i < count($array); $i++)
 		{
 			$row = new Rapav_Declaration_Param();
@@ -173,7 +173,6 @@ class Rapav_Declaration_Param
 	function insert()
 	{
 		$data = new RAPAV_Declaration_Row_SQL();
-		$data->dr_info = $this->param->p_info;
 		$data->dr_code = $this->param->p_code;
 		$data->dr_libelle = $this->param->p_libelle;
 		$data->dr_order = $this->param->p_order;
@@ -193,14 +192,13 @@ class Rapav_Declaration_Param
 	 *    - 'p_type',
 	 *    - 'p_order',
 	 *    - 'f_id',
-	 *    - 'p_info',
 	 *    - 't_id'
 	 * @param type $p_array
 	 */
 	function from_array($p_array)
 	{
 		$this->param = new Formulaire_Param();
-		foreach (array('p_id', 'p_code', 'p_libelle', 'p_type', 'p_order', 'f_id', 'p_info', 't_id') as $e)
+		foreach (array('p_id', 'p_code', 'p_libelle', 'p_type', 'p_order', 'f_id', 't_id') as $e)
 		{
 			$this->param->$e = $p_array[$e];
 		}

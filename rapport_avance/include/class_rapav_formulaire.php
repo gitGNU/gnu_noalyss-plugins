@@ -112,19 +112,20 @@ class RAPAV_Formulaire extends Formulaire_Sql
 	 */
 	static function update_definition($p_array)
 	{
+		global $cn;
 		$rapav = new RAPAV_Formulaire($p_array['f_id']);
 		// save into table formulaire
 		$rapav->f_title = $p_array['f_title'];
 		$rapav->f_description = $p_array['f_description'];
 		$rapav->update();
-
-		for ($i = 0; $i < count($p_array['p_id']); $i++)
+		$nb_line=count($p_array['p_id']);
+		for ($i = 0; $i < $nb_line ; $i++)
 		{
 			$form_param = new formulaire_param_sql($p_array['p_id'][$i]);
 			$form_param->p_code = $p_array['p_code'][$i];
 			$form_param->p_libelle = $p_array['p_libelle'][$i];
 			$form_param->p_type = $p_array['p_type'][$i];
-			$form_param->p_order = (isNumber($p_array['p_order'][$i]) == 0) ? $i * 10 : $p_array['p_order'][$i];
+			$form_param->p_order = (isNumber($p_array['p_order'][$i]) == 0) ?  ($i+1) * 10 : $p_array['p_order'][$i];
 			$form_param->t_id = $p_array['t_id'][$i];
 			$form_param->f_id = $p_array['f_id'];
 			// update or insert the row
@@ -133,14 +134,23 @@ class RAPAV_Formulaire extends Formulaire_Sql
 			else
 				$form_param->update();
 		}
+		// delete checked rows
+		if ( isset ($p_array["del_row"]))
+		{
+			for ($i=0;$i<count($p_array['del_row']);$i++)
+			{
+				echo $p_array['del_row'][$i];
+				if (isNumber($p_array['del_row'][$i]) == 1 &&  $p_array['del_row'][$i]!=-1) {
+					$cn->exec_sql('delete from rapport_advanced.formulaire_param where p_id=$1',array($p_array['del_row'][$i]));
+				}
+			}
+		}
 		self::load_file($rapav);
 	}
 
 	static function load_file(RAPAV_Formulaire $p_rapav)
 	{
 		global $cn;
-		var_dump($p_rapav);
-		var_dump($_FILES);
 		// nothing to save
 		if (sizeof($_FILES) == 0)
 			return;

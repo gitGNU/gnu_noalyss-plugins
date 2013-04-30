@@ -40,21 +40,25 @@ switch($row['dr_type'])
 {
 	case 1:
 		echo '<h1  class="title">'.$row['dr_libelle'].'</h1>';
-		echo '<span class="notice">'.$row['dr_info'].'</span>';
 		break;
 	case 2:
 		echo '<h2  class="title">'.$row['dr_libelle'].'</h2>';
-		echo '<span class="notice">'.$row['dr_info'].'</span>';
 		break;
 	case 6:
 		echo '<h3  class="title">'.$row['dr_libelle'].'</h3>';
-		echo '<span class="notice">'.$row['dr_info'].'</span>';
 		break;
 	case 3:
 		$input=new INum('amount[]',$row['dr_amount']);
 		$input->size=15;
 		echo HtmlInput::hidden('code[]',$row['dr_id']);
-		echo '<p>'.$row['dr_code']." ".$row['dr_libelle']." = ".$input->input(). '<span class="notice">'.$row['dr_info'].'</span>'.'</p>';
+		echo '<p>'.$row['dr_code']." ".$row['dr_libelle']." = ".$input->input().'</p>';
+		break;
+	case 7:
+		echo '<p>'.$row['dr_libelle'].'</p>';
+		break;
+	case 8:
+		echo '<span class="notice" > '.$row['dr_libelle'].'</span>';
+		break;
 
 }
 endfor;

@@ -366,7 +366,7 @@ function rapav_declaration_delete(plugin_code,ac,dossier,d_id)
  * @param plugin_code code of plugin
  * @param ac code AD
  * @param dossier gDossier
- * @param d_id id 
+ * @param d_id id
  * @returns {undefined}
  */
 function rapav_form_export(plugin_code,ac,dossier,d_id)

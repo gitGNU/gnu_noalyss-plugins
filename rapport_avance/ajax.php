@@ -11,18 +11,7 @@ switch ($act)
 		require_once 'include/class_rapav_formulaire.php';
 		if (!isset($_GET['f_id']) && isNum($_GET['f_id']) == 0)
 			exit();
-		echo '<h1>Définition </h1>';
-		$form = new RAPAV_formulaire($_REQUEST['f_id']);
-		$form->load_definition();
-		echo '<form method="POST" enctype="multipart/form-data" class="print">';
-		$form->input_formulaire();
-		$form->input_definition();
-		echo '<p>';
-		$delete = new ICheckBox('delete');
-		echo "Cochez la case pour effacer ce formulaire " . $delete->input();
-		echo '</p>';
-		echo HtmlInput::submit('form_def_sub', 'Sauve');
-		echo '</form>';
+		require_once 'include/formulaire_definition_show.inc.php';
 		break;
 	/*	 * **************************************************************************************************************
 	 * Ajoute une ligne dans la definition
@@ -31,6 +20,9 @@ switch ($act)
 		$type_row = $cn->make_array("select p_type,p_description from rapport_advanced.type_row order by p_description");
 		$type_periode = $cn->make_array("select t_id,t_description from rapport_advanced.periode_type order by t_description");
 		?>
+		<td>
+			Nouv.
+		</td>
 		<td>
 			<?= HtmlInput::hidden('p_id[]', -1)?>
 			<?
@@ -68,13 +60,6 @@ switch ($act)
 			echo $p_order->input();
 			?>
 		</td>
-		<td>
-			<?
-			$p_info = new IText('p_info[]');
-			$p_info->css_size = "100%";
-			echo $p_info->input();
-			?>
-		</td>'
 		<?
 		break;
 	/*	 * **************************************************************************************************************

@@ -32,13 +32,16 @@ $type_periode=$cn->make_array("select t_id,t_description from rapport_advanced.p
 <table id="table_formulaire_definition_id" class="result" style="table-layout: auto">
 	<thead>
 	<tr>
+	<th>
+		A effacer
+	</th>
 	<th style="width:92px">
 		Code <?=HtmlInput::infobulle(200)?>
 	</th>
 	<th>
 		Libellé
 	</th>
-	<th style="width:192px">
+	<th style="width:92px">
 		Type de ligne
 	</th>
 	<th>
@@ -47,15 +50,17 @@ $type_periode=$cn->make_array("select t_id,t_description from rapport_advanced.p
 	<th style="width:92px">
 		Ordre d'apparition
 	</th>
-	<th>
-		Message d'aide
-	</th>
 	</tr>
 	</thead>
 	<tbody id="table_body_id">
 	<? for ($i=0;$i<$max;$i++):?>
 	<tr id="row_<?=$i?>">
-
+		<td>
+			<?
+			$a=new ICheckBox('del_row[]',$this->definition[$i]->p_id);
+			echo $a->input();
+			?>
+		</td>
 		<td>
 			<?=HtmlInput::hidden('p_id[]',$this->definition[$i]->p_id) ?>
 			<?
@@ -67,7 +72,8 @@ $type_periode=$cn->make_array("select t_id,t_description from rapport_advanced.p
 		<td>
 			<?
 				$p_libelle=new IText('p_libelle[]',$this->definition[$i]->p_libelle);
-				$p_libelle->css_size="100%";
+				$p_libelle->size="50";
+				//$p_libelle->css_size="100%";
 				echo $p_libelle->input();
 			?>
 		</td>
@@ -97,13 +103,6 @@ $type_periode=$cn->make_array("select t_id,t_description from rapport_advanced.p
 				$p_order->prec=0;
 				$p_order->size=4;
 				echo $p_order->input();
-			?>
-		</td>
-		<td>
-			<?
-				$p_info=new IText('p_info[]',$this->definition[$i]->p_info);
-				$p_info->css_size="100%";
-				echo $p_info->input();
 			?>
 		</td>
 	</tr>

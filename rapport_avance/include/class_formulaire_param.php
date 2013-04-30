@@ -72,9 +72,9 @@ class Formulaire_Param extends Formulaire_Param_Sql
 		header('Pragma: public');
 		header('Content-type: application/bin');
 		header('Content-Disposition: attachment;filename="' . $title . '.bin"', FALSE);
-		fputcsv($out, array("RAPAV", '2'), ";");
-		fputcsv($out, array($form->f_title, $form->f_description));
-		$array = $cn->get_array("select p_id,p_code, p_libelle, p_type, p_order, f_id, p_info, t_id
+		fputcsv($out, array("RAPAV", '3'), ";");
+		fputcsv($out, array($form->f_title, $form->f_description), ";");
+		$array = $cn->get_array("select p_id,p_code, p_libelle, p_type, p_order, f_id,  t_id
 			from rapport_advanced.formulaire_param where f_id=$1", array($p_id));
 		for ($i = 0; $i < count($array); $i++)
 		{
@@ -104,6 +104,7 @@ class Formulaire_Param extends Formulaire_Param_Sql
 				throw new Exception('Formulaire invalide');
 			}
 			// $a[1] contains the version
+			$rapav_version=$a[1];
 			// first line is the title and description
 			$form = new formulaire_sql();
 			$first = fgetcsv($in, 0, ";");
@@ -116,10 +117,13 @@ class Formulaire_Param extends Formulaire_Param_Sql
 			{
 				if ($csv[0] != "RAPAV_DETAIL")
 				{
+					if ( $rapav_version == 2 ) {
+						unset($csv[6]);
+					}
 					$csv[5]=$form->f_id;
 					$cn->get_array("INSERT INTO rapport_advanced.restore_formulaire_param(
-						    p_id, p_code, p_libelle, p_type, p_order, f_id, p_info, t_id)
-								VALUES ($1, $2, $3, $4, $5, $6, $7, $8)", $csv);
+						    p_id, p_code, p_libelle, p_type, p_order, f_id, t_id)
+								VALUES ($1, $2, $3, $4, $5, $6, $7)", $csv);
 				} else
 					break;
 			}
@@ -144,7 +148,7 @@ class Formulaire_Param extends Formulaire_Param_Sql
 			$cn->exec_sql("update rapport_advanced.restore_formulaire_param set p_id=nextval('rapport_advanced.formulaire_param_p_id_seq')");
 			$cn->exec_sql("update rapport_advanced.restore_formulaire_param_detail set fp_id=nextval('rapport_advanced.formulaire_param_detail_fp_id_seq')");
 
-			$cn->exec_sql('insert into rapport_advanced.formulaire_param select  p_id, p_code, p_libelle, p_type, p_order, f_id, p_info, t_id
+			$cn->exec_sql('insert into rapport_advanced.formulaire_param select  p_id, p_code, p_libelle, p_type, p_order, f_id, t_id
 				from rapport_advanced.restore_formulaire_param where f_id=$1',array($form->f_id));
 
 			$cn->exec_sql('insert into rapport_advanced.formulaire_param_detail select fp_id, p_id, tmp_val, tva_id, fp_formula, fp_signed, jrn_def_type,

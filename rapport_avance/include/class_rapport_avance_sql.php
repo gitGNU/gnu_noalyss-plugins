@@ -44,7 +44,6 @@ class formulaire_param_sql extends phpcompta_sql
 			"p_type" => "p_type",
 			"p_order" => "p_order",
 			"f_id" => "f_id",
-			"p_info" => "p_info",
 			"t_id" => "t_id"
 		);
 
@@ -55,7 +54,6 @@ class formulaire_param_sql extends phpcompta_sql
 			"p_type" => "numeric",
 			"p_order" => "numeric",
 			"f_id" => "numeric",
-			"p_info" => "text",
 			"t_id" => "numeric"
 		);
 
@@ -213,8 +211,7 @@ function __construct($p_id=-1)
 			"dr_order"=>"dr_order",
 			"dr_code"=>"dr_code",
 			"dr_amount"=>"dr_amount",
-			"dr_type"=>"dr_type",
-			"dr_info"=>"dr_info"
+			"dr_type"=>"dr_type"
 		);
 
 		$this->type = array(
@@ -224,8 +221,7 @@ function __construct($p_id=-1)
 			"dr_order"=>"text",
 			"dr_code"=>"numeric",
 			"dr_amount"=>"numeric",
-			"dr_type"=>"numeric",
-			"dr_info"=>'text'
+			"dr_type"=>"numeric"
 
 		);
 

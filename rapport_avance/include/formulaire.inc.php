@@ -37,7 +37,8 @@ if ( isset($_POST['form_def_sub']))
 	else
 	{
 		RAPAV_formulaire::save_definition($_POST);
-
+		require_once 'formulaire_definition_show.inc.php';
+		exit();
 	}
 }
 if (isset ($_POST['add_form']))
