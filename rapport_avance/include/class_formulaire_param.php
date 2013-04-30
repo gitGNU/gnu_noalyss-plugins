@@ -52,6 +52,10 @@ class Formulaire_Param extends Formulaire_Param_Sql
 				return new Formulaire_Title3($form);
 			case 3:
 				return new Formulaire_Formula($form);
+			case 7:
+				return new Formulaire_Text($form);
+			case 8:
+				return new Formulaire_Notice($form);
 		}
 	}
 
@@ -216,6 +220,40 @@ class formulaire_title1 extends Formulaire_Row
 	function input()
 	{
 		echo h1($this->obj->p_libelle, ' class="title"');
+	}
+
+}
+/**
+ * @brief display title level 1
+ */
+class formulaire_text extends Formulaire_Row
+{
+
+	function display()
+	{
+		echo '<p>'.$this->obj->p_libelle.'<p>';
+	}
+
+	function input()
+	{
+		echo '<p>'.$this->obj->p_libelle.'<p>';
+	}
+
+}
+/**
+ * @brief display title level 1
+ */
+class formulaire_notice extends Formulaire_Row
+{
+
+	function display()
+	{
+		echo span($this->obj->p_libelle, ' class="notice" ');
+	}
+
+	function input()
+	{
+		echo span($this->obj->p_libelle, ' class="notice"');
 	}
 
 }
