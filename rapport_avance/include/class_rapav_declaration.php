@@ -227,7 +227,7 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 	{
 		global $cn,$g_parameter;
 		// Retrieve all the code + libelle
-		$array[]=array('code'=>'PERIODE_DECLARATION','value'=>  format_date($this->d_end)." - ".format_date($this->d_start));
+		$array[]=array('code'=>'PERIODE_DECLARATION','value'=>  format_date($this->d_start)." - ".format_date($this->d_end));
 		$array[]=array('code'=>'TITRE','value'=>$this->d_title);
 		$array[]=array('code'=>'DOSSIER','value'=>$cn->format_name($_REQUEST['gDossier'],'dos'));
 		$array[]=array('code'=>'NAME','value'=>$g_parameter->MY_NAME);
@@ -238,6 +238,7 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 		$array[]=array('code'=>'PHONE','value'=>$g_parameter->MY_TEL);
 		$array[]=array('code'=>'CEDEX','value'=>$g_parameter->MY_CP);
 		$array[]=array('code'=>'FAX','value'=>$g_parameter->MY_FAX);
+		$array[]=array('code'=>'NOTE','value'=>$this->d_description);
 
 		// open the files
 		$ifile=fopen($p_dir.'/'.$p_filename,'r');
@@ -267,9 +268,9 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 				{
 					$replace='&lt;&lt;'.$value['code'].'&gt;&gt;';
 					$fmt_value=$value['value'];
+					$fmt_value=str_replace('&','&amp;',$fmt_value);
 					$fmt_value=str_replace('<','&lt;',$fmt_value);
 					$fmt_value=str_replace('>','&gt;',$fmt_value);
-					$fmt_value=str_replace('&','&amp;',$fmt_value);
 					$fmt_value=str_replace('"','&quot;',$fmt_value);
 					$fmt_value=str_replace("'",'&apos;',$fmt_value);
 				} else {

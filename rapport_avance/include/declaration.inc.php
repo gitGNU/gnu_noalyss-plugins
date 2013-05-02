@@ -41,7 +41,7 @@ if (isset($_POST['save']))
 	$decl->save();
 	$decl->generate_document();
 	$decl->display();
-	echo '<h2 class="notice">'._(' Sauvé ').date('d-m-Y H:i').'</h2>';
+	echo '<p class="notice">'._(' Sauvé ').date('d-m-Y H:i').'</p>';
 
 	$ref_csv = HtmlInput::array_to_string(array('gDossier', 'plugin_code', 'd_id'), $_REQUEST, 'extension.raw.php?');
 	$ref_csv.="&amp;act=export_decla_csv";
@@ -61,6 +61,7 @@ if (isset($_GET['compute']))
 	}
 	else
 	{
+		$decl->d_description=$_GET['p_description'];
 		$decl->compute($_GET['p_form'], $_GET['p_start'], $_GET['p_end']);
 		echo '<form class="print" method="POST">';
 		echo HtmlInput::hidden('p_form', $_GET['p_form']);
@@ -75,6 +76,8 @@ $date_end = new IDate('p_end');
 $hidden = HtmlInput::array_to_hidden(array('gDossier', 'ac', 'plugin_code', 'sa'), $_GET);
 $select = new ISelect('p_form');
 $select->value = $cn->make_array('select f_id,f_title from rapport_advanced.formulaire order by 2');
+$description=new IText('p_description');
+$description->size=80;
 ?>
 <form id="declaration_form_id" method="GET" onsubmit="return validate()">
 	<?= $hidden?>
@@ -86,6 +89,10 @@ $select->value = $cn->make_array('select f_id,f_title from rapport_advanced.form
 			<td>
 				<?= $select->input()?>
 			</td>
+			</tr>
+	</table>
+	<p> Description <?=$description->input()?>
+	<table>
 		<tr>
 			<td>
 				Date de début
@@ -103,11 +110,12 @@ $select->value = $cn->make_array('select f_id,f_title from rapport_advanced.form
 			</td>
 		</tr>
 	</table>
+	</p>
 	<?= HtmlInput::submit('compute', 'Générer')?>
 </form>
 <script charset="UTF8" lang="javascript">
 	function validate() {
-		if ( check_date_id('<?= $date_start->id?>') == false ) {alert('Date de début incorrecte');return false;}
-		if ( check_date_id('<?= $date_end->id?>') == false ) {alert('Date de fin incorrecte');return false;}
+		if ( check_date_id('<?= $date_start->id?>') == false ) {alert('Date de début incorrecte');$('<?= $date_start->id?>').style.borderColor='red';$('<?= $date_start->id?>').style.borderWidth=2;return false;}
+		if ( check_date_id('<?= $date_end->id?>') == false ) {alert('Date de fin incorrecte');$('<?= $date_end->id?>').style.borderColor='red';$('<?= $date_end->id?>').style.borderWidth=2;return false;}
 	}
 </script>

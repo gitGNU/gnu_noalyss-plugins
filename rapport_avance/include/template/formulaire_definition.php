@@ -129,7 +129,7 @@ $type_periode=$cn->make_array("select t_id,t_description from rapport_advanced.p
 						$_REQUEST['gDossier'],
 						$this->f_id
 				));
-		echo '<span id="rapav_template"> '.$this->f_filename.'</span>';
+		echo '<span id="rapav_template"> '.$this->anchor_document().'</span>';
 		echo '<span id="rapav_template_ctl"> '.$remove_doc.'</span>';
 		echo '<span id="rapav_new_file" style="display:none"> '.$file->input().'</span>';
 	}

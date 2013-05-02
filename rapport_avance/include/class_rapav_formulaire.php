@@ -43,14 +43,23 @@ class RAPAV_Formulaire extends Formulaire_Sql
 	 *  show a list of all existing declaration
 	 * @global type $cn database connection
 	 */
-	static
-			function listing()
+	static	function listing()
 	{
 		global $cn;
-		$alist = $cn->get_array("select f_id,f_title,f_description from rapport_advanced.formulaire order by 2");
+		$alist = $cn->get_array("select f_id,f_title,f_description
+			from rapport_advanced.formulaire order by 2");
 		require 'template/formulaire_listing.php';
 	}
-
+	/**
+	 * Anchor to the template
+	 * @return html anchor string
+	 */
+	function anchor_document()
+	{
+		$url=HtmlInput::request_to_string(array('gDossier','ac','plugin_code'));
+		$url='extension.raw.php'.$url.'&amp;act=export_definition_modele&amp;id='.$this->f_id;
+		return HtmlInput::anchor($this->f_filename,$url);
+	}
 	/**
 	 * Get data from database, from the table rapport_advanced.formulaire_param
 	 */
@@ -122,7 +131,7 @@ class RAPAV_Formulaire extends Formulaire_Sql
 		for ($i = 0; $i < $nb_line ; $i++)
 		{
 			$form_param = new formulaire_param_sql($p_array['p_id'][$i]);
-			$form_param->p_code = $p_array['p_code'][$i];
+			$form_param->p_code = (trim($p_array['p_code'][$i])!="")?$p_array['p_code'][$i]:'C'.$i.microtime();
 			$form_param->p_libelle = $p_array['p_libelle'][$i];
 			$form_param->p_type = $p_array['p_type'][$i];
 			$form_param->p_order = (isNumber($p_array['p_order'][$i]) == 0) ?  ($i+1) * 10 : $p_array['p_order'][$i];

@@ -29,6 +29,9 @@
 ?>
 <h1><?=$this->d_title?></h1>
 <h2> Du <?=$this->d_start?> au <?=$this->d_end?></h2>
+<p>
+	Note : <?=h($this->d_description)?>
+</p>
 <?
 	if ( empty($array) ) { echo 'Aucune donnée'; exit();}
 
@@ -57,7 +60,7 @@ switch($row['dr_type'])
 		echo '<p>'.$row['dr_libelle'].'</p>';
 		break;
 	case 8:
-		echo '<span class="notice" > '.$row['dr_libelle'].'</span>';
+		echo '<p class="notice" > '.$row['dr_libelle'].'</p>';
 		break;
 
 }

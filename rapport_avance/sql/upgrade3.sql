@@ -30,3 +30,4 @@ COMMENT ON COLUMN rapport_advanced.declaration.d_mimetype IS 'Mimetype of the fi
 
 ALTER TABLE rapport_advanced.declaration ADD COLUMN d_size bigint;
 COMMENT ON COLUMN rapport_advanced.declaration.d_size IS 'Size of the file';
+

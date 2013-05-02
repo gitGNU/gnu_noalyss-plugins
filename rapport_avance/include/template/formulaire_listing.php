@@ -32,6 +32,7 @@
 	<tr>
 		<th>Nom du formulaire</th>
 		<th>Description</th>
+
 		<th></th>
 		<th></th>
 		<th></th>

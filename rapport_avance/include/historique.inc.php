@@ -29,7 +29,11 @@
 global $cn;
 $cn->exec_sql("delete from rapport_advanced.declaration where to_keep='N' and d_generated < now() - interval '5 hours'");
 $data=$cn->get_array("select d_id,d_title,
-		d_start,d_end
+		d_start,d_end,to_char(d_generated,'DD/MM/YY HH24:MI') as fmt_generated,
+		d_description,d_generated,
+		to_char(d_start,'YYMMDD') as fmt_start,
+		to_char(d_end,'YYMMDD') as fmt_end,
+		to_char(d_end,'YYMMDDHH24MI') as fmt_order_generated
 		from rapport_advanced.declaration
 		where to_keep='Y'
 		order by d_start,d_title");
@@ -37,14 +41,21 @@ $data=$cn->get_array("select d_id,d_title,
 <div id="declaration_list_div">
 <table class="sortable">
 	<tr>
-		<th>
-			Date début
+		<th class=" sorttable_sorted_reverse">
+			Date début <?php echo HtmlInput::infobulle(17);?>
+			<span id="sorttable_sortrevind">&nbsp;&blacktriangle;</span>
 		</th>
 		<th>
 			Date Fin
 		</th>
 		<th>
 			Déclaration
+		</th>
+		<th>
+			Description
+		</th>
+		<th>
+			Date génération
 		</th>
 		<th>
 
@@ -55,19 +66,26 @@ $data=$cn->get_array("select d_id,d_title,
 	</tr>
 	<? for ($i=0;$i<count($data);$i++) :?>
 	<tr id="tr_<?=$data[$i]['d_id']?>">
-		<td>
+		<td sortable_customkey="<?=$data[$i]['fmt_start']?>">
+
 			<?=format_date($data[$i]['d_start'])?>
 		</td>
-		<td>
+		<td sortable_customkey="<?=$data[$i]['fmt_end']?>">
 			<?=format_date($data[$i]['d_end'])?>
 		</td>
 		<td>
 			<?=h($data[$i]['d_title'])?>
 		</td>
-		<td id="mod_<?=$data[$i]['d_id']?>">
+		<td>
+			<?=h($data[$i]['d_description'])?>
+		</td>
+		<td sortable_customkey="<?=$data[$i]['fmt_order_generated']?>">
+			<?=h($data[$i]['fmt_generated'])?>
+		</td>
+		<td  id="mod_<?=$data[$i]['d_id']?>">
 			<?=HtmlInput::anchor("Afficher","",sprintf("onclick=\"rapav_declaration_display('%s','%s','%s','%s')\"",$_REQUEST['plugin_code'],$_REQUEST['ac'],$_REQUEST['gDossier'],$data[$i]['d_id']))?>
 		</td>
-		<td id="del_<?=$data[$i]['d_id']?>">
+		<td  id="del_<?=$data[$i]['d_id']?>">
 			<?=HtmlInput::anchor("Efface","",sprintf("onclick=\"rapav_declaration_delete('%s','%s','%s','%s')\"",$_REQUEST['plugin_code'],$_REQUEST['ac'],$_REQUEST['gDossier'],$data[$i]['d_id']))?>
 		</td>
 	</tr>
