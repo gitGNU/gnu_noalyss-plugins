@@ -32,6 +32,8 @@ $decl = new Rapav_Declaration();
 $decl->d_id = $_GET['d_id'];
 $decl->load();
 $decl->display();
+echo $decl->anchor_document();
+echo '<hr>';
 $ref=HtmlInput::array_to_string(array('gDossier','plugin_code','d_id'),$_GET,'extension.raw.php?');
 $ref.="&amp;act=export_decla_csv";
 echo HtmlInput::button_anchor("Export CSV",$ref,'export_id');
