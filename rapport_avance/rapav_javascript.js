@@ -3,6 +3,7 @@
 content[200]="Le code doit être unique pour ce formulaire";
 content[201]="Formula TODO";
 content[203]="Utiliser le % pour indiquer les postes comptables qui en dépendent ex: 70% pour reprendre tous les comptes commençant par 70";
+content[204]="Filtrer en donnant une date, partie de la description ou de la déclaration";
 
 /**
  *@brief show the definition of a form and let it modify it

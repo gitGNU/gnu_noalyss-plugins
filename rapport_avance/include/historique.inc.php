@@ -39,7 +39,13 @@ $data=$cn->get_array("select d_id,d_title,
 		order by d_start,d_title");
 ?>
 <div id="declaration_list_div">
-<table class="sortable">
+<?php
+echo '<span style="display:block">';
+	echo _('Filtre').HtmlInput::infobulle(204);
+	echo HtmlInput::filter_table("t_declaration", "0,1,2,3","1");
+	echo '</span>';
+?>
+<table id="t_declaration" class="sortable">
 	<tr>
 		<th class=" sorttable_sorted_reverse">
 			Date début <?php echo HtmlInput::infobulle(17);?>
