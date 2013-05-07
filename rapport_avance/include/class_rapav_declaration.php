@@ -50,8 +50,9 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 	static function to_csv($p_id)
 	{
 		global $cn;
-		$a_row=$cn->get_array('select dr_code,dr_libelle,dr_amount from rapport_advanced.declaration_row
-			where d_id=$1 order by dr_order',array($p_id));
+		$a_row=$cn->get_array('select dr_code,dr_libelle,dr_amount,dr_start,dr_end
+			from rapport_advanced.declaration_row
+			where d_id=$1 order by dr_order,dr_start',array($p_id));
 
 		$a_title=$cn->get_array("select d_title
 			,to_char(d_start,'DD.MM.YYYY') as start
@@ -72,10 +73,12 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 
 		for ($i = 0; $i < count($a_row); $i++)
 		{
-			printf ('"%s";"%s";%s'."\r\n",
+			printf ('"%s";"%s";%s;"%s";"%s"'."\r\n",
 					$a_row[$i]['dr_code'],
 					$a_row[$i]['dr_libelle'],
-					nb($a_row[$i]['dr_amount'])
+					nb($a_row[$i]['dr_amount']),
+					format_date($a_row[$i]['dr_start']),
+					format_date($a_row[$i]['dr_end'])
 					);
 		}
 	}
@@ -315,7 +318,15 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 
 
 	}
-	function compute($p_id, $p_start, $p_end)
+	/**
+	 *
+	 * @global $cn $cn
+	 * @param type $p_id
+	 * @param type $p_start
+	 * @param type $p_end
+	 * @param type $p_step
+	 */
+	function compute($p_id, $p_start, $p_end,$p_step)
 	{
 		global $cn;
 		$cn->start();
@@ -333,6 +344,7 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 		$this->d_filename=$this->form->f_filename;
 		$this->d_mimetype=$this->form->f_mimetype;
 		$this->d_size=$this->form->f_size;
+		$this->d_step=$p_step;
 		$this->insert();
 		/*
 		 * First we compute the formula and tva_code for each detail
@@ -341,37 +353,89 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 			from rapport_advanced.formulaire_param
 			where
 			f_id=$1
-			and p_type =3
 			order by p_order", array($p_id));
-		for ($i = 0; $i < count($array); $i++)
-		{
-			$row = new Rapav_Declaration_Param();
-			$row->d_id = $this->d_id;
-			$row->dr_id = $cn->get_next_seq('rapport_advanced.declaration_param_seq');
-			$row->from_array($array[$i]);
-			$row->compute($p_start, $p_end);
-			$row->insert();
-		}
-
 		/**
-		 * Add the lines missing lines
+		 * if step != 0, recompute the date
 		 */
-		$array = $cn->get_array("select fp.p_id,p_code,p_libelle,p_type,p_order,f_id,t_id
-			from rapport_advanced.formulaire_param as fp
-			where
-			f_id=$1
-			and p_type in (1,2,6,7,8)", array($p_id));
-		for ($i = 0; $i < count($array); $i++)
+		if ($p_step == 0)
 		{
-			$row = new Rapav_Declaration_Param();
-			$row->d_id = $this->d_id;
-			$row->dr_id = $cn->get_next_seq('rapport_advanced.declaration_param_seq');
-			$row->from_array($array[$i]);
-			$row->amount = 0;
-			$row->insert();
+			// compute each row
+			for ($i = 0; $i < count($array); $i++)
+			{
+				$row = new Rapav_Declaration_Param();
+				$row->d_id = $this->d_id;
+				$row->dr_id = $cn->get_next_seq('rapport_advanced.declaration_param_seq');
+				$row->from_array($array[$i]);
+				if ( $array[$i]['p_type']==3) {
+					$row->compute($p_start, $p_end);
+				} else {
+					$row->amount = 0;
+				}
+				$row->dr_start=$p_start;
+				$row->dr_end=$p_end;
+				$row->insert();
+			}
 		}
+		else
+		{
+			// compute new date, stored in $this->start and $this->end
+			while ($this->compute_interval($p_start, $p_end, $p_step) == 1)
+			{
+				for ($i = 0; $i < count($array); $i++)
+				{
+					$row = new Rapav_Declaration_Param();
+					$row->d_id = $this->d_id;
+					$row->dr_id = $cn->get_next_seq('rapport_advanced.declaration_param_seq');
+					$row->from_array($array[$i]);
+					if ($array[$i]['p_type'] == 3)
+					{
+						$row->compute($this->start, $this->end);
+						$row->dr_start=$this->start;
+						$row->dr_end=$this->end;
+						$row->insert();
+					}
+				}
+			}
 
+
+		}
 		$cn->commit();
+	}
+	function compute_interval($p_start, $p_end, $p_step)
+	{
+		static $s_start = "";
+		static $s_count = 0;
+
+		if ($s_start == "")
+		{
+			$s_start = $p_start;
+		}
+		$s_count++;
+		// initialize datetime object
+		$date_start = new DateTime(format_date($s_start, 'DD.MM.YYYY', 'YYYY/MM/DD'));
+		$date_end = new DateTime(format_date($s_start, 'DD.MM.YYYY', 'YYYY/MM/DD'));
+		$date_finish = new DateTime(format_date($p_end, 'DD.MM.YYYY', 'YYYY/MM/DD'));
+
+		$add = $this->get_interval($p_step);
+
+
+		if ($s_count > 1)	{ $date_start->add($add); $date_end->add($add);}
+		// compute date_end
+		$date_end->add($add);
+		$date_end->sub(new DateInterval('P1D'));
+
+		// if date_end > date_finish then stop
+		if ($date_end > $date_finish) 			return 0;
+
+		$this->start = $date_start->format("d.m.Y");
+		$this->end = $date_end->format("d.m.Y");
+		$s_start = $this->start;
+		return 1;
+	}
+	function get_interval($p_step)
+	{
+		$array_interval=array("","P7D","P14D","P1M","P3M");
+		return new DateInterval($array_interval[$p_step]);
 	}
 	function anchor_document()
 	{
@@ -382,7 +446,7 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 	function display()
 	{
 		global $cn;
-		$array = $cn->get_array('select * from rapport_advanced.declaration_row where d_id=$1 order by dr_order', array($this->d_id));
+		$array = $cn->get_array('select * from rapport_advanced.declaration_row where d_id=$1 order by dr_order,dr_start', array($this->d_id));
 		require_once 'template/declaration_display.php';
 	}
 
@@ -430,6 +494,8 @@ class Rapav_Declaration_Param
 		$data->d_id = $this->d_id;
 		$data->dr_id = $this->dr_id;
 		$data->dr_type = $this->param->p_type;
+		$data->dr_start=$this->dr_start;
+		$data->dr_end=$this->dr_end;
 		$data->insert();
 	}
 
@@ -469,55 +535,55 @@ class Rapav_Declaration_Param
 	function compute_date($p_start, $p_end)
 	{
 		global $g_user;
-		switch ($this->param->t_id)
-		{
-			case 1:
-				$this->start = $p_start;
-				$this->end = $p_end;
+			switch ($this->param->t_id)
+			{
+				case 1:
+					$this->start = $p_start;
+					$this->end = $p_end;
 				return;
-				break;
-			case 2:
-				list($this->start, $this->end) = $g_user->get_limit_current_exercice();
+					break;
+				case 2:
+					list($this->start, $this->end) = $g_user->get_limit_current_exercice();
 				return;
-				break;
-			case 3:
-				$exercice = $g_user->get_exercice();
-				$exercice--;
-				break;
-			case 4:
-				$exercice = $g_user->get_exercice();
-				$exercice-=2;
-				break;
-			case 5:
-				$exercice = $g_user->get_exercice();
-				$exercice-=3;
-				break;
-			case 6:
-				list($this->start, $this->end) = $g_user->get_limit_current_exercice();
+					break;
+				case 3:
+					$exercice = $g_user->get_exercice();
+					$exercice--;
+					break;
+				case 4:
+					$exercice = $g_user->get_exercice();
+					$exercice-=2;
+					break;
+				case 5:
+					$exercice = $g_user->get_exercice();
+					$exercice-=3;
+					break;
+				case 6:
+					list($this->start, $this->end) = $g_user->get_limit_current_exercice();
 				$this->end=$p_end;
 				return;
-				break;
-			default:
-				throw new Exception('compute_date : t_id est incorrect');
-		}
-		global $cn;
+					break;
+				default:
+					throw new Exception('compute_date : t_id est incorrect');
+			}
+			global $cn;
 
-		// If exercice does not exist then
-		// set the date end and start to 01.01.1900
+			// If exercice does not exist then
+			// set the date end and start to 01.01.1900
 
-		$exist_exercice = $cn->get_value('select count(p_id) from parm_periode where p_exercice=$1', array($exercice));
-		if ($exist_exercice == 0)
-		{
-			$this->start = '01.01.1900';
-			$this->end = '01.01.1900';
+			$exist_exercice = $cn->get_value('select count(p_id) from parm_periode where p_exercice=$1', array($exercice));
+			if ($exist_exercice == 0)
+			{
+				$this->start = '01.01.1900';
+				$this->end = '01.01.1900';
 			return;
+			}
+			// Retrieve start & end date
+			$periode = new Periode($cn);
+			list($per_start, $per_end) = $periode->get_limit($exercice);
+			$this->start = $per_start->first_day();
+			$this->end = $per_end->last_day();
 		}
-		// Retrieve start & end date
-		$periode = new Periode($cn);
-		list($per_start, $per_end) = $periode->get_limit($exercice);
-		$this->start = $per_start->first_day();
-		$this->end = $per_end->last_day();
-	}
 
 	/*	 * *
 	 * @brief compute amount of all the detail of apport_advanced.formulaire_param

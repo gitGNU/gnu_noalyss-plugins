@@ -176,7 +176,8 @@ class RAPAV_Declaration_SQL extends phpcompta_sql
 			"d_filename"=>"d_filename",
 			"d_mimetype"=>"d_mimetype",
 			"d_size"=>"d_size",
-			"f_id"=>"f_id"
+			"f_id"=>"f_id",
+			'd_step'=>'d_step'
 		);
 
 		$this->type = array(
@@ -192,7 +193,7 @@ class RAPAV_Declaration_SQL extends phpcompta_sql
 			"d_filename"=>"text",
 			"d_mimetype"=>"text",
 			"d_size"=>"numeric",
-
+			'd_step'=>'numeric'
 		);
 
 		$this->default = array(
@@ -222,7 +223,9 @@ function __construct($p_id=-1)
 			"dr_order"=>"dr_order",
 			"dr_code"=>"dr_code",
 			"dr_amount"=>"dr_amount",
-			"dr_type"=>"dr_type"
+			"dr_type"=>"dr_type",
+			"dr_start"=>"dr_start",
+			"dr_end"=>"dr_end"
 		);
 
 		$this->type = array(
@@ -232,14 +235,15 @@ function __construct($p_id=-1)
 			"dr_order"=>"text",
 			"dr_code"=>"numeric",
 			"dr_amount"=>"numeric",
-			"dr_type"=>"numeric"
-
+			"dr_type"=>"numeric",
+			"dr_start"=>"date",
+			"dr_end"=>"date"
 		);
 
 		$this->default = array(
 		);
 		global $cn;
-
+		$this->date_format='DD.MM.YYYY';
 		parent::__construct($cn, $p_id);
 	}
 }

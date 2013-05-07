@@ -39,14 +39,14 @@ if (isset($_POST['save']))
 	$decl->to_keep = 'Y';
 	$decl->f_id = $_POST['p_form'];
 	$decl->save();
-	$decl->generate_document();
+	if ( $decl->d_step == 0 ) $decl->generate_document();
 	$decl->display();
 	echo '<p class="notice">'._(' Sauvé ').date('d-m-Y H:i').'</p>';
 
 	$ref_csv = HtmlInput::array_to_string(array('gDossier', 'plugin_code', 'd_id'), $_REQUEST, 'extension.raw.php?');
 	$ref_csv.="&amp;act=export_decla_csv";
 	echo HtmlInput::button_anchor("Export CSV", $ref_csv, 'export_id');
-	if ( $decl->d_filename != '' ) echo $decl->anchor_document();
+	if ( $decl->d_filename != '' && $decl->d_step==0) echo $decl->anchor_document();
 	exit();
 }
 /*
@@ -62,7 +62,7 @@ if (isset($_GET['compute']))
 	else
 	{
 		$decl->d_description=$_GET['p_description'];
-		$decl->compute($_GET['p_form'], $_GET['p_start'], $_GET['p_end']);
+		$decl->compute($_GET['p_form'], $_GET['p_start'], $_GET['p_end'],$_GET['p_step']);
 		echo '<form class="print" method="POST">';
 		echo HtmlInput::hidden('p_form', $_GET['p_form']);
 		$decl->display();
@@ -76,8 +76,18 @@ $date_end = new IDate('p_end');
 $hidden = HtmlInput::array_to_hidden(array('gDossier', 'ac', 'plugin_code', 'sa'), $_GET);
 $select = new ISelect('p_form');
 $select->value = $cn->make_array('select f_id,f_title from rapport_advanced.formulaire order by 2');
-$description=new IText('p_description');
-$description->size=80;
+$description=new ITextArea('p_description');
+$description->heigh=2;
+$description->width=80;
+
+$istep=new ISelect('p_step');
+$istep->value=array(
+		array('label'=>'Aucun','value'=>0),
+		array('label'=>'7 jours','value'=>1),
+		array('label'=>'14 jours','value'=>2),
+		array('label'=>'1 mois','value'=>3),
+		array('label'=>'3 mois','value'=>4)
+		);
 ?>
 <form id="declaration_form_id" method="GET" onsubmit="return validate()">
 	<?= $hidden?>
@@ -90,9 +100,9 @@ $description->size=80;
 				<?= $select->input()?>
 			</td>
 			</tr>
-	</table>
-	<p> Description <?=$description->input()?>
-	<table>
+			<tr>
+	<td> Description</td><td> <?=$description->input()?></td>
+	</tr>
 		<tr>
 			<td>
 				Date de début
@@ -107,6 +117,14 @@ $description->size=80;
 			</td>
 			<td>
 				<?= $date_end->input()?>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Etape de
+			</td>
+			<td>
+				<?= $istep->input()?>
 			</td>
 		</tr>
 	</table>

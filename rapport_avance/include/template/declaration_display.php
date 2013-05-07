@@ -39,6 +39,7 @@
 	echo HtmlInput::hidden('d_id',$this->d_id);
 for ($i=0;$i<count($array);$i++):
 	$row=$array[$i];
+if ($this->d_step <> 0 ) $per= $row['dr_start']." : ".$row['dr_end'];
 switch($row['dr_type'])
 {
 	case 1:
@@ -54,7 +55,7 @@ switch($row['dr_type'])
 		$input=new INum('amount[]',$row['dr_amount']);
 		$input->size=15;
 		echo HtmlInput::hidden('code[]',$row['dr_id']);
-		echo '<p>'.$row['dr_code']." ".$row['dr_libelle']." = ".$input->input().'</p>';
+		echo '<p>'.$row['dr_code']." ".$row['dr_libelle']." = ".$input->input()."  $per ".' </p>';
 		break;
 	case 7:
 		echo '<p>'.$row['dr_libelle'].'</p>';
@@ -64,5 +65,6 @@ switch($row['dr_type'])
 		break;
 
 }
+
 endfor;
 ?>

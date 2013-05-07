@@ -33,7 +33,7 @@ $type_periode=$cn->make_array("select t_id,t_description from rapport_advanced.p
 	<thead>
 	<tr>
 	<th>
-		A effacer
+		Effacer
 	</th>
 	<th style="width:92px">
 		Code <?=HtmlInput::infobulle(200)?>

@@ -148,7 +148,6 @@ class RAPAV_Formulaire extends Formulaire_Sql
 		{
 			for ($i=0;$i<count($p_array['del_row']);$i++)
 			{
-				echo $p_array['del_row'][$i];
 				if (isNumber($p_array['del_row'][$i]) == 1 &&  $p_array['del_row'][$i]!=-1) {
 					$cn->exec_sql('delete from rapport_advanced.formulaire_param where p_id=$1',array($p_array['del_row'][$i]));
 				}
