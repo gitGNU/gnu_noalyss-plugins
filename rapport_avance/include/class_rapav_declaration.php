@@ -405,16 +405,16 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 	{
 		static $s_start = "";
 		static $s_count = 0;
-
+            
 		if ($s_start == "")
 		{
 			$s_start = $p_start;
 		}
 		$s_count++;
 		// initialize datetime object
-		$date_start = new DateTime(format_date($s_start, 'DD.MM.YYYY', 'YYYY/MM/DD'));
-		$date_end = new DateTime(format_date($s_start, 'DD.MM.YYYY', 'YYYY/MM/DD'));
-		$date_finish = new DateTime(format_date($p_end, 'DD.MM.YYYY', 'YYYY/MM/DD'));
+		$date_start = DateTime::createFromFormat('d.m.Y',$s_start);
+		$date_end = DateTime::createFromFormat('d.m.Y',$s_start);
+		$date_finish = DateTime::createFromFormat('d.m.Y',$p_end);
 
 		$add = $this->get_interval($p_step);
 
@@ -423,10 +423,8 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 		// compute date_end
 		$date_end->add($add);
 		$date_end->sub(new DateInterval('P1D'));
-
 		// if date_end > date_finish then stop
 		if ($date_end > $date_finish) 			return 0;
-
 		$this->start = $date_start->format("d.m.Y");
 		$this->end = $date_end->format("d.m.Y");
 		$s_start = $this->start;
