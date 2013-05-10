@@ -432,7 +432,7 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 	}
 	function get_interval($p_step)
 	{
-		$array_interval=array("","P7D","P14D","P1M","P3M");
+		$array_interval = array("", "P7D", "P14D", "P1M", "P2M", "P3M");
 		return new DateInterval($array_interval[$p_step]);
 	}
 	function anchor_document()

@@ -31,3 +31,8 @@ COMMENT ON COLUMN rapport_advanced.declaration.d_mimetype IS 'Mimetype of the fi
 ALTER TABLE rapport_advanced.declaration ADD COLUMN d_size bigint;
 COMMENT ON COLUMN rapport_advanced.declaration.d_size IS 'Size of the file';
 
+ALTER TABLE rapport_advanced.declaration ADD COLUMN d_step numeric;
+
+ALTER TABLE rapport_advanced.declaration_row ADD COLUMN dr_start date;
+
+ALTER TABLE rapport_advanced.declaration_row ADD COLUMN dr_end date;

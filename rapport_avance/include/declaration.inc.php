@@ -39,7 +39,17 @@ if (isset($_POST['save']))
 	$decl->to_keep = 'Y';
 	$decl->f_id = $_POST['p_form'];
 	$decl->save();
-	if ( $decl->d_step == 0 ) $decl->generate_document();
+	if ( $decl->d_step == 0 ) {
+		$decl->generate_document();
+	}	else
+	{
+		// get empty lob
+		$decl->d_filename = null;
+		$decl->d_size = null;
+		$decl->d_mimetype = null;
+		$decl->d_lob = null;
+		$decl->update();
+	}
 	$decl->display();
 	echo '<p class="notice">'._(' Sauvé ').date('d-m-Y H:i').'</p>';
 
@@ -86,8 +96,9 @@ $istep->value=array(
 		array('label'=>'7 jours','value'=>1),
 		array('label'=>'14 jours','value'=>2),
 		array('label'=>'1 mois','value'=>3),
-		array('label'=>'3 mois','value'=>4)
-		);
+		array('label' => '2 mois', 'value' => 4),
+	array('label' => '3 mois', 'value' => 5)
+);
 ?>
 <form id="declaration_form_id" method="GET" onsubmit="return validate()">
 	<?= $hidden?>
