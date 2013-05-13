@@ -6,7 +6,7 @@
 <table>
 <tr>
 	<td>Fiche</td>
-	<td><?=$card->strAttribut(ATTR_DEF_QUICKCODE)?></td>
+	<td><?=HtmlInput::card_detail($card->strAttribut(ATTR_DEF_QUICKCODE))?></td>
 </tr>
 
 <tr>
@@ -80,7 +80,7 @@ for ($i=0;$i<count($array);$i++):
 	echo HtmlInput::hidden("ad_id[]",$array[$i]->ad_id);
 	$amount=new INum("amount[]");
 	$amount->value=$array[$i]->ad_amount;
-	echo $amount->input();	
+	echo $amount->input();
         ?>
 
 </td>
@@ -89,10 +89,10 @@ for ($i=0;$i<count($array);$i++):
 
 	$x=$cn->get_array('select ha_id,h_pj,jr_internal,h_amount from amortissement.amortissement_histo where a_id=$1 and h_year=$2',
 	                   array($value_a_id,$array[$i]->ad_year));
-	if ( count ($x) == 1) 
+	if ( count ($x) == 1)
 	{
 	echo HtmlInput::hidden('h[]',$x[0]['ha_id']);
-	
+
 	$done=bcadd($done,$x[0]['h_amount']);
 	$acte=new INum('p_histo[]');
         $acte->value=$x[0]['h_amount'];
@@ -102,7 +102,7 @@ for ($i=0;$i<count($array);$i++):
 	$pj->value=$x[0]['h_pj'];
 	echo td($pj->input());
 
-	if ( $x[0]['jr_internal'] != '' ) { 
+	if ( $x[0]['jr_internal'] != '' ) {
 	$jr_id=$cn->get_value('select jr_id from jrn where jr_internal=$1',array($x[0]['jr_internal']));
 	echo td(HtmlInput::detail_op($jr_id,$x[0]['jr_internal']));
 	} else {
@@ -130,7 +130,7 @@ if ( $annuite !=  $p_amount->value)
 	echo '<h2>';
  }
  ?>
-</fieldset> 
+</fieldset>
 <?
    echo HtmlInput::submit('sauver','Sauver',"onclick=\"return confirm('Vous confirmez ?')\" ");
    $rm=sprintf("remove_mat(%d,'%s',%d)",dossier::id(),$_REQUEST['plugin_code'],$value_a_id);
