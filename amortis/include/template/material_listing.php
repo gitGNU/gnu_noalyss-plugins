@@ -1,8 +1,13 @@
-<table class="result" style="width:80%;margin-left:10%">
+<br>
+Filtre <?php echo HtmlInput::infobulle(400)?> <?php echo HtmlInput::filter_table("list_amortissement","0,1,2,3,4",1)?>
+
+<table id="list_amortissement" class="sortable" style="width:80%;margin-left:10%">
 <tr>
-<th></th>
 <th>Quickcode</th>
-<th>Nom</th>
+<th class=" sorttable_sorted">
+	Nom
+<span id="sorttable_sortfwdind">&nbsp;&nbsp;&#x25BE;</span>
+</th>
 <th>Date acquisition</th>
 <th>Année achat</th>
 <th style="text-align:right">Montant Initial</th>
@@ -20,9 +25,9 @@ for ($i =0 ;$i < count($ret);$i++) :
 
         $detail=detail_material($ret[$i]->f_id,$fiche->strAttribut(ATTR_DEF_QUICKCODE));
         echo td($detail);
-	echo td($fiche->strAttribut(ATTR_DEF_QUICKCODE));
 	echo td($fiche->strAttribut(ATTR_DEF_NAME));
-	echo td(format_date($ret[$i]->a_date));
+	// <td sorttable_customkey="<?=$row_bank['b_date']
+	echo '<td sorttable_customkey="'.$ret[$i]->a_date.'">'.format_date($ret[$i]->a_date).'</td>';
 	echo td($ret[$i]->a_start);
         echo td(nbm($ret[$i]->a_amount),'style="text-align:right"');
         $amortized=$cn->get_value("select sum(h_amount) from amortissement.amortissement_histo where a_id=$1",array($ret[$i]->a_id));

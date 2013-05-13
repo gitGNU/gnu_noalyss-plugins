@@ -1,3 +1,4 @@
+content[400]="Filtrer sur quick-code, nom, date d'acquisition ou Année d'achat";
 /**
  *javascript
  */
