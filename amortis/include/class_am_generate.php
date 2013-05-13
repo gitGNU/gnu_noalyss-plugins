@@ -172,7 +172,13 @@ array
     $ledger->with_concerned=false;
     echo '<div style="width:80%;margin-left:10%">';
     echo '<form method="POST" style="display:inline">';
+	try {
     echo $ledger->input($array,true);
+	}
+	catch (Exception $e){
+		echo alert($e->getMessage());
+		return false;
+	}
     echo HtmlInput::submit('save','Sauver');
     echo HtmlInput::hidden('sa',$p_array['sa']);
     echo HtmlInput::hidden('sb',$p_array['sb']);
