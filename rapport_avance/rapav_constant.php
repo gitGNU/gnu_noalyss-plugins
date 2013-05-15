@@ -11,5 +11,5 @@ require_once ('class_database.php');
 
 global $cn,$rapav_version;
 $cn=new Database (dossier::id());
-$rapav_version=2;
+$rapav_version=3;
 ?>
