@@ -1,3 +1,4 @@
+begin;
 ALTER TABLE rapport_advanced.formulaire ADD COLUMN f_lob oid;
 COMMENT ON COLUMN rapport_advanced.formulaire.f_lob IS 'OID for file';
 
@@ -36,3 +37,9 @@ ALTER TABLE rapport_advanced.declaration ADD COLUMN d_step numeric;
 ALTER TABLE rapport_advanced.declaration_row ADD COLUMN dr_start date;
 
 ALTER TABLE rapport_advanced.declaration_row ADD COLUMN dr_end date;
+
+ALTER TABLE rapport_advanced.declaration ADD COLUMN d_description text;
+
+insert into rapport_advanced.version  (version_id,version_note)values(3,'Génération de document');
+
+commit;
