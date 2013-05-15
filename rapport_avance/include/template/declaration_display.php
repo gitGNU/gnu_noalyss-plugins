@@ -40,6 +40,7 @@
 for ($i=0;$i<count($array);$i++):
 	$row=$array[$i];
 if ($this->d_step <> 0 ) $per= $row['dr_start']." : ".$row['dr_end'];
+$per=(isset($per))?$per:"";
 switch($row['dr_type'])
 {
 	case 1:
