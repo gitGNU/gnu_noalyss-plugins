@@ -1,5 +1,5 @@
 
-<?
+<?php 
 	$bt=new IButton("but_tva_add");
 	$bt->label="Ajout d'une correspondance";
 	$bt->javascript=" $('dtvaadd').show()";
@@ -9,7 +9,7 @@
 <table class="result" style="width:60%;margin-left:20%">
 	<tr>
 		<th>Fiche TVA</th>
-		<th>Taux correspondant <?=HtmlInput::infobulle(50)?></th>
+		<th>Taux correspondant <?php echo HtmlInput::infobulle(50)?></th>
 	</tr>
 	<?php
 	for ($i = 0; $i < count($atva); $i++):

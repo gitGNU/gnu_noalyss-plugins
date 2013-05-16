@@ -36,21 +36,21 @@
 					TVA
 				</td>
 				<td>
-					<? $tva_id = new ITva_Popup('tva_id');
+					<?php $tva_id = new ITva_Popup('tva_id');
 					echo $tva_id->input()?>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					Taux dans le fichier <?= HtmlInput::infobulle(50)?>
+					Taux dans le fichier <?php echo  HtmlInput::infobulle(50)?>
 				</td>
 				<td>
-					<? $w = new INum('pt_rate');echo $w->input();?>
+					<?php $w = new INum('pt_rate');echo $w->input();?>
 				</td>
 			</tr>
 		</table>
-		<?= HtmlInput::submit("ftvaadd", "Ajout");?>
-		<?
+		<?php echo  HtmlInput::submit("ftvaadd", "Ajout");?>
+		<?php 
 		$bt = new IButton("but_tva_close");
 		$bt->label = "Fermer";
 		$bt->javascript = " $('dtvaadd').hide()";

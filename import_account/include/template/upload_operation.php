@@ -37,9 +37,9 @@ echo _('Importation des opération');
 <table>
 <tr>
 <tr>
-	<td>Fichier à charger</td><TD> <? $file = new IFile('csv_operation');echo $file->input()?></td>
+	<td>Fichier à charger</td><TD> <?php $file = new IFile('csv_operation');echo $file->input()?></td>
 </tr>
 </table>
-<? echo HtmlInput::submit('upload','Valider');?>
+<?php echo HtmlInput::submit('upload','Valider');?>
 
 </form>
