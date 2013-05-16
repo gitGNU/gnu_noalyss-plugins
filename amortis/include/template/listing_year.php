@@ -1,4 +1,4 @@
-<h2 class="info">Liste  pour <?=$year?></h2>
+<h2 class="info">Liste  pour <?php echo $year?></h2>
 <style>
 @PAGE landscape {size: landscape;}
 TABLE {PAGE: landscape;}
@@ -16,7 +16,7 @@ TABLE {PAGE: landscape;}
   <th style="text-align:right">Pourcentage</th>
   <th style="text-align:right">Reste à amortir</th>
 </tr>
-<?
+<?php 
 $tot_amort=0;$tot_net=0;bcscale(2);
 for ($i=0;$i < count($array) ; $i++):
 	echo '<tr>';
@@ -57,7 +57,7 @@ endfor;
 <hr>
 <table class="result" style="width:50%;margin-left:25%">
 <tr>
-<?
+<?php 
 echo td("Acquisition de l'année");
    $tot=$cn->get_value(" select coalesce(sum(a_amount),0) from amortissement.amortissement where a_start=$1",
 			array($year));
@@ -65,24 +65,24 @@ echo td(nbm($tot),"align=\"right\"");
 ?>
 </tr>
 <tr>
-<?
+<?php 
 echo td("Amortissement ");
 echo td(nbm($tot_amort),"align=\"right\"");
 ?>
 </tr>
 <tr>
-<?
+<?php 
 echo td("Valeur net ");
 echo td(nbm($tot_net),"align=\"right\"");
 
 ?>
 </tr>
-<?=date('d.m.Y')?>
+<?php echo date('d.m.Y')?>
 <form method="GET" action="extension.raw.php">
-<?=dossier::hidden()?>
-<?=HtmlInput::hidden('list_year',$year);?>
-<?=HtmlInput::hidden('ac',$_REQUEST['ac']);?>
-<?=HtmlInput::extension()?>
-<?=HtmlInput::submit('csv','Export CSV');?>
+<?php echo dossier::hidden()?>
+<?php echo HtmlInput::hidden('list_year',$year);?>
+<?php echo HtmlInput::hidden('ac',$_REQUEST['ac']);?>
+<?php echo HtmlInput::extension()?>
+<?php echo HtmlInput::submit('csv','Export CSV');?>
 </form>
 

@@ -70,32 +70,32 @@ echo '<span style="display:block">';
 
 		</th>
 	</tr>
-	<? for ($i=0;$i<count($data);$i++) :?>
-	<tr id="tr_<?=$data[$i]['d_id']?>">
-		<td sortable_customkey="<?=$data[$i]['fmt_start']?>">
+	<?php for ($i=0;$i<count($data);$i++) :?>
+	<tr id="tr_<?php echo $data[$i]['d_id']?>">
+		<td sortable_customkey="<?php echo $data[$i]['fmt_start']?>">
 
-			<?=format_date($data[$i]['d_start'])?>
+			<?php echo format_date($data[$i]['d_start'])?>
 		</td>
-		<td sortable_customkey="<?=$data[$i]['fmt_end']?>">
-			<?=format_date($data[$i]['d_end'])?>
-		</td>
-		<td>
-			<?=h($data[$i]['d_title'])?>
+		<td sortable_customkey="<?php echo $data[$i]['fmt_end']?>">
+			<?php echo format_date($data[$i]['d_end'])?>
 		</td>
 		<td>
-			<?=h($data[$i]['d_description'])?>
+			<?php echo h($data[$i]['d_title'])?>
 		</td>
-		<td sortable_customkey="<?=$data[$i]['fmt_order_generated']?>">
-			<?=h($data[$i]['fmt_generated'])?>
+		<td>
+			<?php echo h($data[$i]['d_description'])?>
 		</td>
-		<td  id="mod_<?=$data[$i]['d_id']?>">
-			<?=HtmlInput::anchor("Afficher","",sprintf("onclick=\"rapav_declaration_display('%s','%s','%s','%s')\"",$_REQUEST['plugin_code'],$_REQUEST['ac'],$_REQUEST['gDossier'],$data[$i]['d_id']))?>
+		<td sortable_customkey="<?php echo $data[$i]['fmt_order_generated']?>">
+			<?php echo h($data[$i]['fmt_generated'])?>
 		</td>
-		<td  id="del_<?=$data[$i]['d_id']?>">
-			<?=HtmlInput::anchor("Efface","",sprintf("onclick=\"rapav_declaration_delete('%s','%s','%s','%s')\"",$_REQUEST['plugin_code'],$_REQUEST['ac'],$_REQUEST['gDossier'],$data[$i]['d_id']))?>
+		<td  id="mod_<?php echo $data[$i]['d_id']?>">
+			<?php echo HtmlInput::anchor("Afficher","",sprintf("onclick=\"rapav_declaration_display('%s','%s','%s','%s')\"",$_REQUEST['plugin_code'],$_REQUEST['ac'],$_REQUEST['gDossier'],$data[$i]['d_id']))?>
+		</td>
+		<td  id="del_<?php echo $data[$i]['d_id']?>">
+			<?php echo HtmlInput::anchor("Efface","",sprintf("onclick=\"rapav_declaration_delete('%s','%s','%s','%s')\"",$_REQUEST['plugin_code'],$_REQUEST['ac'],$_REQUEST['gDossier'],$data[$i]['d_id']))?>
 		</td>
 	</tr>
-	<? endfor; ?>
+	<?php endfor; ?>
 </table>
 </div>
 <div id="declaration_display_div">

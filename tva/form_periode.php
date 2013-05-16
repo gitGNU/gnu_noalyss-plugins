@@ -1,21 +1,21 @@
 <fieldset>
 <legend>
-   <?=_('Entrez la période de la déclaration')?>
+   <?php echo _('Entrez la période de la déclaration')?>
 </legend>
 <form class="print" method="GET">
-<?=_('Année')?> <?=$str_year?><br/>
-<?=$str_monthly?>   <?=_('Mois')?> : <?=$str_month?><br/>
-<?=$str_quaterly?>   <?=_('Trimestre')?> : <?=$str_quater?><br/>
-<?=$str_hidden?>
+<?php echo _('Année')?> <?php echo $str_year?><br/>
+<?php echo $str_monthly?>   <?php echo _('Mois')?> : <?php echo $str_month?><br/>
+<?php echo $str_quaterly?>   <?php echo _('Trimestre')?> : <?php echo $str_quater?><br/>
+<?php echo $str_hidden?>
 <?php
 if (isset ($by_year) && $by_year == true ) :
 ?>
-<?=_('Par année')?> <?=$str_byyear?><br/>
+<?php echo _('Par année')?> <?php echo $str_byyear?><br/>
 <?php
 echo HtmlInput::request_to_hidden(array('ac'));
 endif;
 ?>
 <br>
-<?=$str_submit?>
+<?php echo $str_submit?>
 </form>
 </fieldset>

@@ -85,7 +85,7 @@ $categorie_immeuble->readOnly=true;
 			Catégorie de fiches pour les immeubles
 		</td>
 		<td>
-			<?=$categorie_immeuble->input()?>
+			<?php echo $categorie_immeuble->input()?>
 		</td>
 	</tr>
 		<tr>
@@ -93,7 +93,7 @@ $categorie_immeuble->readOnly=true;
 			Catégorie de fiches pour les copropriétaires
 		</td>
 		<td>
-			<?=$cat_coprop->input();?>
+			<?php echo $cat_coprop->input();?>
 		</td>
 	</tr>
 	<tr>
@@ -101,7 +101,7 @@ $categorie_immeuble->readOnly=true;
 			Catégorie de fiches pour les lots
 		</td>
 		<td>
-			<?=$cat_lot->input()?>
+			<?php echo $cat_lot->input()?>
 		</td>
 	</tr>
 		<tr>
@@ -109,7 +109,7 @@ $categorie_immeuble->readOnly=true;
 			Catégorie de fiches pour les appels de fond
 		</td>
 		<td>
-			<?=$categorie_appel->input();?>
+			<?php echo $categorie_appel->input();?>
 		</td>
 	</tr>
 		<tr>
@@ -117,7 +117,7 @@ $categorie_immeuble->readOnly=true;
 			Catégorie de fiches pour les charges
 		</td>
 		<td>
-			<?=$categorie_charge->input();?>
+			<?php echo $categorie_charge->input();?>
 		</td>
 	</tr>
 	<tr>
@@ -125,9 +125,9 @@ $categorie_immeuble->readOnly=true;
 			Journal Appel de fond
 		</td>
 		<td>
-			<?=$journal_appel->input();?>
+			<?php echo $journal_appel->input();?>
 		</td>
 	</tr>
 </table>
-	<?=HtmlInput::submit("save","Sauver")?>
+	<?php echo HtmlInput::submit("save","Sauver")?>
 </form>

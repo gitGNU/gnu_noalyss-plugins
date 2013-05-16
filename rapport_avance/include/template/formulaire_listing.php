@@ -37,30 +37,30 @@
 		<th></th>
 		<th></th>
 	</tr>
-<?
+<?php 
 	for ($i=0;$i<count($alist);$i++):
 ?>
 	<tr>
 		<td>
-			<?=h($alist[$i]['f_title'])?>
+			<?php echo h($alist[$i]['f_title'])?>
 		</td>
 		<td>
-			<?=h($alist[$i]['f_description'])?>
+			<?php echo h($alist[$i]['f_description'])?>
 		</td>
 		<td>
-			<?=HtmlInput::anchor('Définition', "",sprintf('onclick="rapav_form_def(\'%s\',\'%s\',\'%s\',\'%s\')"',$_REQUEST['plugin_code'],$_REQUEST['ac'],dossier::id(),$alist[$i]['f_id']))?>
+			<?php echo HtmlInput::anchor('Définition', "",sprintf('onclick="rapav_form_def(\'%s\',\'%s\',\'%s\',\'%s\')"',$_REQUEST['plugin_code'],$_REQUEST['ac'],dossier::id(),$alist[$i]['f_id']))?>
 		</td>
 		<td>
-			<?=HtmlInput::anchor('Paramètre', "",sprintf('onclick="rapav_form_param(\'%s\',\'%s\',\'%s\',\'%s\')"',$_REQUEST['plugin_code'],$_REQUEST['ac'],dossier::id(),$alist[$i]['f_id']))?>
+			<?php echo HtmlInput::anchor('Paramètre', "",sprintf('onclick="rapav_form_param(\'%s\',\'%s\',\'%s\',\'%s\')"',$_REQUEST['plugin_code'],$_REQUEST['ac'],dossier::id(),$alist[$i]['f_id']))?>
 		</td>
 		<td>
-			<?=HtmlInput::anchor('Export définition', sprintf("extension.raw.php?plugin_code=%s&ac=%s&gDossier=%s&d_id=%s&act=rapav_form_export",$_REQUEST['plugin_code'],$_REQUEST['ac'],dossier::id(),$alist[$i]['f_id']))?>
+			<?php echo HtmlInput::anchor('Export définition', sprintf("extension.raw.php?plugin_code=%s&ac=%s&gDossier=%s&d_id=%s&act=rapav_form_export",$_REQUEST['plugin_code'],$_REQUEST['ac'],dossier::id(),$alist[$i]['f_id']))?>
 		</td>
 	</tr>
 
-<?	endfor; ?>
+<?php endfor; ?>
 </table>
-	<?
+	<?php 
 	echo HtmlInput::button("add_form_bt","Ajout d'un formulaire",'onclick="$(\'add_form_div\').show();$(\'add_form_bt\').hide()"');
 echo '<div id="add_form_div" style="display:none">';
 echo '<form method="POST">';

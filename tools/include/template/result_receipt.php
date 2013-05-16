@@ -13,15 +13,15 @@
 	$class=($i%2==0)?' class="even" ':' class="odd" ';
 	$checkbox->value=$row['jr_id'];
 ?>
-<tr <?=$class?> >
-	<TD><?=$row['str_date']?></TD>
-	<td><?=HtmlInput::detail_op($row['jr_id'],$row['jr_internal'])?></td>
-	<td><?=h($row['jr_comment'])?>
-	<td><?=$row['jr_pj_number']?></td>
-	<td class="num"><?=nbm($row['jr_montant'])?></td>
-	<td><?=$checkbox->input();?></td>
+<tr <?php echo $class?> >
+	<TD><?php echo $row['str_date']?></TD>
+	<td><?php echo HtmlInput::detail_op($row['jr_id'],$row['jr_internal'])?></td>
+	<td><?php echo h($row['jr_comment'])?>
+	<td><?php echo $row['jr_pj_number']?></td>
+	<td class="num"><?php echo nbm($row['jr_montant'])?></td>
+	<td><?php echo $checkbox->input();?></td>
 	</tr>
-<?
+<?php 
 endfor;
 ?>
 </table>

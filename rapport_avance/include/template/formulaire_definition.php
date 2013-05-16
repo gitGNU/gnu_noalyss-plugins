@@ -36,7 +36,7 @@ $type_periode=$cn->make_array("select t_id,t_description from rapport_advanced.p
 		Effacer
 	</th>
 	<th style="width:92px">
-		Code <?=HtmlInput::infobulle(200)?>
+		Code <?php echo HtmlInput::infobulle(200)?>
 	</th>
 	<th>
 		Libellé
@@ -53,24 +53,24 @@ $type_periode=$cn->make_array("select t_id,t_description from rapport_advanced.p
 	</tr>
 	</thead>
 	<tbody id="table_body_id">
-	<? for ($i=0;$i<$max;$i++):?>
-	<tr id="row_<?=$i?>">
+	<?php for ($i=0;$i<$max;$i++):?>
+	<tr id="row_<?php echo $i?>">
 		<td>
-			<?
+			<?php 
 			$a=new ICheckBox('del_row[]',$this->definition[$i]->p_id);
 			echo $a->input();
 			?>
 		</td>
 		<td>
-			<?=HtmlInput::hidden('p_id[]',$this->definition[$i]->p_id) ?>
-			<?
+			<?php echo HtmlInput::hidden('p_id[]',$this->definition[$i]->p_id) ?>
+			<?php 
 				$p_code=new IText('p_code[]',$this->definition[$i]->p_code);
 				$p_code->size="10";
 				echo $p_code->input();
 			?>
 		</td>
 		<td>
-			<?
+			<?php 
 				$p_libelle=new IText('p_libelle[]',$this->definition[$i]->p_libelle);
 				$p_libelle->size="50";
 				//$p_libelle->css_size="100%";
@@ -78,7 +78,7 @@ $type_periode=$cn->make_array("select t_id,t_description from rapport_advanced.p
 			?>
 		</td>
 		<td>
-			<?
+			<?php 
 				$p_type=new ISelect('p_type[]');
 				$p_type->value=$type_row;
 				$p_type->selected=$this->definition[$i]->p_type;
@@ -86,7 +86,7 @@ $type_periode=$cn->make_array("select t_id,t_description from rapport_advanced.p
 			?>
 		</td>
 		<td>
-			<?
+			<?php 
 				$p_type_periode=new ISelect('t_id[]');
 				$p_type_periode->value=$type_periode;
 				$p_type_periode->selected=$this->definition[$i]->t_id;
@@ -94,7 +94,7 @@ $type_periode=$cn->make_array("select t_id,t_description from rapport_advanced.p
 			?>
 		</td>
 		<td>
-			<?
+			<?php 
 				if ($this->definition[$i]->p_order=='')
 					$value=$i*10;
 				else
@@ -106,11 +106,11 @@ $type_periode=$cn->make_array("select t_id,t_description from rapport_advanced.p
 			?>
 		</td>
 	</tr>
-	<?endfor;?>
+	<?php endfor;?>
 	</tbody>
 </table>
 <p>
-<?=HtmlInput::button_anchor("Ajout d'une ligne","javascript:void(0)","add_def",
+<?php echo HtmlInput::button_anchor("Ajout d'une ligne","javascript:void(0)","add_def",
 		sprintf('onclick="add_row_definition(\'%s\',\'%s\',\'%s\')"',$_REQUEST['plugin_code'],$_REQUEST['ac'],$_REQUEST['gDossier']))?>
 </p>
 <p>

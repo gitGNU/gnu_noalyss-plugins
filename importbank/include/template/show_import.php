@@ -38,25 +38,25 @@ $nrec=Database::fetch_array($rec,0);
 
 
 ?>
-<tr <?=$class?>>
-<td><?=$row['id']?></td>
+<tr <?php echo $class?>>
+<td><?php echo $row['id']?></td>
 <td>
-<?=HtmlInput::hidden('id[]',$row['id']);?>
-<?=format_date($row['str_date'])?>
+<?php echo HtmlInput::hidden('id[]',$row['id']);?>
+<?php echo format_date($row['str_date'])?>
 </td>
 <td>
-<?=h($row['format_name'])?>
+<?php echo h($row['format_name'])?>
 </td>
 
-<td><?=$nnew[0]?></td>
-<td><?=$ntransf[0]?></td>
-<td><?=$nrec[0]?></td>
+<td><?php echo $nnew[0]?></td>
+<td><?php echo $ntransf[0]?></td>
+<td><?php echo $nrec[0]?></td>
 
-<td><?=$nerror[0]?></td>
-<td><?=$ndelete[0]?></td>
+<td><?php echo $nerror[0]?></td>
+<td><?php echo $ndelete[0]?></td>
 
 <td>
-<?
+<?php 
     $select=new ICheckBox('s_del[]',$row['id']);
 
 echo $select->input()
@@ -72,7 +72,7 @@ echo HtmlInput::button_anchor('Détail',$link.'&id='.$row['id']);
 </tr>
 
 </tr>
-<?
+<?php 
 	endfor;
 ?>
 </table>

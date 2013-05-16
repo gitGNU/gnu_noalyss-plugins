@@ -37,11 +37,11 @@ echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="ht
 
 ?>
 <FORM METHOD="GET">
-  <? echo HtmlInput::extension().dossier::hidden();?>
-  <? echo HtmlInput::hidden('ac',$_REQUEST['ac']);?>
-<?=_("Code interne de l'opération à modifier") ?>
-  <?=$str->input()?>
-	<?
+  <?php echo HtmlInput::extension().dossier::hidden();?>
+  <?php echo HtmlInput::hidden('ac',$_REQUEST['ac']);?>
+<?php echo _("Code interne de l'opération à modifier") ?>
+  <?php echo $str->input()?>
+	<?php 
 
 	echo HtmlInput::submit('seek','retrouver')?>
 </FORM>

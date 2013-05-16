@@ -49,7 +49,7 @@ $nb_col->value=($nb_col->value=='')?$max:$nb_col->value;
 	Nom du format
 	</td>
 	<td>
-	<?=$format->input()?>
+	<?php echo $format->input()?>
 	</td>
 </tr>
 <tr>
@@ -57,7 +57,7 @@ $nb_col->value=($nb_col->value=='')?$max:$nb_col->value;
 	A importer dans le journal de banque
 	</td>
 	<td>
-	<?=$jrn_def->input()?>
+	<?php echo $jrn_def->input()?>
 	</td>
 </tr>
 <tr>
@@ -65,7 +65,7 @@ $nb_col->value=($nb_col->value=='')?$max:$nb_col->value;
 Format de date
 	</td>
 	<td>
-	<?=$format_date->input()?>
+	<?php echo $format_date->input()?>
 	</td>
 </tr>
 
@@ -74,7 +74,7 @@ Format de date
 	Séparateur de champs
 	</td>
 	<td>
-	<?=$sep_field->input()?>
+	<?php echo $sep_field->input()?>
 	</td>
 </tr>
 
@@ -83,7 +83,7 @@ Format de date
 	Séparateur de millier
 	</td>
 	<td>
-	<?=$sep_thousand->input()?>
+	<?php echo $sep_thousand->input()?>
 	</td>
 </tr>
 
@@ -92,7 +92,7 @@ Format de date
 	Séparateur décimal
 	</td>
 	<td>
-	<?=$sep_decimal->input()?>
+	<?php echo $sep_decimal->input()?>
 	</td>
 </tr>
 <tr>
@@ -100,7 +100,7 @@ Format de date
 	Ligne d'en-tête à ne pas prendre en considération
 	</td>
 	<td>
-	<?=$skip->input()?>
+	<?php echo $skip->input()?>
 	</td>
 </tr>
 <tr>
@@ -108,7 +108,7 @@ Format de date
 	Les lignes ayant ce nombre de colonnes sont valides
 	</td>
 	<td>
-	<?=$nb_col->input()?>
+	<?php echo $nb_col->input()?>
 	</td>
 </tr>
 
@@ -181,5 +181,5 @@ echo $table;
 
 ?>
 </table>
-<?=HtmlInput::submit('transfer_submit','Enregistrer les opérations')?>
+<?php echo HtmlInput::submit('transfer_submit','Enregistrer les opérations')?>
 </form>

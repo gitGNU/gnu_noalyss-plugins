@@ -123,12 +123,12 @@ $res = $cn->get_array($sql);
 	<tr>
 		<th>Type de déclaration</th>
 		<th>Periodicité</th>
-		<th> <?=$sort->get_header(1)?></th>
-		<th><?=$sort->get_header(0)?></th>
+		<th> <?php echo $sort->get_header(1)?></th>
+		<th><?php echo $sort->get_header(0)?></th>
 
-		<? for ($i = 0; $i < count($res); $i++):?>
+		<?php for ($i = 0; $i < count($res); $i++):?>
 		<tr>
-			<?
+			<?php 
 			$aref = sprintf('<a href="javascript:void(0)" onclick="show_declaration(\'%s\',\'%s\')">', $res[$i]['type_decl'], $res[$i]['id']);
 			echo td($aref . $res[$i]['type_title'] . '</a>');
 			echo td($aref . $res[$i]['fmt_periodicity'] . '</a>');
@@ -136,7 +136,7 @@ $res = $cn->get_array($sql);
 			echo td($aref.$res[$i]['date_fmt'].'</a>');
 			?>
 		</tr>
-	<? endfor;?>
+	<?php endfor;?>
 </table>
 </div>
 

@@ -29,7 +29,7 @@
 Exporter le plan comptable
 <form method="get" action="extension.raw.php">
 
-<?
+<?php 
     echo HtmlInput::hidden('sa',$_GET['sa']);
     echo HtmlInput::extension();
 echo dossier::hidden();

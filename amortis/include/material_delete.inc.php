@@ -1,4 +1,4 @@
-<?
+<?php 
 $cn->exec_sql('delete from amortissement.amortissement where a_id=$1',
 	      array($a_id));
 echo HtmlInput::anchor_close($t);

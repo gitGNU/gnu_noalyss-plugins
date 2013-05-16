@@ -28,8 +28,8 @@
  */
 ?>
 <div class="content" style="margin-left: 20px">
-	<?=HtmlInput::button('rlist','Retour liste',' onclick="$(\'key_list\').show();$(\'keydetail_div\').hide()"')?>
-<h1><?=$str_message?></h1>
+	<?php echo HtmlInput::button('rlist','Retour liste',' onclick="$(\'key_list\').show();$(\'keydetail_div\').hide()"')?>
+<h1><?php echo $str_message?></h1>
 
 
 <h2> Caractéristique</h2>
@@ -40,7 +40,7 @@
                         Nom
 		</td>
 		<td>
-			<?=$name->input()?>
+			<?php echo $name->input()?>
 		</td>
         </tr>
         <tr>
@@ -48,13 +48,13 @@
                 Total tantième
             </td>
                 <td>
-                    <?=$tantieme->input()?>
+                    <?php echo $tantieme->input()?>
                 </td>
 	</tr>
 
 </table>
 Description
-<?=$note->input()?>
+<?php echo $note->input()?>
 <h2>Détail des lots</h2>
 <table class="result">
 	<tr>
@@ -65,23 +65,23 @@ Description
 		<th>Bâtiment</th>
 		<th>Montant</th>
 	</tr>
-<?
+<?php 
 	for ($i=0;$i<count($alot);$i++):
 		if ( $alot[$i]['qcode'] == "" ) continue;
 ?>
 	<tr>
 		<td>
-			<?=HtmlInput::card_detail($alot[$i]['qcode'],$alot[$i]['qcode'],' class="line"')?>
-			<?=HtmlInput::hidden('f_id[]',$alot[$i]['f_id'])?>
+			<?php echo HtmlInput::card_detail($alot[$i]['qcode'],$alot[$i]['qcode'],' class="line"')?>
+			<?php echo HtmlInput::hidden('f_id[]',$alot[$i]['f_id'])?>
 		</td>
 		<td>
-			<?=$alot[$i]['name']?>
+			<?php echo $alot[$i]['name']?>
 		</td>
                 <td>
-                    <?=$alot[$i]['desc']?>
+                    <?php echo $alot[$i]['desc']?>
                 </td>
 				<td>
-					<?
+					<?php 
 						$copro=$cn->get_value ("select ad_value
 							from fiche_Detail
 							where ad_id=1
@@ -90,7 +90,7 @@ Description
 					?>
 				</td>
 				<td>
-					<?
+					<?php 
 						$batiment=$cn->get_value ("select ad_value
 							from fiche_Detail
 							where ad_id=1
@@ -99,7 +99,7 @@ Description
 					?>
 				</td>
 		<td>
-			<?
+			<?php 
 			$num=new INum('part'.$alot[$i]['f_id']);
 			$num->javascript='onchange="format_number(this,0);compute_key();"';
 			$num->value=round($alot[$i]['l_part'],0);
@@ -107,27 +107,27 @@ Description
 			?>
 		</td>
 	</tr>
-<?
+<?php 
 	endfor;
 ?>
 </table>
 <p>
-Total tantièmes : <span id="span_tantieme"><?=round($init_tantieme)?></span>
+Total tantièmes : <span id="span_tantieme"><?php echo round($init_tantieme)?></span>
 </p>
 
 <p>
   Différence :
 
-<?
+<?php 
  bcscale(0);
 if ( bcsub ($init_tantieme,$tantieme->value) != 0):
 ?>
-<span id="span_diff" style="color:red"><?=bcsub ($init_tantieme,$tantieme->value)?></span>
-<?
+<span id="span_diff" style="color:red"><?php echo bcsub ($init_tantieme,$tantieme->value)?></span>
+<?php 
 else:
     ?>
-<span id="span_diff" style="color:green"><?=bcsub ($init_tantieme,$tantieme->value)?></span>
-<?
+<span id="span_diff" style="color:green"><?php echo bcsub ($init_tantieme,$tantieme->value)?></span>
+<?php 
 endif;
 ?>
 

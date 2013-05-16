@@ -14,30 +14,30 @@ echo HtmlInput::hidden('p_jrn',$g_copro_parameter->journal_appel);
         <th>Clef de répartition </th>
         <th>Montant</th>
     </tr>
-<? for ($i=0;$i < count($a_input);$i++):?>
+<?php for ($i=0;$i < count($a_input);$i++):?>
     <tr>
         <td>
-            <?=$a_input[$i]['card']?>
+            <?php echo $a_input[$i]['card']?>
         </td>
         <td>
-            <?=$a_input[$i]['card_label']?>
+            <?php echo $a_input[$i]['card_label']?>
         </td>
         <td>
-            <?=$a_input[$i]['key']?>
+            <?php echo $a_input[$i]['key']?>
 
         </td>
 
         <td>
-            <?=$a_input[$i]['amount']?>
+            <?php echo $a_input[$i]['amount']?>
 
         </td>
     </tr>
 
-<? endfor?>
+<?php endfor?>
 
 </table>
 <p>
-	Total <span id="sbud_total"><?=nbm($bud_amount)?></span>
+	Total <span id="sbud_total"><?php echo nbm($bud_amount)?></span>
 </p>
 <p>
 Différence <span id="span_diff"></span>

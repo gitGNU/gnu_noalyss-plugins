@@ -7,7 +7,7 @@ $checkbox=new ICheckBox('jr_id[]');
 
 ?>
 <form method="POST" id="form1" onsubmit="return confirm('Vous confirmez?')">
-<?
+<?php 
 	echo HtmlInput::extension();
 	echo HtmlInput::get_to_hidden(array('sa','ac'));
 	echo Dossier::hidden();
@@ -16,7 +16,7 @@ $checkbox=new ICheckBox('jr_id[]');
 <div id="div_poste" class="inner_box" style="top:230;margin:5;overflow:visible;display:none;">
 	<h2 class="info">Poste comptable </h2>
 	<p class="notice">Changera dans les opérations sélectionnées le poste comptable.Attention, cela ne changera pas la fiche, soyez prudent</p>
-<?
+<?php 
 	$target=new IPoste('tposte');
 	$source=new IPoste('sposte');
 	$target->set_attribute('gDossier',Dossier::id());
@@ -34,14 +34,14 @@ $checkbox=new ICheckBox('jr_id[]');
 <table>
 	<TR><TD>Changer le poste comptable </TD>
 	<TD>
-		<?=$source->input()?>
+		<?php echo $source->input()?>
  	<td> <span id="sposte_label"></span></td>
 	<td>Par le poste comptable</td>
-	<td><?=$target->input()?></td>
+	<td><?php echo $target->input()?></td>
 	<td> <span id="tposte_label"></span>'</td>
 	</TR>
-	<tr><TD><?=HtmlInput::submit('chg_poste','Changer le poste comptable')?></TD>
-<td><?
+	<tr><TD><?php echo HtmlInput::submit('chg_poste','Changer le poste comptable')?></TD>
+<td><?php 
 echo  HtmlInput::button('accounting_hide_bt','Annuler','onclick="$(\'div_poste\').hide();"');
 ?>
 </TD>
@@ -52,7 +52,7 @@ echo  HtmlInput::button('accounting_hide_bt','Annuler','onclick="$(\'div_poste\'
 <div id="div_card" class="inner_box" style="top:230;margin:5;overflow:visible;display:none;">
 <h2 class="info">Changer  la fiche </h2>
 	<p class="notice">Attention, dans les opérations sélectionnées cela changera la fiche et le poste comptable: ce sera celui de la fiche qui sera utilisé, soyez prudent</p>
-<?
+<?php 
 	$csource=new ICard('csource');
   	$csource->set_attribute('label','csource_label');
 	$csource->set_dblclick("fill_ipopcard(this);");
@@ -75,20 +75,20 @@ echo  HtmlInput::button('accounting_hide_bt','Annuler','onclick="$(\'div_poste\'
 <table>
 <TR>
 	<TD>Changer</TD>
-	<TD><?=$csource->input();?></TD>
-	<td><?=$csource->search()?></td>
+	<TD><?php echo $csource->input();?></TD>
+	<td><?php echo $csource->search()?></td>
 	<td><span id="csource_label"></span></td>
 </tr>
 <tr>
 	<TD>par </TD>
 
-	<TD><?=$ctarget->input()?></TD>
-	<td><?=$ctarget->search()?></td>
+	<TD><?php echo $ctarget->input()?></TD>
+	<td><?php echo $ctarget->search()?></td>
 	<td><span id="ctarget_label"></span></td>
 </tr>
 </table>
-	<? echo HtmlInput::submit('chg_card','Changer la fiche'); ?>
-<?
+	<?php echo HtmlInput::submit('chg_card','Changer la fiche'); ?>
+<?php 
 echo  HtmlInput::button('card_hide_bt','Annuler','onclick="$(\'div_card\').hide();"');
 ?>
 
@@ -96,7 +96,7 @@ echo  HtmlInput::button('card_hide_bt','Annuler','onclick="$(\'div_card\').hide(
 <div id="div_card_account" class="inner_box" style="top:230;margin:5;overflow:visible;display:none;">
 <h2 class="info">Changer un poste comptable par une fiche</h2>
 	<p class="notice">Attention, dans les opérations sélectionnées, le poste comptable sera changé par une fiche et par son poste comptable, soyez prudent</p>
-<?
+<?php 
 	$csource=new IPoste('csource1');
 	$csource->set_attribute('gDossier',Dossier::id());
 	$csource->set_attribute('jrn',0);
@@ -118,19 +118,19 @@ echo  HtmlInput::button('card_hide_bt','Annuler','onclick="$(\'div_card\').hide(
 <table>
 <TR>
 	<TD>Changer</TD>
-	<TD><?=$csource->input();?></TD>
+	<TD><?php echo $csource->input();?></TD>
 	<td><span id="csource1_label"></span></td>
 </tr>
 <tr>
 	<TD>par </TD>
 
-	<TD><?=$ctarget->input()?></TD>
-	<td><?=$ctarget->search()?></td>
+	<TD><?php echo $ctarget->input()?></TD>
+	<td><?php echo $ctarget->search()?></td>
 	<td><span id="ctarget1_label"></span></td>
 </tr>
 </table>
-	<? echo HtmlInput::submit('chg_card_account','Changer le poste comptable par la fiche'); ?>
-<?
+	<?php echo HtmlInput::submit('chg_card_account','Changer le poste comptable par la fiche'); ?>
+<?php 
 echo  HtmlInput::button('card_hide_bt','Annuler','onclick="$(\'div_card_account\').hide();"');
 ?>
 
@@ -139,7 +139,7 @@ echo  HtmlInput::button('card_hide_bt','Annuler','onclick="$(\'div_card_account\
 <h2 class="info">Déplacer dans un autre journal </h2>
 	<p class="notice">Attention, pour les opérations sélectionnées,cela  transfèrera les opérations vers le journal choisi mais il faut que ce journal soit de même type (achat vers achat, vente vers vente...), les pièces justificatives ne seront pas mises à jour, soyez prudent</p>
 
-<?
+<?php 
 	$sql="select jrn_def_id, '('||jrn_def_type||') '||jrn_def_name from jrn_def order by jrn_def_name asc";
 $aledger=$cn->make_array($sql);
 $sledger=new ISelect('sledger');
@@ -148,10 +148,10 @@ $tledger=new ISelect('tledger');
 $tledger->value=$aledger;
 ?>
 <p>
-Les opérations appartenant au journal <?=$sledger->input()?> vers le journal <?=$tledger->input()?>
+Les opérations appartenant au journal <?php echo $sledger->input()?> vers le journal <?php echo $tledger->input()?>
 </p>
-	<? echo HtmlInput::submit('chg_ledger','Déplacer dans le journal'); ?>
-<?
+	<?php echo HtmlInput::submit('chg_ledger','Déplacer dans le journal'); ?>
+<?php 
 echo  HtmlInput::button('ledger_hide_bt','Annuler','onclick="$(\'div_ledger\').hide();"');
 ?>
 
@@ -171,7 +171,7 @@ echo HtmlInput::hidden('sa',$_REQUEST['sa']);
 	<TH class="num">Montant</TH>
 	<TH><INPUT TYPE="CHECKBOX" onclick="toggle_checkbox('form1')"></TH>
 </TR>
-<?
+<?php 
 for ($i = 0;$i < $nb_row;$i++) :
 	$row=$cn->fetch_array($ret,$i);
 	$odd=($i%2==0)?' class="odd"':' class="even"';
@@ -181,12 +181,12 @@ for ($i = 0;$i < $nb_row;$i++) :
 
 
 
-	<TR <?=$odd?> >
-	<TD><?=$row['str_jr_date']?></TD>
-	<td><?=HtmlInput::detail_op($row['jr_id'],$row['jr_internal'])?></td>
-	<td><?=$row['jr_pj_number']?></td>
-	<td><?=$row['jrn_def_name']?></td>
-	<td><?=$row['jr_comment']?></td>
+	<TR <?php echo $odd?> >
+	<TD><?php echo $row['str_jr_date']?></TD>
+	<td><?php echo HtmlInput::detail_op($row['jr_id'],$row['jr_internal'])?></td>
+	<td><?php echo $row['jr_pj_number']?></td>
+	<td><?php echo $row['jrn_def_name']?></td>
+	<td><?php echo $row['jr_comment']?></td>
 
 <?php
 $positive=0;
@@ -200,8 +200,8 @@ $positive=0;
             }
 
 ?>
-	<td class="num"><?=( $positive != 0 )?"<font color=\"red\">  - ".nbm($row['jr_montant'])."</font>":nbm($row['jr_montant'])?> </td>
-	<td><?=$checkbox->input();?></td>
+	<td class="num"><?php echo ( $positive != 0 )?"<font color=\"red\">  - ".nbm($row['jr_montant'])."</font>":nbm($row['jr_montant'])?> </td>
+	<td><?php echo $checkbox->input();?></td>
 	</TR>
 <?php
 endfor;

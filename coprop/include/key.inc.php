@@ -77,37 +77,37 @@ $a_key=$cn->get_array($sql);
 
                 </th>
 	</tr>
-<?
+<?php 
 for ($i=0;$i < count($a_key);$i++):
 	$js=sprintf("mod_key('%s','%s','%s','%s')",$gDossier,$_REQUEST['plugin_code'],$_REQUEST['ac'],$a_key[$i]['cr_id']);
 	$mod_key=HtmlInput::anchor($a_key[$i]['cr_name'],"","onclick=\"$js\"");
 ?>
-	<tr id="row<?=$a_key[$i]['cr_id']?>">
+	<tr id="row<?php echo $a_key[$i]['cr_id']?>">
 		<td>
-			<?=$mod_key?>
+			<?php echo $mod_key?>
 		</td>
 		<td>
-			<?=h($a_key[$i]['cr_note'])?>
+			<?php echo h($a_key[$i]['cr_note'])?>
 		</td>
                 <td class="num">
-                    <?=nbm($a_key[$i]['cr_tantieme'])?>
+                    <?php echo nbm($a_key[$i]['cr_tantieme'])?>
                 </td>
                 <td class="num">
-                    <?=nbm($a_key[$i]['delta'])?>
+                    <?php echo nbm($a_key[$i]['delta'])?>
                 </td>
-		<td id="col<?=$a_key[$i]['cr_id']?>">
-                    <?
+		<td id="col<?php echo $a_key[$i]['cr_id']?>">
+                    <?php 
                     $js="onclick=remove_key('".$_REQUEST['plugin_code']."','".$_REQUEST['ac']."','".$_REQUEST['gDossier']."','".$a_key[$i]['cr_id']."')";
 			echo HtmlInput::anchor("enlever","",$js);
                         ?>
                 </td>
 
 	</tr>
-<?
+<?php 
 endfor;
 ?>
 </table>
-	<? $js=sprintf("add_key('%s','%s','%s')",$gDossier,$_REQUEST['plugin_code'],$_REQUEST['ac']);
+	<?php $js=sprintf("add_key('%s','%s','%s')",$gDossier,$_REQUEST['plugin_code'],$_REQUEST['ac']);
  echo HtmlInput::button("add_key","Ajout clef","onclick=\"$js\"");
 	?>
  </div>

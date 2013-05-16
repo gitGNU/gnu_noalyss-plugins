@@ -39,14 +39,14 @@ echo HtmlInput::title_box('Code Formulaire','search_code_div');
 			Libellé
 		</th>
 	</tr>
-	<? for ($i=0;$i<count($array);$i++): ?>
+	<?php for ($i=0;$i<count($array);$i++): ?>
 	<tr>
 		<td>
-			<?=HtmlInput::anchor(h($array[$i]['p_code']),"",'onclick="$(\'form_compute\').value+=\'['.$array[$i]['p_code'].']\';removeDiv(\'search_code_div\');"')?>
+			<?php echo HtmlInput::anchor(h($array[$i]['p_code']),"",'onclick="$(\'form_compute\').value+=\'['.$array[$i]['p_code'].']\';removeDiv(\'search_code_div\');"')?>
 		</td>
 		<td>
-			<?=h($array[$i]['p_libelle'])?>
+			<?php echo h($array[$i]['p_libelle'])?>
 		</td>
 	</tr>
-	<?endfor;?>
+	<?php endfor;?>
 </table>

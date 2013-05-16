@@ -32,24 +32,24 @@
 			Date de l'opération
 		</td>
 		<td>
-			<?=$date->input()?>
+			<?php echo $date->input()?>
 		</td>
 	</tr>
 		<td>Journal pour l'appel de fond</td>
 		<td>
-			<?=$led_appel_fond->input()?>
+			<?php echo $led_appel_fond->input()?>
 		</td>
         </tr>
         <tr>
             <td> Fiche pour l'appel</td>
             
-            <td><?=$f_categorie_appel_bt?><?=$categorie_appel->input()?></td>
-		<td><?=$f_categorie_appel_label?></td>
-		<td><?=$str_add_appel?></td>
+            <td><?php echo $f_categorie_appel_bt?><?php echo $categorie_appel->input()?></td>
+		<td><?php echo $f_categorie_appel_label?></td>
+		<td><?php echo $str_add_appel?></td>
 	</tr>
 
 </table>
-appel de fond par <?=$appel_fond_type->input()?>
+appel de fond par <?php echo $appel_fond_type->input()?>
 <div style="margin-left:150px">
 <table id="appel_fond_budget">
         	<tr >
@@ -58,7 +58,7 @@ appel de fond par <?=$appel_fond_type->input()?>
 			Budget à utiliser
 		</td>
 		<td>
-			<?=$budget_sel->input()?>
+			<?php echo $budget_sel->input()?>
 		</td>
         </tr>
         <tr>
@@ -66,7 +66,7 @@ appel de fond par <?=$appel_fond_type->input()?>
 			Pourcentage du budget
 		</td>
 		<td>
-			<?=$budget_pct->input()?>
+			<?php echo $budget_pct->input()?>
 		</td>
 	</tr>
 </table>
@@ -77,7 +77,7 @@ appel de fond par <?=$appel_fond_type->input()?>
 			Montant à répartir
 		</td>
 		<td>
-			<?=$amount->input()?>
+			<?php echo $amount->input()?>
 		</td>
         </tr>
         <tr>
@@ -85,7 +85,7 @@ appel de fond par <?=$appel_fond_type->input()?>
 			Clef de répartiton à utiliser
 		</td>
 		<td>
-			<?=$key->input()?>
+			<?php echo $key->input()?>
 		</td>
 	</tr>
 

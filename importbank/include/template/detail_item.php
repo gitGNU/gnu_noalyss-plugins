@@ -1,5 +1,5 @@
-<div id="<?=$ctl?>">
-<?=HtmlInput::anchor_close($ctl)?>
+<div id="<?php echo $ctl?>">
+<?php echo HtmlInput::anchor_close($ctl)?>
 
 <?php
 echo h2info('Détail opération');
@@ -18,73 +18,73 @@ echo HtmlInput::hidden('p_jrn',$bi->jrn_def_id);
 
 <table>
 <TR>
-<TD>Date</TD><td><?=$date->input()?></td></tr>
+<TD>Date</TD><td><?php echo $date->input()?></td></tr>
 <tr>
 	<TD>Journal
 	</TD>
-	<td><span class="notice"><?=$jrn?></span>
+	<td><span class="notice"><?php echo $jrn?></span>
 	</td>
 </tr>
 <tr>
 	<TD>Contrepartie
 	</TD>
-	<td><?=$w->input()?><?=$w->search()?><span id="e_third"><?=h($name)?></span>
+	<td><?php echo $w->input()?><?php echo $w->search()?><span id="e_third"><?php echo h($name)?></span>
 	</td>
 </tr>
 
-<tr><td>n° opération </td><td><?=h($bi->ref_operation)?></td></tr>
+<tr><td>n° opération </td><td><?php echo h($bi->ref_operation)?></td></tr>
 <tr><TD>
 	Tiers
     </TD>
     <td>
-	<?=$third->input()?>
+	<?php echo $third->input()?>
     </td>
 </tr>
 <tr>
 	<TD>Montant
 	</TD>
-	<td><?=$amount->input()?>
+	<td><?php echo $amount->input()?>
 	</td>
 </tr>
 <tr>
 	<TD>Libelle
 	</TD>
-	<td><?=$libelle->input()?>
+	<td><?php echo $libelle->input()?>
 	</td>
 </tr>
 <tr>
 	<TD>Autre information
 	</TD>
-	<td><?=$extra->input()?>
+	<td><?php echo $extra->input()?>
 	</td>
 </tr>
 <tr>
 	<TD>reconciliation
 	</TD>
-	<td><?=$wConcerned->input();?>
+	<td><?php echo $wConcerned->input();?>
 	</td>
 </tr>
-<? $style=($bi->status == 'E') ? 'style="color:red;font-weight:bold"' : '';?>
+<?php $style=($bi->status == 'E') ? 'style="color:red;font-weight:bold"' : '';?>
 
 <tr>
 	<TD>statut</TD>
-	<td <?=$style?> ><?=$status?></td>
+	<td <?php echo $style?> ><?php echo $status?></td>
 </tr>
-<? if ($bi->status != 'D') : ?>
+<?php if ($bi->status != 'D') : ?>
 <tr>
 	<TD>A effacer</TD>
-	<td><?=$remove->input();?>
+	<td><?php echo $remove->input();?>
 </td>
 </tr>
-<? else :?>
+<?php else :?>
 <tr>
 	<TD>A ne pas effacer</TD>
-	<td><?=$recup->input();?>
+	<td><?php echo $recup->input();?>
 </td>
 </tr>
-<? endif; ?>
+<?php endif; ?>
 </table>
-<?=HtmlInput::submit('save','Sauve');?>
-<?=HtmlInput::button_close($ctl)?>
+<?php echo HtmlInput::submit('save','Sauve');?>
+<?php echo HtmlInput::button_close($ctl)?>
 </form>
 </div>

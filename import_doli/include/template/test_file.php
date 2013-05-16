@@ -9,26 +9,26 @@ echo _('Importation de données');
 </p>
 
 <form method="POST" >
-<?=$hidden?>
+<?php echo $hidden?>
 <table>
 <tr>
 <td>Délimiteur </td>
-<td> <? echo $_POST['rdelimiter']?></td>
+<td> <?php echo $_POST['rdelimiter']?></td>
 </tr>
 <tr>
-<td>Fichier à charger</td><td> <? echo $_FILES['csv_file']['name']?></td>
+<td>Fichier à charger</td><td> <?php echo $_FILES['csv_file']['name']?></td>
 </tr>
 <tr>
-<td>Catégorie de fiche</td><td> <? echo $file_cat;?></td>
+<td>Catégorie de fiche</td><td> <?php echo $file_cat;?></td>
 </tr>
 <tr>
-<td>Encodage </td><td> <? echo $encoding?></td>
+<td>Encodage </td><td> <?php echo $encoding?></td>
 </tr>
 <tr>
-<td>Texte entouré par</td><td> <? echo $_POST['rsurround'];?></td>
+<td>Texte entouré par</td><td> <?php echo $_POST['rsurround'];?></td>
 </tr>
 </table>
-<?
+<?php 
 foreach (array('rfichedef','rdelimiter','encodage') as $e)
 {
   if ( isset($_POST[$e])) echo HtmlInput::hidden($e,$_POST[$e]);
@@ -37,11 +37,11 @@ echo HtmlInput::hidden('filename',$filename);
 
  echo HtmlInput::submit('record_import','Valider');
 ?>
-<input type="hidden" name="rsurround" value='<?=$_POST['rsurround']?>'>
+<input type="hidden" name="rsurround" value='<?php echo $_POST['rsurround']?>'>
 
 
 
-<?
+<?php 
    global $cn;
    ob_start();
   /**

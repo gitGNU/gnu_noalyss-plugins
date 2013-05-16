@@ -33,10 +33,10 @@ echo '<br>';
 echo HtmlInput::print_window();
 ?>
 <form method="GET" action="extension.raw.php" style="display:inline">
-<?=dossier::hidden()?>
-<?=HtmlInput::hidden('material','1');?>
-<?=HtmlInput::hidden('ac',$_REQUEST['ac']);?>
-<?=HtmlInput::extension()?>
-<?=HtmlInput::submit('csv','Export CSV');?>
+<?php echo dossier::hidden()?>
+<?php echo HtmlInput::hidden('material','1');?>
+<?php echo HtmlInput::hidden('ac',$_REQUEST['ac']);?>
+<?php echo HtmlInput::extension()?>
+<?php echo HtmlInput::submit('csv','Export CSV');?>
 </form>
 </div>

@@ -1,44 +1,44 @@
 <h2 class="info">Modification de matériel</h2>
 <form onsubmit="save_modify(this);return false">
-<?=$p_card?>
-<?=$a_id?>
-<span style="text-align:center;display:block;font-size:2em" id="p_card_label"  ><?= $card->strAttribut(ATTR_DEF_NAME)?></span>
+<?php echo $p_card?>
+<?php echo $a_id?>
+<span style="text-align:center;display:block;font-size:2em" id="p_card_label"  ><?php echo  $card->strAttribut(ATTR_DEF_NAME)?></span>
 <table>
 <tr>
 	<td>Fiche</td>
-	<td><?=HtmlInput::card_detail($card->strAttribut(ATTR_DEF_QUICKCODE))?></td>
+	<td><?php echo HtmlInput::card_detail($card->strAttribut(ATTR_DEF_QUICKCODE))?></td>
 </tr>
 
 <tr>
 	<td>Date Acquisition</td>
-	<td><?=$p_date->input()?></td>
+	<td><?php echo $p_date->input()?></td>
 </tr>
 <tr>
 	<td>Montant à amortir</td>
-	<td><?=$p_amount->input()?></td>
+	<td><?php echo $p_amount->input()?></td>
 </tr>
 
 <tr>
 	<td>Année comptable d'achat</td>
-	<td> <? echo $p_year->input();?></td>
+	<td> <?php echo $p_year->input();?></td>
 </tr>
 <tr>
 	<td>Poste de charge dotations amortissement (débit)</td>
-	<td><?=$p_deb->input()?></td>
-	<td><?=$deb_span->input()?></td>
+	<td><?php echo $p_deb->input()?></td>
+	<td><?php echo $deb_span->input()?></td>
 </tr>
 <tr>
 	<td>Poste amortissement en contrepartie</td>
-	<td><?=$p_cred->input();?></td>
-	<td><?=$cred_span->input();?></td>
+	<td><?php echo $p_cred->input();?></td>
+	<td><?php echo $cred_span->input();?></td>
 </tr>
 <tr>
 	<td>Nombre d'années amortissement (non modifiable)</td>
-	<td><? echo $p_number->input()?></td>
+	<td><?php echo $p_number->input()?></td>
 </tr>
 <tr>
 	<td>Visible <span class="notice">Y pour oui ou N pour non</span></td>
-	<td><? echo $p_visible->input();?></td>
+	<td><?php echo $p_visible->input();?></td>
 </tr>
 <tr>
 	<td> </td>
@@ -61,7 +61,7 @@
 
 <th>Pourcent</th>
 
-<?
+<?php 
 bcscale(2);
 echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
 echo dossier::hidden();
@@ -72,11 +72,11 @@ for ($i=0;$i<count($array);$i++):
 	       $pct->value=$array[$i]->ad_percentage;
 ?>
 <tr>
-	<td><?=HtmlInput::hidden('ad_year[]',$array[$i]->ad_year)?>
-	  <?=$array[$i]->ad_year?>
+	<td><?php echo HtmlInput::hidden('ad_year[]',$array[$i]->ad_year)?>
+	  <?php echo $array[$i]->ad_year?>
 	</td>
 	<td>
-	<?
+	<?php 
 	echo HtmlInput::hidden("ad_id[]",$array[$i]->ad_id);
 	$amount=new INum("amount[]");
 	$amount->value=$array[$i]->ad_amount;
@@ -84,7 +84,7 @@ for ($i=0;$i<count($array);$i++):
         ?>
 
 </td>
-	<?
+	<?php 
 	$annuite=bcadd($annuite,$array[$i]->ad_amount);
 
 	$x=$cn->get_array('select ha_id,h_pj,jr_internal,h_amount from amortissement.amortissement_histo where a_id=$1 and h_year=$2',
@@ -114,15 +114,15 @@ for ($i=0;$i<count($array);$i++):
 </tr>
 
 
-<?
+<?php 
 endfor;
 ?>
 </table>
-<span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%">Total = <?=nbm($annuite)?></span>
-<span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%">Amorti = <?=nbm($done)?></span>
-<span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%">Reste = <?=nbm($p_amount->value-$done)?></span>
+<span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%">Total = <?php echo nbm($annuite)?></span>
+<span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%">Amorti = <?php echo nbm($done)?></span>
+<span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%">Reste = <?php echo nbm($p_amount->value-$done)?></span>
 
-<?
+<?php 
 if ( $annuite !=  $p_amount->value)
  {
  	echo '<h2 class="error">Différence entre le montant à amortir et le montant amorti =';
@@ -131,7 +131,7 @@ if ( $annuite !=  $p_amount->value)
  }
  ?>
 </fieldset>
-<?
+<?php 
    echo HtmlInput::submit('sauver','Sauver',"onclick=\"return confirm('Vous confirmez ?')\" ");
    $rm=sprintf("remove_mat(%d,'%s',%d)",dossier::id(),$_REQUEST['plugin_code'],$value_a_id);
    echo HtmlInput::button('remove','Effacer',"onclick=\"$rm\" ");

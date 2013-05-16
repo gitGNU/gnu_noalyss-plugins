@@ -16,7 +16,7 @@ Filtre <?php echo HtmlInput::infobulle(400)?> <?php echo HtmlInput::filter_table
 
 </tr>
 
-<?
+<?php 
 bcscale(2);
 for ($i =0 ;$i < count($ret);$i++) :
 
@@ -26,7 +26,7 @@ for ($i =0 ;$i < count($ret);$i++) :
         $detail=detail_material($ret[$i]->f_id,$fiche->strAttribut(ATTR_DEF_QUICKCODE));
         echo td($detail);
 	echo td($fiche->strAttribut(ATTR_DEF_NAME));
-	// <td sorttable_customkey="<?=$row_bank['b_date']
+	// <td sorttable_customkey="<?php echo $row_bank['b_date']
 	echo '<td sorttable_customkey="'.$ret[$i]->a_date.'">'.format_date($ret[$i]->a_date).'</td>';
 	echo td($ret[$i]->a_start);
         echo td(nbm($ret[$i]->a_amount),'style="text-align:right"');

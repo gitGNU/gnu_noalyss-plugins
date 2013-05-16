@@ -10,24 +10,24 @@ echo _('Importation de données');
    Par défaut, correspond à un export CSV depuis Calc (OpenOffice.org ou libreoffice);
 </p>
 <form method="POST" enctype="multipart/form-data">
-<?=$hidden?>
+<?php echo $hidden?>
 <table>
 <tr>
-<td>Délimiteur </td><TD> <? echo $delimiter->input()?></td>
+<td>Délimiteur </td><TD> <?php echo $delimiter->input()?></td>
 </tr>
 <tr>
-<td>Fichier à charger</td><TD> <? echo $file->input()?></td>
+<td>Fichier à charger</td><TD> <?php echo $file->input()?></td>
 </tr>
 <tr>
-<td>Catégorie de fiche</td><TD> <? echo $fd->input();?></td>
+<td>Catégorie de fiche</td><TD> <?php echo $fd->input();?></td>
 </tr>
 <tr>
-<td>Encodage unicode</td><TD> <? echo $encodage->input()?></td>
+<td>Encodage unicode</td><TD> <?php echo $encodage->input()?></td>
 </tr>
 <tr>
 <td>  Texte entouré du signe </td><TD><input type="text" name="rsurround" value='"' size="1"></td>
 </tr>
 </table>
-<? echo HtmlInput::submit('test_import','Valider');?>
+<?php echo HtmlInput::submit('test_import','Valider');?>
 
 </form>

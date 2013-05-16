@@ -1,4 +1,4 @@
-<?
+<?php 
 /**
  *@file
  *Contains all the needed variable for the plugin

@@ -27,14 +27,14 @@
  *
  */
 ?>
-<?=HtmlInput::hidden('f_id',$this->f_id)?>
+<?php echo HtmlInput::hidden('f_id',$this->f_id)?>
 <table>
 	<tr>
 		<td>
 			Nom
 		</td>
 		<td>
-			<?
+			<?php 
 			$title=new IText("f_title",$this->f_title);
 			$title->size=50;
 			echo $title->input();
@@ -46,7 +46,7 @@
 			Description
 		</td>
 		<td>
-			<?
+			<?php 
 			$description=new IText("f_description",$this->f_description);
 			$description->size=100;
 			echo $description->input();

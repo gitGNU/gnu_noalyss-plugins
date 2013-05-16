@@ -27,12 +27,12 @@
  *
  */
 ?>
-<h1><?=$this->d_title?></h1>
-<h2> Du <?=$this->d_start?> au <?=$this->d_end?></h2>
+<h1><?php echo $this->d_title?></h1>
+<h2> Du <?php echo $this->d_start?> au <?php echo $this->d_end?></h2>
 <p>
-	Note : <?=h($this->d_description)?>
+	Note : <?php echo h($this->d_description)?>
 </p>
-<?
+<?php 
 	if ( empty($array) ) { echo 'Aucune donnée'; exit();}
 
 	// Create infobulle

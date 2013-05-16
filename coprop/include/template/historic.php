@@ -53,30 +53,30 @@
 		</th>
 
 	</tr>
-<? for ($i=0;$i<count($array);$i++): ?>
+<?php for ($i=0;$i<count($array);$i++): ?>
 	<tr>
 		<td>
-			<?=$array[$i]['str_date']?>
+			<?php echo $array[$i]['str_date']?>
 		</td>
 		<td>
-			<?=$array[$i]['b_name']?>
+			<?php echo $array[$i]['b_name']?>
 		</td>
 		<td>
-			<?=$array[$i]['cr_name']?>
+			<?php echo $array[$i]['cr_name']?>
 		</td>
 		<td>
-			<?=nb($array[$i]['af_amount'])?>
+			<?php echo nb($array[$i]['af_amount'])?>
 		</td>
 		<td>
-			<?=HtmlInput::detail_op($array[$i]['jr_id'], $array[$i]['jr_internal'])?>
+			<?php echo HtmlInput::detail_op($array[$i]['jr_id'], $array[$i]['jr_internal'])?>
 		</td>
 		<td>
-			<?=$array[$i]['af_percent']?>
+			<?php echo $array[$i]['af_percent']?>
 		</td>
 		<td>
-			<?=$array[$i]['b_exercice']?>
+			<?php echo $array[$i]['b_exercice']?>
 		</td>
 	</tr>
-<? endfor; ?>
+<?php endfor; ?>
 
 </table>

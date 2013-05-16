@@ -105,7 +105,7 @@ echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="ht
 echo ShowItem($array,'H',"mtitle","mtitle",$def,' style="width:80%;margin-left:10%;border-spacing:5;" ');
 ?>
 <div class="content" style="margin-left: 30px">
-<?
+<?php 
 // include the right file
 if ($def==1) {
   require_once('decl_tva.inc.php');

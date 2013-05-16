@@ -34,7 +34,7 @@
 				Exercice
 			</td>
 			<td>
-				<?=$exercice->input()?>
+				<?php echo $exercice->input()?>
 			</td>
 		</tr>
 		<tr>
@@ -42,7 +42,7 @@
 				Année
 			</td>
 			<td>
-				<?=$year->input()?>
+				<?php echo $year->input()?>
 			</td>
 		</tr>
 		<tr>
@@ -50,7 +50,7 @@
 				Nombre de mois
 			</td>
 			<td>
-				<?=$nb_month->input()?>
+				<?php echo $nb_month->input()?>
 			</td>
 		</tr>
 		<tr>
@@ -58,11 +58,11 @@
 				A partir du mois de
 			</td>
 			<td>
-				<?=$from->input()?>
+				<?php echo $from->input()?>
 			</td>
 		</tr>
 	</table>
-<?
+<?php 
 echo HtmlInput::submit('save','Valider');
 echo HtmlInput::request_to_hidden(array('sa','ac','plugin_code','gDossier'));
 ?>
@@ -70,18 +70,18 @@ echo HtmlInput::request_to_hidden(array('sa','ac','plugin_code','gDossier'));
 <script charset="UTF8" lang="javascript">
 	function validate()
 	{
-		if (trim($('<?=$exercice->id?>').value)=='') {
-						$('<?=$exercice->id?>').style.borderColor='red';
+		if (trim($('<?php echo $exercice->id?>').value)=='') {
+						$('<?php echo $exercice->id?>').style.borderColor='red';
 						alert('Exercice invalide');
 						return false;
 					}
-		if (trim($('<?=$nb_month->id?>').value)=='') {
-						$('<?=$nb_month->id?>').style.borderColor='red';
+		if (trim($('<?php echo $nb_month->id?>').value)=='') {
+						$('<?php echo $nb_month->id?>').style.borderColor='red';
 						alert('Nombre de mois invalide');
 						return false;
 					}
-		if (trim($('<?=$year->id?>').value)=='') {
-						$('<?=$year->id?>').style.borderColor='red';
+		if (trim($('<?php echo $year->id?>').value)=='') {
+						$('<?php echo $year->id?>').style.borderColor='red';
 						alert('Année invalide');
 						return false;
 					}

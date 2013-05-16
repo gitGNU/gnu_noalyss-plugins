@@ -25,37 +25,37 @@
  */
  ?>
 <form id="gen_amort" method="post">
-<?=HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);?>
-<?=HtmlInput::hidden('sa',$_REQUEST['sa']);?>
-<?=HtmlInput::hidden('sb',$_REQUEST['sb']);?>
-<?=dossier::hidden()?>
+<?php echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);?>
+<?php echo HtmlInput::hidden('sa',$_REQUEST['sa']);?>
+<?php echo HtmlInput::hidden('sb',$_REQUEST['sb']);?>
+<?php echo dossier::hidden()?>
 
 <table>
 <tr>
 <td>Année</td>
-<td><?=$year->input();?></td>
+<td><?php echo $year->input();?></td>
 </tr>
 <tr>
 <td>Journal dans lequel l'écriture sera passée</td>
-<td><?=$sel_ledger->input()?></td>
+<td><?php echo $sel_ledger->input()?></td>
 </tr>
 <tr>
 <td>Date de l'opération</td>
-<td><?=$p_date->input()?></td>
+<td><?php echo $p_date->input()?></td>
 </tr>
-<? if ( isset ($f_periode)) : ?>
+<?php if ( isset ($f_periode)) : ?>
 <tr>
 	<td>
-		<?=$f_periode?>
+		<?php echo $f_periode?>
 	</td>
 	<td>
-		 <?=$l_form_per?>
+		 <?php echo $l_form_per?>
 	</td>
 </tr>
-<? endif; ?>
+<?php endif; ?>
 <tr>
 <td>Pièce</td>
-<td><?=$pj->input()?></td>
+<td><?php echo $pj->input()?></td>
 </tr>
 </table>
 
@@ -67,7 +67,7 @@ Cochez ce qu'il faut amortir
 	<th>Nom</th>
 	<th>Description</th>
 </tr>
-<?
+<?php 
 /*
  * get all the material
  */
@@ -80,22 +80,22 @@ for ( $i =0;$i<count($array);$i++):
 
 ?>
 <tr>
-<?
+<?php 
 if ( isset($_POST['p_ck'.$i])) $ck->selected=true;else $ck->selected=false;
 $view_history= sprintf('<A class="detail" style="text-decoration:underline" HREF="javascript:view_history_card(\'%s\',\'%s\')" >%s</A>',
                         $fiche->id, dossier::id(), $fiche->get_quick_code());
 ?>
-	<td><?=$ck->input()?></td>
-	<td><?=$view_history?></td>
-	<td><?=$fiche->strAttribut(ATTR_DEF_NAME)?></td>
-	<td>	<?=$fiche->strAttribut(9)?></td>
+	<td><?php echo $ck->input()?></td>
+	<td><?php echo $view_history?></td>
+	<td><?php echo $fiche->strAttribut(ATTR_DEF_NAME)?></td>
+	<td>	<?php echo $fiche->strAttribut(9)?></td>
 	<td></td>
 </tr>
-<?
+<?php 
 endfor;
 ?>
 </table>
-<?=HtmlInput::submit('generate',"Générer l'écriture");?>
+<?php echo HtmlInput::submit('generate',"Générer l'écriture");?>
 </form>
-<?=HtmlInput::button('check_all','Sélectionner tout',' onclick="select_checkbox(\'gen_amort\')"');?>
-<?=HtmlInput::button('check_none','Tout Désélectionner ',' onclick="unselect_checkbox(\'gen_amort\')"');?>
+<?php echo HtmlInput::button('check_all','Sélectionner tout',' onclick="select_checkbox(\'gen_amort\')"');?>
+<?php echo HtmlInput::button('check_none','Tout Désélectionner ',' onclick="unselect_checkbox(\'gen_amort\')"');?>

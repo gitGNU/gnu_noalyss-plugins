@@ -34,7 +34,7 @@
 			Nom
 		</td>
 		<td>
-			<?=$name->input()?>
+			<?php echo $name->input()?>
 		</td
 	</tr>
 	<tr>
@@ -42,7 +42,7 @@
 			Exercice
 		</td>
 		<td>
-			<?=$exercice->input()?>
+			<?php echo $exercice->input()?>
 		</td>
 	</tr>
 	<tr>
@@ -50,7 +50,7 @@
 			Type de budget
 		</td>
 		<td>
-			<?=$type->input()?>
+			<?php echo $type->input()?>
 		</td>
 	</tr>
 	<tr>
@@ -58,7 +58,7 @@
 		Montant
 		</td>
 		<td>
-			<?=$amount->input()?>
+			<?php echo $amount->input()?>
 		</td>
 
 	</tr>

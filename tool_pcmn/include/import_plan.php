@@ -42,7 +42,7 @@ if (!isset($_POST['imp']) && !isset($_GET['confirm']))
 		<li>Le poste parent</li>
 	    <li>Le type de poste : PAS pour passif, ACT pour actif, PRO pour produit, CHA pour charge, CON suivant contexte, pour les comptes inversés ajouter INV à la fin, exemple PROINV (produit compte inversé)</li>
 	</ol>
-	<?
+	<?php 
 	echo ' <form method="post" enctype="multipart/form-data" >';
 	echo HtmlInput::hidden('sa', $_GET ['sa']);
 	echo HtmlInput::extension();
@@ -63,7 +63,7 @@ if (!isset($_POST['imp']) && !isset($_GET['confirm']))
 
 
 	</form>
-	<?
+	<?php 
 }
 
 // Import the file and ask to confirm

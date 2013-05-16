@@ -101,25 +101,25 @@ $istep->value=array(
 );
 ?>
 <form id="declaration_form_id" method="GET" onsubmit="return validate()">
-	<?= $hidden?>
+	<?php echo  $hidden?>
 	<table>
 		<tr>
 			<td>
 				Déclaration
 			</td>
 			<td>
-				<?= $select->input()?>
+				<?php echo  $select->input()?>
 			</td>
 			</tr>
 			<tr>
-	<td> Description</td><td> <?=$description->input()?></td>
+	<td> Description</td><td> <?php echo $description->input()?></td>
 	</tr>
 		<tr>
 			<td>
 				Date de début
 			</td>
 			<td>
-				<?= $date_start->input()?>
+				<?php echo  $date_start->input()?>
 			</td>
 		</tr>
 		<tr>
@@ -127,7 +127,7 @@ $istep->value=array(
 				Date de fin
 			</td>
 			<td>
-				<?= $date_end->input()?>
+				<?php echo  $date_end->input()?>
 			</td>
 		</tr>
 		<tr>
@@ -135,16 +135,16 @@ $istep->value=array(
 				Etape de
 			</td>
 			<td>
-				<?= $istep->input()?>
+				<?php echo  $istep->input()?>
 			</td>
 		</tr>
 	</table>
 	</p>
-	<?= HtmlInput::submit('compute', 'Générer')?>
+	<?php echo  HtmlInput::submit('compute', 'Générer')?>
 </form>
 <script charset="UTF8" lang="javascript">
 	function validate() {
-		if ( check_date_id('<?= $date_start->id?>') == false ) {alert('Date de début incorrecte');$('<?= $date_start->id?>').style.borderColor='red';$('<?= $date_start->id?>').style.borderWidth=2;return false;}
-		if ( check_date_id('<?= $date_end->id?>') == false ) {alert('Date de fin incorrecte');$('<?= $date_end->id?>').style.borderColor='red';$('<?= $date_end->id?>').style.borderWidth=2;return false;}
+		if ( check_date_id('<?php echo  $date_start->id?>') == false ) {alert('Date de début incorrecte');$('<?php echo  $date_start->id?>').style.borderColor='red';$('<?php echo  $date_start->id?>').style.borderWidth=2;return false;}
+		if ( check_date_id('<?php echo  $date_end->id?>') == false ) {alert('Date de fin incorrecte');$('<?php echo  $date_end->id?>').style.borderColor='red';$('<?php echo  $date_end->id?>').style.borderWidth=2;return false;}
 	}
 </script>
