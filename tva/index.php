@@ -102,10 +102,15 @@ echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="ht
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
 '</div>';
 // show menu
+?>
+<h2 class="notice">Attention, ce plugin ne permet que le calcul TVA pour 2012 et régime transitoire en 2013, employez
+		plutôt l'extension "rapport avancé"
+	</h2>
+<?php
 echo ShowItem($array,'H',"mtitle","mtitle",$def,' style="width:80%;margin-left:10%;border-spacing:5;" ');
 ?>
 <div class="content" style="margin-left: 30px">
-<?php 
+<?php
 // include the right file
 if ($def==1) {
   require_once('decl_tva.inc.php');
