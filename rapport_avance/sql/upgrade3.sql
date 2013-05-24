@@ -42,4 +42,10 @@ ALTER TABLE rapport_advanced.declaration ADD COLUMN d_description text;
 
 insert into rapport_advanced.version  (version_id,version_note)values(3,'Génération de document');
 
+ALTER TABLE rapport_advanced.restore_formulaire_param_detail drop CONSTRAINT formulaire_param_detail_p_id_fkey;
+ALTER TABLE rapport_advanced.restore_formulaire_param_detail  ADD CONSTRAINT formulaire_param_fkey FOREIGN KEY (p_id)
+      REFERENCES rapport_advanced.restore_formulaire_param (p_id) MATCH SIMPLE
+      ON UPDATE CASCADE ON DELETE CASCADE;
+
+
 commit;
