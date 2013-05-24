@@ -21,7 +21,7 @@
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
 global $version_plugin;
 $version_plugin=SVNINFO;
-Extension::check_version(5255);
+Extension::check_version(5300);
 /*!\file
  * \brief main entry
  */

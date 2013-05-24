@@ -1,14 +1,15 @@
 <div class="content" style="width:80%;margin-left:10%">
 <!-- <h2 class="info">Historique</h2> -->
 <form method="POST">
-<?php 
+<?php
 echo HtmlInput::hidden('sa',$_REQUEST['sa']);
 echo HtmlInput::hidden('sb',$_REQUEST['sb']);
 echo HtmlInput::hidden('ac',$_REQUEST['ac']);
 echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
 echo dossier::hidden();
+echo 'Filtre : '.HtmlInput::filter_table('amortissement_tb','1,2,3,5,6',1);
 ?>
-<table class="result">
+<table id="amortissement_tb" class="result">
 <tr>
 <th><?php echo $header->get_header(0)?></th>
 <th><?php echo $header->get_header(1)?></th>
@@ -18,7 +19,7 @@ echo dossier::hidden();
 <th><?php echo $header->get_header(5)?></th>
 
 </tr>
-<?php 
+<?php
 
 for ($i=0;$i<count($array);$i++) :
 	echo '<tr>';
