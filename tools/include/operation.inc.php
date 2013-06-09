@@ -55,7 +55,7 @@ if ( isset ($_GET['viewsearch']))
     list($sql,$where)=$ledger->build_search_sql($array);
 
     // order
-    $sql.=' order by jr_date_order asc,substring(jr_pj_number,\'\\\d+$\')::numeric asc  ';
+    $sql.=' order by jr_date_order asc,substring(jr_pj_number,\'[0-9]+$\')::numeric asc  ';
 
     // Count nb of line
     $max_line=$cn->count_sql($sql);
