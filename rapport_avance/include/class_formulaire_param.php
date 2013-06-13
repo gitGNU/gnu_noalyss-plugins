@@ -150,14 +150,13 @@ class Formulaire_Param extends Formulaire_Param_Sql
 			}
 			/// Update now the table  rapport_advanced.restore_formulaire_param and set the correct pk
 			$cn->exec_sql("update rapport_advanced.restore_formulaire_param set p_id=nextval('rapport_advanced.formulaire_param_p_id_seq')");
-			$cn->exec_sql("update rapport_advanced.restore_formulaire_param_detail set fp_id=nextval('rapport_advanced.formulaire_param_detail_fp_id_seq')");
 
 			$cn->exec_sql('insert into rapport_advanced.formulaire_param select  p_id, p_code, p_libelle, p_type, p_order, f_id, t_id
 				from rapport_advanced.restore_formulaire_param where f_id=$1',array($form->f_id));
 
-			$cn->exec_sql('insert into rapport_advanced.formulaire_param_detail select fp_id, p_id, tmp_val, tva_id, fp_formula, fp_signed, jrn_def_type,
+			$cn->exec_sql("insert into rapport_advanced.formulaire_param_detail select nextval('rapport_advanced.formulaire_param_detail_fp_id_seq'), p_id, tmp_val, tva_id, fp_formula, fp_signed, jrn_def_type,
             tt_id, type_detail, with_tmp_val, type_sum_account, operation_pcm_val from  rapport_advanced.restore_formulaire_param_detail where p_id in (
-			select p_id from rapport_advanced.restore_formulaire_param where f_id=$1)',array($form->f_id));
+			select p_id from rapport_advanced.restore_formulaire_param where f_id=$1)",array($form->f_id));
 
 			$cn->exec_sql('delete from  rapport_advanced.restore_formulaire_param where f_id=$1',array($form->f_id));
 			$cn->commit();
