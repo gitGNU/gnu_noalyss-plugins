@@ -122,7 +122,6 @@ class RAPAV_Formulaire extends Formulaire_Sql
 	static function verify_definition(&$p_array)
 	{
 		global $cn;
-		var_dump($p_array);
 		for ($i=0;$i<count($p_array['p_code']);$i++)
 		{
 			$c=$cn->get_value('select count(*) from rapport_advanced.formulaire_param
