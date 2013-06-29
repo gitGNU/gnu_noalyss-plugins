@@ -110,8 +110,22 @@ class RAPAV_Formulaire extends Formulaire_Sql
 	 */
 	static function save_definition($p_array)
 	{
+		self::verify_definition($p_array);
 		self::update_definition($p_array);
 		return;
+	}
+	static function verify_definition(&$p_array)
+	{
+		global $cn;
+		for ($i=0;$i<count($p_array['p_code']);$i++)
+		{
+			$c=$cn->get_value('select count(*) from rapport_advanced.formulaire_param where p_code=$1 and p_id <> $2',
+					array($p_array['p_code'][$i],$p_array['p_id'][$i]));
+
+			if ( $c > 0 ) {
+				$p_array['p_code'][$i]='C'.$i.microtime();
+			}
+		}
 	}
 
 	/**
