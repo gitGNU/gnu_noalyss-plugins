@@ -114,13 +114,20 @@ class RAPAV_Formulaire extends Formulaire_Sql
 		self::update_definition($p_array);
 		return;
 	}
+	/**
+	 * @brief Check data and change them if needed
+	 * @global database connection $cn
+	 * @param array $p_array normally $_POST
+	 */
 	static function verify_definition(&$p_array)
 	{
 		global $cn;
+		var_dump($p_array);
 		for ($i=0;$i<count($p_array['p_code']);$i++)
 		{
-			$c=$cn->get_value('select count(*) from rapport_advanced.formulaire_param where p_code=$1 and p_id <> $2',
-					array($p_array['p_code'][$i],$p_array['p_id'][$i]));
+			$c=$cn->get_value('select count(*) from rapport_advanced.formulaire_param
+				where p_code=$1 and p_id <> $2 and f_id=$3',
+					array($p_array['p_code'][$i],$p_array['p_id'][$i],$p_array['f_id']));
 
 			if ( $c > 0 ) {
 				$p_array['p_code'][$i]='C'.$i.microtime();
