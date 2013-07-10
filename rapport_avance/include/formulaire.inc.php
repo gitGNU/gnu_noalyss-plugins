@@ -36,10 +36,19 @@ if ( isset($_POST['form_def_sub']))
 	}
 	else
 	{
-		echo '<p class="notice">'._(' dernière sauvegarde ').date('d-m-Y H:i').'</p>';
-		RAPAV_formulaire::save_definition($_POST);
+		//echo '<p class="notice">'._(' dernière sauvegarde ').date('d-m-Y H:i').'</p>';
+		try
+		{
+			RAPAV_formulaire::save_definition($_POST);
+			echo '<p class="notice">'._(' dernière sauvegarde ').date('d-m-Y H:i').'</p>';
+		}
+		catch (Exception $exc)
+		{
+			echo '<p class="notice">'._(' Impossible de sauver').$exc->getMessage().'</p>';
+
+			//throw $exc;
+		}
 		require_once 'formulaire_definition_show.inc.php';
-		echo '<p class="notice">'._(' dernière sauvegarde ').date('d-m-Y H:i').'</p>';
 		exit();
 	}
 }
