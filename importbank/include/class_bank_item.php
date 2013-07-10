@@ -78,6 +78,8 @@ class Bank_Item
 	  {
 	    $libelle=new ITextArea('libelle');
 	    $libelle->value=$bi->libelle;
+	    $libelle->heigh=3;
+	    $libelle->width=60;
 
 	  }
 	else

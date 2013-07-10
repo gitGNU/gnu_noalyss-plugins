@@ -120,7 +120,6 @@ switch ($act)
 		require_once 'include/class_rapav_formulaire.php';
 		$rapav=new Rapav_Formulaire($_GET['f_id']);
 		$rapav->remove_doc_template();
-		defaut:
 		break;
 }
 ?>

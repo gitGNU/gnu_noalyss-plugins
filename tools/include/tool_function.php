@@ -377,7 +377,7 @@ function display_result_receipt(&$cn)
 	where
 	jr_def_id=$1 and jr_date >= to_date($2,'DD.MM.YYYY')
 	and jr_date <= to_date($3,'DD.MM.YYYY')
-	 order by jr_date asc,substring(jr_pj_number,'\\\\d+$')::numeric asc
+	 order by jr_date asc,substring(jr_pj_number,'[0-9]+$')::numeric asc
 	";
   $ret=$cn->exec_sql($sql,array($_GET['ledger'],$_GET['dstart'],$_GET['dend']));
   $nb_row=Database::num_row($ret);
