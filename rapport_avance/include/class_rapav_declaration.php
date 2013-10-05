@@ -405,7 +405,7 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 	{
 		static $s_start = "";
 		static $s_count = 0;
-            
+
 		if ($s_start == "")
 		{
 			$s_start = $p_start;
@@ -766,9 +766,9 @@ class Rapav_dd_Account_Tva extends Rapav_Declaration_Detail
 	{
 		if ($this->form->jrn_def_type == 'ACH')
 		{
-			$sql = "select coalesce(sum(qs_vat),0) as amount
-						from quant_sold join jrnx using (j_id)
-						where qs_vat_code=$1
+			$sql = "select coalesce(sum(qp_vat),0) as amount
+						from quant_purchase join jrnx using (j_id)
+						where qp_vat_code=$1
 						and (j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))
 						and j_poste::text like ($4)";
 			$amount = $this->cn->get_value($sql, array($this->form->tva_id,
