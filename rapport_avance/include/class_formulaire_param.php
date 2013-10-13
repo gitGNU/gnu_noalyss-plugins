@@ -99,7 +99,7 @@ class Formulaire_Param extends Formulaire_Param_Sql
 	{
 		global $cn;
 		$in = fopen($filename, "r");
-		$cn->start();
+		/* DEBUG $cn->start(); */
 		try
 		{
 			$a = fgetcsv($in, 0, ";");
@@ -149,17 +149,29 @@ class Formulaire_Param extends Formulaire_Param_Sql
 				VALUES ($1, $2, $3, $4, $5, $6, $7,$8, $9, $10, $11, $12)", $t);
 			}
 			/// Update now the table  rapport_advanced.restore_formulaire_param and set the correct pk
-			$cn->exec_sql("update rapport_advanced.restore_formulaire_param set p_id=nextval('rapport_advanced.formulaire_param_p_id_seq')");
+			/// $cn->exec_sql("update rapport_advanced.restore_formulaire_param set p_id=nextval('rapport_advanced.formulaire_param_p_id_seq')");
+                        
+                        // Insert row by row + detail 
+                        $array=$cn->get_array("select p_id,p_code,p_libelle,p_order,f_id,t_id from rapport_advanced.restore_formulaire_param where f_id=$1",array($form->f_id));
+                        // Prepare stmt for the details
+                        $cn->prepare('detail','select p_id,tmp_val,tva_id,fp_formula,fp_signed, jrn_def_type,tt_id,type_detail,with_tmp_val,type_sum_account,operation_pcm_val 
+                                    from  rapport_advanced.restore_formulaire_param_detail where p_id=$1');
+                        $nb=count($array);
+                        for ($e=0;$e<$nb;$e++)
+                        {
+                            // Insert first into  rapport_advanced.formulaire_param
+        			$new_pid=$cn->get_value("insert into rapport_advanced.formulaire_param (p_code, p_libelle, p_type, p_order, f_id, t_id)
+                                   select   p_code, p_libelle, p_type, p_order, f_id, t_id
+				from rapport_advanced.restore_formulaire_param where p_id=$1 returning p_id",array($array[$e]['p_id']));
+                            // Insert detail 
+                                $cn->exec_sql("insert into rapport_advanced.formulaire_param_detail select nextval('rapport_advanced.formulaire_param_detail_fp_id_seq'), $new_pid, tmp_val, tva_id, fp_formula, fp_signed, jrn_def_type,
+                    tt_id, type_detail, with_tmp_val, type_sum_account, operation_pcm_val from  rapport_advanced.restore_formulaire_param_detail where p_id =$1
+                                ",array($array[$e]['p_id']));
+                        }
 
-			$cn->exec_sql('insert into rapport_advanced.formulaire_param select  p_id, p_code, p_libelle, p_type, p_order, f_id, t_id
-				from rapport_advanced.restore_formulaire_param where f_id=$1',array($form->f_id));
 
-			$cn->exec_sql("insert into rapport_advanced.formulaire_param_detail select nextval('rapport_advanced.formulaire_param_detail_fp_id_seq'), p_id, tmp_val, tva_id, fp_formula, fp_signed, jrn_def_type,
-            tt_id, type_detail, with_tmp_val, type_sum_account, operation_pcm_val from  rapport_advanced.restore_formulaire_param_detail where p_id in (
-			select p_id from rapport_advanced.restore_formulaire_param where f_id=$1)",array($form->f_id));
-
-			$cn->exec_sql('delete from  rapport_advanced.restore_formulaire_param where f_id=$1',array($form->f_id));
-			$cn->commit();
+		/*DEBUG	$cn->exec_sql('delete from  rapport_advanced.restore_formulaire_param where f_id=$1',array($form->f_id));
+			$cn->commit();*/
 		}
 		catch (Exception $exc)
 		{
