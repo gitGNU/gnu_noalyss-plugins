@@ -99,7 +99,7 @@ class Formulaire_Param extends Formulaire_Param_Sql
 	{
 		global $cn;
 		$in = fopen($filename, "r");
-		/* DEBUG $cn->start(); */
+		$cn->start(); 
 		try
 		{
 			$a = fgetcsv($in, 0, ";");
@@ -170,8 +170,8 @@ class Formulaire_Param extends Formulaire_Param_Sql
                         }
 
 
-		/*DEBUG	$cn->exec_sql('delete from  rapport_advanced.restore_formulaire_param where f_id=$1',array($form->f_id));
-			$cn->commit();*/
+                    $cn->exec_sql('delete from  rapport_advanced.restore_formulaire_param where f_id=$1',array($form->f_id));
+                    $cn->commit();
 		}
 		catch (Exception $exc)
 		{
