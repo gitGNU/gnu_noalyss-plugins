@@ -10,12 +10,12 @@ Filtrer : <?php echo $filter->input()?>
 <?php echo HtmlInput::submit('delete_record','Effacer')?>
 <?php echo HtmlInput::submit('transfer_record','Transfèrer')?>
 </form>
-
-<table class="table_large">
+<?php echo HtmlInput::filter_table('record_tb_id','1,2,3,4,5,6,7',1); ?>
+<table id="record_tb_id" class="sortable" >
 	<TR>
 	<th></th>
 	<TH>N° opération</TH>
-	<th>Date</th>
+	<th  class=" sorttable_sorted_reverse" >Date <span id="sorttable_sortrevind">&nbsp;&blacktriangle;</span></th>
 	<th>Montant</th>
 	<th>Etat</th>
 	<th>Tiers</th>
@@ -33,18 +33,18 @@ Filtrer : <?php echo $filter->input()?>
 
 ?>
 <tr <?php echo $class?> >
-<td>
+<td sorttable_customkey="1">
 	<?php echo HtmlInput::button('bt'.$row['id'],'Reconcilie',$javascript)?>
 </td>
 <TD>
 <?php echo $row['ref_operation']?>
 </TD>
 
-<TD>
+<TD sorttable_customkey="<?php echo $row['tp_date']; ?>">
 <?php echo format_date($row['tp_date'])?>
 </TD>
 
-<td class="num">
+<td class="num" sorttable_customkey="<?php echo $row['amount']; ?>">
 <?php echo nbm($row['amount'])?>
 </td>
 <td id="<?php echo 'st'.$row['id']?>" <?php echo Import_Bank::color_status($row['status'])?>  >
