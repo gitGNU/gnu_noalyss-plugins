@@ -222,10 +222,7 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
         {
             echo _('Ne peut pas sauver ' . $oname . ' vers ' . $p_dir . '/' . $p_filename . ' code d\'erreur =' . $ret);
         }
-        /**
-         * @todo clean files
-         */
-        // unlink ($oname);
+       unlink ($oname);
     }
 
     function special_tag($p_dir, $p_filename, $p_type)
@@ -297,10 +294,7 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
         {
             echo _('Ne peut pas sauver ' . $oname . ' vers ' . $p_dir . '/' . $p_filename . ' code d\'erreur =' . $ret);
         }
-        /**
-         * @todo clean files
-         */
-        // unlink ($oname);
+        unlink ($oname);
     }
 
     function load_document($p_file)
