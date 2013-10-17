@@ -698,7 +698,12 @@ class Rapav_dd_Formula extends Rapav_Declaration_Detail
     function compute($p_start, $p_end)
     {
         global $cn;
-        $amount = Impress::parse_formula($cn, "", $this->form->fp_formula, $p_start, $p_end, true, 1);
+        $sql="";
+        if ($this->form->jrn_def_id !=null ) 
+        {
+            $sql=' and j_jrn_def ='.$this->form->jrn_def_id;
+        }
+        $amount = Impress::parse_formula($cn, "", $this->form->fp_formula, $p_start, $p_end, true, 1,$sql);
         return $amount['montant'];
     }
 
