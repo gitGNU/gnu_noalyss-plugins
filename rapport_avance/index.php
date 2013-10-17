@@ -27,7 +27,7 @@
 
 global $version_plugin;
 $version_plugin = SVNINFO;
-Extension::check_version(5220);
+Extension::check_version(5506);
 require_once 'class_phpcompta_sql.php';
 require_once 'rapav_constant.php';
 require_once 'class_impress.php';
