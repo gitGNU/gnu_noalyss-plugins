@@ -38,7 +38,7 @@ class Formulaire_Param extends Formulaire_Param_Sql
 	/**
 	 * Factory, create an object following the $form->p_type,
 	 * @param Formulaire_Param_Sql $form
-	 * @return \Formulaire_Title1|\Formulaire_Title2|\Formulaire_Title3|\Formulaire_Formula
+	 * @return Formulaire_Title1| Formulaire_Title2| Formulaire_Title3| Formulaire_Formula
 	 */
 	static function factory(Formulaire_Param_Sql $form)
 	{
@@ -183,7 +183,7 @@ class Formulaire_Param extends Formulaire_Param_Sql
 }
 
 /**
- * @brief mother class of \Formulaire_Title1|\Formulaire_Title2|\Formulaire_Title3|\Formulaire_Formula
+ * @brief mother class of Formulaire_Title1| Formulaire_Title2| Formulaire_Title3| Formulaire_Formula
  */
 class Formulaire_Row
 {
@@ -328,7 +328,7 @@ class Formulaire_Formula extends Formulaire_Row
 	 * @brief return an object following the key type_detail of the array passed in parameter
 	 *
 	 * @param type $p_index
-	 * @return \RAPAV_Formula|\RAPAV_Account_Tva|\RAPAV_Compute
+	 * @return RAPAV_Formula| RAPAV_Account_Tva| RAPAV_Compute
 	 */
 	function make_object($p_index)
 	{
