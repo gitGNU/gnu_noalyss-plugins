@@ -77,6 +77,7 @@
 	<?php echo HtmlInput::hidden('tab','formula')?>
 		<?php echo RAPAV_Formula::new_row()?>
 	</p>
+        <p> Filtrage par journal <?php echo $select->input(); ?> </p>
 <?php echo HtmlInput::submit('save','Sauve')?>
 
 </form>
@@ -90,6 +91,7 @@
 
 	<?php echo HtmlInput::hidden('tab','account_tva')?>
 		<?php echo RAPAV_Account_Tva::new_row()?>
+    <p> Filtrage par journal <?php echo $select->input(); ?> </p>
 <?php echo HtmlInput::submit('save','Sauve')?>
 
 </form>
@@ -114,6 +116,7 @@
 
 	<?php echo HtmlInput::hidden('tab','new_account_id')?>
 		<?php echo RAPAV_Account::new_row($p_id)?>
+    <p> Filtrage par journal <?php echo $select->input(); ?> </p>
 <?php echo HtmlInput::submit('save','Sauve')?>
 
 </form>
@@ -125,6 +128,7 @@
 
 	<?php echo HtmlInput::hidden('tab','new_reconcile_id')?>
 		<?php echo RAPAV_Reconcile::new_row($p_id)?>
+    <p> Filtrage par journal <?php echo $select->input(); ?> </p>
 <?php echo HtmlInput::submit('save','Sauve')?>
 
 </form>

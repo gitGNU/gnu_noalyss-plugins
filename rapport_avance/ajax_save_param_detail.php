@@ -42,6 +42,7 @@ switch ($tab)
 		$acc_tva->p_id = $p_id;
 		$acc_tva->type_detail = 2;
 		$acc_tva->tt_id = $code_base;
+                $acc_tva->jrn_def_id=$p_ledger;
 		if ($acc_tva->verify() == 1)
 		{
 			$code = 'nok';
@@ -69,6 +70,7 @@ switch ($tab)
 		$acc_formula->fp_formula = $formula_new;
 		$acc_formula->p_id = $p_id;
 		$acc_formula->type_detail = 1;
+                $acc_formula->jrn_def_id=$p_ledger;
 		if ($acc_formula->verify() == 1)
 		{
 			$code = 'nok';
@@ -96,6 +98,7 @@ switch ($tab)
 		$acc_compute->fp_formula = $form_compute;
 		$acc_compute->p_id = $p_id;
 		$acc_compute->type_detail = 3;
+                $acc_compute->jrn_def_id=null;
 		if ($acc_compute->verify() == 1)
 		{
 			$code = 'nok';
@@ -125,6 +128,7 @@ switch ($tab)
 		$acc_account->p_id = $p_id;
 		$acc_account->type_detail = 4;
 		$acc_account->type_sum_account= $account_sum_type;
+                $acc_account->jrn_def_id=$p_ledger;
 		if ($acc_account->verify() == 1)
 		{
 			$code = 'nok';
@@ -156,6 +160,7 @@ switch ($tab)
 		$acc_account->p_id = $p_id;
 		$acc_account->type_detail = 5;
 		$acc_account->type_sum_account= $account_sum_type;
+                $acc_account->jrn_def_id=$p_ledger;
 		if ($acc_account->verify() == 1)
 		{
 			$code = 'nok';
