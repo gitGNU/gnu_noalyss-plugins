@@ -285,7 +285,7 @@ class RAPAV_Reconcile extends Formulaire_Param_Detail
         $total_type_account = $cn->get_value('select tt_label from rapport_advanced.total_type_account where tt_id=$1', array($this->type_sum_account));
         $ledger = $this->get_ledger_name();
         printf("Total %s poste comptable %s utilisé avec le poste comptable %s rapprochée dans la période donnée
-			avec une opération utilisant le poste comptable %s  utisant $ledger", $total_type_account, $this->tmp_val, $this->with_tmp_val, $this->operation_pcm_val);
+			avec une opération utilisant le poste comptable %s  utilisant $ledger", $total_type_account, $this->tmp_val, $this->with_tmp_val, $this->operation_pcm_val);
     }
 
     static function new_row($p_id)
