@@ -105,7 +105,9 @@
 
 	<?php echo HtmlInput::hidden('tab','compute_id')?>
 		<?php echo RAPAV_Compute::new_row($p_id)?>
+    <p>
 <?php echo HtmlInput::submit('save','Sauve')?>
+    </p>
 
 </form>
 </div>
