@@ -76,7 +76,7 @@ class Formulaire_Param extends Formulaire_Param_Sql
 		header('Pragma: public');
 		header('Content-type: application/bin');
 		header('Content-Disposition: attachment;filename="' . $title . '.bin"', FALSE);
-		fputcsv($out, array("RAPAV", '3'), ";");
+		fputcsv($out, array("RAPAV", '4'), ";");
 		fputcsv($out, array($form->f_title, $form->f_description), ";");
 		$array = $cn->get_array("select p_id,p_code, p_libelle, p_type, p_order, f_id,  t_id
 			from rapport_advanced.formulaire_param where f_id=$1", array($p_id));
@@ -87,7 +87,7 @@ class Formulaire_Param extends Formulaire_Param_Sql
 		fputcsv($out, array('RAPAV_DETAIL'), ";");
 		$array = $cn->get_array("select
 			fp_id, p_id, tmp_val, tva_id, fp_formula, fp_signed, jrn_def_type,
-			tt_id, type_detail, with_tmp_val, type_sum_account, operation_pcm_val
+			tt_id, type_detail, with_tmp_val, type_sum_account, operation_pcm_val,date_paid
 			from rapport_advanced.formulaire_param_detail where p_id in (select p_id from rapport_advanced.formulaire_param where f_id=$1)", array($p_id));
 		for ($i = 0; $i < count($array); $i++)
 		{
@@ -143,10 +143,14 @@ class Formulaire_Param extends Formulaire_Param_Sql
 						$t[$o] = $csv[$o];
 					}
 				}
-				$cn->get_array("INSERT INTO rapport_advanced.restore_formulaire_param_detail(
-            fp_id, p_id, tmp_val, tva_id, fp_formula, fp_signed, jrn_def_type,
-            tt_id, type_detail, with_tmp_val, type_sum_account, operation_pcm_val)
-				VALUES ($1, $2, $3, $4, $5, $6, $7,$8, $9, $10, $11, $12)", $t);
+                                if ($rapav_version < 4 )
+                                {
+                                    $t[12]=0;
+                                }
+                                $cn->get_array("INSERT INTO rapport_advanced.restore_formulaire_param_detail(
+        fp_id, p_id, tmp_val, tva_id, fp_formula, fp_signed, jrn_def_type,
+        tt_id, type_detail, with_tmp_val, type_sum_account, operation_pcm_val,date_paid)
+                            VALUES ($1, $2, $3, $4, $5, $6, $7,$8, $9, $10, $11, $12,$13)", $t);
 			}
 			/// Update now the table  rapport_advanced.restore_formulaire_param and set the correct pk
 			/// $cn->exec_sql("update rapport_advanced.restore_formulaire_param set p_id=nextval('rapport_advanced.formulaire_param_p_id_seq')");
@@ -154,7 +158,7 @@ class Formulaire_Param extends Formulaire_Param_Sql
                         // Insert row by row + detail 
                         $array=$cn->get_array("select p_id,p_code,p_libelle,p_order,f_id,t_id from rapport_advanced.restore_formulaire_param where f_id=$1",array($form->f_id));
                         // Prepare stmt for the details
-                        $cn->prepare('detail','select p_id,tmp_val,tva_id,fp_formula,fp_signed, jrn_def_type,tt_id,type_detail,with_tmp_val,type_sum_account,operation_pcm_val 
+                        $cn->prepare('detail','select p_id,tmp_val,tva_id,fp_formula,fp_signed, jrn_def_type,tt_id,type_detail,with_tmp_val,type_sum_account,operation_pcm_val,date_paid 
                                     from  rapport_advanced.restore_formulaire_param_detail where p_id=$1');
                         $nb=count($array);
                         for ($e=0;$e<$nb;$e++)
@@ -164,8 +168,39 @@ class Formulaire_Param extends Formulaire_Param_Sql
                                    select   p_code, p_libelle, p_type, p_order, f_id, t_id
 				from rapport_advanced.restore_formulaire_param where p_id=$1 returning p_id",array($array[$e]['p_id']));
                             // Insert detail 
-                                $cn->exec_sql("insert into rapport_advanced.formulaire_param_detail select nextval('rapport_advanced.formulaire_param_detail_fp_id_seq'), $new_pid, tmp_val, tva_id, fp_formula, fp_signed, jrn_def_type,
-                    tt_id, type_detail, with_tmp_val, type_sum_account, operation_pcm_val from  rapport_advanced.restore_formulaire_param_detail where p_id =$1
+                                $cn->exec_sql("insert into rapport_advanced.formulaire_param_detail
+                                        (fp_id,
+                                        p_id,
+                                        tmp_val,
+                                        tva_id,
+                                        fp_formula,
+                                        fp_signed,
+                                        jrn_def_type,
+                                        tt_id,
+                                        type_detail,
+                                        with_tmp_val,
+                                        type_sum_account,
+                                        operation_pcm_val,
+                                        jrn_def_id,
+                                        date_paid
+                                        ) 
+                                        select 
+                                        nextval('rapport_advanced.formulaire_param_detail_fp_id_seq'), 
+                                        $new_pid, 
+                                            tmp_val, 
+                                            tva_id, 
+                                            fp_formula, 
+                                            fp_signed, 
+                                            jrn_def_type,
+                                            tt_id, 
+                                            type_detail, 
+                                            with_tmp_val, 
+                                            type_sum_account, 
+                                            operation_pcm_val,
+                                            -1,
+                                            date_paid 
+                                            from  
+                                            rapport_advanced.restore_formulaire_param_detail where p_id =$1
                                 ",array($array[$e]['p_id']));
                         }
 

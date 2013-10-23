@@ -38,10 +38,7 @@ class Formulaire_Param_Detail extends Formulaire_Param_Detail_SQL
         $parent = new Formulaire_Param($p_id);
         echo HtmlInput::title_box('Formule', 'param_detail_div');
         echo '<h2>' . $parent->p_code . " " . $parent->p_libelle . '</h2>';
-        $select = new ISelect('p_ledger');
-        $a_ledger = $cn->make_array('select jrn_def_id,jrn_def_name from jrn_def order by 2', 1);
-        $a_ledger[0]['label'] = '-- Tous les journaux -- ';
-        $select->value = $a_ledger;
+
         require_once 'template/param_detail_new.php';
     }
 
@@ -49,7 +46,7 @@ class Formulaire_Param_Detail extends Formulaire_Param_Detail_SQL
     {
         global $cn;
         $ledger = "";
-        if ($this->jrn_def_id == null || $this->jrn_def_id==-1)
+        if ($this->jrn_def_id == null || $this->jrn_def_id == -1)
         {
             $ledger = " tous les journaux";
         } else
@@ -60,6 +57,26 @@ class Formulaire_Param_Detail extends Formulaire_Param_Detail_SQL
         return $ledger;
     }
 
+    static function input_ledger()
+    {
+        global $cn;
+        $select = new ISelect('p_ledger');
+        $a_ledger = $cn->make_array('select jrn_def_id,jrn_def_name from jrn_def order by 2', 1);
+        $a_ledger[0]['label'] = '-- Tous les journaux -- ';
+        $select->value = $a_ledger;
+
+        echo '<p> Filtrage par journal ' . $select->input() . '</p>';
+    }
+
+    static function input_date_paiement()
+    {
+        $ck_paid = new ICheckBox('p_paid');
+        echo '<p> La date donnée concerne la date de paiement, ce qui limitera la recherche aux journaux VEN et ACH ';
+        echo HtmlInput::infobulle(36);
+        echo $ck_paid->input();
+        echo '</p>';
+    }
+
 }
 
 class RAPAV_Formula extends Formulaire_Param_Detail
@@ -68,7 +85,8 @@ class RAPAV_Formula extends Formulaire_Param_Detail
     function display_row()
     {
         $ledger = $this->get_ledger_name();
-        printf("Résultat de la formule %s utilisant $ledger", $this->fp_formula);
+        $paid = ( $this->date_paid != 0 ) ? "la date concerne la date de paiement, la recherche sera limitée au journaux de type ACH & VEN" : "";
+        printf("Résultat de la formule %s utilisant $ledger %s", $this->fp_formula, $paid);
     }
 
     static function new_row()
@@ -82,6 +100,8 @@ class RAPAV_Formula extends Formulaire_Param_Detail
         $account->set_attribute('noquery', 1);
         $account->set_attribute('account', $account->id);
         echo $account->input();
+        Formulaire_Param_Detail::input_date_paiement();
+        Formulaire_Param_Detail::input_ledger();
     }
 
     function verify()
@@ -109,7 +129,8 @@ class RAPAV_Account_Tva extends Formulaire_Param_Detail
         global $cn;
         $ledger = $this->get_ledger_name();
         $type_total = $cn->get_value("select tt_label from rapport_advanced.total_type where tt_id=$1", array($this->tt_id));
-        printf("Poste comptable %s avec le code tva %s (%s) dans le journal de type %s [ %s ] $ledger", $this->tmp_val, $this->tva_id, $this->tva_id, $this->jrn_def_type, $type_total);
+        $paid = ( $this->date_paid != 0 ) ? "la date concerne la date de paiement, la recherche sera limitée au journaux de type ACH & VEN" : "";
+        printf("Poste comptable %s avec le code tva %s (%s) dans le journal de type %s [ %s ] $ledger %s", $this->tmp_val, $this->tva_id, $this->tva_id, $this->jrn_def_type, $type_total, $paid);
     }
 
     static function new_row()
@@ -147,6 +168,8 @@ class RAPAV_Account_Tva extends Formulaire_Param_Detail
         echo td($code_base->input());
         echo '</tr>';
         echo '</table>';
+        Formulaire_Param_Detail::input_date_paiement();
+        Formulaire_Param_Detail::input_ledger();
     }
 
     function verify()
@@ -225,8 +248,9 @@ class RAPAV_Account extends Formulaire_Param_Detail
     {
         global $cn;
         $ledger = $this->get_ledger_name();
+        $paid = ( $this->date_paid != 0 ) ? "la date concerne la date de paiement, la recherche sera limitée au journaux de type ACH & VEN" : "";
         $total_type_account = $cn->get_value('select tt_label from rapport_advanced.total_type_account where tt_id=$1', array($this->type_sum_account));
-        printf("Total %s poste comptable %s utilisé avec le poste comptable %s utilisant $ledger", $total_type_account, $this->tmp_val, $this->with_tmp_val);
+        printf("Total %s poste comptable %s utilisé avec le poste comptable %s utilisant $ledger %s", $total_type_account, $this->tmp_val, $this->with_tmp_val, $paid);
     }
 
     static function new_row($p_id)
@@ -258,6 +282,8 @@ class RAPAV_Account extends Formulaire_Param_Detail
         echo ' utilisé avec le poste comptable ' . HtmlInput::infobulle(203);
         echo $account_second->input();
         echo '</p>';
+        Formulaire_Param_Detail::input_date_paiement();
+        Formulaire_Param_Detail::input_ledger();
     }
 
     function verify()
@@ -328,6 +354,7 @@ class RAPAV_Reconcile extends Formulaire_Param_Detail
         echo $account_third->input();
 
         echo '</p>';
+        Formulaire_Param_Detail::input_ledger();
     }
 
     function verify()
