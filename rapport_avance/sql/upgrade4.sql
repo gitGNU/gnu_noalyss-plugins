@@ -3,7 +3,7 @@ begin;
 ALTER TABLE rapport_advanced.formulaire_param_detail   ADD COLUMN jrn_def_id bigint;
 COMMENT ON COLUMN rapport_advanced.formulaire_param_detail.jrn_def_id IS 'FK to jrn_def, if null then all the ledgers are concerned';
 
-CREATE FUNCTION formulaire_param_detail_jrn_def_id_ins_upd() RETURNS trigger
+CREATE FUNCTION rapport_advanced.formulaire_param_detail_jrn_def_id_ins_upd() RETURNS trigger
     AS $$
 declare
 	jrn_def_id integer;
@@ -13,7 +13,8 @@ begin
 		NEW.jrn_def_id := jrn_def_id;
 	end if;
 	return NEW;
-end;$$;
+end;
+$$
 language plpgsql;
 
 CREATE INDEX fki_jrn_def_id ON rapport_advanced.formulaire_param_detail USING btree (jrn_def_id);
