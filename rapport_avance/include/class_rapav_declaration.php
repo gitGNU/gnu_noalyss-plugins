@@ -697,7 +697,7 @@ class Rapav_dd_Formula extends Rapav_Declaration_Detail
         {
             $sql = ' and j_jrn_def =' . $this->form->jrn_def_id;
         }
-        if ($this->form->date == 1)
+        if ($this->form->date_paid == 1)
         {
             $sql.=sprintf(" and jr_date_paid >= to_date('%s','DD.MM.YYYY') and jr_date_paid <= to_date ('%s','DD.MM.YYYY')", $p_start, $p_end);
             $p_start = '01.01.1900';
