@@ -42,26 +42,29 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
         $this->form = new RAPAV_Formulaire();
         parent::__construct();
     }
-
+    function load_formulaire() {
+        $this->form->load();
+    }
     /**
      * @brief export a declaration to CSV
      * @global $cn database conx
      * @param $p_id pk of rapav_declaration
+     * @param $p_orient
+     *        value : 
+     *           - list : for a list
+     *           - table : to have a table (if using step)
      */
-    static function to_csv($p_id)
+    static function to_csv($p_id,$p_orient="list")
     {
         global $cn;
-        $a_row = $cn->get_array('select dr_code,dr_libelle,dr_amount,dr_start,dr_end
-			from rapport_advanced.declaration_row
-			where d_id=$1 order by dr_order,dr_start', array($p_id));
-
+        
         $a_title = $cn->get_array("select d_title
 			,to_char(d_start,'DD.MM.YYYY') as start
 			,to_char(d_end,'DD.MM.YYYY') as end
 			from
 			rapport_advanced.declaration
 			where
-			d_id=$1", array($p_id));
+			d_id=$1 ", array($p_id));
         $title = $a_title[0]['d_title'] . "-" . $a_title[0]['start'] . "-" . $a_title[0]['end'];
         $title = mb_strtolower($title, 'UTF-8');
         $title = str_replace(array('/', '*', '<', '>', '*', '.', '+', ':', '?', '!', " ", ";"), "_", $title);
@@ -70,12 +73,52 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
         header('Pragma: public');
         header('Content-type: application/csv');
         header('Content-Disposition: attachment;filename="' . $title . '.csv"', FALSE);
-        fputcsv($out, $a_title[0], ";");
-
-        for ($i = 0; $i < count($a_row); $i++)
+        if ($p_orient == "list")
         {
-            printf('"%s";"%s";%s;"%s";"%s"' . "\r\n", $a_row[$i]['dr_code'], $a_row[$i]['dr_libelle'], nb($a_row[$i]['dr_amount']), format_date($a_row[$i]['dr_start']), format_date($a_row[$i]['dr_end'])
-            );
+            fputcsv($out, $a_title[0], ";");
+            
+            $a_row = $cn->get_array('select dr_code,dr_libelle,dr_amount,dr_start,dr_end
+			from rapport_advanced.declaration_row
+			where d_id=$1 order by dr_order,dr_start', array($p_id));
+
+            for ($i = 0; $i < count($a_row); $i++)
+            {
+                printf('"%s";"%s";%s;"%s";"%s"' . "\r\n", $a_row[$i]['dr_code'], $a_row[$i]['dr_libelle'], nb($a_row[$i]['dr_amount']), format_date($a_row[$i]['dr_start']), format_date($a_row[$i]['dr_end'])
+                );
+            }
+        }
+        elseif ($p_orient=="table")
+        {
+             fputcsv($out, $a_title[0], ";");
+             // Only the period
+             $a_periode = $cn->get_array('select distinct dr_start,dr_end
+			from rapport_advanced.declaration_row
+			where d_id=$1 order by dr_start', array($p_id));
+
+             // 2 blank columns
+             printf(';');
+            for ($i = 0; $i < count($a_periode); $i++)
+            {
+                printf(';"%s-%s"', format_date($a_periode[$i]['dr_start']), format_date($a_periode[$i]['dr_end']));
+            }
+            printf("\r\n");
+            
+            // print each code on one line
+             $a_row = $cn->get_array('select dr_code,dr_libelle,dr_amount,dr_start,dr_end
+			from rapport_advanced.declaration_row
+			where d_id=$1 order by dr_order,dr_start', array($p_id));
+            $last_code="";
+            for ($i = 0; $i < count($a_row); $i++)
+            {
+                if ( $last_code != $a_row[$i]['dr_code'])
+                {
+                    if ($last_code!=""){ printf("\r\n"); }
+                    printf('"%s";"%s"', $a_row[$i]['dr_code'],$a_row[$i]['dr_libelle']);
+                    $last_code=$a_row[$i]['dr_code'];
+                }
+                printf(';%s',nb($a_row[$i]['dr_amount']));
+            }
+             printf("\r\n");
         }
     }
 

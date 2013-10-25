@@ -34,7 +34,11 @@ if ($act == 'rapav_form_export')
 }
 if ($act == 'export_decla_csv')
 {
-	Rapav_Declaration::to_csv($d_id);
+        $decl=  new Rapav_Declaration();
+        $decl->d_id=$d_id;
+        $decl->load();
+        $orient=($decl->d_step==0)?"list":"table";
+	Rapav_Declaration::to_csv($d_id,$orient);
 	exit();
 }
 if ($act == 'export_decla_document')
