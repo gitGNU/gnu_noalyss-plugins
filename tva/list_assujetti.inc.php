@@ -68,7 +68,6 @@ $by_year=true;
 $tva->blank($_REQUEST['year'],1,3);
 
 
-// xdebug_disable();
 try {
   $r=$tva->compute();
 } catch (Exception $e) {
