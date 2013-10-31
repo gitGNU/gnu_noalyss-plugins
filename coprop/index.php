@@ -99,7 +99,7 @@ echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="ht
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
 '</div>';
 
-echo ShowItem($array,'H','mtitle ','mtitle ',$def,' class="topmenu"');
+echo ShowItem($array,'H','mtitle',' ',$def,' style="width:98%" class="topmenu"');
 
 // include the right file
 /*

@@ -24,6 +24,8 @@
 /**\file
  * \brief this class manages the installation and the patch of the plugin
  */
+define ('ATTR_IMMEUBLE',5000);
+define ('ATTR_COPROP',5001);
 
 class Install_Plugin
 {
@@ -69,6 +71,7 @@ class Install_Plugin
 		$fiche_def->add(array(
 			'FICHE_REF' => 9,
 			'nom_mod' => 'Copropriétaires - plugin',
+                        'fd_description'=>'Liste des copropriétaires, catégorie créée par le plugin copropriété',
 			'class_base' => null)
 		);
 		$copro = $fiche_def->id;
@@ -77,7 +80,8 @@ class Install_Plugin
 		$lot_def->add(array(
 			'FICHE_REF' => 15,
 			'nom_mod' => 'Lots - plugin',
-			'class_base' => '')
+                        'fd_description'=>'Liste des lots, catégorie créée par le plugin copropriété',
+			'class_base' => null)
 		);
 		$lot = $lot_def->id;
 
@@ -85,18 +89,19 @@ class Install_Plugin
 		$imm_def->add(array(
 			'FICHE_REF' => 15,
 			'nom_mod' => 'immeuble - plugin',
-			'class_base' => '')
+                        'fd_description'=>'Liste des immeubles, catégorie créée par le plugin copropriété',
+			'class_base' => null)
 		);
 		$immeuble = $imm_def->id;
 
 		// creation attribut
 		$this->cn->exec_sql("insert into attr_def (ad_id,ad_text,ad_type,ad_size,ad_extra)
-		values  ('71','Copropriétaire','select','22','select f_id,vw_name from vw_fiche_attr where fd_id = $copro ')");
+		values  (".ATTR_COPROP.",'Copropriétaire','select','22','select f_id,vw_name from vw_fiche_attr where fd_id = $copro ')");
 		$this->cn->exec_sql("insert into attr_def (ad_id,ad_text,ad_type,ad_size,ad_extra) values
-		('70','Immeuble','select','22','select f_id,vw_name from vw_fiche_attr where fd_id = $immeuble ');");
+		(".ATTR_IMMEUBLE.",'Immeuble','select','22','select f_id,vw_name from vw_fiche_attr where fd_id = $immeuble ');");
 
-		$lot_def->InsertAttribut(71); // lien vers coprop
-		$lot_def->InsertAttribut(70);// lien vers immeuble
+		$lot_def->InsertAttribut(ATTR_COPROP); // lien vers coprop
+		$lot_def->InsertAttribut(ATTR_IMMEUBLE);// lien vers immeuble
 
 		$imm_def->InsertAttribut(14); // adresse
 		$imm_def->InsertAttribut(15); // code postale
@@ -115,10 +120,10 @@ class Install_Plugin
 				JOIN fiche f1 ON f1.f_id = a.f_id
 				JOIN ( SELECT fd1.f_id, fd1.ad_value
 					FROM fiche_detail fd1
-					WHERE fd1.ad_id = 70) m ON m.f_id = a.f_id
+					WHERE fd1.ad_id = ".ATTR_IMMEUBLE.") m ON m.f_id = a.f_id
 				JOIN ( SELECT fd1.f_id, fd1.ad_value
 				FROM fiche_detail fd1
-				WHERE fd1.ad_id = 71) c ON c.f_id = a.f_id
+				WHERE fd1.ad_id = ".ATTR_COPROP.") c ON c.f_id = a.f_id
 				WHERE f1.fd_id = ".$lot." AND a.ad_id = 1");
 		$this->lot_id=$lot;
 		$this->immeuble_id=$immeuble;
