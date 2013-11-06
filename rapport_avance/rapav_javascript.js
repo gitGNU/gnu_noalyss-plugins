@@ -463,7 +463,8 @@ function listing_add(json)
                             remove_waiting_box();
                             var code_html = getNodeText(html[0]); 
                             code_html = unescape_xml(code_html);
-                            add_div({'id':json.cout,'cssclass':'inner_box','drag':1})
+                            var position=fixed_position(451,217);
+                            add_div({'id':json.cout,'cssclass':'inner_box','drag':1,'style':position});
                             $(json.cout).innerHTML = code_html;
                         } catch (e) {
                             console.log(e);
