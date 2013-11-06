@@ -292,6 +292,7 @@ class RAPAV_Listing_SQL extends phpcompta_sql
             "description" => "l_description",
             "name"=>'l_name',
             "lob" => "l_lob",
+            "filename" => "l_filename",
             "mimetype" => "l_mimetype",
             "size" => "l_size",
             "fiche_def_id" => "fd_id"
@@ -301,6 +302,7 @@ class RAPAV_Listing_SQL extends phpcompta_sql
             "l_name"=>'text',
             "l_description" => "text",
             "l_lob" => "oid",
+            "l_filename" => "text", 
             "l_mimetype" => "text",
             "l_size" => "numeric",
             "fd_id" => "numeric"

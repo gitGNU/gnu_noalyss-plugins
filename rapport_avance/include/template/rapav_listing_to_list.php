@@ -9,7 +9,7 @@
             Description
         </th>
         <th>
-            
+            Catégorie de fiche
         </th>
     </tr>
     <?php
@@ -23,6 +23,9 @@
         </td>
         <td>
             <?php echo h($row['l_description']); ?>
+        </td>
+        <td>
+            <?php echo h($row['fd_label']); ?>
         </td>
         <td>
             Action

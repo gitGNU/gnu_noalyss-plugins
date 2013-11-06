@@ -4,8 +4,9 @@ create table rapport_advanced.listing
     l_name text check (length(trim(l_name)) > 0 and l_name is not null),
     l_description   text,
     l_lob oid,
+    l_filename text,
     l_mimetype text,
-    l_size bigint,
+    l_size bigint default 0,
     fd_id bigint references fiche_def (fd_id) on update cascade on delete set null
 );
 create table rapport_advanced.listing_param
