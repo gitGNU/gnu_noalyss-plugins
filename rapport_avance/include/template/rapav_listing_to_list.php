@@ -1,0 +1,35 @@
+
+
+<table class="result" id="listing_tb_id">
+    <tr>
+        <th>
+            Nom
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            
+        </th>
+    </tr>
+    <?php
+    $max=Database::num_row($res);
+    for ($i=0;$i<$max;$i++):
+        $row=  Database::fetch_array($res, $i);
+    ?>
+    <tr>
+        <td>
+            <?php echo h($row['l_name']); ?>
+        </td>
+        <td>
+            <?php echo h($row['l_description']); ?>
+        </td>
+        <td>
+            Action
+        </td>
+    </tr>
+    <?php
+    endfor;
+    
+    ?>
+</table>

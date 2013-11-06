@@ -55,10 +55,10 @@ echo create_script($j);
 
 $url = '?' . dossier::get() . "&plugin_code=" . $_REQUEST['plugin_code'] . "&ac=" . $_REQUEST['ac'];
 $array = array(
-//	array($url . '&sa=li', _('Liste'), _('Création, modification, Paramètre de listes, mailing list'), 0),
+	array($url . '&sa=li', _('Liste'), _('Création, modification, Paramètre de listes, mailing list'), 0),
 	array($url . '&sa=fo', _('Formulaire'), _('Création, modification, Paramètre'), 1),
- 	array($url . '&sa=de', _('Génération Déclaration '), _('Génération Déclaration '), 2),
-// 	array($url . '&sa=de', _('Génération Déclaration / listing'), _('Génération Déclaration / listing'), 2),
+// 	array($url . '&sa=de', _('Génération Déclaration '), _('Génération Déclaration '), 2),
+ 	array($url . '&sa=de', _('Génération Déclaration / listing'), _('Génération Déclaration / listing'), 2),
 	array($url . '&sa=hi', _('Historique'), _('Historique des déclarations faites'), 3)
 );
 

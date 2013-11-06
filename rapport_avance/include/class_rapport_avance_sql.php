@@ -280,4 +280,137 @@ class RAPAV_Declaration_Row_Detail_SQL extends phpcompta_sql
 		parent::__construct($cn, $p_id);
 	}
 }
+class RAPAV_Listing_SQL extends phpcompta_sql
+{
+
+    function __construct($p_id = -1)
+    {
+        $this->table = "rapport_advanced.listing";
+        $this->primary_key = "l_id";
+        $this->name = array(
+            "id" => "l_id",
+            "description" => "l_description",
+            "name"=>'l_name',
+            "lob" => "l_lob",
+            "mimetype" => "l_mimetype",
+            "size" => "l_size",
+            "fiche_def_id" => "fd_id"
+        );
+        $this->type = array(
+            "l_id" => "numeric",
+            "l_name"=>'text',
+            "l_description" => "text",
+            "l_lob" => "oid",
+            "l_mimetype" => "text",
+            "l_size" => "numeric",
+            "fd_id" => "numeric"
+        );
+        $this->default = array(
+            "l_id" => "auto"
+        );
+        global $cn;
+
+        parent::__construct($cn, $p_id);
+    }
+
+}
+
+class RAPAV_Listing_Param_SQL extends Phpcompta_Sql
+{
+
+    function __construct($p_id = -1)
+    {
+
+
+        $this->table = "rapport_advanced.listing_param_detail";
+        $this->primary_key = "fp_id";
+
+        $this->name = array(
+            "lp_id" => "lp_id",
+            "listing_id" => "l_id",
+            "code" => "lp_code",
+            "comment" => "lp_comment",
+            "order" => "l_order"
+        );
+
+        $this->type = array(
+            "lp_id" => "numeric",
+            "l_id" => "numeric",
+            "lp_code" => "text",
+            "lp_comment" => "text",
+            "l_order" => "numeric"
+        );
+
+        $this->default = array(
+            "lp_id" => "auto"
+        );
+        global $cn;
+
+        parent::__construct($cn, $p_id);
+    }
+
+}
+class RAPAV_Listing_Param_Detail extends Phpcompta_Sql
+{
+
+    function __construct($p_id = -1)
+    {
+
+
+        $this->table = "rapport_advanced.listing_param_detail";
+        $this->primary_key = "fp_id";
+
+        $this->name = array(
+            "id" => "fp_id",
+            "p_id" => "p_id", // always null
+            "tmp_val" => "tmp_val",
+            "tva_id" => "tva_id",
+            "formula" => "fp_formula",
+            "signed" => "fp_signed",
+            "jrn_def_type" => "jrn_def_type",
+            "acc_vat_sum" => "tt_id",
+            "formula_type" => "type_detail",
+            "with_tmp_val" => "with_tmp_val",
+            "sum_signed" => "type_sum_account",
+            "operation_pcm_val" => "operation_pcm_val",
+            "jrn_def_id" => "jrn_def_id",
+            "date_paid" => "date_paid",
+            "attribut_card" => "ad_id",
+            "card_saldo" => "lp_card_saldo",
+            "with_card" => "lp_with_card",
+            "listing_param_id" => "lp_id"
+        );
+
+        $this->type = array(
+            "fp_id" => "numeric",
+            "p_id" => "numeric",
+            "tmp_val" => "text",
+            "tva_id" => "numeric",
+            "fp_formula" => "text",
+            "fp_signed" => "numeric",
+            "jrn_def_type" => "text",
+            "tt_id" => "numeric",
+            "type_detail" => "numeric",
+            "with_tmp_val" => "text",
+            "type_sum_account" => "numeric",
+            "operation_pcm_val" => "text",
+            "jrn_def_id" => "numeric",
+            "date_paid" => "numeric",
+            "ad_id" => "numeric",
+            "lp_card_saldo" => "text",
+            "lp_with_card" => "text",
+            "lp_id" => "numeric"
+        );
+
+        $this->default = array(
+            "fp_id" => "auto",
+            "p_id"  => "auto"  // always null
+        );
+        global $cn;
+
+        parent::__construct($cn, $p_id);
+    }
+
+}
+
 ?>

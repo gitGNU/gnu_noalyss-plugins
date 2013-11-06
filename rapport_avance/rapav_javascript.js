@@ -430,3 +430,61 @@ function rapav_remove_doc_template(plugin_code,ac,dossier,f_id)
 		alert(e.message);
 	}
 }
+/**
+ * Receive a json object and display a window to add a new listing
+ *    - gDossier is the dossier id
+ *    - ac is the AC CODE
+ *    - pc is the plugin CODE
+ *    - cin the table to be updated after save
+ *    - cout the div to display
+ *    
+ */
+function listing_add(json)
+{
+    console.log(json)
+    try {
+        var querystring = 'plugin_code=' + json.pc + '&ac=' + json.ac + '&gDossier=' + json.gDossier + '&act=listing_add' + "&cin=" + json.cin + '&cout=' + json.cout;
+        waiting_box();
+        var action = new Ajax.Request(
+                "ajax.php",
+                {
+                    method: 'get',
+                    parameters: querystring,
+                    onFailure: error_get_predef,
+                    onSuccess: function(req) {
+                        try {
+                            var answer = req.responseXML;
+                            var a = answer.getElementsByTagName('ctl');
+                            var html = answer.getElementsByTagName('code');
+                            if (a.length == 0) {
+                                var rec = req.responseText;
+                                throw 'cannot find ctl element';
+                            }
+                            remove_waiting_box();
+                            var code_html = getNodeText(html[0]); 
+                            code_html = unescape_xml(code_html);
+                            add_div({'id':json.cout,'cssclass':'inner_box','drag':1})
+                            $(json.cout).innerHTML = code_html;
+                        } catch (e) {
+                            console.log(e);
+                            console.log(code_html);
+                        }
+                    }
+                }
+        );
+
+    } catch (e)
+    {
+        alert(e.message);
+
+    }
+}
+function check_listing_add(form_id)
+{
+    var str=$(form_id)['name'].value;
+    if ( str.trim()=='') {
+        error_message('Le nom est obligatoire');
+        return false;
+    }
+    return true;
+}
