@@ -480,6 +480,11 @@ function listing_add(json)
 
     }
 }
+/**
+ * Check that the name is not empty before saving a new listing
+ * @param {type} form_id
+ * @returns {Boolean}
+ */
 function check_listing_add(form_id)
 {
     var str=$(form_id)['name'].value;
