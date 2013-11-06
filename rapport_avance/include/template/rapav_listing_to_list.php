@@ -9,7 +9,7 @@
             Description
         </th>
         <th>
-            Catégorie de fiche
+            Catégorie de fiches
         </th>
     </tr>
     <?php
