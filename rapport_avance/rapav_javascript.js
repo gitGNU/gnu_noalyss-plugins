@@ -481,7 +481,7 @@ function listing_modify(json)
     }
 }
 /**
- * Check that the name is not empty before saving a new listing
+ * @brief Check that the name is not empty before saving a new listing
  * @param {type} form_id
  * @returns {Boolean}
  */
@@ -494,7 +494,15 @@ function check_listing_add(form_id)
     }
     return true;
 }
-
+/**
+ * @brief Remove a document from listing
+ * @param {type} json
+ *    - gDossier is the dossier id
+ *    - ac is the AC CODE
+ *    - pc is the plugin CODE
+ *    - cin not used
+ *    - cout span id where is the name of file 
+ */
 function listing_remove_modele(json)
 {
     console.log(json)

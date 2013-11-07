@@ -145,24 +145,44 @@ class Rapav_Listing {
             throw $ex;
         }
     }
-
+/**
+ * @brief remove a document template
+ * @global type $cn database connection
+ * @return type
+ */
     function remove_modele() {
         global $cn;
         if ($this->Data->l_lob == null)
             return;
-        $cn->start();
-        $this->Data->cn->lo_unlink($this->Data->l_lob);
-        $this->Data->l_filename = null;
-        $this->Data->l_lob = null;
-        $this->Data->l_size = null;
-        $this->Data->l_mimetype = null;
-        $this->Data->update();
-        $cn->commit();
+        try {
+            $cn->start();
+            $this->Data->cn->lo_unlink($this->Data->l_lob);
+            $this->Data->l_filename = null;
+            $this->Data->l_lob = null;
+            $this->Data->l_size = null;
+            $this->Data->l_mimetype = null;
+            $this->Data->update();
+            $cn->commit();
+        } catch (Exception $e) {
+            $cn->rollback;
+            throw $ex;
+
+        }
     }
+    /**
+     * @brief delete a listing + lobs
+     * @throws type
+     */
     function delete()
     {
-        $this->remove_modele();
-        $this->Data->delete();
+        try {
+            $this->remove_modele();
+            $this->Data->delete(); 
+        } catch (Exception $e) {
+            $cn->rollback;
+            throw $ex;
+
+        }
     }
 
 }
