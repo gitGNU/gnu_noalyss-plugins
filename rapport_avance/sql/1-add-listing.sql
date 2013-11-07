@@ -1,3 +1,4 @@
+begin;
 create table rapport_advanced.listing
 (
     l_id    serial primary key,
@@ -51,3 +52,4 @@ CREATE TRIGGER listing_param_detail_trg
   ON rapport_advanced.listing_param_detail
   FOR EACH ROW
   EXECUTE PROCEDURE rapport_advanced.formulaire_param_detail_jrn_def_id_ins_upd();
+commit;
