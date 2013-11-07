@@ -13,7 +13,7 @@ echo HtmlInput::hidden('l_id',$id);
 echo HtmlInput::request_to_hidden(array('gDossier', 'ac', 'plugin_code'));
 $obj->form_modify();
 echo '<p>';
-echo HtmlInput::submit("listing_add_sb", "Ajout");
+echo HtmlInput::submit("listing_add_sb", "Valider");
 echo '</p>';
 echo '</form>';
 $response = ob_get_clean();
