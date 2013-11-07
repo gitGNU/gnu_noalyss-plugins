@@ -439,11 +439,11 @@ function rapav_remove_doc_template(plugin_code,ac,dossier,f_id)
  *    - cout the div to display
  *    
  */
-function listing_add(json)
+function listing_modify(json)
 {
     console.log(json)
     try {
-        var querystring = 'plugin_code=' + json.pc + '&ac=' + json.ac + '&gDossier=' + json.gDossier + '&act=listing_add' + "&cin=" + json.cin + '&cout=' + json.cout;
+        var querystring = 'plugin_code=' + json.pc + '&ac=' + json.ac + '&gDossier=' + json.gDossier + '&act=listing_modify' + "&cin=" + json.cin + '&cout=' + json.cout+'&id='+json.id;
         waiting_box();
         var action = new Ajax.Request(
                 "ajax.php",
@@ -493,4 +493,45 @@ function check_listing_add(form_id)
         return false;
     }
     return true;
+}
+
+function listing_remove_modele(json)
+{
+    console.log(json)
+    try {
+        var querystring = 'plugin_code=' + json.pc + '&ac=' + json.ac + '&gDossier=' + json.gDossier + '&act=listing_remove_modele' + "&cin=" + json.cin + '&cout=' + json.cout+'&id='+json.id;
+        waiting_box();
+        var action = new Ajax.Request(
+                "ajax.php",
+                {
+                    method: 'get',
+                    parameters: querystring,
+                    onFailure: error_get_predef,
+                    onSuccess: function(req) {
+                        try {
+                            var answer = req.responseXML;
+                            var a = answer.getElementsByTagName('ctl');
+                            var html = answer.getElementsByTagName('code');
+                            if (a.length == 0) {
+                                var rec = req.responseText;
+                                throw 'cannot find ctl element';
+                            }
+                            remove_waiting_box();
+                            var code_html = getNodeText(html[0]); 
+                            code_html = unescape_xml(code_html);
+                             console.log(code_html);
+                           $(json.cout).innerHTML = code_html;
+                        } catch (e) {
+                            console.log(e);
+                            console.log(code_html);
+                        }
+                    }
+                }
+        );
+
+    } catch (e)
+    {
+        alert(e.message);
+
+    }
 }

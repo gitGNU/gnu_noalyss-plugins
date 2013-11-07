@@ -13,8 +13,11 @@ $listing=new Rapav_Listing();
  */
 if ( isset ($_POST['listing_add_sb']))
 {
-    $new=new Rapav_Listing();
-    $new->insert($_POST);
+    $new=new Rapav_Listing($_POST['l_id']);
+    if ( ! isset ($_POST['remove']))
+        $new->save($_POST);
+    else
+        $new->delete($_POST);
 }
 
 ///////////////////////////////////////////////////////////////////////////////

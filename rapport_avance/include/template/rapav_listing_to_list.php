@@ -16,10 +16,18 @@
     $max=Database::num_row($res);
     for ($i=0;$i<$max;$i++):
         $row=  Database::fetch_array($res, $i);
+        $arg = array(
+            'gDossier' => Dossier::id(),
+            'ac' => $_REQUEST['ac'],
+            'pc' => $_REQUEST['plugin_code'],
+            'id' => $row['l_id'],
+            'cin' => 'listing_tb_id',
+            'cout' => 'listing_mod_div');
+        $json = 'listing_modify(' . str_replace('"', "'", json_encode($arg)) . ')';
     ?>
     <tr>
         <td>
-            <?php echo h($row['l_name']); ?>
+            <?php echo HtmlInput::anchor(h($row['l_name']),'',' onclick="'.$json.'"'); ?>
         </td>
         <td>
             <?php echo h($row['l_description']); ?>

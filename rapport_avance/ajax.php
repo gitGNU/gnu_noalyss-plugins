@@ -124,28 +124,14 @@ switch ($act)
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     // Show a div to enter new listing
     ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    case 'listing_add':
-        require_once 'include/class_rapav_listing.php';
-        ob_start();
-        echo HtmlInput::title_box("Ajout d'un listing", $cout);
-        echo '<form method="POST" enctype="multipart/form-data" id="listing_frm" onsubmit="return check_listing_add(\'listing_frm\')">';
-        echo HtmlInput::request_to_hidden(array('gDossier','ac','plugin_code'));
-        Rapav_Listing::form_add();
-        echo '<p>';
-        echo HtmlInput::submit("listing_add_sb", "Ajout");
-        echo '</p>';
-        echo '</form>';
-        $response = ob_get_clean();
-        ob_end_clean();
-        $html = escape_xml($response);
-        header('Content-type: text/xml; charset=UTF-8');
-        echo <<<EOF
-<?xml version="1.0" encoding="UTF-8"?>
-<data>
-<ctl></ctl>
-<code>$html</code>
-</data>
-EOF;
+    case 'listing_modify':
+       include 'ajax_listing_modify.php';
+        exit();
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Remove a document modele
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    case 'listing_remove_modele':
+       include 'ajax_listing_remove_modele.php';
         exit();
 
         break;

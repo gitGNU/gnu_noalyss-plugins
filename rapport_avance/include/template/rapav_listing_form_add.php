@@ -37,3 +37,6 @@
     </tr>
 
 </table>
+<?php
+echo $str_remove;
+?>
