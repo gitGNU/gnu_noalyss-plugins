@@ -50,6 +50,7 @@ class Rapav_Listing {
         global $cn;
         $name = new IText('name');
         $description = new ITextArea('description');
+        $description->style=' style="margin:0px;width:100%" class="itextarea"';
         $file = new IFile('listing_mod');
         $fichedef = new ISelect('fiche_def');
         $fichedef->value = $cn->make_array('select fd_id,fd_label from fiche_def order by fd_label');
@@ -78,7 +79,7 @@ class Rapav_Listing {
                 $file->value = $this->Data->l_filename . HtmlInput::anchor(' <span style="background-color:red">X </span>', "", ' onclick="' . $json . '"');
             }
         }
-        require 'template/rapav_listing_form_add.php';
+        require 'template/rapav_listing_form_modify.php';
     }
 
     /**
@@ -183,6 +184,16 @@ class Rapav_Listing {
             throw $ex;
 
         }
+    }
+    /**
+     * @brief display the parameter of a listing
+     * let add or remove detail
+     */
+    function display()
+    {
+        // Load all listing_parameter
+
+        // Display them avec an anchor to update / delete (javascript)
     }
 
 }

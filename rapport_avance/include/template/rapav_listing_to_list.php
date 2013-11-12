@@ -36,7 +36,18 @@
             <?php echo h($row['fd_label']); ?>
         </td>
         <td>
-            Action
+        <?php
+        $arg = array(
+            'gDossier' => Dossier::id(),
+            'ac' => $_REQUEST['ac'],
+            'pc' => $_REQUEST['plugin_code'],
+            'id' => $row['l_id'],
+            'cin' => 'listing_definition_id',
+            'cout' => 'listing_definition_div_id');
+        $json = 'listing_definition(' . str_replace('"', "'", json_encode($arg)) . ')';
+        echo HtmlInput::anchor(h($row['l_name']),'',' onclick="'.$json.'"'); 
+        ?>
+            
         </td>
     </tr>
     <?php

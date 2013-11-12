@@ -133,7 +133,14 @@ switch ($act)
     case 'listing_remove_modele':
        include 'ajax_listing_remove_modele.php';
         exit();
-
-        break;
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Display the definition of a listing
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    case 'listing_display_definition':
+        include 'ajax_listing_display_definition.php';
+        exit();
+    default:
+        if ( DEBUG) var_dump($_GET);
+        die ("Aucune action demandée");
 }
 ?>

@@ -543,3 +543,43 @@ function listing_remove_modele(json)
 
     }
 }
+function listing_definition (json)
+{
+    console.log(json)
+    try {
+        var querystring = 'plugin_code=' + json.pc + '&ac=' + json.ac + '&gDossier=' + json.gDossier + '&act=listing_display_definition' + "&cin=" + json.cin + '&cout=' + json.cout+'&id='+json.id;
+        waiting_box();
+        var action = new Ajax.Request(
+                "ajax.php",
+                {
+                    method: 'get',
+                    parameters: querystring,
+                    onFailure: error_get_predef,
+                    onSuccess: function(req) {
+                        try {
+                            var answer = req.responseXML;
+                            var a = answer.getElementsByTagName('ctl');
+                            var html = answer.getElementsByTagName('code');
+                            if (a.length == 0) {
+                                var rec = req.responseText;
+                                throw 'cannot find ctl element';
+                            }
+                            remove_waiting_box();
+                            var code_html = getNodeText(html[0]); 
+                            code_html = unescape_xml(code_html);
+                             console.log(code_html);
+                           $(json.cout).innerHTML = code_html;
+                        } catch (e) {
+                            console.log(e);
+                            console.log(code_html);
+                        }
+                    }
+                }
+        );
+
+    } catch (e)
+    {
+        alert(e.message);
+
+    }
+}
