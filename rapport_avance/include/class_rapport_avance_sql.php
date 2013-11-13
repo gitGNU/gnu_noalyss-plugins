@@ -324,7 +324,7 @@ class RAPAV_Listing_Param_SQL extends Phpcompta_Sql
     {
 
 
-        $this->table = "rapport_advanced.listing_param_detail";
+        $this->table = "rapport_advanced.listing_param";
         $this->primary_key = "fp_id";
 
         $this->name = array(
@@ -352,7 +352,7 @@ class RAPAV_Listing_Param_SQL extends Phpcompta_Sql
     }
 
 }
-class RAPAV_Listing_Param_Detail extends Phpcompta_Sql
+class RAPAV_Listing_Param_Detail_SQL extends Phpcompta_Sql
 {
 
     function __construct($p_id = -1)

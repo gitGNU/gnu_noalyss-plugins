@@ -14,9 +14,11 @@
 require_once 'class_rapport_avance_sql.php';
 
 class Rapav_Listing {
-
+    private $Data; /*!< RAPAV_Listing_SQL */
+    private $a_detail; /*!< array of RAPAV_Listing_Param corresponding to the listing*/
     function __construct($p_id = -1) {
         $this->Data = new RAPAV_Listing_SQL($p_id);
+        $this->a_detail=array();
     }
 
     /**
@@ -192,8 +194,17 @@ class Rapav_Listing {
     function display()
     {
         // Load all listing_parameter
-
+        $this->load_detail();
+        
         // Display them avec an anchor to update / delete (javascript)
+        include_once 'template/rapav_listing_definition.php';
     }
-
+    
+    function load_detail()
+    {
+        if ( $this->Data->getp('id') == -1) 
+            throw new Exception ("Undefined objet ".__FILE__.':'.__LINE__);
+        $this->a_detail=  RAPAV_Listing_Param::get_listing_detail($this->Data->getp('id'));
+        
+    }
 }
