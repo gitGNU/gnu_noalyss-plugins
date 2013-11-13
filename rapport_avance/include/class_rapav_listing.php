@@ -12,7 +12,7 @@
  * @author dany
  */
 require_once 'class_rapport_avance_sql.php';
-
+require_once 'class_rapav_listing_param.php';
 class Rapav_Listing {
     private $Data; /*!< RAPAV_Listing_SQL */
     private $a_detail; /*!< array of RAPAV_Listing_Param corresponding to the listing*/
@@ -205,6 +205,10 @@ class Rapav_Listing {
         if ( $this->Data->getp('id') == -1) 
             throw new Exception ("Undefined objet ".__FILE__.':'.__LINE__);
         $this->a_detail=  RAPAV_Listing_Param::get_listing_detail($this->Data->getp('id'));
+        
+    }
+    function button_add_param() 
+    {
         
     }
 }

@@ -91,7 +91,7 @@ class RAPAV_Listing_Param {
        
        $a_param_id=$cn->get_array('select lp_id 
                from rapport_advanced.listing_param 
-               where l_id=$1 order by l_order'.array($p_id));
+               where l_id=$1 order by l_order',array($p_id));
        
        for ($i=0;$i<count($a_param_id);$i++)
        {
