@@ -599,12 +599,51 @@ function listing_definition (json)
  * @brief display a form for adding a parameter to the current listing
  * @param  json
  * Attributes are 
- *     - cin    the div to fill
- *     - tb_id  the table to update
+ *     - cin      the div to fill
+ *     - tb_id    the table to update
  *     - gDossier dossier 
  *     - ac       the AC code
+ *     - pc       plugin_code
  */
 function listing_param_add(json)
 {
     console.log(json);
+    try {
+        var querystring = 'plugin_code=' + json.pc + '&ac=' + json.ac + '&gDossier=' + json.gDossier + '&act=listing_param_add' + "&cin=" + json.cin +'&id='+json.id;
+        waiting_box();
+        var action = new Ajax.Request(
+                "ajax.php",
+                {
+                    method: 'get',
+                    parameters: querystring,
+                    onFailure: error_get_predef,
+                    onSuccess: function(req) {
+                        try {
+                            var answer = req.responseXML;
+                            var a = answer.getElementsByTagName('ctl');
+                            var html = answer.getElementsByTagName('code');
+                            if (a.length == 0) {
+                                var rec = req.responseText;
+                                throw 'cannot find ctl element';
+                            }
+                            remove_waiting_box();
+                            var code_html = getNodeText(html[0]); 
+                            code_html = unescape_xml(code_html);
+                            console.log(code_html);
+                            var position=fixed_position(451,217);
+                            add_div({'id':json.cin,'cssclass':'inner_box','drag':1,'style':position});
+                           $(json.cin).innerHTML = code_html;
+                        } catch (e) {
+                            console.log(e);
+                            console.log(code_html);
+                        }
+                    }
+                }
+        );
+
+    } catch (e)
+    {
+        alert(e.message);
+
+    }
 }

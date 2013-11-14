@@ -217,14 +217,20 @@ class Rapav_Listing {
     {
         $button=new IButton('detail_add_bt','Ajout','detail_add_bt');
         $arg=  json_encode(array(
-            'cin'=>'listing_definition_div_id',
+            'cin'=>'listing_param_input_div_id',
             'gDossier'=>Dossier::id(),
             'id'=>$this->Data->getp('id'),
             'tb_id'=>'definition_tb_id',
-            'ac'=>$_REQUEST['ac'])
+            'ac'=>$_REQUEST['ac'],
+            'pc'=>$_REQUEST['plugin_code'])
             );
         $arg=str_replace('"',"'",$arg);
         $button->javascript='listing_param_add('.$arg.')';
         echo $button->input();
+    }
+    function add_parameter()
+    {
+        $param=new RAPAV_Listing_Param();
+        $param->input($this->Data->getp("id"));
     }
 }

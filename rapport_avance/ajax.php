@@ -139,6 +139,12 @@ switch ($act)
     case 'listing_display_definition':
         include 'ajax_listing_display_definition.php';
         exit();
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Add a param to a listing
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    case 'listing_param_add':
+        include 'ajax_listing_param_add.php';
+        exit();
     default:
         if ( DEBUG) var_dump($_GET);
         die ("Aucune action demandée");

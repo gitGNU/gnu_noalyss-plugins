@@ -325,7 +325,7 @@ class RAPAV_Listing_Param_SQL extends Phpcompta_Sql
 
 
         $this->table = "rapport_advanced.listing_param";
-        $this->primary_key = "fp_id";
+        $this->primary_key = "lp_id";
 
         $this->name = array(
             "lp_id" => "lp_id",

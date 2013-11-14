@@ -68,4 +68,16 @@ class RAPAV_Listing_Param {
        }
        return $a_listing_param;
     }
+    /**
+     * @brief display a div for adding or modifing a parameter
+     * @param $p_id is the listing id
+     */
+    function input($p_id)
+    {
+        $code=new IText('code_id');
+        $comment=new IText('comment');
+        $order=new INum('order');
+        
+        require 'template/listing_param_input.php';
+    }
 }
