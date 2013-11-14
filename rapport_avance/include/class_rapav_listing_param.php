@@ -16,7 +16,6 @@ require_once 'class_rapport_avance_sql.php';
 
 class RAPAV_Listing_Param {
     private  $Param;  /*!< RAPAV_Listing_Param_SQL */
-    private  $Detail;  /*!< RAPAV_Listing_Param_Detail_SQL */
     
     /**
      * constructor, initialize Data with a RAPAV_Listing_Param_SQL
@@ -26,11 +25,6 @@ class RAPAV_Listing_Param {
     function __construct($p_id=-1) {
         global $cn;
         $this->Param = new RAPAV_Listing_Param_SQL($p_id);
-        $this->Detail=new RAPAV_Listing_Param_Detail_SQL();
-        if ( $p_id !=-1)
-        {
-            $this->load_detail();
-        }
     }
     /**
      * Set the id of Param and load from database 
@@ -50,33 +44,8 @@ class RAPAV_Listing_Param {
     function load()
     {
         $this->Param->load();
-        $this->load_detail();
+        // $this->load_detail();
         
-    }
-    /**
-     * Retrieve data from listing_param_detail
-     */
-    function load_detail()
-    {
-       $id=$this->Param->getp('id');
-       
-       if ( $id !=-1)
-        {
-            $pk_detail=$cn->get_value(' select fp_id from 
-                    rapport_advanced.listing_param_detail
-                    where
-                    lp_id = $1',array($id));
-            
-            if ($cn->count() != 0)    {
-                $this->Detail->setp('id',-1);
-                return;
-            }
-            
-            $this->Detail->setp('id',$pk_detail);
-            
-            $this->Detail->load();
-            
-        }
     }
     /**
      * Get all data from listing_param and listing_param_detail 

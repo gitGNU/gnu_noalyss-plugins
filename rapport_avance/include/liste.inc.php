@@ -1,3 +1,4 @@
+<div class="content" id="listing_definition_div_id">
 <?php
 /**
  * @file
@@ -28,3 +29,4 @@ echo '<p>';
 Rapav_Listing::Button_Add_Listing();
 echo '</p>';
 ?>
+</div>

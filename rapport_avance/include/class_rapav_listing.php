@@ -199,7 +199,10 @@ class Rapav_Listing {
         // Display them avec an anchor to update / delete (javascript)
         include_once 'template/rapav_listing_definition.php';
     }
-    
+    /**
+     * @brief Load the detail of a listing
+     * @throws Exception Undefined object
+     */
     function load_detail()
     {
         if ( $this->Data->getp('id') == -1) 
@@ -207,8 +210,21 @@ class Rapav_Listing {
         $this->a_detail=  RAPAV_Listing_Param::get_listing_detail($this->Data->getp('id'));
         
     }
+    /**
+     * @brief Display button for adding detail to a list definition, it means
+     */
     function button_add_param() 
     {
-        
+        $button=new IButton('detail_add_bt','Ajout','detail_add_bt');
+        $arg=  json_encode(array(
+            'cin'=>'listing_definition_div_id',
+            'gDossier'=>Dossier::id(),
+            'id'=>$this->Data->getp('id'),
+            'tb_id'=>'definition_tb_id',
+            'ac'=>$_REQUEST['ac'])
+            );
+        $arg=str_replace('"',"'",$arg);
+        $button->javascript='listing_param_add('.$arg.')';
+        echo $button->input();
     }
 }

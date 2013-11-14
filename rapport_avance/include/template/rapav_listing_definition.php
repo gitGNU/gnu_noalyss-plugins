@@ -7,7 +7,7 @@
  */
 
 ?>
-<table class="result">
+<table class="result" id="definition_tb_id">
     <tr>
         <th>
             Code

@@ -543,6 +543,18 @@ function listing_remove_modele(json)
 
     }
 }
+/**
+ * Show the definition of a list in a div
+ * @param json json object 
+ * Attributes are 
+ *     - pc
+ *     - ac
+ *     - gDossier
+ *     - act
+ *     - cin
+ *     - cout
+ *
+ */
 function listing_definition (json)
 {
     console.log(json)
@@ -582,4 +594,17 @@ function listing_definition (json)
         alert(e.message);
 
     }
+}
+/**
+ * @brief display a form for adding a parameter to the current listing
+ * @param  json
+ * Attributes are 
+ *     - cin    the div to fill
+ *     - tb_id  the table to update
+ *     - gDossier dossier 
+ *     - ac       the AC code
+ */
+function listing_param_add(json)
+{
+    console.log(json);
 }

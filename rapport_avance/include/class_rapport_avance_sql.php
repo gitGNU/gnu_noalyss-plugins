@@ -332,39 +332,7 @@ class RAPAV_Listing_Param_SQL extends Phpcompta_Sql
             "listing_id" => "l_id",
             "code" => "lp_code",
             "comment" => "lp_comment",
-            "order" => "l_order"
-        );
-
-        $this->type = array(
-            "lp_id" => "numeric",
-            "l_id" => "numeric",
-            "lp_code" => "text",
-            "lp_comment" => "text",
-            "l_order" => "numeric"
-        );
-
-        $this->default = array(
-            "lp_id" => "auto"
-        );
-        global $cn;
-
-        parent::__construct($cn, $p_id);
-    }
-
-}
-class RAPAV_Listing_Param_Detail_SQL extends Phpcompta_Sql
-{
-
-    function __construct($p_id = -1)
-    {
-
-
-        $this->table = "rapport_advanced.listing_param_detail";
-        $this->primary_key = "fp_id";
-
-        $this->name = array(
-            "id" => "fp_id",
-            "p_id" => "p_id", // always null
+            "order" => "l_order",
             "tmp_val" => "tmp_val",
             "tva_id" => "tva_id",
             "formula" => "fp_formula",
@@ -380,12 +348,14 @@ class RAPAV_Listing_Param_Detail_SQL extends Phpcompta_Sql
             "attribut_card" => "ad_id",
             "card_saldo" => "lp_card_saldo",
             "with_card" => "lp_with_card",
-            "listing_param_id" => "lp_id"
         );
 
         $this->type = array(
-            "fp_id" => "numeric",
-            "p_id" => "numeric",
+            "lp_id" => "numeric",
+            "l_id" => "numeric",
+            "lp_code" => "text",
+            "lp_comment" => "text",
+            "l_order" => "numeric",
             "tmp_val" => "text",
             "tva_id" => "numeric",
             "fp_formula" => "text",
@@ -401,12 +371,10 @@ class RAPAV_Listing_Param_Detail_SQL extends Phpcompta_Sql
             "ad_id" => "numeric",
             "lp_card_saldo" => "text",
             "lp_with_card" => "text",
-            "lp_id" => "numeric"
         );
 
         $this->default = array(
-            "fp_id" => "auto",
-            "p_id"  => "auto"  // always null
+            "lp_id" => "auto"
         );
         global $cn;
 
@@ -414,5 +382,6 @@ class RAPAV_Listing_Param_Detail_SQL extends Phpcompta_Sql
     }
 
 }
+
 
 ?>
