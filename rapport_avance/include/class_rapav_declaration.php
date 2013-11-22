@@ -858,7 +858,7 @@ class Rapav_dd_Account_Tva extends Rapav_Declaration_Detail
         {
             $sql = "select coalesce(sum(qs_vat),0) as amount
 						from quant_sold join jrnx using (j_id)
-						where qs_vat_code=$1 and
+						where qs_vat_code=$1 
 						$sql_date
 						and j_poste::text like ($4)  $filter_ledger";
 
