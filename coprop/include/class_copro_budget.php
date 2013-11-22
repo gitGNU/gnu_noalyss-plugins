@@ -9,9 +9,9 @@ class Copro_Budget
 
         $array=$cn->get_array("select b_id, b_name,
                    b_exercice,
-				   b_type,
-				    case when b_type = 'OPER' then 'Opérationnel'
-					 when b_type = 'PREV' then 'Prévisionnel' else 'inconnu' end as str_type,
+                    b_type,
+                     case when b_type = 'OPER' then 'Opérationnel'
+                          when b_type = 'PREV' then 'Prévisionnel' else 'inconnu' end as str_type,
                     b_amount
                     from coprop.budget
                     order by b_name

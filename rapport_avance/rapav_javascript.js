@@ -214,13 +214,34 @@ function rapav_form_param(plugin_code,ac,dossier,f_id)
 	}
 }
 /**
- * @brief montre le div contenant le type de formule
+ * @brief montre le div contenant le type de formule pour les rapports
  */
-function show_type_formula(p_toshow)
+function show_rapport_formula(p_toshow)
 {
 	try
 	{
 		var div=['new_account_tva_id','new_formula_id','new_compute_id','new_account_id','new_reconcile_id'];
+		for (var r =0;r<div.length;r++ ) {
+			$(div[r]).hide();
+			$(div[r]+'_bt').style.backgroundColor="inherit";
+
+		}
+		$(p_toshow).show();
+		$(p_toshow+'_bt').style.backgroundColor="red";
+	} catch (e)
+{
+		alert (e.message);
+	}
+
+}
+/**
+ * @brief montre le div contenant le type de formule pour les listings
+ */
+function show_listing_formula(p_toshow)
+{
+	try
+	{
+		var div=['new_formula_id','new_compute_id','new_account_id'];
 		for (var r =0;r<div.length;r++ ) {
 			$(div[r]).hide();
 			$(div[r]+'_bt').style.backgroundColor="inherit";
@@ -630,7 +651,7 @@ function listing_param_add(json)
                             var code_html = getNodeText(html[0]); 
                             code_html = unescape_xml(code_html);
                             console.log(code_html);
-                            var position=fixed_position(451,217);
+                            var position=fixed_position(451,217)+';width:50%';
                             add_div({'id':json.cin,'cssclass':'inner_box','drag':1,'style':position});
                            $(json.cin).innerHTML = code_html;
                         } catch (e) {

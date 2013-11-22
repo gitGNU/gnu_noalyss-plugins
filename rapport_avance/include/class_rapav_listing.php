@@ -193,8 +193,22 @@ class Rapav_Listing {
      */
     function display()
     {
+        require_once 'class_rapav_listing_formula.php';
         // Load all listing_parameter
         $this->load_detail();
+        
+        // Button for modifing 
+        $button=new IButton('listing_mod_bt_id','Modifie');
+        $arg = array(
+            'gDossier' => Dossier::id(),
+            'ac' => $_REQUEST['ac'],
+            'pc' => $_REQUEST['plugin_code'],
+            'id' => $this->Data->l_id,
+            'cin' => 'listing_tb_id',
+            'cout' => 'listing_mod_div');
+        $json = 'listing_modify(' . str_replace('"', "'", json_encode($arg)) . ')';
+        $button->javascript=$json;
+        
         
         // Display them avec an anchor to update / delete (javascript)
         include_once 'template/rapav_listing_definition.php';
@@ -232,5 +246,29 @@ class Rapav_Listing {
     {
         $param=new RAPAV_Listing_Param();
         $param->input($this->Data->getp("id"));
+    }
+    /**
+     * Return the name of the description of the category of the cards
+     * 
+     * @return string
+     */
+    function get_categorie_name()
+    {
+        global $cn;
+        if ($this->Data->getp('id')==0) return;
+        $cat=$cn->get_value('select fd_label from fiche_def where fd_id=$1',array($this->Data->getp('fiche_def_id')));
+        return $cat;
+    }
+    /**
+     * Return the name of the description of the category of the cards
+     * 
+     * @return string
+     */
+    function get_categorie_description()
+    {
+        global $cn;
+        if ($this->Data->getp('id')==0) return;
+        $cat=$cn->get_value('select fd_description from fiche_def where fd_id=$1',array($this->Data->getp('fiche_def_id')));
+        return $cat;
     }
 }

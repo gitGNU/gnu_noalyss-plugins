@@ -7,6 +7,17 @@
  */
 
 ?>
+<p>
+    Nom listing <?php echo h($this->Data->getp('name')); ?>
+</p>
+<p>
+    Description <?php echo h($this->Data->getp('description')); ?>
+</p>
+<p>
+    Catégorie <?php echo h($this->get_categorie_name()); ?>
+    <?php echo h($this->get_categorie_description());  ?>
+</p>
+<?php echo $button->input(); ?>
 <table class="result" id="definition_tb_id">
     <tr>
         <th>

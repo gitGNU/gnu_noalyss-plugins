@@ -16,14 +16,14 @@
     $max=Database::num_row($res);
     for ($i=0;$i<$max;$i++):
         $row=  Database::fetch_array($res, $i);
-        $arg = array(
+     $arg = array(
             'gDossier' => Dossier::id(),
             'ac' => $_REQUEST['ac'],
             'pc' => $_REQUEST['plugin_code'],
             'id' => $row['l_id'],
-            'cin' => 'listing_tb_id',
-            'cout' => 'listing_mod_div');
-        $json = 'listing_modify(' . str_replace('"', "'", json_encode($arg)) . ')';
+            'cin' => 'listing_definition_id',
+            'cout' => 'listing_definition_div_id');
+        $json = 'listing_definition(' . str_replace('"', "'", json_encode($arg)) . ')';
     ?>
     <tr>
         <td>
@@ -36,17 +36,6 @@
             <?php echo h($row['fd_label']); ?>
         </td>
         <td>
-        <?php
-        $arg = array(
-            'gDossier' => Dossier::id(),
-            'ac' => $_REQUEST['ac'],
-            'pc' => $_REQUEST['plugin_code'],
-            'id' => $row['l_id'],
-            'cin' => 'listing_definition_id',
-            'cout' => 'listing_definition_div_id');
-        $json = 'listing_definition(' . str_replace('"', "'", json_encode($arg)) . ')';
-        echo HtmlInput::anchor(h($row['l_name']),'',' onclick="'.$json.'"'); 
-        ?>
             
         </td>
     </tr>

@@ -23,7 +23,7 @@
 
 /**
  * @file
- * @brief
+ * @brief add parameter for declaration
  *
  */
 
@@ -32,28 +32,28 @@
 <table style="width:90%;margin-left:5%" >
 	<tr>
 	<td id="new_formula_id_bt" class="tool" style="background:red">
-		<a class="mtitle"  href="javascript:void(0)"  onclick="show_type_formula('new_formula_id')">
+		<a class="mtitle"  href="javascript:void(0)"  onclick="show_rapport_formula('new_formula_id')">
 			Formule
 		</a>
 	</td>
 	<td id="new_compute_id_bt"  class="tool" style="background:inherit">
 		<a class="mtitle" href="javascript:void(0)"
-		   onclick="show_type_formula('new_compute_id')">
+		   onclick="show_rapport_formula('new_compute_id')">
 			Compute
 		</a>
 	</td>
 	<td id="new_account_tva_id_bt"  class="tool" style="background:inherit">
-		<a class="mtitle" href="javascript:void(0)"   onclick="show_type_formula('new_account_tva_id')">
+		<a class="mtitle" href="javascript:void(0)"   onclick="show_rapport_formula('new_account_tva_id')">
 			Poste comptable et code TVA
 		</a>
 	</td>
 	<td id="new_account_id_bt"  class="tool" style="background:inherit">
-		<a class="mtitle" href="javascript:void(0)"   onclick="show_type_formula('new_account_id')">
+		<a class="mtitle" href="javascript:void(0)"   onclick="show_rapport_formula('new_account_id')">
 			Poste comptable
 		</a>
 	</td>
 	<td id="new_reconcile_id_bt"  class="tool" style="background:inherit">
-		<a class="mtitle" href="javascript:void(0)"   onclick="show_type_formula('new_reconcile_id')">
+		<a class="mtitle" href="javascript:void(0)"   onclick="show_rapport_formula('new_reconcile_id')">
 			Opérations rapprochées
 		</a>
 	</td>
