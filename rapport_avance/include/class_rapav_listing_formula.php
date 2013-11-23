@@ -11,6 +11,8 @@
  *
  * @author dany
  */
+require_once 'class_impress.php';
+
 abstract class RAPAV_Listing_Formula
 {
 
@@ -80,28 +82,34 @@ abstract class RAPAV_Listing_Formula
         switch ($obj->getp('formula_type'))
         {
             case 'ATTR':
-                $ret=new Rapav_Formula_Attribute($obj);
+                $ret = new Rapav_Formula_Attribute($obj);
+                break;
+            case 'FORM':
+                $ret = new Rapav_Formula_Formula($obj);
                 break;
 
             default:
-                throw new Exception ('Object '.$obj.' invalide ');
+                throw new Exception('Object ' .var_export( $obj,true) . ' invalide ');
                 break;
-           
         }
         return $ret;
     }
+
     function display_code()
     {
         return $this->data->getp('code');
     }
+
     function display_comment()
     {
         return $this->data->getp('comment');
     }
+
     function display_order()
     {
         return $this->data->getp('order');
     }
+
     function load()
     {
         $this->data->load();
@@ -114,14 +122,23 @@ abstract class RAPAV_Listing_Formula
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /**
  * @brief Class for the listing detail attribute, this class use RAPAV_Listing_Param_SQL
- * the specific columns are attribut_card
+ * the specific columns are 
+ *   - attribut_card
  */
 class RAPAV_Formula_Attribute extends RAPAV_Listing_Formula
 {
 
-    var $data;           /**< RAPAV_Listing_Param_SQL objet */
-    var $cat;            /**< categorie id */
-    var $sig;            /**< Object signature */
+    /**
+     * RAPAV_Listing_Param_SQL objet */
+    var $data;
+
+    /**
+     * categorie id */
+    var $cat;
+
+    /**
+     * Object signature */
+    var $sig;
 
     function __construct(RAPAV_Listing_Param_SQL $obj, $p_cat_id = 0)
     {
@@ -184,6 +201,111 @@ class RAPAV_Formula_Attribute extends RAPAV_Listing_Formula
         $this->data->setp('attribut_card', $p_array['p_attribute']);
         $this->data->setp('formula_type', 'ATTR');
         $this->data->save();
+    }
+
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// RAPAV_Formula_Formula
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * @brief Class for the listing detail attribute, this class 
+ * use RAPAV_Listing_Param_SQL the specific columns are 
+ *   - fp_formula
+ *   - jrn_def_id
+ *   - date_paid
+ *  
+ */
+class RAPAV_Formula_Formula extends RAPAV_Listing_Formula
+{
+
+    /**
+     * < RAPAV_Listing_Param_SQL objet */
+    var $data;
+
+    /**
+     * < Object signature 
+     */
+    var $sig;
+
+    function __construct(RAPAV_Listing_Param_SQL $obj)
+    {
+        global $cn;
+        $this->data = $obj;
+        $this->sig = 'FORM';
+    }
+
+    function display()
+    {
+        $ledger = $this->get_ledger_name();
+        $paid = ( $this->data->date_paid != 0 ) ? "la date concerne la date de paiement, la recherche sera limitée au journaux de type ACH & VEN" : "";
+        $str = sprintf("Résultat de la formule %s utilisant $ledger %s", $this->data->fp_formula, $paid);
+        return $str;
+    }
+
+    function compute($p_start, $p_end)
+    {
+        return 0;
+    }
+
+    function input()
+    {
+        $account = new IPoste("p_formula", "", "formula_input_id");
+        $account->size = 50;
+        $account->label = _("Recherche poste");
+        $account->set_attribute('gDossier', dossier::id());
+        $account->set_attribute('bracket', 1);
+        $account->set_attribute('no_overwrite', 1);
+        $account->set_attribute('noquery', 1);
+        $account->set_attribute('account', "formula_input_id");
+        echo $account->input();
+        parent::input_date_paiement();
+        parent::input_ledger();
+    }
+
+    function save($p_array)
+    {
+        parent::set($p_array);
+        $this->data->setp('listing_id', $p_array['listing_id']);
+        /* Clean everything but keep the lp_id, l_id, with_Card and ad_id  + common */
+        $a_toclean = explode(',', 'operation_pcm_val,with_tmp_val,tmp_val, '
+                . 'type_sum_account, tt_id, '
+                . 'fp_signed,  tva_id'
+                . ',lp_card_saldo,attribut_card');
+
+        parent::set_to_null($a_toclean);
+        $this->data->setp('with_card', 'N');
+        $this->data->setp('formula', $p_array['p_formula']);
+        if (isset($p_array['p_paid']))
+        {
+            $this->data->setp('date_paid', 1);
+        } else
+        {
+            $this->data->setp('date_paid', null);
+            
+        }
+        $this->data->setp('jrn_def_id', $p_array['p_ledger']);
+        $this->data->setp('formula_type', 'FORM');
+        $this->data->save();
+    }
+
+    /**
+     * @brief check if the formula is valid, return 1 for an error
+     * and set errode to the error
+     */
+    function verify()
+    {
+        if (Impress::check_formula($this->data->fp_formula) == false)
+        {
+            $this->errcode = "Erreur dans votre formule";
+            return 1;
+        }
+        if (trim($this->data->fp_formula) == "")
+        {
+            $this->errcode = " Aucune formule trouvée";
+            return 1;
+        }
+        return 0;
     }
 
 }

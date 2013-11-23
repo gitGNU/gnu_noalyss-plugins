@@ -658,10 +658,13 @@ function listing_param_add(json)
                             var position = fixed_position(451, 217) + ';width:50%';
                             add_div({'id': json.cin, 'cssclass': 'inner_box', 'drag': 1, 'style': position});
                             $(json.cin).innerHTML = code_html;
+                          
                         } catch (e) {
                             console.log(e);
                             console.log(code_html);
                         }
+                        console.log('trying to execute javascript');
+                        code_html.evalScripts();
                     }
                 }
         );

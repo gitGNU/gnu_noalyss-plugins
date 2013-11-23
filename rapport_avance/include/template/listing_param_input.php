@@ -77,7 +77,7 @@
                           <?php echo HtmlInput::request_to_hidden(array('gDossier', 'ac', 'plugin_code', 'p_id')) ?>
                     <p>
                         <?php echo HtmlInput::hidden('tab', 'formula') ?>
-                        <?php echo "formula"; ?>
+                        <?php echo $formula->input() ?>
                     </p>
 
                     <?php echo HtmlInput::submit('save', 'Sauve') ?>

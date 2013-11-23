@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @file
  * @brief sauve la nouvelle ligne de détail (listing) et renvoie un xml
@@ -22,106 +23,106 @@ $formula = new RAPAV_Listing_Param_SQL();
 // var_dump($_GET);
 switch ($tab)
 {
-   /* case 'formula':
-        $acc_formula = new RAPAV_Formula();
-        $acc_formula->fp_formula = $formula_new;
-        $acc_formula->p_id = $p_id;
-        $acc_formula->type_detail = 1;
-        $acc_formula->jrn_def_id = $p_ledger;
-        $acc_formula->date_paid = (isset($p_paid)) ? 1 : 0;
+    case 'formula':
+        $acc_formula = new RAPAV_Formula_Formula($formula);
+        $acc_formula->data->setp('formula', $p_formula);
         if ($acc_formula->verify() == 1)
         {
             $code = 'nok';
             $html = $acc_formula->errcode;
+            $lp_id=0;
         } else
         {
-            $acc_formula->insert();
-            $fp_id = $acc_formula->fp_id;
+            $acc_formula->save($_GET);
+            $acc_formula->load();
+            $lp_id = $acc_formula->data->getp('lp_id');
             $code = 'ok';
-            $html = '<td>';
             ob_start();
-            $acc_formula->display_row();
+            echo td($acc_formula->display_code());
+            echo td($acc_formula->display_comment());
+            $r=$acc_formula->display();
+            echo td($r);
+            echo td($acc_formula->display_order());
             $html.=ob_get_contents();
             ob_end_clean();
-            $html.= '</td>';
-            $html.='<td id="del_' . $acc_formula->fp_id . '">';
+            $html.='<td id="del_' . $lp_id . '">';
             $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"delete_param_detail('%s','%s','%s','%s')\""
-                                    , $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $acc_formula->fp_id));
+                                    , $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $lp_id));
             $html.='</td>';
         }
         break;
-    case 'compute_id':
-        $acc_compute = new RAPAV_Compute();
-        $acc_compute->fp_formula = $form_compute;
-        $acc_compute->p_id = $p_id;
-        $acc_compute->type_detail = 3;
-        $acc_compute->jrn_def_id = null;
-        if ($acc_compute->verify() == 1)
-        {
-            $code = 'nok';
-            $html = $acc_compute->errcode;
-        } else
-        {
-            $acc_compute->insert();
-            $fp_id = $acc_compute->fp_id;
-            $code = 'ok';
-            $html = '<td>';
-            ob_start();
-            $acc_compute->display_row();
-            $html.=ob_get_contents();
-            ob_end_clean();
-            $html.= '</td>';
-            $html.='<td id="del_' . $acc_compute->fp_id . '">';
-            $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"delete_param_detail('%s','%s','%s','%s')\""
-                                    , $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $acc_compute->fp_id));
-            $html.='</td>';
-        }
-        break;
-    case 'new_account_id':
-        $acc_account = new RAPAV_Account();
-        $acc_account->tmp_val = $account_first;
-        $acc_account->with_tmp_val = $account_second;
-        $acc_account->p_id = $p_id;
-        $acc_account->type_detail = 4;
-        $acc_account->type_sum_account = $account_sum_type;
-        $acc_account->jrn_def_id = $p_ledger;
-        $acc_account->date_paid = (isset($p_paid)) ? 1 : 0;
-        if ($acc_account->verify() == 1)
-        {
-            $code = 'nok';
-            $html = $acc_account->errcode;
-        } else
-        {
-            $acc_account->insert();
-            $fp_id = $acc_account->fp_id;
-            $code = 'ok';
-            $html = '<td>';
-            ob_start();
-            $acc_account->display_row();
-            $html.=ob_get_contents();
-            ob_end_clean();
-            $html.= '</td>';
-            $html.='<td id="del_' . $acc_account->fp_id . '">';
-            $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"delete_param_detail('%s','%s','%s','%s')\""
-                                    , $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $acc_account->fp_id));
-            $html.='</td>';
-        }
-        break;*/
+    /*  case 'compute_id':
+      $acc_compute = new RAPAV_Compute();
+      $acc_compute->fp_formula = $form_compute;
+      $acc_compute->p_id = $p_id;
+      $acc_compute->type_detail = 3;
+      $acc_compute->jrn_def_id = null;
+      if ($acc_compute->verify() == 1)
+      {
+      $code = 'nok';
+      $html = $acc_compute->errcode;
+      } else
+      {
+      $acc_compute->insert();
+      $fp_id = $acc_compute->fp_id;
+      $code = 'ok';
+      $html = '<td>';
+      ob_start();
+      $acc_compute->display_row();
+      $html.=ob_get_contents();
+      ob_end_clean();
+      $html.= '</td>';
+      $html.='<td id="del_' . $acc_compute->fp_id . '">';
+      $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"delete_param_detail('%s','%s','%s','%s')\""
+      , $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $acc_compute->fp_id));
+      $html.='</td>';
+      }
+      break;
+      case 'new_account_id':
+      $acc_account = new RAPAV_Account();
+      $acc_account->tmp_val = $account_first;
+      $acc_account->with_tmp_val = $account_second;
+      $acc_account->p_id = $p_id;
+      $acc_account->type_detail = 4;
+      $acc_account->type_sum_account = $account_sum_type;
+      $acc_account->jrn_def_id = $p_ledger;
+      $acc_account->date_paid = (isset($p_paid)) ? 1 : 0;
+      if ($acc_account->verify() == 1)
+      {
+      $code = 'nok';
+      $html = $acc_account->errcode;
+      } else
+      {
+      $acc_account->insert();
+      $fp_id = $acc_account->fp_id;
+      $code = 'ok';
+      $html = '<td>';
+      ob_start();
+      $acc_account->display_row();
+      $html.=ob_get_contents();
+      ob_end_clean();
+      $html.= '</td>';
+      $html.='<td id="del_' . $acc_account->fp_id . '">';
+      $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"delete_param_detail('%s','%s','%s','%s')\""
+      , $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $acc_account->fp_id));
+      $html.='</td>';
+      }
+      break; */
     case 'new_attribute_id':
         ob_start();
         $attr = new RAPAV_Formula_Attribute($formula, $listing_id);
         $attr->save($_GET);
         $attr->load();
-        $lp_id=$attr->data->getp("lp_id");
+        $lp_id = $attr->data->getp("lp_id");
         $code = 'ok';
-        $html="";
+        $html = "";
         echo td($attr->display_code());
         echo td($attr->display_comment());
         echo td($attr->display_order());
         echo td($attr->display());
         $html.=ob_get_contents();
         ob_end_clean();
-        $html.='<td id="del_' .$lp_id . '">';
+        $html.='<td id="del_' . $lp_id . '">';
         $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"delete_listing_detail('%s','%s','%s','%s')\""
                                 , $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $lp_id));
         $html.='</td>';
