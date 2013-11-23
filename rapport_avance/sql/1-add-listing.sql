@@ -16,7 +16,6 @@ create table rapport_advanced.listing_param
  l_id bigint constraint fk_listing_param_listing references rapport_advanced.listing(l_id) on update cascade on delete cascade,
  lp_code text not null constraint c_lp_code check (length (trim(lp_code))> 0),
  lp_comment text,
- l_card int default 0,
  l_order int,
  ad_id bigint constraint fk_listing_param_detail_attr_def references attr_def (ad_id),
  lp_card_saldo char(1) check (lp_card_saldo in ('C','D','S',NULL)),
@@ -27,7 +26,7 @@ create table rapport_advanced.listing_param
  fp_signed integer,
  jrn_def_type character(3),
  tt_id integer,
- type_detail integer,
+ type_detail text not null,
  with_tmp_val account_type,
  type_sum_account bigint,
  operation_pcm_val account_type,
@@ -61,4 +60,27 @@ CREATE TRIGGER listing_param_trg
   ON rapport_advanced.listing_param
   FOR EACH ROW
   EXECUTE PROCEDURE rapport_advanced.formulaire_param_detail_jrn_def_id_ins_upd();
+ alter table rapport_advanced.listing_param add constraint ck_type_detail check (type_detail in ('ATTR','COMP','FORM','SALDO','ACCOUNT'));
+
+CREATE OR REPLACE FUNCTION rapport_advanced.listing_param_code_transform()
+ RETURNS trigger
+    AS $function$
+    declare
+        sResult text;
+    begin
+        sResult := lower(NEW.lp_code);
+
+        sResult := translate(sResult,E'éèêëàâäïîüûùöôç','eeeeaaaiiuuuooc');
+        sResult := translate(sResult,E' $€µ£%.+-/\\!(){}(),;_&|"#''^<>*','');
+
+        NEW.lp_code=upper(sResult);
+
+return NEW;
+
+end;
+$function$
+ LANGUAGE plpgsql;
+
+create trigger listing_param_code_transform_trg before insert or update of lp_code on rapport_advanced.listing_param
+    for each row execute procedure rapport_advanced.listing_param_code_transform();
 commit;
