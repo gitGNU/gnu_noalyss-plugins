@@ -7,7 +7,7 @@ $obj->display();
 echo '<p>';
 $obj->button_add_param();
 echo '</p>';
-$response = ob_get_flush();
+$response = ob_get_contents();
 ob_end_clean();
 $html = escape_xml($response);
 header('Content-type: text/xml; charset=UTF-8');
