@@ -1,31 +1,40 @@
 <div>
-    <table>
-        <tr>
-            <td>
-                <label>Code</label> 
-            </td>
-            <td>
-                <?php echo $code->input() ?>
-            </tD>
-        </tr>
-        <tr>
-            <td>
-                <label>Commentaire</label>
-            </td>
-            <td>
-                <?php echo $comment->input(); ?>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <label>Order apparition</label>
-            </td>
-            <td>
-                <?php echo $order->input(); ?>
-            </td>
-        </tr>
-    </table>
-    <table style="width:90%;margin-left:5%" >
+    <form id="common_frm">
+    <?php echo HtmlInput::hidden("listing_id", $p_id); ?>
+        <table >
+            <tr>
+                <td>
+                    <label>Code</label> 
+                   
+                </td>
+                <td>
+                    <?php echo $code->input() ?>
+                </tD>
+                <td>
+                     <p id="code_id_span" class="error"></p>
+                </td>
+                
+                
+            </tr>
+            <tr>
+                <td>
+                    <label>Commentaire</label>
+                </td>
+                <td>
+                    <?php echo $comment->input(); ?>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label>Ordre d'apparition</label>
+                </td>
+                <td>
+                    <?php echo $order->input(); ?>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table id="table_<?php echo $p_id;?>" style="width:90%;margin-left:5%" >
         <tr>
             <td id="new_formula_id_bt" class="tool" style="background:red">
                 <a class="mtitle"  href="javascript:void(0)"  onclick="show_listing_formula('new_formula_id')">
@@ -44,10 +53,15 @@
                     Poste comptable
                 </a>
             </td>
+            <td id="new_attribute_id_bt"  class="tool" style="background:inherit">
+                <a class="mtitle" href="javascript:void(0)"   onclick="show_listing_formula('new_attribute_id')">
+                    Attribut
+                </a>
+            </td>
         </tr>
     </table>
-    <div style="width:100%;height:290px;margin:1px">
-        <span class="error" id="param_detail_info_div"></span>
+    <div style="width:90%;height:290px;margin-left:5%">
+        <span class="error" id="info_listing_param_input_div_id"></span>
 
         <div style="padding: 10px">
             <div id="new_formula_id" style="display:block">
@@ -95,7 +109,24 @@
                     <?php echo HtmlInput::hidden('tab', 'new_account_id') ?>
                     <?php echo "account" ?>
 
-                    <?php echo HtmlInput::submit('save', 'Sauve') ?>
+                    <p>
+                        <?php echo HtmlInput::submit('save', 'Sauve') ?>
+                    </p>
+
+                </form>
+            </div>
+            <div id="new_attribute_id" style="display:none">
+                <form id="new_padeattr" method="POST" onsubmit="save_param_listing('new_padeattr');
+                        return false">
+
+                    <?php echo HtmlInput::request_to_hidden(array('gDossier', 'ac', 'plugin_code', 'p_id')) ?>
+
+                    <?php echo HtmlInput::hidden('tab', 'new_attribute_id') ?>
+                    <?php echo $attribute->input(); ?>
+
+                    <p>
+                        <?php echo HtmlInput::submit('save', 'Sauve') ?>
+                    </p>
 
                 </form>
             </div>

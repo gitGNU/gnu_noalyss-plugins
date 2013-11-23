@@ -13,9 +13,10 @@
  * @author danydb
  */
 require_once 'class_rapport_avance_sql.php';
+require_once 'class_rapav_listing_formula.php';
 
 class RAPAV_Listing_Param {
-    private  $Param;  /*!< RAPAV_Listing_Param_SQL */
+    var  $Param;  /*!< RAPAV_Listing_Param_SQL */
     
     /**
      * constructor, initialize Data with a RAPAV_Listing_Param_SQL
@@ -64,7 +65,7 @@ class RAPAV_Listing_Param {
        
        for ($i=0;$i<count($a_param_id);$i++)
        {
-           $a_listing_param[]=new RAPAV_Listing_Param($a_param_id['lp_id'][$i]);
+           $a_listing_param[]=new RAPAV_Listing_Param($a_param_id[$i]['lp_id']);
        }
        return $a_listing_param;
     }
@@ -77,7 +78,8 @@ class RAPAV_Listing_Param {
         $code=new IText('code_id');
         $comment=new IText('comment');
         $order=new INum('order');
-        
+        $order->value=10;
+        $attribute=new RAPAV_Formula_Attribute($this->Param,$p_id);
         require 'template/listing_param_input.php';
     }
 }

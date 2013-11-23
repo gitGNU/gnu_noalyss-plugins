@@ -319,7 +319,9 @@ class RAPAV_Listing_SQL extends phpcompta_sql
 
 class RAPAV_Listing_Param_SQL extends Phpcompta_Sql
 {
-
+/*
+ *  operation_pcm_val,with_tmp_val,tmp_val,date_paid,jrn_def_id,type_sum_account,type_detail,tt_id,jrn_def_type,fp_signed,fp_formula,tva_id,lp_with_card,lp_card_saldo,ad_id,l_order,l_card,lp_comment,lp_code,l_id,lp_id
+ */
     function __construct($p_id = -1)
     {
 

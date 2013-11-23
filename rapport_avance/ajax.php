@@ -145,6 +145,12 @@ switch ($act)
     case 'listing_param_add':
         include 'ajax_listing_param_add.php';
         exit();
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // save a param to a listing
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    case 'save_param_listing':
+        include 'ajax_save_param_listing.php';
+        exit();
     default:
         if ( DEBUG) var_dump($_GET);
         die ("Aucune action demandée");

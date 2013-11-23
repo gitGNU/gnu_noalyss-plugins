@@ -30,6 +30,9 @@
             Formules
         </th>
         <th>
+            Ordre
+        </th>
+        <th>
             action
         </th>
     </tr>
@@ -37,15 +40,21 @@
     $nb=count($this->a_detail);
     for ($i=0;$i<$nb;$i++):
 ?>
-    <tr>
+    <tr id="tr_<?php echo $this->a_detail[$i]->Param->getp('lp_id')?>">
         <td>
-           <?php $this->a_detail[$i]->Param->getp('code'); ?>
+           <?php echo $this->a_detail[$i]->Param->getp('code'); ?>
         </td>
         <td>
-           <?php $this->a_detail[$i]->Param->getp('comment'); ?>
+           <?php echo h($this->a_detail[$i]->Param->getp('comment')); ?>
         </td>
         <td>
-            Formule
+            <?php 
+            $obj=   RAPAV_Listing_Formula::make_object($this->a_detail[$i]->Param);
+            echo $obj->display();
+            ?>
+        </td>
+        <td>
+            <?php echo $this->a_detail[$i]->Param->getp('order'); ?>
         </td>
         <td>
             Efface / modifie
