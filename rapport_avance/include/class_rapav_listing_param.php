@@ -80,7 +80,10 @@ class RAPAV_Listing_Param {
         $order=new INum('order');
         $order->value=10;
         $attribute=new RAPAV_Formula_Attribute($this->Param,$p_id);
-        $formula=new RAPAV_Formula_Formula($this->Param,$p_id);
+        $formula=new RAPAV_Formula_Formula($this->Param);
+        $compute=new RAPAV_Formula_Compute($this->Param);
+        $account=new RAPAV_Formula_Account($this->Param);
+        $account->set_listing($p_id);
         require 'template/listing_param_input.php';
     }
 }

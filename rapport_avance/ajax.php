@@ -5,7 +5,8 @@ $a_action=explode(',',
         'mod_form,add_row_definition,mod_param,add_param_detail,'.
         'rapav_search_code,save_param_detail,rapav_declaration_display,'.
         'listing_modify,listing_remove_modele,listing_display_definition,'.
-        'listing_param_add,save_param_listing,listing_remove_detail');
+        'listing_param_add,save_param_listing,listing_detail_remove,'.
+        'listing_search_code');
 if ( in_array($act,$a_action ) == true )
 {
     include 'ajax_'.$act.'.php';

@@ -66,7 +66,7 @@
         <div style="padding: 10px">
             <div id="new_formula_id" style="display:block">
                 <p>
-                    Entrer une formule avec des postes comptables, la syntaxe est la même que celle des "rapports"
+                    Entrez une formule avec des postes comptables, la syntaxe est la même que celle des "rapports"
                 </p>
                 <p>
                     Exemple : [70%]*0.25+[71%]
@@ -86,14 +86,14 @@
             </div>
             <div id="new_compute_id" style="display:none">
                 <p>
-                    Entrer une formule avec des codes utilisés dans ce formulaires
+                    Entrez une formule avec des codes utilisés dans ce formulaire
                 </p>
                 <form id="new_padec" method="POST" onsubmit="save_param_listing('new_padec');
                         return false">
                           <?php echo HtmlInput::request_to_hidden(array('gDossier', 'ac', 'plugin_code', 'p_id')) ?>
 
                     <?php echo HtmlInput::hidden('tab', 'compute_id') ?>
-                    <?php echo "compute" ?>
+                    <?php echo $compute->input() ?>
                     <p>
                         <?php echo HtmlInput::submit('save', 'Sauve') ?>
                     </p>
@@ -107,8 +107,7 @@
                     <?php echo HtmlInput::request_to_hidden(array('gDossier', 'ac', 'plugin_code', 'p_id')) ?>
 
                     <?php echo HtmlInput::hidden('tab', 'new_account_id') ?>
-                    <?php echo "account" ?>
-
+                    <?php echo $account->input() ?>
                     <p>
                         <?php echo HtmlInput::submit('save', 'Sauve') ?>
                     </p>

@@ -811,3 +811,41 @@ function listing_detail_remove(dossier,plugin_code,ac,id)
         alert(e.message);
     }
 }
+
+/**
+ *@brief display a popup and let you select an existing code
+ */
+function listing_search_code(ac, plugin_code, dossier, f_id)
+{
+    try
+    {
+        var querystring = 'plugin_code=' + plugin_code + '&ac=' + ac + '&gDossier=' + dossier + '&act=listing_search_code' + "&f_id=" + f_id;
+        waiting_box();
+        var action = new Ajax.Request(
+                "ajax.php",
+                {
+                    method: 'get',
+                    parameters: querystring,
+                    onFailure: error_get_predef,
+                    onSuccess: function(req) {
+                        remove_waiting_box();
+                        removeDiv('search_code_div');
+                        var nTop = calcy(80);
+                        var nLeft = "400px";
+                        var str_style = "top:" + nTop + "px;left:" + nLeft + ";width:50em;height:auto;z-index:4";
+                        add_div({
+                            id: 'search_code_div',
+                            style: str_style,
+                            cssclass: 'inner_box',
+                            drag: 1
+                        });
+                        $('search_code_div').innerHTML = req.responseText;
+                    }
+                }
+        );
+
+    } catch (e)
+    {
+        alert("listing_search_code" + e.message);
+    }
+}

@@ -87,6 +87,12 @@ abstract class RAPAV_Listing_Formula
             case 'FORM':
                 $ret = new Rapav_Formula_Formula($obj);
                 break;
+            case 'ACCOUNT':
+                $ret = new Rapav_Formula_Account($obj);
+                break;
+            case 'COMP':
+                $ret = new Rapav_Formula_Compute($obj);
+                break;
 
             default:
                 throw new Exception('Object ' .var_export( $obj,true) . ' invalide ');
@@ -113,6 +119,10 @@ abstract class RAPAV_Listing_Formula
     function load()
     {
         $this->data->load();
+    }
+    function set_listing($p_id)
+    {
+        $this->data->setp('listing_id',$p_id);
     }
 
 }
@@ -185,7 +195,7 @@ class RAPAV_Formula_Attribute extends RAPAV_Listing_Formula
                                         fd_id=' . $this->cat . ' order by 2');
 
         $select->selected = $this->data->getp('attribut_card');
-        return $select->input();
+        return "Attribut à afficher pour chaque fiche ".$select->input();
     }
 
     function save($p_array)
@@ -228,7 +238,7 @@ class RAPAV_Formula_Formula extends RAPAV_Listing_Formula
      */
     var $sig;
 
-    function __construct(RAPAV_Listing_Param_SQL $obj)
+    function __construct(RAPAV_Listing_Param_SQL $obj,$p_cat_id = 0)
     {
         global $cn;
         $this->data = $obj;
@@ -305,6 +315,219 @@ class RAPAV_Formula_Formula extends RAPAV_Listing_Formula
             $this->errcode = " Aucune formule trouvée";
             return 1;
         }
+        return 0;
+    }
+
+}
+///////////////////////////////////////////////////////////////////////////////
+// RAPAV_Formula_Compute
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * @brief Class for the listing detail compute,
+ * Formula compute the already computed code
+ *  this class 
+ * use RAPAV_Listing_Param_SQL the specific columns are 
+ *   - fp_formula
+ *  
+ */
+class RAPAV_Formula_Compute extends RAPAV_Listing_Formula
+{
+
+    /**
+     * < RAPAV_Listing_Param_SQL objet */
+    var $data;
+
+    /**
+     * < Object signature 
+     */
+    var $sig;
+
+    function __construct(RAPAV_Listing_Param_SQL $obj)
+    {
+        global $cn;
+        $this->data = $obj;
+        $this->sig = 'COMP';
+    }
+
+    function display()
+    {
+        $str = sprintf("Formule avec les codes du formulaire %s ", $this->data->fp_formula);
+        return $str;
+    }
+
+    function compute($p_start, $p_end)
+    {
+        return 0;
+    }
+
+    function input()
+    {
+        global $cn;
+        $f_id=$this->data->getp('listing_id');
+        $account = new IText("form_compute");
+        $account->size = 50;
+        echo $account->input();
+        echo HtmlInput::button('listing_search_code_bt', 'Cherche codes', sprintf(" onclick=\"listing_search_code('%s','%s','%s','%s')\"", $_REQUEST['ac'], $_REQUEST['plugin_code'], $_REQUEST['gDossier'], $f_id));
+    }
+
+    function save($p_array)
+    {
+        parent::set($p_array);
+        $this->data->setp('listing_id', $p_array['listing_id']);
+
+        /* Clean everything but keep the lp_id, l_id, ad_id  + common */
+        $a_toclean=explode (',','operation_pcm_val,with_tmp_val,'
+                . 'tmp_val,date_paid,jrn_def_id,type_sum_account,type_detail,'
+                . 'tt_id,jrn_def_type,fp_signed,tva_id,lp_with_card,'
+                . 'lp_card_saldo,ad_id');
+        
+        parent::set_to_null($a_toclean);
+        $this->data->setp('formula', $p_array['form_compute']);
+        $this->data->setp('formula_type', 'COMP');
+        $this->data->save();
+    }
+
+    /**
+     * @brief check if the formula is valid, return 1 for an error
+     * and set errode to the error
+     */
+    function verify()
+    {
+        if (trim($this->data->fp_formula) == "")
+        {
+            $this->errcode = " Aucune formule trouvée";
+            return 1;
+        }
+
+        // copy $this->form->fp_formula to a variable
+        $formula = $this->data->fp_formula;
+
+        // remove the valid
+        preg_match_all("/\[([A-Z]*[0-9]*)*([0-9]*[A-Z]*)\]/i", $formula, $e);
+        $formula = preg_replace("/\[([A-Z]*[0-9]*)*([0-9]*[A-Z]*)\]/i", '', $formula);
+        $formula = preg_replace('/([0-9]+.{0,1}[0.9]*)*(\+|-|\*|\/)*/', '', $formula);
+        $formula = preg_replace('/(\(|\))/', '', $formula);
+        $formula = preg_replace('/\s/', '', $formula);
+
+        // if something remains it should be a mistake
+        if ($formula != '')
+        {
+            $this->errcode = " Erreur dans la formule " . $formula;
+            return 1;
+        }
+        return 0;
+    }
+
+}
+///////////////////////////////////////////////////////////////////////////////
+// RAPAV_Formula_Saldo
+///////////////////////////////////////////////////////////////////////////////
+/**
+ * @brief Class for the listing detail account, 
+ * Compute the saldo of account used with a given accounting, the type of 
+ * saldo can be
+ *   - C
+ *   - D
+ *   - D - C
+ * You can also choose to get the account saldo of the card or of the given
+ * accounting
+ * 
+ * this class use RAPAV_Listing_Param_SQL the specific columns are 
+ *   - fp_formula
+ *   - jrn_def_id
+ *   - date_paid
+ *   - tt
+ *  
+ */
+class RAPAV_Formula_Account extends RAPAV_Listing_Formula
+{
+
+    /**
+     * < RAPAV_Listing_Param_SQL objet */
+    var $data;
+
+    /**
+     * < Object signature 
+     */
+    var $sig;
+
+    function __construct(RAPAV_Listing_Param_SQL $obj)
+    {
+        global $cn;
+        $this->data = $obj;
+        $this->sig = 'ACCOUNT';
+    }
+
+    function display()
+    {
+        $ledger = $this->get_ledger_name();
+        $paid = ( $this->data->date_paid != 0 ) ? "la date concerne la date de paiement, la recherche sera limitée au journaux de type ACH & VEN" : "";
+        $str = sprintf("Résultat de la formule %s utilisant $ledger %s", $this->data->fp_formula, $paid);
+        return $str;
+    }
+
+    function compute($p_start, $p_end)
+    {
+        return 0;
+    }
+
+    function input()
+    {
+        global $cn;
+        $account = new IPoste("p_formula", "", "formula_acc_input_id");
+        $account->label = _("Recherche poste");
+        $account->set_attribute('gDossier', dossier::id());
+        $account->set_attribute('account', "formula_acc_input_id");
+        echo "Poste comptable utilisée avec chaque fiche ".$account->input();
+        $sel_total_type_row=new ISelect ('tt_id');
+        $sel_total_type_row->value=$cn->make_array('select tt_id,tt_label from '
+                . ' rapport_advanced.total_type_account order by 2');
+        
+        echo '<p>';
+        echo "type de total : ".$sel_total_type_row->input();
+        echo '</p>';
+        
+        $ck=new ICheckBox('card_saldo');
+        echo '<p>';
+        echo 'Prendre le total de la fiche '.$ck->input();
+        echo '</p>';
+        parent::input_date_paiement();
+        parent::input_ledger();
+    }
+
+    function save($p_array)
+    {
+        parent::set($p_array);
+        $this->data->setp('listing_id', $p_array['listing_id']);
+        /* Clean everything but keep the lp_id, l_id, with_Card and ad_id  + common */
+        $a_toclean = explode(',', 'operation_pcm_val,with_tmp_val,tmp_val, '
+                . 'type_sum_account, tt_id, '
+                . 'fp_signed,  tva_id'
+                . ',lp_card_saldo,attribut_card');
+
+        parent::set_to_null($a_toclean);
+        $this->data->setp('with_card', 'N');
+        $this->data->setp('formula', $p_array['p_formula']);
+        if (isset($p_array['p_paid']))
+        {
+            $this->data->setp('date_paid', 1);
+        } else
+        {
+            $this->data->setp('date_paid', null);
+            
+        }
+        $this->data->setp('jrn_def_id', $p_array['p_ledger']);
+        $this->data->setp('formula_type', 'ACCOUNT');
+        $this->data->save();
+    }
+
+    /**
+     * @brief check if the formula is valid, return 1 for an error
+     * and set errode to the error
+     * @todo verifier que le poste comptable existe
+     */
+    function verify()
+    {
         return 0;
     }
 
