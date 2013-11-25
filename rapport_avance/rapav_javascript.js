@@ -699,7 +699,7 @@ function save_param_listing(p_form_id)
                     method: 'get',
                     parameters: qs,
                     onFailure: error_get_predef,
-                    onSuccess: function infodiv(req, json) {
+                    onSuccess: function (req, json) {
                         try {
                             remove_waiting_box();
                             var answer = req.responseXML;
@@ -754,4 +754,60 @@ function save_param_listing(p_form_id)
     }
 
     return false;
+}
+function listing_detail_remove(dossier,plugin_code,ac,id)
+{
+    if ( confirm('Confirmez-vous effacer ce détail ?') == false )
+    {
+        return;
+    }
+    try {
+        var query='plugin_code=' + plugin_code+ '&ac=' + ac+ '&gDossier=' +dossier+ '&act=listing_detail_remove' + "&id="+id;
+        waiting_box();
+        var action = new Ajax.Request(
+                "ajax.php",
+                {
+                    method: 'get',
+                    parameters: query,
+                    onFailure: error_get_predef,
+                    onSuccess: function (req, json) {
+                        try {
+                            remove_waiting_box();
+                            var answer = req.responseXML;
+                            var acode = answer.getElementsByTagName('code');
+                            var lp_id = answer.getElementsByTagName('lp_id');
+
+                            if (acode.length == 0) {
+                                var rec = req.responseText;
+                                alert('erreur :' + rec);
+                            }
+                            var code = acode[0].firstChild.nodeValue;
+                            
+                            if (code == 'ok')
+                            {
+                                console.log('tr_'+id);
+                                var row=$('tr_'+id);
+                                row.style.color="red";
+                                row.style.textDecoration='line-through';
+                                row.cells[row.cells.length-1].innerHTML="";
+                                console.log(row.length);
+
+                            }
+                            if (code == 'nok')
+                            {
+                                // montre erreur
+                                alert('effacement non possible');
+                            }
+                        }
+                        catch (e) {
+                            alert("callback : listing_detail_remove " + e.message);
+                        }
+
+                    }
+                }
+        );
+    } catch(e)
+    {
+        alert(e.message);
+    }
 }
