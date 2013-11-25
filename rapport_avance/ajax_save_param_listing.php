@@ -46,7 +46,7 @@ switch ($tab)
             $html.=ob_get_contents();
             ob_end_clean();
             $html.='<td id="del_' . $lp_id . '">';
-            $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"delete_param_detail('%s','%s','%s','%s')\""
+            $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"delete_listing_detail('%s','%s','%s','%s')\""
                                     , $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $lp_id));
             $html.='</td>';
         }

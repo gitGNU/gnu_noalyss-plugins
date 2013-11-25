@@ -23,7 +23,7 @@
 
 /**
  * @file
- * @brief display a declaration but you can't modify it
+ * @brief display a declaration from history but you can't modify it
  */
 require_once 'include/class_rapav_declaration.php';
 global $cn;
