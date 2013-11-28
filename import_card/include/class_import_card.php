@@ -174,7 +174,7 @@ class Import_Card
 			if ($valid_qcode == 0)
 			{
 				$attr = sprintf('av_text%d', ATTR_DEF_QUICKCODE);
-				$array[$attr] = 'FID';
+				$array[$attr] = '';
 			}
 			/*
 			 * Force the creating of an accounting
