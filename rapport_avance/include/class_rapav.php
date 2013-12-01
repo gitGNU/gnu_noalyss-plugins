@@ -73,7 +73,7 @@ class RAPAV
         switch ($p_type)
         {
             case 0:
-                return "";
+                return "la date concerne la date d'opération";
                 break;
             case 1:
                 return "la date concerne la date de paiement, la recherche sera limitée au journaux de type ACH & VEN";
