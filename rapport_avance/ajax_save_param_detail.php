@@ -43,7 +43,7 @@ switch ($tab)
         $acc_tva->type_detail = 2;
         $acc_tva->tt_id = $code_base;
         $acc_tva->jrn_def_id = $p_ledger;
-        $acc_tva->date_paid=(isset($p_paid))?1:0;
+        $acc_tva->date_paid=$p_paid;
         if ($acc_tva->verify() == 1)
         {
             $code = 'nok';
@@ -71,7 +71,7 @@ switch ($tab)
         $acc_formula->p_id = $p_id;
         $acc_formula->type_detail = 1;
         $acc_formula->jrn_def_id = $p_ledger;
-        $acc_formula->date_paid=(isset($p_paid))?1:0;
+        $acc_formula->date_paid=$p_paid;
         if ($acc_formula->verify() == 1)
         {
             $code = 'nok';
@@ -128,7 +128,7 @@ switch ($tab)
         $acc_account->type_detail = 4;
         $acc_account->type_sum_account = $account_sum_type;
         $acc_account->jrn_def_id = $p_ledger;
-        $acc_account->date_paid=(isset($p_paid))?1:0;
+        $acc_account->date_paid=$p_paid;
         if ($acc_account->verify() == 1)
         {
             $code = 'nok';

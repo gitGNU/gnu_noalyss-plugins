@@ -742,7 +742,13 @@ class Rapav_dd_Formula extends Rapav_Declaration_Detail
         }
         if ($this->form->date_paid == 1)
         {
-            $sql.=sprintf(" and jr_date_paid >= to_date('%s','DD.MM.YYYY') and jr_date_paid <= to_date ('%s','DD.MM.YYYY')", $p_start, $p_end);
+            $sql.=sprintf(" and j_id in ( select j_id from jrnx join jrn on (j_grpt=jr_grpt_id) where jr_date_paid >= to_date('%s','DD.MM.YYYY') and jr_date_paid <= to_date ('%s','DD.MM.YYYY'))", $p_start, $p_end);
+            $p_start = '01.01.1900';
+            $p_end = '01.01.2100';
+        }
+        if ($this->form->date_paid == 2)
+        {
+            $sql.=sprintf(" and j_id in ( select j_id from jrnx join jrn on (j_grpt=jr_grpt_id) where jr_ech >= to_date('%s','DD.MM.YYYY') and jr_ech <= to_date ('%s','DD.MM.YYYY'))", $p_start, $p_end);
             $p_start = '01.01.1900';
             $p_end = '01.01.2100';
         }
@@ -825,6 +831,8 @@ class Rapav_dd_Account_Tva extends Rapav_Declaration_Detail
         {
             $filter_ledger = " and j_jrn_def = " . sql_string($this->form->jrn_def_id);
         }
+        $sql_date=RAPAV::get_sql_date($this->form->date_paid );
+/*
         if ($this->form->date_paid == 1)
         {
             $sql_date=" and j_id in 
@@ -839,12 +847,12 @@ class Rapav_dd_Account_Tva extends Rapav_Declaration_Detail
         else
         {
             $sql_date="and (j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))";
-        }
+        }*/
         if ($this->form->jrn_def_type == 'ACH')
         {
 
             $sql = "select coalesce(sum(qp_vat),0) as amount
-						from quant_purchase join jrnx using (j_id)
+						from quant_purchase join jrnx as jrn1 using (j_id)
 						where qp_vat_code=$1
 						$sql_date
 						and j_poste::text like ($4) $filter_ledger";
@@ -857,7 +865,7 @@ class Rapav_dd_Account_Tva extends Rapav_Declaration_Detail
         if ($this->form->jrn_def_type == 'VEN')
         {
             $sql = "select coalesce(sum(qs_vat),0) as amount
-						from quant_sold join jrnx using (j_id)
+						from quant_sold join jrnx as jrn1  using (j_id)
 						where qs_vat_code=$1 
 						$sql_date
 						and j_poste::text like ($4)  $filter_ledger";
@@ -890,6 +898,8 @@ class Rapav_dd_Account_Tva extends Rapav_Declaration_Detail
         {
             $filter_ledger = " and j_jrn_def = " . sql_string($this->form->jrn_def_id);
         }
+        $sql_date=RAPAV::get_sql_date($this->form->date_paid );
+/*
         if ($this->form->date_paid == 1)
         {
             $sql_date=" and j_id in 
@@ -904,10 +914,10 @@ class Rapav_dd_Account_Tva extends Rapav_Declaration_Detail
         else
         {
             $sql_date="and (j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))";
-        }
+        }*/
         if ($this->form->jrn_def_type == 'ACH')
         {
-            $sql = "select coalesce(sum(qp_price),0) as amount from quant_purchase join jrnx using (j_id)
+            $sql = "select coalesce(sum(qp_price),0) as amount from quant_purchase join jrnx as jrn1  using (j_id)
 					where qp_vat_code=$1 $sql_date
 					and j_poste::text like ($4) $filter_ledger";
 
@@ -920,7 +930,7 @@ class Rapav_dd_Account_Tva extends Rapav_Declaration_Detail
         if ($this->form->jrn_def_type == 'VEN')
         {
             $sql = "select coalesce(sum(qs_price),0) as amount from quant_sold
-					join jrnx using (j_id)
+					join jrnx as jrn1  using (j_id)
 					where qs_vat_code=$1 $sql_date
 					and j_poste::text like ($4) $filter_ledger";
             $amount = $this->cn->get_value($sql, array($this->form->tva_id,
@@ -998,7 +1008,8 @@ class Rapav_dd_Account extends Rapav_Declaration_Detail
             $filter_ledger = " and jrn1.j_jrn_def = " . sql_string($this->form->jrn_def_id);
         }
         
-        if ($this->form->date_paid == 1)
+        $sql_date=RAPAV::get_sql_date($this->form->date_paid );
+        /*if ($this->form->date_paid == 1)
         {
             $sql_date=" and j_id in 
                 (select j_id from jrnx join jrn on (j_grpt = jr_grpt_id)
@@ -1012,7 +1023,7 @@ class Rapav_dd_Account extends Rapav_Declaration_Detail
         else
         {
             $sql_date="and (jrn1.j_date >= to_date($3,'DD.MM.YYYY') and jrn1.j_date <= to_date($4,'DD.MM.YYYY'))";
-        }
+        }*/
         bcscale(2);
         switch ($this->form->type_sum_account)
         {
@@ -1028,17 +1039,17 @@ class Rapav_dd_Account extends Rapav_Declaration_Detail
                                 join jrnx as jrn2 on (jrn1.j_grpt=jrn2.j_grpt)
                                 where
                                 jrn1.j_poste like $1
-                                and
-                                jrn2.j_poste like $2
                                 $sql_date
+                                and
+                                jrn2.j_poste like $4
                                 $filter_ledger
                                 ) as tv_amount
 							 ";
                 $amount = $cn->get_value($sql, array(
                     $this->form->tmp_val,
-                    $this->form->with_tmp_val,
                     $p_start,
-                    $p_end
+                    $p_end,
+                    $this->form->with_tmp_val
                 ));
                 // if C-D is asked then reverse the result
                 if ($this->form->type_sum_account == 2)
