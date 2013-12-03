@@ -9,7 +9,11 @@ CREATE TABLE rapport_advanced.listing_compute_fiche
   lf_lob oid, -- Generated file if any
   lf_filename text, -- Name of the generated file. It should be based on the name of the template + unique id
   lf_mimetype text, -- Same mimetype as in table listing
+  lc_id bigint,
   CONSTRAINT listing_compute_fiche_pkey PRIMARY KEY (lf_id ),
+  CONSTRAINT fk_listing_compute_lc_id FOREIGN KEY (lc_id)
+      REFERENCES rapport_advanced.listing_compute (lc_id) MATCH SIMPLE
+      ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT listing_compute_fiche_f_id_fkey FOREIGN KEY (f_id)
       REFERENCES fiche (f_id) MATCH SIMPLE
       ON UPDATE CASCADE ON DELETE CASCADE

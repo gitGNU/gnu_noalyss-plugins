@@ -31,3 +31,14 @@ COMMENT ON COLUMN rapport_advanced.listing_compute.l_start IS 'start data';
 COMMENT ON COLUMN rapport_advanced.listing_compute.l_end IS 'end_date';
 COMMENT ON COLUMN rapport_advanced.listing_compute.l_keep IS 'If yes, it is keeped with N it will deleted';
 
+
+-- Trigger: listing_compute_trg on rapport_advanced.listing_compute
+
+-- DROP TRIGGER listing_compute_trg ON rapport_advanced.listing_compute;
+
+CREATE TRIGGER listing_compute_trg
+  BEFORE INSERT OR UPDATE
+  ON rapport_advanced.listing_compute
+  FOR EACH ROW
+  EXECUTE PROCEDURE rapport_advanced.listing_compute_trg();
+
