@@ -26,15 +26,17 @@ abstract class RAPAV_Listing_Formula
 
     function save_computed()
     {
-        $this->detail->lf_id=$this->fiche->lf_id;
-        $this->detail->lp_id=$this->data->lp_id;
+        $this->detail->lf_id = $this->fiche->lf_id;
+        $this->detail->lp_id = $this->data->lp_id;
         $this->detail->save();
     }
+
     function set_listing_compute($param)
     {
-        $this->detail->lc_id=$param;
-        $this->fiche->lc_id=$param;
+        $this->detail->lc_id = $param;
+        $this->fiche->lc_id = $param;
     }
+
     function set($p_array)
     {
         $this->data->setp("code", $p_array["code_id"]);
@@ -104,14 +106,14 @@ abstract class RAPAV_Listing_Formula
         $this->fiche->f_id = $f_id;
     }
 
-
     function save_fiche()
     {
         $this->fiche->save();
     }
+
     function filter_operation($param)
     {
-        $this->type_operation=$param;
+        $this->type_operation = $param;
     }
 
 }
@@ -176,25 +178,24 @@ class RAPAV_Formula_Attribute extends RAPAV_Listing_Formula
     function compute($p_start, $p_end)
     {
         global $cn;
-        $value=$cn->get_value("select ad_value from fiche_detail "
+        $value = $cn->get_value("select ad_value from fiche_detail "
                 . "where "
-                . "f_id=$1 and ad_id=$2",array($this->fiche->f_id,
-                    $this->data->getp('attribut_card')));
-        $type=$cn->get_value('select ad_type from attr_def where 
-                ad_id=$1',array($this->data->getp('attribut_card')));
+                . "f_id=$1 and ad_id=$2", array($this->fiche->f_id,
+            $this->data->getp('attribut_card')));
+        $type = $cn->get_value('select ad_type from attr_def where 
+                ad_id=$1', array($this->data->getp('attribut_card')));
         switch ($type)
         {
             case "numeric":
-                $this->detail->ld_value_numeric=$value;
+                $this->detail->ld_value_numeric = $value;
                 break;
             case "date":
-                $this->detail->ld_value_date=$value;
+                $this->detail->ld_value_date = $value;
                 break;
             default:
-                $this->detail->ld_value_text=$value;
+                $this->detail->ld_value_text = $value;
                 break;
         }
-        
     }
 
     function input()
@@ -226,7 +227,6 @@ class RAPAV_Formula_Attribute extends RAPAV_Listing_Formula
         $this->data->setp('formula_type', 'ATTR');
         $this->data->save();
     }
-
 
 }
 
@@ -281,7 +281,27 @@ class RAPAV_Formula_Formula extends RAPAV_Listing_Formula
 
     function compute($p_start, $p_end)
     {
-        return 0;
+        global $cn;
+        $sql = "";
+        if ($this->data->jrn_def_id != null)
+        {
+            $sql = ' and j_jrn_def =' . $this->data->jrn_def_id;
+        }
+        if ($this->data->date_paid == 1)
+        {
+            $sql.=sprintf(" and j_id in ( select j_id from jrnx join jrn on (j_grpt=jr_grpt_id) where jr_date_paid >= to_date('%s','DD.MM.YYYY') and jr_date_paid <= to_date ('%s','DD.MM.YYYY'))", $p_start, $p_end);
+            $p_start = '01.01.1900';
+            $p_end = '01.01.2100';
+        }
+        if ($this->data->date_paid == 2)
+        {
+            $sql.=sprintf(" and j_id in ( select j_id from jrnx join jrn on (j_grpt=jr_grpt_id) where jr_ech >= to_date('%s','DD.MM.YYYY') and jr_ech <= to_date ('%s','DD.MM.YYYY'))", $p_start, $p_end);
+            $p_start = '01.01.1900';
+            $p_end = '01.01.2100';
+        }
+
+        $amount = Impress::parse_formula($cn, "", $this->data->fp_formula, $p_start, $p_end, true, 1, $sql);
+        $this->detail->ld_value_numeric = $amount['montant'];
     }
 
     function input()
@@ -325,8 +345,8 @@ class RAPAV_Formula_Formula extends RAPAV_Listing_Formula
     function verify()
     {
         global $errcode;
-        $ret = RAPAV::verify_compute($this->data->fp_formula);
-        $this->errocode = $errcode;
+        $ret = RAPAV::verify_formula($this->data->fp_formula);
+        $this->errcode = $errcode;
         return $ret;
     }
 
@@ -380,7 +400,30 @@ class RAPAV_Formula_Compute extends RAPAV_Listing_Formula
 
     function compute($p_start, $p_end)
     {
-        return 0;
+        global $cn;
+        $amount = 0;
+        bcscale(2);
+
+        // copy $this->form->fp_formula to a variable
+        $formula = $this->data->fp_formula;
+
+        // split the string from  into smaller piece
+        preg_match_all("/\[([A-Z]*[0-9]*)*([0-9]*[A-Z]*)\]/i", $formula, $e);
+        $tmp = $e[0];
+
+        foreach ($tmp as $piece)
+        {
+            // Find the code in the database
+            $search = str_replace('[', '', $piece);
+            $search = str_replace(']', '', $search);
+            $value = $cn->get_value('select coalesce(sum(ld_value_numeric),0) as value
+				from rapport_advanced.listing_compute_detail where lc_id=$1 and lp_id in (select lp_id from 
+                                rapport_advanced.listing_param where lp_code=$2)', array($this->detail->lc_id, $search));
+            $formula = str_replace($piece, $value, $formula);
+        }
+        eval('$amount = ' . $formula . ';');
+        //
+        $this->detail->ld_value_numeric= $amount;
     }
 
     function input()
@@ -418,10 +461,9 @@ class RAPAV_Formula_Compute extends RAPAV_Listing_Formula
     {
         global $errcode;
         $ret = RAPAV::verify_compute($this->data->fp_formula);
-        $this->errocode = $errcode;
+        $this->errcode = $errcode;
         return $ret;
     }
-
 
 }
 
@@ -485,7 +527,108 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
 
     function compute($p_start, $p_end)
     {
-        return 0;
+        global $cn;
+        $filter_ledger = "";
+        if ($this->data->jrn_def_id != "")
+        {
+            $filter_ledger = " and jrn1.j_jrn_def = " . sql_string($this->data->jrn_def_id);
+        }
+
+        $sql_date = RAPAV::get_sql_date($this->data->date_paid);
+        $card_saldo = ($this->data->lp_card_saldo == 0) ? "jrn1" : "jrn2";
+        bcscale(2);
+        switch ($this->data->type_sum_account)
+        {
+            // Saldo
+            case 1:
+            case 2:
+                // Compute D-C
+                $sql = "
+                        select sum(jrnx_amount)
+                        from (
+                                select distinct $card_saldo.j_id,case when $card_saldo.j_debit = 't' then $card_saldo.j_montant else $card_saldo.j_montant*(-1) end as jrnx_amount
+                                from jrnx as jrn1
+                                join jrnx as jrn2 on (jrn1.j_grpt=jrn2.j_grpt)
+                                where
+                                jrn1.j_poste like $1
+                                $sql_date
+                                and
+                                jrn2.f_id = $4
+                                $filter_ledger
+                                    
+                                ) as tv_amount
+							 ";
+                $amount = $cn->get_value($sql, array(
+                    $this->data->fp_formula,
+                    $p_start,
+                    $p_end,
+                    $this->fiche->f_id
+                ));
+                // if C-D is asked then reverse the result
+                if ($this->data->type_sum_account == 2)
+                    $amount = bcmul($amount, -1);
+                break;
+            // Only DEBIT
+            case 3:
+                $sql = "
+                        select sum(jrnx_amount)
+                        from (
+                                select distinct $card_saldo.j_id,$card_saldo.j_montant as jrnx_amount
+                                from jrnx as jrn1
+                                join jrnx as jrn2 on (jrn1.j_grpt=jrn2.j_grpt)
+                                where
+                                jrn1.j_poste like $1
+                                $sql_date
+                                and
+                                jrn2.f_id = $4
+                                and
+                                $card_saldo.j_debit='t'
+                                $filter_ledger
+                                ) as tv_amount
+							 ";
+                $amount = $cn->get_value($sql, array(
+                    $this->data->fp_formula,
+                    $p_start,
+                    $p_end,
+                    $this->fiche->f_id
+                ));
+                break;
+            // Only CREDIT
+            case 4:
+                $sql = "
+                        select sum(jrnx_amount)
+                        from (
+                                select distinct $card_saldo.j_id,jrn1.j_montant as jrnx_amount
+                                from jrnx as jrn1
+                                join jrnx as jrn2 on (jrn1.j_grpt=jrn2.j_grpt)
+                                where
+                                jrn1.j_poste like $1
+                                $sql_date
+                                and
+                                jrn2.f_id = $4
+                                and
+                                $card_saldo.j_debit='f'
+                                $filter_ledger
+                                ) as tv_amount
+							 ";
+                $amount = $cn->get_value($sql, array(
+                    $this->data->fp_formula,
+                    $p_start,
+                    $p_end,
+                    $this->fiche->f_id
+                ));
+                break;
+
+            default:
+                if (DEBUG)
+                    var_dump($this);
+                die(__FILE__ . ":" . __LINE__ . " UNKNOW SUM TYPE");
+                break;
+        }
+        /*
+         * 4 possibilities with type_sum_account
+         */
+        $this->detail->ld_value_numeric = $amount;
     }
 
     function input()
@@ -528,6 +671,8 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
         $this->data->setp('date_paid', $p_array['p_paid']);
         $this->data->setp('jrn_def_id', $p_array['p_ledger']);
         $this->data->setp('formula_type', 'ACCOUNT');
+        $this->data->setp('sum_signed', $p_array['tt_id']);
+        $this->data->lp_card_saldo = (isset($p_array['card_saldo'])) ? 1 : 0;
         $this->data->save();
     }
 

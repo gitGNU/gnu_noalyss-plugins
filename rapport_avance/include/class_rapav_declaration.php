@@ -1021,19 +1021,19 @@ class Rapav_dd_Account extends Rapav_Declaration_Detail
                                 join jrnx as jrn2 on (jrn1.j_grpt=jrn2.j_grpt)
                                 where
                                 jrn1.j_poste like $1
+                                $sql_date
                                 and
-                                jrn2.j_poste like $2
+                                jrn2.j_poste like $4
                                 and
                                 jrn1.j_debit='t'
-                                $sql_date
                                 $filter_ledger
                                 ) as tv_amount
 							 ";
                 $amount = $cn->get_value($sql, array(
                     $this->form->tmp_val,
-                    $this->form->with_tmp_val,
                     $p_start,
-                    $p_end
+                    $p_end,
+                    $this->form->with_tmp_val
                 ));
                 break;
             // Only CREDIT
@@ -1046,19 +1046,19 @@ class Rapav_dd_Account extends Rapav_Declaration_Detail
                                 join jrnx as jrn2 on (jrn1.j_grpt=jrn2.j_grpt)
                                 where
                                 jrn1.j_poste like $1
+                                $sql_date
                                 and
                                 jrn2.j_poste like $2
                                 and
                                 jrn1.j_debit='f'
-                                $sql_date
                                 $filter_ledger
                                 ) as tv_amount
 							 ";
                 $amount = $cn->get_value($sql, array(
                     $this->form->tmp_val,
-                    $this->form->with_tmp_val,
                     $p_start,
-                    $p_end
+                    $p_end,
+                    $this->form->with_tmp_val,
                 ));
                 break;
 

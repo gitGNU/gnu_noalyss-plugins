@@ -22,8 +22,8 @@ class RAPAV_Listing_Compute
      * < Data point to listing_compute
      */
     var $data;
-    
-     /**
+
+    /**
      * Type of operation
      *    - 0 all operations
      *    - 1 only paid operations
@@ -46,12 +46,12 @@ class RAPAV_Listing_Compute
     {
         global $cn;
         // save an object Listing_Compute with the flag to_keep to N
-        $this->data->l_start=$p_date_start;
-        $this->data->l_end=$p_date_end;
-        $this->data->l_keep='N';
-        $this->data->l_id=$rapav_listing->Data->l_id;
+        $this->data->l_start = $p_date_start;
+        $this->data->l_end = $p_date_end;
+        $this->data->l_keep = 'N';
+        $this->data->l_id = $rapav_listing->Data->l_id;
         $this->data->insert();
-        
+
         // retrieve all the code from $rapav_listing
         $rapav_listing->load_detail();
         $a_code = $rapav_listing->a_detail;
@@ -62,12 +62,12 @@ class RAPAV_Listing_Compute
         // ------------------------------------------------------
         // For each card
         $fiche_def = new Fiche_Def($cn);
-        $fiche_def->id=$rapav_listing->Data->getp('fiche_def_id');
+        $fiche_def->id = $rapav_listing->Data->getp('fiche_def_id');
         $a_fiche = $fiche_def->get_by_type();
         $nb_fiche = count($a_fiche);
         for ($e = 0; $e < $nb_fiche; $e++)
         {
-            
+
             $a_later = array();
             for ($i = 0; $i < $nb; $i++)
             {
@@ -76,7 +76,7 @@ class RAPAV_Listing_Compute
                 unset($compute);
                 $compute = RAPAV_Listing_Formula::make_object($a_code[$i]->Param);
                 $compute->set_fiche($a_fiche[$e]['f_id']);
-                
+
                 if ($compute->sig == 'COMP')
                 {
                     $a_later[] = clone $compute;
@@ -84,8 +84,16 @@ class RAPAV_Listing_Compute
                 {
                     $compute->set_listing_compute($this->data->lc_id);
                     $compute->filter_operation($this->type_operation);
-                    
-                    if ( $i == 0 ) $compute->save_fiche();
+
+                    if ($i == 0)
+                    {
+                        $compute->save_fiche();
+                        $fiche = $compute->fiche;
+                    } 
+                    else
+                    {
+                        $compute->fiche=$fiche;
+                    }
                     //compute
                     $compute->compute($p_date_start, $p_date_end);
                     // save computed
@@ -101,13 +109,22 @@ class RAPAV_Listing_Compute
             {
                 $a_later[$i]->set_fiche($a_fiche[$e]['f_id']);
                 $compute->set_listing_compute($this->data->lc_id);
-                 if ( $i == 0 )  $a_later[$i]->save_fiche();
-                $a_later[$i]->compute($p_date_start, $p_data_end);
+                if ($i == 0)
+                {
+                    $a_later[$i]->save_fiche();
+                    $fiche=$a_later[$i]->fiche;
+                }
+                else
+                {
+                    $a_later[$i]=$fiche;
+                }
+                $a_later[$i]->compute($p_date_start, $p_date_end);
                 $a_later[$i]->save_computed();
             }
         }
     }
-        /**
+
+    /**
      * Filter the operations
      *    - 0 all operations
      *    - 1 only paid operations - only VEN & ACH
@@ -118,6 +135,7 @@ class RAPAV_Listing_Compute
     {
         $this->type_operation = $p_type;
     }
+
     function display()
     {
         
