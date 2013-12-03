@@ -1,0 +1,6 @@
+-- for computing we need several new tables
+-- TABLES are :
+-- 1. listing_compute
+-- 2. listing_compute_detail
+-- 3. listing_condition
+-- 4. listing_compute_fiche

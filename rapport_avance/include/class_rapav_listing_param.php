@@ -75,15 +75,21 @@ class RAPAV_Listing_Param {
      */
     function input($p_id)
     {
+        global $cn;
         $code=new IText('code_id');
         $comment=new IText('comment');
         $order=new INum('order');
-        $order->value=10;
-        $attribute=new RAPAV_Formula_Attribute($this->Param,$p_id);
+        $order->value=$cn->get_value("select coalesce(max(l_order),0)+10 from 
+                    rapport_advanced.listing_param 
+                    where 
+                    l_id=$1
+                    ",array($this->Param->l_id));
+        $attribute=new RAPAV_Formula_Attribute($this->Param);
         $formula=new RAPAV_Formula_Formula($this->Param);
         $compute=new RAPAV_Formula_Compute($this->Param);
         $account=new RAPAV_Formula_Account($this->Param);
         $account->set_listing($p_id);
+        $attribute->set_listing($p_id);
         require 'template/listing_param_input.php';
     }
 }

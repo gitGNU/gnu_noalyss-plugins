@@ -72,17 +72,10 @@ class RAPAV_Formula extends Formulaire_Param_Detail
 
     function verify()
     {
-        if (Impress::check_formula($this->fp_formula) == false)
-        {
-            $this->errcode = "Erreur dans votre formule";
-            return 1;
-        }
-        if (trim($this->fp_formula) == "")
-        {
-            $this->errcode = " Aucune formule trouvée";
-            return 1;
-        }
-        return 0;
+        global $errcode;
+        $ret = RAPAV::verify_compute($this->fp_formula);
+        $this->errocode=$errcode;
+        return $ret;
     }
 
 }
@@ -176,30 +169,10 @@ class RAPAV_Compute extends Formulaire_Param_Detail
 
     function verify()
     {
-
-        if (trim($this->fp_formula) == "")
-        {
-            $this->errcode = " Aucune formule trouvée";
-            return 1;
-        }
-
-        // copy $this->form->fp_formula to a variable
-        $formula = $this->fp_formula;
-
-        // remove the valid
-        preg_match_all("/\[([A-Z]*[0-9]*)*([0-9]*[A-Z]*)\]/i", $formula, $e);
-        $formula = preg_replace("/\[([A-Z]*[0-9]*)*([0-9]*[A-Z]*)\]/i", '', $formula);
-        $formula = preg_replace('/([0-9]+.{0,1}[0.9]*)*(\+|-|\*|\/)*/', '', $formula);
-        $formula = preg_replace('/(\(|\))/', '', $formula);
-        $formula = preg_replace('/\s/', '', $formula);
-
-        // if something remains it should be a mistake
-        if ($formula != '')
-        {
-            $this->errcode = " Erreur dans la formule " . $formula;
-            return 1;
-        }
-        return 0;
+        global $errcode;
+        $ret = RAPAV::verify_compute($this->p_formula);
+        $this->errocode=$errcode;
+        return $ret;
     }
 
 }

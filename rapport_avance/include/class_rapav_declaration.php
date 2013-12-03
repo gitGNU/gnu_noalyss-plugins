@@ -832,22 +832,7 @@ class Rapav_dd_Account_Tva extends Rapav_Declaration_Detail
             $filter_ledger = " and j_jrn_def = " . sql_string($this->form->jrn_def_id);
         }
         $sql_date=RAPAV::get_sql_date($this->form->date_paid );
-/*
-        if ($this->form->date_paid == 1)
-        {
-            $sql_date=" and j_id in 
-                (select j_id from jrnx join jrn on (j_grpt = jr_grpt_id)
-                    where
-                    coalesce(jr_date_paid,to_date('01.01.1900','DD.MM.YYYY')) >= to_date($2,'DD.MM.YYYY')
-                    and coalesce(jr_date_paid,to_date('01.01.1900','DD.MM.YYYY')) <= to_date($3,'DD.MM.YYYY')
-                 )
-                    ";
-                    
-        }
-        else
-        {
-            $sql_date="and (j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))";
-        }*/
+
         if ($this->form->jrn_def_type == 'ACH')
         {
 
@@ -899,22 +884,7 @@ class Rapav_dd_Account_Tva extends Rapav_Declaration_Detail
             $filter_ledger = " and j_jrn_def = " . sql_string($this->form->jrn_def_id);
         }
         $sql_date=RAPAV::get_sql_date($this->form->date_paid );
-/*
-        if ($this->form->date_paid == 1)
-        {
-            $sql_date=" and j_id in 
-                (select j_id from jrnx join jrn on (j_grpt = jr_grpt_id)
-                    where
-                    coalesce(jr_date_paid,to_date('01.01.1900','DD.MM.YYYY')) >= to_date($2,'DD.MM.YYYY')
-                    and coalesce(jr_date_paid,to_date('01.01.1900','DD.MM.YYYY')) <= to_date($3,'DD.MM.YYYY')
-                 )
-                    ";
-                    
-        }
-        else
-        {
-            $sql_date="and (j_date >= to_date($2,'DD.MM.YYYY') and j_date <= to_date($3,'DD.MM.YYYY'))";
-        }*/
+
         if ($this->form->jrn_def_type == 'ACH')
         {
             $sql = "select coalesce(sum(qp_price),0) as amount from quant_purchase join jrnx as jrn1  using (j_id)
@@ -1009,21 +979,7 @@ class Rapav_dd_Account extends Rapav_Declaration_Detail
         }
         
         $sql_date=RAPAV::get_sql_date($this->form->date_paid );
-        /*if ($this->form->date_paid == 1)
-        {
-            $sql_date=" and j_id in 
-                (select j_id from jrnx join jrn on (j_grpt = jr_grpt_id)
-                    where
-                    coalesce(jr_date_paid,to_date('01.01.1900','DD.MM.YYYY')) >= to_date($3,'DD.MM.YYYY')
-                    and coalesce(jr_date_paid,to_date('01.01.1900','DD.MM.YYYY')) <= to_date($4,'DD.MM.YYYY')
-                 )
-                    ";
-                    
-        }
-        else
-        {
-            $sql_date="and (jrn1.j_date >= to_date($3,'DD.MM.YYYY') and jrn1.j_date <= to_date($4,'DD.MM.YYYY'))";
-        }*/
+
         bcscale(2);
         switch ($this->form->type_sum_account)
         {

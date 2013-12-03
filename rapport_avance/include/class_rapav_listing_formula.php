@@ -12,6 +12,8 @@
  * @author dany
  */
 require_once 'class_impress.php';
+require_once 'class_rapav.php';
+require_once 'class_rapport_avance_sql.php';
 
 abstract class RAPAV_Listing_Formula
 {
@@ -24,44 +26,15 @@ abstract class RAPAV_Listing_Formula
 
     function save_computed()
     {
-        
+        $this->detail->lf_id=$this->fiche->lf_id;
+        $this->detail->lp_id=$this->data->lp_id;
+        $this->detail->save();
     }
-
-    function get_ledger_name()
+    function set_listing_compute($param)
     {
-        global $cn;
-        $ledger = "";
-        if ($this->data->jrn_def_id == null || $this->data->jrn_def_id == -1)
-        {
-            $ledger = " tous les journaux";
-        } else
-        {
-            $tledger = $cn->get_value('select jrn_def_name from jrn_def where jrn_def_id=$1', array($this->data->jrn_def_id));
-            $ledger.="  le journal " . $tledger;
-        }
-        return $ledger;
+        $this->detail->lc_id=$param;
+        $this->fiche->lc_id=$param;
     }
-
-    static function input_ledger()
-    {
-        global $cn;
-        $select = new ISelect('p_ledger');
-        $a_ledger = $cn->make_array('select jrn_def_id,jrn_def_name from jrn_def order by 2', 1);
-        $a_ledger[0]['label'] = '-- Tous les journaux -- ';
-        $select->value = $a_ledger;
-
-        echo '<p> Filtrage par journal ' . $select->input() . '</p>';
-    }
-
-    static function input_date_paiement()
-    {
-        $ck_paid = new ICheckBox('p_paid');
-        echo '<p> La date donnée concerne la date de paiement, ce qui limitera la recherche aux journaux VEN et ACH ';
-        echo HtmlInput::infobulle(36);
-        echo $ck_paid->input();
-        echo '</p>';
-    }
-
     function set($p_array)
     {
         $this->data->setp("code", $p_array["code_id"]);
@@ -95,7 +68,7 @@ abstract class RAPAV_Listing_Formula
                 break;
 
             default:
-                throw new Exception('Object ' .var_export( $obj,true) . ' invalide ');
+                throw new Exception('Object ' . var_export($obj, true) . ' invalide ');
                 break;
         }
         return $ret;
@@ -120,9 +93,25 @@ abstract class RAPAV_Listing_Formula
     {
         $this->data->load();
     }
+
     function set_listing($p_id)
     {
-        $this->data->setp('listing_id',$p_id);
+        $this->data->setp('listing_id', $p_id);
+    }
+
+    function set_fiche($f_id)
+    {
+        $this->fiche->f_id = $f_id;
+    }
+
+
+    function save_fiche()
+    {
+        $this->fiche->save();
+    }
+    function filter_operation($param)
+    {
+        $this->type_operation=$param;
     }
 
 }
@@ -143,6 +132,14 @@ class RAPAV_Formula_Attribute extends RAPAV_Listing_Formula
     var $data;
 
     /**
+     * < RAPAV_Listing_Compute_SQL object */
+    var $fiche;
+
+    /**
+     * < RAPAV_Listing_Detail_SQL object */
+    var $detail;
+
+    /**
      * categorie id */
     var $cat;
 
@@ -150,11 +147,11 @@ class RAPAV_Formula_Attribute extends RAPAV_Listing_Formula
      * Object signature */
     var $sig;
 
-    function __construct(RAPAV_Listing_Param_SQL $obj, $p_cat_id = 0)
+    function __construct(RAPAV_Listing_Param_SQL $obj)
     {
         global $cn;
         $this->data = $obj;
-        if ($p_cat_id == 0)
+        if ($this->data->getp('lp_id') > 0)
         {
             $this->cat = $cn->get_value('select fd_id 
                                 from rapport_advanced.listing 
@@ -164,11 +161,9 @@ class RAPAV_Formula_Attribute extends RAPAV_Listing_Formula
             if ($this->cat == "")
                 throw new Exception(__FILE__ . ':' . __LINE__ . 'Aucune catégorie définie');
         }
-        else
-        {
-            $this->cat = $p_cat_id;
-        }
         $this->sig = 'ATTR';
+        $this->fiche = new RAPAV_Listing_Compute_Fiche_SQL();
+        $this->detail = new RAPAV_Listing_Compute_Detail_SQL();
     }
 
     function display()
@@ -180,7 +175,26 @@ class RAPAV_Formula_Attribute extends RAPAV_Listing_Formula
 
     function compute($p_start, $p_end)
     {
-        return 0;
+        global $cn;
+        $value=$cn->get_value("select ad_value from fiche_detail "
+                . "where "
+                . "f_id=$1 and ad_id=$2",array($this->fiche->f_id,
+                    $this->data->getp('attribut_card')));
+        $type=$cn->get_value('select ad_type from attr_def where 
+                ad_id=$1',array($this->data->getp('attribut_card')));
+        switch ($type)
+        {
+            case "numeric":
+                $this->detail->ld_value_numeric=$value;
+                break;
+            case "date":
+                $this->detail->ld_value_date=$value;
+                break;
+            default:
+                $this->detail->ld_value_text=$value;
+                break;
+        }
+        
     }
 
     function input()
@@ -192,10 +206,10 @@ class RAPAV_Formula_Attribute extends RAPAV_Listing_Formula
                                         from
                                         attr_def as a join jnt_fic_attr as j on (a.ad_id=j.ad_id)
                                         where
-                                        fd_id=' . $this->cat . ' order by 2');
+                                        fd_id=' . $this->data->getp('listing_id') . ' order by 2');
 
         $select->selected = $this->data->getp('attribut_card');
-        return "Attribut à afficher pour chaque fiche ".$select->input();
+        return "Attribut à afficher pour chaque fiche " . $select->input();
     }
 
     function save($p_array)
@@ -212,6 +226,7 @@ class RAPAV_Formula_Attribute extends RAPAV_Listing_Formula
         $this->data->setp('formula_type', 'ATTR');
         $this->data->save();
     }
+
 
 }
 
@@ -234,21 +249,32 @@ class RAPAV_Formula_Formula extends RAPAV_Listing_Formula
     var $data;
 
     /**
+     * < RAPAV_Listing_Detail_SQL object */
+    var $fiche;
+
+    /**
      * < Object signature 
      */
     var $sig;
 
-    function __construct(RAPAV_Listing_Param_SQL $obj,$p_cat_id = 0)
+    /**
+     * < RAPAV_Listing_Detail_SQL object */
+    var $detail;
+
+    function __construct(RAPAV_Listing_Param_SQL $obj, $p_cat_id = 0)
     {
         global $cn;
         $this->data = $obj;
         $this->sig = 'FORM';
+        $this->fiche = new RAPAV_Listing_Compute_Fiche_SQL();
+        $this->detail = new RAPAV_Listing_Compute_Detail_SQL();
     }
 
     function display()
     {
-        $ledger = $this->get_ledger_name();
-        $paid = ( $this->data->date_paid != 0 ) ? "la date concerne la date de paiement, la recherche sera limitée au journaux de type ACH & VEN" : "";
+        $ledger = RAPAV::get_ledger_name($this->data->jrn_def_id);
+        ;
+        $paid = RAPAV::str_date_type($this->data->date_paid);
         $str = sprintf("Résultat de la formule %s utilisant $ledger %s", $this->data->fp_formula, $paid);
         return $str;
     }
@@ -269,8 +295,8 @@ class RAPAV_Formula_Formula extends RAPAV_Listing_Formula
         $account->set_attribute('noquery', 1);
         $account->set_attribute('account', "formula_input_id");
         echo $account->input();
-        parent::input_date_paiement();
-        parent::input_ledger();
+        RAPAV::input_date_paiement();
+        RAPAV::input_ledger();
     }
 
     function save($p_array)
@@ -286,14 +312,7 @@ class RAPAV_Formula_Formula extends RAPAV_Listing_Formula
         parent::set_to_null($a_toclean);
         $this->data->setp('with_card', 'N');
         $this->data->setp('formula', $p_array['p_formula']);
-        if (isset($p_array['p_paid']))
-        {
-            $this->data->setp('date_paid', 1);
-        } else
-        {
-            $this->data->setp('date_paid', null);
-            
-        }
+        $this->data->setp('date_paid', $p_array['p_paid']);
         $this->data->setp('jrn_def_id', $p_array['p_ledger']);
         $this->data->setp('formula_type', 'FORM');
         $this->data->save();
@@ -305,20 +324,14 @@ class RAPAV_Formula_Formula extends RAPAV_Listing_Formula
      */
     function verify()
     {
-        if (Impress::check_formula($this->data->fp_formula) == false)
-        {
-            $this->errcode = "Erreur dans votre formule";
-            return 1;
-        }
-        if (trim($this->data->fp_formula) == "")
-        {
-            $this->errcode = " Aucune formule trouvée";
-            return 1;
-        }
-        return 0;
+        global $errcode;
+        $ret = RAPAV::verify_compute($this->data->fp_formula);
+        $this->errocode = $errcode;
+        return $ret;
     }
 
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 // RAPAV_Formula_Compute
 ///////////////////////////////////////////////////////////////////////////////
@@ -338,15 +351,25 @@ class RAPAV_Formula_Compute extends RAPAV_Listing_Formula
     var $data;
 
     /**
+     * < RAPAV_Listing_Detail_SQL object */
+    var $fiche;
+
+    /**
      * < Object signature 
      */
     var $sig;
+
+    /**
+     * < RAPAV_Listing_Detail_SQL object */
+    var $detail;
 
     function __construct(RAPAV_Listing_Param_SQL $obj)
     {
         global $cn;
         $this->data = $obj;
         $this->sig = 'COMP';
+        $this->fiche = new RAPAV_Listing_Compute_Fiche_SQL();
+        $this->detail = new RAPAV_Listing_Compute_Detail_SQL();
     }
 
     function display()
@@ -363,7 +386,7 @@ class RAPAV_Formula_Compute extends RAPAV_Listing_Formula
     function input()
     {
         global $cn;
-        $f_id=$this->data->getp('listing_id');
+        $f_id = $this->data->getp('listing_id');
         $account = new IText("form_compute");
         $account->size = 50;
         echo $account->input();
@@ -376,11 +399,11 @@ class RAPAV_Formula_Compute extends RAPAV_Listing_Formula
         $this->data->setp('listing_id', $p_array['listing_id']);
 
         /* Clean everything but keep the lp_id, l_id, ad_id  + common */
-        $a_toclean=explode (',','operation_pcm_val,with_tmp_val,'
+        $a_toclean = explode(',', 'operation_pcm_val,with_tmp_val,'
                 . 'tmp_val,date_paid,jrn_def_id,type_sum_account,type_detail,'
                 . 'tt_id,jrn_def_type,fp_signed,tva_id,lp_with_card,'
                 . 'lp_card_saldo,ad_id');
-        
+
         parent::set_to_null($a_toclean);
         $this->data->setp('formula', $p_array['form_compute']);
         $this->data->setp('formula_type', 'COMP');
@@ -393,32 +416,15 @@ class RAPAV_Formula_Compute extends RAPAV_Listing_Formula
      */
     function verify()
     {
-        if (trim($this->data->fp_formula) == "")
-        {
-            $this->errcode = " Aucune formule trouvée";
-            return 1;
-        }
-
-        // copy $this->form->fp_formula to a variable
-        $formula = $this->data->fp_formula;
-
-        // remove the valid
-        preg_match_all("/\[([A-Z]*[0-9]*)*([0-9]*[A-Z]*)\]/i", $formula, $e);
-        $formula = preg_replace("/\[([A-Z]*[0-9]*)*([0-9]*[A-Z]*)\]/i", '', $formula);
-        $formula = preg_replace('/([0-9]+.{0,1}[0.9]*)*(\+|-|\*|\/)*/', '', $formula);
-        $formula = preg_replace('/(\(|\))/', '', $formula);
-        $formula = preg_replace('/\s/', '', $formula);
-
-        // if something remains it should be a mistake
-        if ($formula != '')
-        {
-            $this->errcode = " Erreur dans la formule " . $formula;
-            return 1;
-        }
-        return 0;
+        global $errcode;
+        $ret = RAPAV::verify_compute($this->data->fp_formula);
+        $this->errocode = $errcode;
+        return $ret;
     }
 
+
 }
+
 ///////////////////////////////////////////////////////////////////////////////
 // RAPAV_Formula_Saldo
 ///////////////////////////////////////////////////////////////////////////////
@@ -447,21 +453,32 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
     var $data;
 
     /**
+     * < RAPAV_Listing_Detail_SQL object */
+    var $fiche;
+
+    /**
      * < Object signature 
      */
     var $sig;
+
+    /**
+     * < RAPAV_Listing_Detail_SQL object */
+    var $detail;
 
     function __construct(RAPAV_Listing_Param_SQL $obj)
     {
         global $cn;
         $this->data = $obj;
         $this->sig = 'ACCOUNT';
+        $this->fiche = new RAPAV_Listing_Compute_Fiche_SQL();
+        $this->detail = new RAPAV_Listing_Compute_Detail_SQL();
     }
 
     function display()
     {
-        $ledger = $this->get_ledger_name();
-        $paid = ( $this->data->date_paid != 0 ) ? "la date concerne la date de paiement, la recherche sera limitée au journaux de type ACH & VEN" : "";
+        $ledger = RAPAV::get_ledger_name($this->data->jrn_def_id);
+        ;
+        $paid = RAPAV::str_date_type($this->data->date_paid);
         $str = sprintf("Résultat de la formule %s utilisant $ledger %s", $this->data->fp_formula, $paid);
         return $str;
     }
@@ -478,21 +495,21 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
         $account->label = _("Recherche poste");
         $account->set_attribute('gDossier', dossier::id());
         $account->set_attribute('account', "formula_acc_input_id");
-        echo "Poste comptable utilisée avec chaque fiche ".$account->input();
-        $sel_total_type_row=new ISelect ('tt_id');
-        $sel_total_type_row->value=$cn->make_array('select tt_id,tt_label from '
+        echo "Poste comptable utilisée avec chaque fiche " . $account->input();
+        $sel_total_type_row = new ISelect('tt_id');
+        $sel_total_type_row->value = $cn->make_array('select tt_id,tt_label from '
                 . ' rapport_advanced.total_type_account order by 2');
-        
+
         echo '<p>';
-        echo "type de total : ".$sel_total_type_row->input();
+        echo "type de total : " . $sel_total_type_row->input();
         echo '</p>';
-        
-        $ck=new ICheckBox('card_saldo');
+
+        $ck = new ICheckBox('card_saldo');
         echo '<p>';
-        echo 'Prendre le total de la fiche '.$ck->input();
+        echo 'Prendre le total de la fiche ' . $ck->input();
         echo '</p>';
-        parent::input_date_paiement();
-        parent::input_ledger();
+        RAPAV::input_date_paiement();
+        RAPAV::input_ledger();
     }
 
     function save($p_array)
@@ -508,14 +525,7 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
         parent::set_to_null($a_toclean);
         $this->data->setp('with_card', 'N');
         $this->data->setp('formula', $p_array['p_formula']);
-        if (isset($p_array['p_paid']))
-        {
-            $this->data->setp('date_paid', 1);
-        } else
-        {
-            $this->data->setp('date_paid', null);
-            
-        }
+        $this->data->setp('date_paid', $p_array['p_paid']);
         $this->data->setp('jrn_def_id', $p_array['p_ledger']);
         $this->data->setp('formula_type', 'ACCOUNT');
         $this->data->save();

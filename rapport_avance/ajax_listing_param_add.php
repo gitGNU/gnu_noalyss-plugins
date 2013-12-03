@@ -8,7 +8,7 @@ require_once 'include/class_rapav_listing.php';
 ob_start();
 echo HtmlInput::title_box("Nouveau paramètre", $cin);
 $obj=new RAPAV_Listing($id);
-$obj->add_parameter();
+$obj->add_parameter($id);
 $response = ob_get_contents();
 ob_end_clean();
 $html = escape_xml($response);

@@ -109,7 +109,7 @@ switch ($tab)
         break;
     case 'new_attribute_id':
         ob_start();
-        $attr = new RAPAV_Formula_Attribute($formula, $listing_id);
+        $attr = new RAPAV_Formula_Attribute($formula);
         $attr->save($_GET);
         $attr->load();
         $lp_id = $attr->data->getp("lp_id");
@@ -117,8 +117,8 @@ switch ($tab)
         $html = "";
         echo td($attr->display_code());
         echo td($attr->display_comment());
-        echo td($attr->display_order());
         echo td($attr->display());
+        echo td($attr->display_order());
         $html.=ob_get_contents();
         ob_end_clean();
         $html.='<td>';

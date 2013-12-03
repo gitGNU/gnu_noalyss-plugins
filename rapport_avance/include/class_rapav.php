@@ -33,6 +33,7 @@ class RAPAV
         }
         return $ledger;
     }
+
     /**
      * display a choice of ledger
      * @global cn
@@ -47,6 +48,7 @@ class RAPAV
 
         echo '<p> Filtrage par journal ' . $select->input() . '</p>';
     }
+
     /**
      * Display a select for the date
      */
@@ -54,7 +56,7 @@ class RAPAV
     {
         $s_date = new ISelect('p_paid');
         $s_date->value = array();
-        $s_date->value[] = array("value" => 0, "label" => 'Date calendrier');
+        $s_date->value[] = array("value" => 0, "label" => 'Date d\'opération');
         $s_date->value[] = array("value" => 1, "label" => 'Date de paiement');
         $s_date->value[] = array("value" => 2, "label" => 'Date d\'échéance');
         echo '<p> Si la date donnée concerne la date de paiement ou d\'écheance, cela limitera la recherche aux journaux VEN et ACH ';
@@ -62,6 +64,7 @@ class RAPAV
         echo $s_date->input();
         echo '</p>';
     }
+
     /**
      * Compute the string to display for date
      * @param $p_type
@@ -125,6 +128,57 @@ class RAPAV
                 break;
         }
         return $sql_date;
+    }
+
+    /**
+     * @brief check if the formula is valid, return 1 for an error
+     * and set errcode to the error msg
+     * errcode is global variable
+     */
+    static function verify_compute($p_formula)
+    {
+        global $errcode;
+        $errcode = "";
+        if (trim($p_formula) == "")
+        {
+            $errcode = " Aucune formule trouvée";
+            return 1;
+        }
+
+        // copy $this->form->fp_formula to a variable
+        $formula = $p_formula;
+
+        // remove the valid
+        preg_match_all("/\[([A-Z]*[0-9]*)*([0-9]*[A-Z]*)\]/i", $formula, $e);
+        $formula = preg_replace("/\[([A-Z]*[0-9]*)*([0-9]*[A-Z]*)\]/i", '', $formula);
+        $formula = preg_replace('/([0-9]+.{0,1}[0.9]*)*(\+|-|\*|\/)*/', '', $formula);
+        $formula = preg_replace('/(\(|\))/', '', $formula);
+        $formula = preg_replace('/\s/', '', $formula);
+
+        // if something remains it should be a mistake
+        if ($formula != '')
+        {
+            $errcode = " Erreur dans la formule " . $formula;
+            return 1;
+        }
+        return 0;
+    }
+
+    static function verify_formula($p_formula)
+    {
+        global $errcode;
+        $errcode = "";
+        if (Impress::check_formula($p_formula) == false)
+        {
+            $errcode = "Erreur dans votre formule";
+            return 1;
+        }
+        if (trim($p_formula) == "")
+        {
+            $errcode = " Aucune formule trouvée";
+            return 1;
+        }
+        return 0;
     }
 
 }
