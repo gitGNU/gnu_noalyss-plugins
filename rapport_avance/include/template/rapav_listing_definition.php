@@ -37,8 +37,9 @@
 <?php
 $nb = count($this->a_detail);
 for ($i = 0; $i < $nb; $i++):
+    $class=($i%2==0)?' class="even"':'class="odd"';
     ?>
-        <tr id="tr_<?php echo $this->a_detail[$i]->Param->getp('lp_id') ?>">
+        <tr id="tr_<?php echo $this->a_detail[$i]->Param->getp('lp_id') ?>" <?php echo $class?>>
             <td>
     <?php echo $this->a_detail[$i]->Param->getp('code'); ?>
             </td>

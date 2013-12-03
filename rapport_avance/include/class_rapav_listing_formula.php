@@ -519,9 +519,14 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
     function display()
     {
         $ledger = RAPAV::get_ledger_name($this->data->jrn_def_id);
-        ;
         $paid = RAPAV::str_date_type($this->data->date_paid);
-        $str = sprintf("Résultat de la formule %s utilisant $ledger %s", $this->data->fp_formula, $paid);
+        $a_sum=explode(',','invalid,Débit,Crédit,Débit-Crédit,Crédit-Débit');
+        $sumof=($this->data->lp_card_saldo==0)?" du poste comptable":"de la fiche";
+        $str = sprintf("%s %s %s utilisant $ledger %s", 
+                $a_sum[$this->data->type_sum_account],
+                $sumof,
+                $this->data->fp_formula, 
+                $paid);
         return $str;
     }
 
