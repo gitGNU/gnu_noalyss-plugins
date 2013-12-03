@@ -67,7 +67,14 @@ class RAPAV_Listing_Compute
         $nb_fiche = count($a_fiche);
         for ($e = 0; $e < $nb_fiche; $e++)
         {
-
+            /*
+             * save a listing_compute_fiche
+             */
+            $fiche=new RAPAV_Listing_Compute_Fiche_SQL();
+            $fiche->f_id=$a_fiche[$e]['f_id'];
+            $this->lc_id = $this->data->lc_id;
+            $fiche->insert();
+            
             $a_later = array();
             for ($i = 0; $i < $nb; $i++)
             {
@@ -75,8 +82,8 @@ class RAPAV_Listing_Compute
                 // Rapav_Formula_Compute or Rapav_Formula_Formula,
                 unset($compute);
                 $compute = RAPAV_Listing_Formula::make_object($a_code[$i]->Param);
-                $compute->set_fiche($a_fiche[$e]['f_id']);
-
+                $compute->fiche=$fiche;
+                
                 if ($compute->sig == 'COMP')
                 {
                     $a_later[] = clone $compute;
@@ -84,16 +91,8 @@ class RAPAV_Listing_Compute
                 {
                     $compute->set_listing_compute($this->data->lc_id);
                     $compute->filter_operation($this->type_operation);
-
-                    if ($i == 0)
-                    {
-                        $compute->save_fiche();
-                        $fiche = $compute->fiche;
-                    } 
-                    else
-                    {
-                        $compute->fiche=$fiche;
-                    }
+                    
+                    
                     //compute
                     $compute->compute($p_date_start, $p_date_end);
                     // save computed
@@ -107,17 +106,7 @@ class RAPAV_Listing_Compute
              */
             for ($i = 0; $i < $nb_later; $i++)
             {
-                $a_later[$i]->set_fiche($a_fiche[$e]['f_id']);
                 $compute->set_listing_compute($this->data->lc_id);
-                if ($i == 0)
-                {
-                    $a_later[$i]->save_fiche();
-                    $fiche=$a_later[$i]->fiche;
-                }
-                else
-                {
-                    $a_later[$i]=$fiche;
-                }
                 $a_later[$i]->compute($p_date_start, $p_date_end);
                 $a_later[$i]->save_computed();
             }

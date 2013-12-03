@@ -417,8 +417,15 @@ class RAPAV_Formula_Compute extends RAPAV_Listing_Formula
             $search = str_replace('[', '', $piece);
             $search = str_replace(']', '', $search);
             $value = $cn->get_value('select coalesce(sum(ld_value_numeric),0) as value
-				from rapport_advanced.listing_compute_detail where lc_id=$1 and lp_id in (select lp_id from 
-                                rapport_advanced.listing_param where lp_code=$2)', array($this->detail->lc_id, $search));
+				from 
+                                    rapport_advanced.listing_compute_detail as ld
+                                    join rapport_advanced.listing_compute_fiche as lf on (ld.lf_id=lf.lf_id) 
+                                    join rapport_advanced.listing_param  as lp on (ld.lp_id=lp.lp_id) 
+                                where 
+                                ld.lc_id=$1 
+                                and lp.lp_code=$2
+                                and lf.f_id = $3
+                                ', array($this->detail->lc_id, $search,$this->fiche->f_id));
             $formula = str_replace($piece, $value, $formula);
         }
         eval('$amount = ' . $formula . ';');
