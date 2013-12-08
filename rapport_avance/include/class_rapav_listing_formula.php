@@ -28,7 +28,11 @@ abstract class RAPAV_Listing_Formula
     {
         $this->detail->lf_id = $this->fiche->lf_id;
         $this->detail->lp_id = $this->data->lp_id;
+        $this->detail->lc_code = $this->data->lp_code;
+        $this->detail->lc_comment = $this->data->lp_comment;
+        $this->detail->lc_order = $this->data->l_order;
         $this->detail->save();
+        $this->fiche->save();
     }
 
     function set_listing_compute($param)
@@ -106,10 +110,6 @@ abstract class RAPAV_Listing_Formula
         $this->fiche->f_id = $f_id;
     }
 
-    function save_fiche()
-    {
-        $this->fiche->save();
-    }
 
     function filter_operation($param)
     {

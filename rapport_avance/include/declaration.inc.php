@@ -84,6 +84,16 @@ if (isset($_GET['compute']))
         exit();
     }
 }
+/**
+ * Save listing now you can export them to csv and generate file if any
+ */
+if ( isset($_POST['save_listing']))
+{
+    $listing=new RAPAV_Listing_Compute();
+    $listing->keep($_POST['lc_id']);
+    $listing->display();
+    exit();
+}
 /*
  * compute listing
  */
@@ -100,6 +110,7 @@ if (isset($_GET['compute_listing']))
         $listing->filter_operation($_GET['p_operation_paid']);
         $listing->compute($p_listing, $_GET['p_start'], $_GET['p_end']);
         echo '<form class="print" method="POST">';
+        echo HtmlInput::hidden('lc_id',$listing->lc_id);
         $listing->display();
         echo HtmlInput::submit('save_listing', 'Sauver');
         echo '</form>';
@@ -150,12 +161,12 @@ $operation_paid->value = array(
 ?>
 <div id="Choix">
     <h2>Choisissez ce que vous souhaitez générer</h2>
-    <table style="border-collapse: collapse;width: 40%">
+    <table style="border-collapse: separate;width: 40%">
         <tr >
-            <td id="rapport_td_id" class="mtitle" style="border-radius:0">
+            <td id="rapport_td_id" class="mtitle" style="border-radius:0;border-bottom: 2;border-top:0;border-left:0;border-right:0">
                 <A class="mtitle" HREF="javascript:void(0)" onclick="select_rapport();"> Rapport</A>
             </td>
-            <td id="listing_td_id" class="mtitle" style="border-radius:0">
+            <td id="listing_td_id" class="mtitle" style="border-radius:0;border-bottom: 2;border-top:0;border-left:0;border-right:0">
                 <A class="mtitle" HREF="javascript:void(0)"onclick="select_listing();"> Listing / Documents</A>
             </td>
         </tr>

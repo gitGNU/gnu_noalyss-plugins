@@ -544,6 +544,9 @@ class RAPAV_Listing_Compute_Detail_SQL extends Phpcompta_SQL
     var $ld_value_text;
     var $lp_id;
     var $lf_id;
+    var $lc_code;
+    var $lc_comment;
+    var $lc_order;
 
     /* example private $variable=array("easy_name"=>column_name,"email"=>"column_name_email","val3"=>0); */
 
@@ -561,6 +564,9 @@ class RAPAV_Listing_Compute_Detail_SQL extends Phpcompta_SQL
             , "ld_value_text" => "ld_value_text"
             , "lp_id" => "lp_id"
             , "lf_id" => "lf_id"
+            ,'code'=>'lc_code'
+            ,'comment'=>'lc_comment'
+            ,'order'=>'lc_order'
         );
 
         $this->type = array(
@@ -571,6 +577,9 @@ class RAPAV_Listing_Compute_Detail_SQL extends Phpcompta_SQL
             , "ld_value_text" => "text"
             , "lp_id" => "numeric"
             , "lf_id" => "numeric"
+            , 'lc_code'=>"text"
+            , 'lc_comment'=>"text"
+            , 'lc_order'=>"numeric"
         );
 
         $this->default = array(
