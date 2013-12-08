@@ -428,7 +428,12 @@ class RAPAV_Formula_Compute extends RAPAV_Listing_Formula
                                 ', array($this->detail->lc_id, $search,$this->fiche->f_id));
             $formula = str_replace($piece, $value, $formula);
         }
-        eval('$amount = ' . $formula . ';');
+        if ( strpos("1".$formula,"/0.0000") != 0)
+        {
+            $amount=0;
+        } else {
+            eval('$amount = ' . $formula . ';');
+        }
         //
         $this->detail->ld_value_numeric= $amount;
     }
