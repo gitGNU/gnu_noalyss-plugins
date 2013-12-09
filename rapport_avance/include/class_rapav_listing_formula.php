@@ -292,7 +292,7 @@ class RAPAV_Formula_Formula extends RAPAV_Listing_Formula
             case '1':
                 /* -- only paid --*/
                 $sql_filter_operation=" and j_id in (select j_id from jrnx join 
-                    jrn on (j_grpt=jr_grpt_id) where jr_rapt='Y')";
+                    jrn on (j_grpt=jr_grpt_id) where jr_rapt='paid')";
                 break;
             case '2':
                 /*-- only unpaid --*/
@@ -582,7 +582,7 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
             case '1':
                 /* -- only paid --*/
                 $sql_filter_operation=" and $card_saldo.j_id in (select j_id from jrnx join 
-                    jrn on (j_grpt=jr_grpt_id) where jr_rapt='Y')";
+                    jrn on (j_grpt=jr_grpt_id) where jr_rapt='paid')";
                 break;
             case '2':
                 /*-- only unpaid --*/
