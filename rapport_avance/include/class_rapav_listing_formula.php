@@ -283,6 +283,25 @@ class RAPAV_Formula_Formula extends RAPAV_Listing_Formula
     {
         global $cn;
         $sql = "";
+        switch ($this->type_operation)
+        {
+            case 0:
+                /*--all operation --*/
+                $sql_filter_operation="";
+                break;
+            case '1':
+                /* -- only paid --*/
+                $sql_filter_operation=" and j_id in (select j_id from jrnx join 
+                    jrn on (j_grpt=jr_grpt_id) where jr_rapt='Y')";
+                break;
+            case '2':
+                /*-- only unpaid --*/
+                $sql_filter_operation=" and j_id in (select j_id from jrnx join 
+                    jrn on (j_grpt=jr_grpt_id) 
+                    join jrn_def on (jrn_def_id=jr_def_id)
+                    where coalesce(jr_rapt,'')='' and jrn_def_type in ('ACH','VEN'))";
+                break;
+        }
         if ($this->data->jrn_def_id != null)
         {
             $sql = ' and j_jrn_def =' . $this->data->jrn_def_id;
@@ -299,7 +318,7 @@ class RAPAV_Formula_Formula extends RAPAV_Listing_Formula
             $p_start = '01.01.1900';
             $p_end = '01.01.2100';
         }
-
+        $sql.=$sql_filter_operation;
         $amount = Impress::parse_formula($cn, "", $this->data->fp_formula, $p_start, $p_end, true, 1, $sql);
         $this->detail->ld_value_numeric = $amount['montant'];
     }
@@ -428,6 +447,7 @@ class RAPAV_Formula_Compute extends RAPAV_Listing_Formula
                                 ', array($this->detail->lc_id, $search,$this->fiche->f_id));
             $formula = str_replace($piece, $value, $formula);
         }
+        /** Protect against division by zero */
         if ( strpos("1".$formula,"/0.0000") != 0)
         {
             $amount=0;
@@ -553,6 +573,25 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
 
         $sql_date = RAPAV::get_sql_date($this->data->date_paid);
         $card_saldo = ($this->data->lp_card_saldo == 0) ? "jrn1" : "jrn2";
+         switch ($this->type_operation)
+        {
+            case 0:
+                /*--all operation --*/
+                $sql_filter_operation="";
+                break;
+            case '1':
+                /* -- only paid --*/
+                $sql_filter_operation=" and $card_saldo.j_id in (select j_id from jrnx join 
+                    jrn on (j_grpt=jr_grpt_id) where jr_rapt='Y')";
+                break;
+            case '2':
+                /*-- only unpaid --*/
+                $sql_filter_operation=" and $card_saldo.j_id in (select j_id from jrnx join 
+                    jrn on (j_grpt=jr_grpt_id) 
+                    join jrn_def on (jrn_def_id=jr_def_id)
+                    where coalesce(jr_rapt,'')='' and jrn_def_type in ('ACH','VEN'))";
+                break;
+        }
         bcscale(2);
         switch ($this->data->type_sum_account)
         {
@@ -572,7 +611,7 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
                                 and
                                 jrn2.f_id = $4
                                 $filter_ledger
-                                    
+                                $sql_filter_operation    
                                 ) as tv_amount
 							 ";
                 $amount = $cn->get_value($sql, array(
@@ -601,6 +640,7 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
                                 and
                                 $card_saldo.j_debit='t'
                                 $filter_ledger
+                                $sql_filter_operation
                                 ) as tv_amount
 							 ";
                 $amount = $cn->get_value($sql, array(
@@ -626,6 +666,7 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
                                 and
                                 $card_saldo.j_debit='f'
                                 $filter_ledger
+                                $sql_filter_operation
                                 ) as tv_amount
 							 ";
                 $amount = $cn->get_value($sql, array(

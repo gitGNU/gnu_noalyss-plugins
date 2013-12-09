@@ -91,6 +91,11 @@ if ( isset($_POST['save_listing']))
 {
     $listing=new RAPAV_Listing_Compute();
     $listing->keep($_POST['lc_id']);
+    
+    if ($listing->has_template() == true) {
+        $listing->generate_doc();
+    }
+    
     $listing->display();
     exit();
 }
