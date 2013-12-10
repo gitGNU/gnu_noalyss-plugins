@@ -362,6 +362,7 @@ class RAPAV_Listing_Param_SQL extends Phpcompta_SQL
             "attribut_card" => "ad_id",
             "card_saldo" => "lp_card_saldo",
             "with_card" => "lp_with_card",
+            "lp_histo"=>"lp_histo"
         );
 
         $this->type = array(
@@ -385,6 +386,7 @@ class RAPAV_Listing_Param_SQL extends Phpcompta_SQL
             "ad_id" => "numeric",
             "lp_card_saldo" => "text",
             "lp_with_card" => "text",
+            "lp_histo" => "numeric",
         );
 
         $this->default = array(
@@ -547,6 +549,7 @@ class RAPAV_Listing_Compute_Detail_SQL extends Phpcompta_SQL
     var $lc_code;
     var $lc_comment;
     var $lc_order;
+    var $lc_histo;
 
     /* example private $variable=array("easy_name"=>column_name,"email"=>"column_name_email","val3"=>0); */
 
@@ -567,6 +570,7 @@ class RAPAV_Listing_Compute_Detail_SQL extends Phpcompta_SQL
             ,'code'=>'lc_code'
             ,'comment'=>'lc_comment'
             ,'order'=>'lc_order'
+            ,'history'=>'lc_histo'
         );
 
         $this->type = array(
@@ -580,10 +584,59 @@ class RAPAV_Listing_Compute_Detail_SQL extends Phpcompta_SQL
             , 'lc_code'=>"text"
             , 'lc_comment'=>"text"
             , 'lc_order'=>"numeric"
+            , 'lc_histo'=>"numeric"
         );
 
         $this->default = array(
             "ld_id" => "auto"
+        );
+        global $cn;
+        $this->date_format = "DD.MM.YYYY";
+        parent::__construct($cn, $p_id);
+    }
+
+    /**
+     * @brief Add here your own code: verify is always call BEFORE insert or update
+     */
+    public function verify()
+    {
+        parent::verify();
+    }
+
+}
+/**
+ * @brief Manage the table rapport_advanced.listing_compute_historique
+ */
+class RAPAV_Listing_Compute_Historique_SQL extends Phpcompta_SQL
+{
+
+    //------ Attributes-----
+    var $lh_id;
+    var $ld_id;
+    var $jr_id;
+
+
+    function __construct($p_id = -1)
+    {
+
+
+        $this->table = "rapport_advanced.listing_compute_historique";
+        $this->primary_key = "lh_id";
+
+        $this->name = array(
+            "lh_id" => "lh_id", "lh_id" => "lh_id"
+            , "ld_id" => "ld_id"
+            , "jr_id" => "jr_id"
+        );
+
+        $this->type = array(
+            "lh_id" => "numeric"
+            , "ld_id" => "numeric"
+            , "jr_id" => "numeric"
+        );
+
+        $this->default = array(
+            "lh_id" => "auto"
         );
         global $cn;
         $this->date_format = "DD.MM.YYYY";

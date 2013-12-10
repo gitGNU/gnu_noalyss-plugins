@@ -31,6 +31,7 @@ abstract class RAPAV_Listing_Formula
         $this->detail->lc_code = $this->data->lp_code;
         $this->detail->lc_comment = $this->data->lp_comment;
         $this->detail->lc_order = $this->data->l_order;
+        $this->detail->lc_histo = $this->data->lp_histo;
         $this->detail->save();
         $this->fiche->save();
     }
@@ -72,7 +73,9 @@ abstract class RAPAV_Listing_Formula
             case 'COMP':
                 $ret = new Rapav_Formula_Compute($obj);
                 break;
-
+            case 'COMP':
+                $ret = new Rapav_Formula_Histo($obj);
+                break;
             default:
                 throw new Exception('Object ' . var_export($obj, true) . ' invalide ');
                 break;
@@ -565,14 +568,15 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
     function compute($p_start, $p_end)
     {
         global $cn;
+        $this->histo=array();
         $filter_ledger = "";
         if ($this->data->jrn_def_id != "")
         {
             $filter_ledger = " and jrn1.j_jrn_def = " . sql_string($this->data->jrn_def_id);
         }
 
-        $sql_date = RAPAV::get_sql_date($this->data->date_paid);
         $card_saldo = ($this->data->lp_card_saldo == 0) ? "jrn1" : "jrn2";
+        $sql_date = RAPAV::get_sql_date($this->data->date_paid,$card_saldo);
          switch ($this->type_operation)
         {
             case 0:
@@ -600,9 +604,9 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
             case 2:
                 // Compute D-C
                 $sql = "
-                        select sum(jrnx_amount)
-                        from (
-                                select distinct $card_saldo.j_id,case when $card_saldo.j_debit = 't' then $card_saldo.j_montant else $card_saldo.j_montant*(-1) end as jrnx_amount
+                        
+                         (
+                                select distinct $card_saldo.j_id,$card_saldo.j_grpt,case when $card_saldo.j_debit = 't' then $card_saldo.j_montant else $card_saldo.j_montant*(-1) end as jrnx_amount
                                 from jrnx as jrn1
                                 join jrnx as jrn2 on (jrn1.j_grpt=jrn2.j_grpt)
                                 where
@@ -614,12 +618,22 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
                                 $sql_filter_operation    
                                 ) as tv_amount
 							 ";
-                $amount = $cn->get_value($sql, array(
+                $amount = $cn->get_value("select sum(jrnx_amount) from ".$sql, array(
                     $this->data->fp_formula,
                     $p_start,
                     $p_end,
                     $this->fiche->f_id
                 ));
+                if ($this->data->lp_histo == 1 ) 
+                {
+                    $this->histo=$cn->get_array("select distinct jr_id from 
+                        jrn join $sql on (j_grpt=jr_grpt_id) ",array (
+                        $this->data->fp_formula,
+                        $p_start,
+                        $p_end,
+                        $this->fiche->f_id));
+
+                }
                 // if C-D is asked then reverse the result
                 if ($this->data->type_sum_account == 2)
                     $amount = bcmul($amount, -1);
@@ -627,9 +641,8 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
             // Only DEBIT
             case 3:
                 $sql = "
-                        select sum(jrnx_amount)
-                        from (
-                                select distinct $card_saldo.j_id,$card_saldo.j_montant as jrnx_amount
+                         (
+                                select distinct $card_saldo.j_id,$card_saldo.j_grpt,$card_saldo.j_montant as jrnx_amount
                                 from jrnx as jrn1
                                 join jrnx as jrn2 on (jrn1.j_grpt=jrn2.j_grpt)
                                 where
@@ -643,19 +656,29 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
                                 $sql_filter_operation
                                 ) as tv_amount
 							 ";
-                $amount = $cn->get_value($sql, array(
+                $amount = $cn->get_value("select sum(jrnx_amount) from".$sql, array(
                     $this->data->fp_formula,
                     $p_start,
                     $p_end,
                     $this->fiche->f_id
                 ));
+               if ($this->data->lp_histo == 1 ) 
+                {
+                    $this->histo=$cn->get_array("select distinct jr_id from 
+                        jrn join $sql on (j_grpt=jr_grpt_id) ",array (
+                        $this->data->fp_formula,
+                        $p_start,
+                        $p_end,
+                        $this->fiche->f_id));
+
+                }
+
                 break;
             // Only CREDIT
             case 4:
                 $sql = "
-                        select sum(jrnx_amount)
-                        from (
-                                select distinct $card_saldo.j_id,jrn1.j_montant as jrnx_amount
+                         (
+                                select distinct $card_saldo.j_id,$card_saldo.j_grpt,$card_saldo.j_montant as jrnx_amount
                                 from jrnx as jrn1
                                 join jrnx as jrn2 on (jrn1.j_grpt=jrn2.j_grpt)
                                 where
@@ -669,12 +692,23 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
                                 $sql_filter_operation
                                 ) as tv_amount
 							 ";
-                $amount = $cn->get_value($sql, array(
+                $amount = $cn->get_value("select sum(jrnx_amount) from ".$sql, array(
                     $this->data->fp_formula,
                     $p_start,
                     $p_end,
                     $this->fiche->f_id
                 ));
+               if ($this->data->lp_histo == 1 ) 
+                {
+                    $this->histo=$cn->get_array("select distinct jr_id from 
+                        jrn join $sql on (j_grpt=jr_grpt_id) ",array (
+                        $this->data->fp_formula,
+                        $p_start,
+                        $p_end,
+                        $this->fiche->f_id));
+
+                }
+
                 break;
 
             default:
@@ -686,12 +720,32 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
         /*
          * 4 possibilities with type_sum_account
          */
+        if ($amount=="") $amount=0;
         $this->detail->ld_value_numeric = $amount;
+    }
+    function save_computed()
+    {
+        parent::save_computed();
+        /*
+         * Save history now
+         */
+        if ($this->data->lp_histo == 1 ) 
+        {
+            for ($e=0;$e<  count($this->histo);$e++)
+            {
+                $histo=new RAPAV_Listing_Compute_Historique_SQL();
+                $histo->jr_id=$this->histo[$e]['jr_id'];
+                $histo->ld_id=$this->detail->ld_id;
+                $histo->save();
+                unset($histo);
+            }
+        }
     }
 
     function input()
     {
         global $cn;
+        $histo_operation=new ICheckBox('histo');
         $account = new IPoste("p_formula", "", "formula_acc_input_id");
         $account->label = _("Recherche poste");
         $account->set_attribute('gDossier', dossier::id());
@@ -701,6 +755,10 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
         $sel_total_type_row->value = $cn->make_array('select tt_id,tt_label from '
                 . ' rapport_advanced.total_type_account order by 2');
 
+        echo '<p>';
+        echo "Reprendre historique opération: " . $histo_operation->input();
+        echo '</p>';
+        
         echo '<p>';
         echo "type de total : " . $sel_total_type_row->input();
         echo '</p>';
@@ -731,6 +789,7 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
         $this->data->setp('formula_type', 'ACCOUNT');
         $this->data->setp('sum_signed', $p_array['tt_id']);
         $this->data->lp_card_saldo = (isset($p_array['card_saldo'])) ? 1 : 0;
+        $this->data->lp_histo = (isset($p_array['histo'])) ? 1 : 0;
         $this->data->save();
     }
 

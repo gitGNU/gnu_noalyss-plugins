@@ -1,3 +1,6 @@
+ALTER TABLE rapport_advanced.listing_param ADD COLUMN lp_histo integer;
+ALTER TABLE rapport_advanced.listing_param ALTER COLUMN lp_histo SET DEFAULT 0;
+COMMENT ON COLUMN rapport_advanced.listing_param.lp_histo IS '0 : no history 1 : with history';
 ﻿-- Table: rapport_advanced.listing_compute_detail
 
 -- DROP TABLE rapport_advanced.listing_compute_detail;
@@ -14,6 +17,7 @@ CREATE TABLE rapport_advanced.listing_compute_detail
   lc_code text,
   lc_comment text,
   lc_order bigint,
+  lc_histo integer DEFAULT 0,
   CONSTRAINT listing_compute_detail_pkey PRIMARY KEY (ld_id ),
   CONSTRAINT listing_compute_detail_lc_id_fkey FOREIGN KEY (lc_id)
       REFERENCES rapport_advanced.listing_compute (lc_id) MATCH SIMPLE
@@ -39,6 +43,7 @@ COMMENT ON COLUMN rapport_advanced.listing_compute_detail.lf_id IS 'FK to listin
 COMMENT ON COLUMN rapport_advanced.listing_compute_detail.lc_code IS 'code from listing_param';
 COMMENT ON COLUMN rapport_advanced.listing_compute_detail.lc_comment IS 'comment from listing_param';
 COMMENT ON COLUMN rapport_advanced.listing_compute_detail.lc_order IS 'order from listing_param';
+COMMENT ON COLUMN rapport_advanced.listing_compute.lc_histo IS '0 : no history 1 : with history';
 
 
 -- Index: rapport_advanced.fki_listing_compute_fiche_lf_id2_fk

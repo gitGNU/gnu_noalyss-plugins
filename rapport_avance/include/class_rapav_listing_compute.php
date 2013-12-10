@@ -179,7 +179,8 @@ class RAPAV_Listing_Compute
                 echo '</tr>';
             }
             /** for each detail */
-            echo '<tr>';
+            $class=($i%2==0)?' class="even" ':'class="odd" ';
+            echo '<tr '.$class.'>';
             for ($e=0;$e <$nb_detail;$e++)
             {
                 $detail=$odetail->next($r_detail,$e);
