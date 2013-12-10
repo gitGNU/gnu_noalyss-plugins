@@ -50,7 +50,7 @@
 
             <td id="new_account_id_bt"  class="tool" style="background:inherit">
                 <a class="mtitle" href="javascript:void(0)"   onclick="show_listing_formula('new_account_id')">
-                    Poste comptable
+                    Solde Fiche / Poste Comptable
                 </a>
             </td>
             <td id="new_attribute_id_bt"  class="tool" style="background:inherit">
