@@ -35,7 +35,11 @@ class RAPAV_Listing_Compute
     {
         $this->data = new RAPAV_Listing_Compute_SQL();
     }
-
+    function load($p_id)
+    {
+        $this->data->lc_id=$p_id;
+        $this->data->load();
+    }
     /**
      * Compute all the values and save them in the table rapav_listing_compute
      * @param RAPAV_Listing $rapav_listing
@@ -132,8 +136,12 @@ class RAPAV_Listing_Compute
     {
         $this->type_operation = $p_type;
     }
-
-    function display()
+    /**
+     * Display the result of the computing, no card are deleted for the moment
+     * @param $with true display the checkbox, false don't
+     * @global type $cn
+     */
+    function display($with_sel,$form_name="")
     {
         global $cn;
         $ofiche=new RAPAV_Listing_Compute_Fiche_SQL();
@@ -151,8 +159,18 @@ class RAPAV_Listing_Compute
             // table header
             if ($nb_detail > 0 && $i == 0)
             {
-                echo '<table style="min-width:100%" class="result">';
+                $col=array();
+                for ($e=0;$e<$nb_detail;$e++)
+                {
+                    $col[]=$e;
+                }
+                $col_range=implode(",",$col);
+                echo "Filtre ".HtmlInput::filter_table($form_name."_tb", $col_range, 1);
+                echo '<table id="'.$form_name.'_tb" style="min-width:100%" class="result">';
                 echo '<tr>';
+                if ( $with_sel ) {
+                    echo '<TH><INPUT TYPE="CHECKBOX" onclick="toggle_checkbox(\''.$form_name.'\')"></TH>';
+                }
                 for ($e=0;$e<$nb_detail;$e++)
                 {
                     $detail=$odetail->next($r_detail,$e);
@@ -165,7 +183,11 @@ class RAPAV_Listing_Compute
             for ($e=0;$e <$nb_detail;$e++)
             {
                 $detail=$odetail->next($r_detail,$e);
-                
+                if ($e==0 && $with_sel)
+                {
+                     $check_box=new ICheckBox("selected_card[]", $fiche->lf_id);
+                     echo td($check_box->input());
+                }
                 echo (($detail->ld_value_numeric !== null)?td(nbm($detail->ld_value_numeric),'class="num"'):"");
                 echo (($detail->ld_value_text !== null)?td($detail->ld_value_text):"");
                 echo (($detail->ld_value_date!== null)?td($detail->ld_value_date):"");
@@ -174,6 +196,10 @@ class RAPAV_Listing_Compute
         }
         echo '</table>';
     }
+    /**
+     * Set the flag to keep to Y
+     * @param $p_id lc_id of the RAPAV_Listing_Compute to keep
+     */
     function keep($p_id)
     {
         $this->data->lc_id=$p_id;
@@ -181,5 +207,26 @@ class RAPAV_Listing_Compute
         $this->data->l_keep='Y';
         $this->data->save();
     }
-
+    /**
+     * Return true or false if the corresponding RAPAV_Listing has a document
+     * @return true if RAPAV_Listing has a template otherwise false
+     */
+    function has_template()
+    {
+        return false;
+    }
+    /**
+     * Save the card selected, they are in an array with the idx selected_fiche
+     * @param $p_array array 
+     */
+    function save_selected($p_array)
+    {
+        global $cn;
+        if (count($p_array)==0)
+                return;
+        $to_keep=implode(',',$p_array);
+        $to_keep=sql_string($to_keep);
+        $cn->exec_sql(" delete from rapport_advanced.listing_compute_fiche
+            where lf_id not in ($to_keep)");
+    }
 }

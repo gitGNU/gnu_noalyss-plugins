@@ -90,13 +90,17 @@ if (isset($_GET['compute']))
 if ( isset($_POST['save_listing']))
 {
     $listing=new RAPAV_Listing_Compute();
-    $listing->keep($_POST['lc_id']);
+    $listing->load($_POST['lc_id']);
+    if ( isset ($_POST['selected_card']) )
+    {
+        $listing->keep($_POST['lc_id']);
+        $listing->save_selected($_POST['selected_card']);
+    }
     
     if ($listing->has_template() == true) {
         $listing->generate_doc();
     }
-    
-    $listing->display();
+    $listing->display(false);
     exit();
 }
 /*
@@ -114,10 +118,10 @@ if (isset($_GET['compute_listing']))
         $p_listing = new Rapav_Listing($_GET['p_listing']);
         $listing->filter_operation($_GET['p_operation_paid']);
         $listing->compute($p_listing, $_GET['p_start'], $_GET['p_end']);
-        echo '<form class="print" method="POST">';
+        echo '<form class="print" id="'.'select_card_frm'.'" method="POST">';
         echo HtmlInput::hidden('lc_id',$listing->lc_id);
-        $listing->display();
-        echo HtmlInput::submit('save_listing', 'Sauver');
+        $listing->display(true,'select_card_frm');
+        echo HtmlInput::submit('save_listing', 'Sauver la sélection');
         echo '</form>';
         exit();
     }
