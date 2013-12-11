@@ -86,6 +86,9 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
 
         // Add special tag
         $this->special_tag($dirname, $file_to_parse, $type);
+        
+        // Add history
+        $this->histo($dirname, $file_to_parse, $type);
 
         // if the doc is a OOo, we need to re-zip it
         if ($type == 'OOo')
@@ -276,7 +279,154 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         }
         unlink($oname);
     }
+    private function histo($p_dir, $p_filename, $p_type)
+    {
+        global $cn, $g_parameter;
+        // Retrieve all the code + libelle
+        $sql="
+        select lc_code,jr_date,jr_ech,jr_comment,jr_rapt,jr_montant,jr_internal,novat,vat,lf_id,jr_pj_number
+                from rapport_advanced.listing_compute_detail
+                left join rapport_advanced.listing_compute_historique  using (ld_id)
+                join rapport_advanced.listing_compute_fiche using (lf_id)
+                left join jrn using (jr_id)
+                left join (
+                                select sum(qs_price) as novat,sum(qs_vat) as vat,qs_internal from quant_sold join jrn on(qs_internal=jr_internal)
+                                group by qs_internal
+                                union all
+                                select sum(qp_price),sum(qp_vat),qp_internal from quant_purchase join jrn on(qp_internal=jr_internal)
+                                group by qp_internal) as detail on (detail.qs_internal=jrn.jr_internal)
+                where 
+             lf_id = $1
+             order by 2";
+        $array=$cn->get_array($sql,array($this->lf_id));
+        
+        // Compute the code to replace
+        $nb_code=count($array);
+        
+        if ( $nb_code == 0)
+            return;
+        
+        $a_code=array();
+        for ($i=0;$i<$nb_code;$i++)
+        {
+            $a['date']=array(
+                'key'=>$array[$i]['lc_code'].'_DATE',
+                'value'=>$array[$i]['jr_date']
+                    );
+            $a['date_ech']=array(
+                'key'=>$array[$i]['lc_code'].'_ECH',
+                'value'=>$array[$i]['jr_ech']);
+            
+            $a['montantop']=array(
+                'key'=>$array[$i]['lc_code'].'_MONTANT_OPERATION',
+                'value'=>$array[$i]['jr_montant']);
+            
+            $a['comment']=array(
+                'key'=>$array[$i]['lc_code'].'_COMMENT',
+                'value'=>$array[$i]['jr_comment']);
+            
+            $a['piece']=array(
+                'key'=>$array[$i]['lc_code'].'_PIECE',
+                'value'=>$array[$i]['jr_pj_number']);
+            
+            $a['internal']=array(
+                'key'=>$array[$i]['lc_code'].'_INTERNAL',
+                'value'=>$array[$i]['jr_internal']);
+            
+            $a['novat']=array(
+                'key'=>$array[$i]['lc_code'].'_HTVA',
+                'value'=>$array[$i]['novat']);
+            
+            $a['vat']=array(
+                'key'=>$array[$i]['lc_code'].'_TVA',
+                'value'=>$array[$i]['vat']);
+            
+            $a['total']=array(
+                'key'=>$array[$i]['lc_code'].'_TOTAL',
+                'value'=>bcadd($array[$i]['vat'],$array[$i]['novat']));
+            $a_code[]=$a;
+        }
+        // open the files
+        $ifile = fopen($p_dir . '/' . $p_filename, 'r');
 
+        // check if tmpdir exist otherwise create it
+        $temp_dir = $_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . 'tmp';
+        if (is_dir($temp_dir) == false)
+        {
+            if (mkdir($temp_dir) == false)
+            {
+                echo "Ne peut pas créer le répertoire " . $temp_dir;
+                exit();
+            }
+        }
+        // Compute output_name
+        $oname = tempnam($temp_dir, "listing_");
+        $ofile = fopen($oname, "w+");
+
+        // read ifile
+        while (!feof($ifile))
+        {
+            $buffer = fgets($ifile);
+            // for each code replace in p_filename the code surrounded by << >> by the amount (value) or &lt; or &gt;
+            foreach ($a_code as $key => $value)
+            {
+                
+                // search all key and replace each by a different value
+                foreach ($value as $key2=>$value2)
+                {
+                        if ($p_type == 'OOo')
+                        {
+                            $replace = '&lt;&lt;' . $value2['key'] . '&gt;&gt;';
+                            $fmt_value = $value2['value'];
+                            $fmt_value = str_replace('&', '&amp;', $fmt_value);
+                            $fmt_value = str_replace('<', '&lt;', $fmt_value);
+                            $fmt_value = str_replace('>', '&gt;', $fmt_value);
+                            $fmt_value = str_replace('"', '&quot;', $fmt_value);
+                            $fmt_value = str_replace("'", '&apos;', $fmt_value);
+                        } else
+                        {
+                            $replace = '<<' . $value2['key'] . '>>';
+                            $fmt_value = $value2['value'];
+                        }
+                        $buffer = preg_replace("/".$replace."/", $fmt_value, $buffer,1);
+                }
+            }
+            /**
+             * clean  remainging HISTO tags
+             */
+            foreach ($a_code as $key => $value)
+            {
+                
+                // search all key and replace each by a different value
+                foreach ($value as $key2=>$value2)
+                {
+                        if ($p_type == 'OOo')
+                        {
+                            $replace = '&lt;&lt;' . $value2['key'] . '&gt;&gt;';
+                            $fmt_value = "";
+                        } else
+                        {
+                            $replace = '<<' . $value2['key'] . '>>';
+                            $fmt_value = "";
+                        }
+                        $buffer = str_replace($replace, $fmt_value, $buffer);
+                }
+            }
+            // write to output
+            fwrite($ofile, $buffer);
+        }
+        
+
+        // copy the output to input
+        fclose($ifile);
+        fclose($ofile);
+
+        if (($ret = copy($oname, $p_dir . '/' . $p_filename)) == FALSE)
+        {
+            echo _('Ne peut pas sauver ' . $oname . ' vers ' . $p_dir . '/' . $p_filename . ' code d\'erreur =' . $ret);
+        }
+        unlink($oname);
+    }
     private function load_document($p_file)
     {
         global $cn;
