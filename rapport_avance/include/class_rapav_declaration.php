@@ -247,6 +247,7 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
             {
                 if (is_numeric($value['dr_amount']))
                 {
+                    /* -- works only with OOo Calc -- */
                     $searched = 'office:value-type="string"><text:p>' . $value['code'];
                     $replaced = 'office:value-type="float" office:value="' . $value['dr_amount'] . '"><text:p>' . $value['code'];
                     $buffer = str_replace($searched, $replaced, $buffer);
@@ -978,7 +979,7 @@ class Rapav_dd_Account extends Rapav_Declaration_Detail
             $filter_ledger = " and jrn1.j_jrn_def = " . sql_string($this->form->jrn_def_id);
         }
         
-        $sql_date=RAPAV::get_sql_date($this->form->date_paid );
+        
 
         bcscale(2);
         switch ($this->form->type_sum_account)
@@ -986,6 +987,7 @@ class Rapav_dd_Account extends Rapav_Declaration_Detail
             // Saldo
             case 1:
             case 2:
+                $sql_date=RAPAV::get_sql_date($this->form->date_paid,'jrn1' );
                 // Compute D-C
                 $sql = "
                         select sum(jrnx_amount)
@@ -1013,6 +1015,7 @@ class Rapav_dd_Account extends Rapav_Declaration_Detail
                 break;
             // Only DEBIT
             case 3:
+                $sql_date=RAPAV::get_sql_date($this->form->date_paid,'jrn1' );
                 $sql = "
                         select sum(jrnx_amount)
                         from (
@@ -1038,6 +1041,7 @@ class Rapav_dd_Account extends Rapav_Declaration_Detail
                 break;
             // Only CREDIT
             case 4:
+                $sql_date=RAPAV::get_sql_date($this->form->date_paid,'jrn1' );
                 $sql = "
                         select sum(jrnx_amount)
                         from (
