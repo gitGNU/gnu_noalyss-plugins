@@ -60,6 +60,7 @@ class RAPAV_Listing_Compute
         try
         {
             // save an object Listing_Compute with the flag to_keep to N
+            $this->data->l_name=$rapav_listing->data->l_name;
             $this->data->l_start = $p_date_start;
             $this->data->l_end = $p_date_end;
             $this->data->l_keep = 'N';

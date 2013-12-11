@@ -6,7 +6,7 @@ $a_action=explode(',',
         'rapav_search_code,save_param_detail,rapav_declaration_display,'.
         'listing_modify,listing_remove_modele,listing_display_definition,'.
         'listing_param_add,save_param_listing,listing_detail_remove,'.
-        'listing_search_code');
+        'listing_search_code,rapav_listing_display');
 if ( in_array($act,$a_action ) == true )
 {
     include 'ajax_'.$act.'.php';
@@ -26,6 +26,13 @@ switch ($act)
     /////////////////////////////////////////////////////////////////////
     case 'rapav_declaration_delete':
         $cn->exec_sql("delete from rapport_advanced.declaration where d_id=$1",
+                array($_GET['d_id']));
+        break;
+    /////////////////////////////////////////////////////////////////////
+    // Delete a saved listing (from history)
+    /////////////////////////////////////////////////////////////////////
+    case 'rapav_listing_delete':
+        $cn->exec_sql("delete from rapport_advanced.listing_compute where lc_id=$1",
                 array($_GET['d_id']));
         break;
     /////////////////////////////////////////////////////////////////////

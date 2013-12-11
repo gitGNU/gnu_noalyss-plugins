@@ -5,8 +5,9 @@
 CREATE TABLE rapport_advanced.listing_compute
 (
   lc_id bigserial NOT NULL, -- PK
-  l_id bigint, -- FK to listing
+  l_name text, -- Description or note
   l_description text, -- Description or note
+  l_id bigint, -- FK to listing
   l_start date, -- start data
   l_end date, -- end_date
   l_keep character(1) NOT NULL DEFAULT 'N'::bpchar, -- If yes, it is keeped with N it will deleted
@@ -26,6 +27,7 @@ COMMENT ON TABLE rapport_advanced.listing_compute
 ';
 COMMENT ON COLUMN rapport_advanced.listing_compute.lc_id IS 'PK';
 COMMENT ON COLUMN rapport_advanced.listing_compute.l_id IS 'FK to listing';
+COMMENT ON COLUMN rapport_advanced.listing_compute.l_name IS 'Title';
 COMMENT ON COLUMN rapport_advanced.listing_compute.l_description IS 'Description or note';
 COMMENT ON COLUMN rapport_advanced.listing_compute.l_start IS 'start data';
 COMMENT ON COLUMN rapport_advanced.listing_compute.l_end IS 'end_date';

@@ -421,6 +421,7 @@ class RAPAV_Listing_Compute_SQL extends Phpcompta_SQL
     var $l_end;
     var $l_keep;
     var $l_timestamp;
+    var $l_name;
 
     /* example private $variable=array("easy_name"=>column_name,"email"=>"column_name_email","val3"=>0); */
 
@@ -437,6 +438,7 @@ class RAPAV_Listing_Compute_SQL extends Phpcompta_SQL
             , "l_end" => "l_end"
             , "l_keep" => "l_keep"
             , "l_timestamp" => "l_timestamp"
+            ,"l_name"=>"l_name"
         );
 
         $this->type = array(
@@ -447,6 +449,7 @@ class RAPAV_Listing_Compute_SQL extends Phpcompta_SQL
             , "l_end" => "date"
             , "l_keep" => "text"
             , "l_timestamp" => "date"
+            , "l_name" => "text"
         );
 
         $this->default = array(

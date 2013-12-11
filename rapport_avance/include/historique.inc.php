@@ -33,10 +33,19 @@ $data=$cn->get_array("select d_id,d_title,
 		d_description,d_generated,
 		to_char(d_start,'YYMMDD') as fmt_start,
 		to_char(d_end,'YYMMDD') as fmt_end,
-		to_char(d_end,'YYMMDDHH24MI') as fmt_order_generated
+		to_char(d_generated,'YYMMDDHH24MI') as fmt_order_generated,
+                1 as type
 		from rapport_advanced.declaration
 		where to_keep='Y'
-		order by d_start,d_title");
+                union all		
+                select lc_id,l_name,l_start,l_end,to_char(l_timestamp,'DD/MM/YY HH24:MI') as fmt_generated,
+		l_description,l_timestamp,
+		to_char(l_start,'YYMMDD') as fmt_start,
+		to_char(l_end,'YYMMDD') as fmt_end,
+		to_char(l_end,'YYMMDDHH24MI') as fmt_order_generated,
+                2
+		from rapport_advanced.listing_compute
+order by d_start,d_title");
 ?>
 <div id="declaration_list_div">
 <?php
@@ -88,12 +97,24 @@ echo '<span style="display:block">';
 		<td sortable_customkey="<?php echo $data[$i]['fmt_order_generated']?>">
 			<?php echo h($data[$i]['fmt_generated'])?>
 		</td>
+<?php if  ($data[$i]['type']==1): ?>
+
 		<td  id="mod_<?php echo $data[$i]['d_id']?>">
 			<?php echo HtmlInput::anchor("Afficher","",sprintf("onclick=\"rapav_declaration_display('%s','%s','%s','%s')\"",$_REQUEST['plugin_code'],$_REQUEST['ac'],$_REQUEST['gDossier'],$data[$i]['d_id']))?>
 		</td>
 		<td  id="del_<?php echo $data[$i]['d_id']?>">
 			<?php echo HtmlInput::anchor("Efface","",sprintf("onclick=\"rapav_declaration_delete('%s','%s','%s','%s')\"",$_REQUEST['plugin_code'],$_REQUEST['ac'],$_REQUEST['gDossier'],$data[$i]['d_id']))?>
 		</td>
+<?php endif; ?>
+<?php if  ($data[$i]['type']==2): ?>
+
+		<td  id="mod_<?php echo $data[$i]['d_id']?>">
+			<?php echo HtmlInput::anchor("Afficher","",sprintf("onclick=\"rapav_listing_display('%s','%s','%s','%s')\"",$_REQUEST['plugin_code'],$_REQUEST['ac'],$_REQUEST['gDossier'],$data[$i]['d_id']))?>
+		</td>
+		<td  id="del_<?php echo $data[$i]['d_id']?>">
+			<?php echo HtmlInput::anchor("Efface","",sprintf("onclick=\"rapav_listing_delete('%s','%s','%s','%s')\"",$_REQUEST['plugin_code'],$_REQUEST['ac'],$_REQUEST['gDossier'],$data[$i]['d_id']))?>
+		</td>
+<?php endif; ?>                
 	</tr>
 	<?php endfor; ?>
 </table>
