@@ -186,4 +186,51 @@ if ($act=="show_file")
 
 	$cn->commit();
 }
+/**
+ * Show generated file
+ */
+if ($act=="show_pdf")
+{
+        $decl = new RAPAV_Listing_Compute_Fiche();
+	$decl->lf_id = $lf_id;
+	$decl->load();
+
+	$cn->start();
+	if ($decl->lf_pdf == "")
+	{
+		ini_set('zlib.output_compression', 'Off');
+		header("Pragma: public");
+		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+		header("Cache-Control: must-revalidate");
+		header('Content-type: ' . 'text/plain');
+		header('Content-Disposition: attachment;filename=vide.txt', FALSE);
+		header("Accept-Ranges: bytes");
+		echo "******************";
+		echo _("Fichier effacé");
+		echo "******************";
+		exit();
+	}
+	$tmp = tempnam($_ENV['TMP'], 'document_');
+
+	$cn->lo_export($decl->lf_pdf, $tmp);
+
+	ini_set('zlib.output_compression', 'Off');
+	header("Pragma: public");
+	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+	header("Cache-Control: must-revalidate");
+	header('Content-type: application/pdf');
+	header('Content-Disposition: attachment;filename="' . $decl->lf_filename . '.pdf"', FALSE);
+	header("Accept-Ranges: bytes");
+	$file = fopen($tmp, 'r');
+	while (!feof($file))
+		echo fread($file, 8192);
+
+	fclose($file);
+
+	unlink($tmp);
+
+	$cn->commit();
+}
 ?>

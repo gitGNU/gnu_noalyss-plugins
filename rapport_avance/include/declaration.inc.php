@@ -92,6 +92,10 @@ if ( isset($_GET['generate_document']) )
     $listing=new RAPAV_Listing_Compute();
     $listing->load($_GET['lc_id']);
     $listing->generate($_GET['numerotation']);
+    
+    if ( GENERATE_PDF == 'YES') 
+        $listing->create_pdf();
+    
     $listing->display(false);
     exit();
 }

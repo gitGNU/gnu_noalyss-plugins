@@ -187,7 +187,11 @@ class RAPAV_Listing_Compute
                     $detail=$odetail->next($r_detail,$e);
                     echo th( $detail->lc_code);
                 }
-                echo th("");
+                echo th("Fichier");
+                if ( GENERATE_PDF == 'YES')
+                {
+                    echo th('PDF');
+                }
                 echo '</tr>';
             }
             /** for each detail */
@@ -214,6 +218,16 @@ class RAPAV_Listing_Compute
                     'lf_id'=>$fiche->lf_id);
                 $href=  "extension.raw.php?".http_build_query($arg);
                 echo td('<a href="'.$href.'">'.$fiche->lf_filename);
+            }
+            if ( $fiche->lf_pdf != "")
+            {
+                $arg=array("gDossier"=>$_REQUEST['gDossier'],
+                    "plugin_code"=>$_REQUEST['plugin_code'],
+                    "ac"=>$_REQUEST['ac'],
+                    'act'=>'show_pdf',
+                    'lf_id'=>$fiche->lf_id);
+                $href=  "extension.raw.php?".http_build_query($arg);
+                echo td('<a href="'.$href.'">'.$fiche->lf_pdf_filename);
             }
             echo '</tr>';
         }
@@ -274,6 +288,20 @@ class RAPAV_Listing_Compute
             $fiche->set_number($p_id);
             $p_id++;
             $fiche->generate_document();
+        }
+    }
+    function create_pdf()
+    {
+        global $cn;
+        $ofiche=new RAPAV_Listing_Compute_Fiche();
+        $r_fiche=$ofiche->seek (" where lc_id = $1",array($this->data->lc_id));
+        $nb_fiche=Database::num_row($r_fiche);
+        if (isNumber($p_id)==0) {$p_id=0;}
+        /* For each card */
+        for ($i = 0;$i < $nb_fiche;$i++)
+        {
+            $fiche=$ofiche->next($r_fiche,$i);
+            $file=$fiche->create_pdf();
         }
     }
     /**

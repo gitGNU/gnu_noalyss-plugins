@@ -10,6 +10,10 @@
 require_once ('class_database.php');
 
 global $cn,$rapav_version,$errcode;
+/** -- pour utiliser unoconv démarrer un server libreoffice 
+ * libreoffice --headless --accept="socket,host=127.0.0.1,port=2002;urp;" --nofirststartwizard */
+define ('OFFICE','unoconv ');
+define ('GENERATE_PDF','NO');
 $cn=new Database (dossier::id());
 $rapav_version=4;
 ?>

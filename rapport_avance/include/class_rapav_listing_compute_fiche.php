@@ -444,5 +444,28 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         $this->update();
         $cn->commit();
     }
+    function create_pdf()
+    {
+        global $cn;
+        if (GENERATE_PDF == 'NO') return;
+        $cn->start();
+        if ( $this->lf_filename=="")return;
+        
+        $file=$_ENV['TMP']."/".$this->lf_filename;
+        
+        $cn->lo_export($this->lf_lob,$file);
+        
+        // remove extension
+        $ext=  strrpos($this->lf_filename,".");
+        $dst_file=  substr($this->lf_filename, 0, $ext);
+        $dst_file.=".pdf";
+        passthru(OFFICE.$file,$status);
+        // reload it into database
+        $this->lf_pdf=$cn->lo_import($_ENV['TMP']."/".$dst_file);
+        $this->lf_pdf_filename=$dst_file;
+        $this->update();
+        $cn->commit();
+        
+    }
 
 }

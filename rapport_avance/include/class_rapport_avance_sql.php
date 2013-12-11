@@ -484,6 +484,8 @@ class RAPAV_Listing_Compute_Fiche_SQL extends Phpcompta_SQL
     var $lf_filename;
     var $lf_mimetype;
     var $lc_id;
+    var $lf_pdf;
+    var $lf_pdf_filename;
 
     /* example private $variable=array("easy_name"=>column_name,"email"=>"column_name_email","val3"=>0); */
 
@@ -501,15 +503,19 @@ class RAPAV_Listing_Compute_Fiche_SQL extends Phpcompta_SQL
             , "lf_lob" => "lf_lob"
             , "lf_filename" => "lf_filename"
             , "lf_mimetype" => "lf_mimetype"
+            , "lf_pdf" => "lf_pdf"
+            , "lf_pdf_filename" => "lf_pdf_filename"
         );
 
         $this->type = array(
             "lf_id" => "numeric",
             "lc_id" => "numeric",
             "f_id" => "numeric"
-            , "lf_lob" => "set_me"
+            , "lf_lob" => "oid"
             , "lf_filename" => "text"
             , "lf_mimetype" => "text"
+            , "lf_pdf" => "oid"
+            , "lf_pdf_filename" => "text"
         );
 
         $this->default = array(
