@@ -85,6 +85,15 @@ if (isset($_GET['compute']))
     }
 }
 /**
+ * Generate all the document
+ */
+if ( isset($_GET['generate_document']) )
+{
+    $listing=new RAPAV_Listing_Compute();
+    $listing->load($_GET['lc_id']);
+    $listing->generate();
+}
+/**
  * Save listing now you can export them to csv and generate file if any
  */
 if ( isset($_POST['save_listing']))
@@ -97,10 +106,15 @@ if ( isset($_POST['save_listing']))
         $listing->save_selected($_POST['selected_card']);
     }
     
-    if ($listing->has_template() == true) {
-        $listing->generate_doc();
-    }
+   
     $listing->display(false);
+    /**
+     * Propose generate and export CSV
+     */
+    $listing->propose_CSV();
+    if ($listing->has_template() == true) {
+        $listing->propose_generate();
+    }
     exit();
 }
 /*

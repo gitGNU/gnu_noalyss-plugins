@@ -99,13 +99,14 @@ class RAPAV
      */
     static function get_sql_date($p_date,$p_prefix="")
     {
+        if ($p_prefix != "") {$p_prefix=$p_prefix.".";}
         switch ($p_date)
         {
             case 0:
-                $sql_date = "and ($p_prefix.j_date >= to_date($2,'DD.MM.YYYY') and jrn1.j_date <= to_date($3,'DD.MM.YYYY'))";
+                $sql_date = "and (".$p_prefix."j_date >= to_date($2,'DD.MM.YYYY') and ".$p_prefix."j_date <= to_date($3,'DD.MM.YYYY'))";
                 break;
             case 1:
-                $sql_date = " and $p_prefix.j_id in 
+                $sql_date = " and ".$p_prefix."j_id in 
                 (select j_id from jrnx join jrn on (j_grpt = jr_grpt_id)
                     where
                     coalesce(jr_date_paid,to_date('01.01.1900','DD.MM.YYYY')) >= to_date($2,'DD.MM.YYYY')
@@ -114,7 +115,7 @@ class RAPAV
                     ";
                 break;
             case 2:
-                $sql_date = " and $p_prefix.j_id in 
+                $sql_date = " and ".$p_prefix."j_id in 
                 (select j_id from jrnx join jrn on (j_grpt = jr_grpt_id)
                     where
                     coalesce(jr_ech,to_date('01.01.1900','DD.MM.YYYY')) >= to_date($2,'DD.MM.YYYY')

@@ -14,7 +14,7 @@
 require_once 'class_rapav_listing.php';
 require_once 'class_rapav_listing_formula.php';
 require_once 'class_rapport_avance_sql.php';
-
+require_once 'class_rapav_listing_compute_fiche.php';
 class RAPAV_Listing_Compute
 {
 
@@ -22,6 +22,7 @@ class RAPAV_Listing_Compute
      * < Data point to listing_compute
      */
     var $data;
+    var $listing;
 
     /**
      * Type of operation
@@ -34,11 +35,18 @@ class RAPAV_Listing_Compute
     function __construct()
     {
         $this->data = new RAPAV_Listing_Compute_SQL();
+        $this->listing=new RAPAV_Listing();
     }
     function load($p_id)
     {
         $this->data->lc_id=$p_id;
         $this->data->load();
+        $this->load_listing($this->data->l_id);
+    }
+    private function load_listing($p_id)
+    {
+        $this->listing->data->l_id=$p_id;
+        $this->listing->data->load();
     }
     /**
      * Compute all the values and save them in the table rapav_listing_compute
@@ -55,8 +63,9 @@ class RAPAV_Listing_Compute
             $this->data->l_start = $p_date_start;
             $this->data->l_end = $p_date_end;
             $this->data->l_keep = 'N';
-            $this->data->l_id = $rapav_listing->Data->l_id;
+            $this->data->l_id = $rapav_listing->data->l_id;
             $this->data->insert();
+            $this->listing=clone $rapav_listing;
 
             // retrieve all the code from $rapav_listing
             $rapav_listing->load_detail();
@@ -68,7 +77,7 @@ class RAPAV_Listing_Compute
             // ------------------------------------------------------
             // For each card
             $fiche_def = new Fiche_Def($cn);
-            $fiche_def->id = $rapav_listing->Data->getp('fiche_def_id');
+            $fiche_def->id = $rapav_listing->data->getp('fiche_def_id');
             $a_fiche = $fiche_def->get_by_type();
             $nb_fiche = count($a_fiche);
             for ($e = 0; $e < $nb_fiche; $e++)
@@ -214,7 +223,14 @@ class RAPAV_Listing_Compute
      */
     function has_template()
     {
-        return false;
+        if ($this->listing->data->l_filename != "") 
+            {
+                return true;
+            }
+            else 
+            {
+                return false;
+            }
     }
     /**
      * Save the card selected, they are in an array with the idx selected_fiche
@@ -228,6 +244,47 @@ class RAPAV_Listing_Compute
         $to_keep=implode(',',$p_array);
         $to_keep=sql_string($to_keep);
         $cn->exec_sql(" delete from rapport_advanced.listing_compute_fiche
-            where lf_id not in ($to_keep)");
+            where lf_id not in ($to_keep) and lc_id=$1",array($this->data->lc_id));
     }
+    function generate()
+    {
+        global $cn;
+        $ofiche=new RAPAV_Listing_Compute_Fiche();
+        $r_fiche=$ofiche->seek (" where lc_id = $1",array($this->data->lc_id));
+        $nb_fiche=Database::num_row($r_fiche);
+
+        /* For each card */
+        for ($i = 0;$i < $nb_fiche;$i++)
+        {
+            $fiche=$ofiche->next($r_fiche,$i);
+            $fiche->set_listing_compute($this);
+            $fiche->generate_document();
+        }
+    }
+    /**
+     * @brief display a form to generate CSV
+     */
+    function propose_CSV()
+    {
+        echo '<form method="GET" action="extension.raw.php" class="noprint" style="display:inline">';
+        echo HtmlInput::array_to_hidden(array('ac','gDossier','plugin_code','sa'), $_REQUEST);
+        echo HtmlInput::hidden('lc_id',$this->data->lc_id);
+        echo HtmlInput::hidden('act','export_listing_csv');
+        echo HtmlInput::submit("export_listing", "Export CSV");
+        echo '</form>';
+    }
+    /**
+     * @brief display a form to generate document
+     */
+
+    function propose_generate()
+    {
+        echo '<form method="GET" action="do.php" class="noprint" style="display:inline">';
+        echo HtmlInput::array_to_hidden(array('ac','gDossier','plugin_code','sa'), $_REQUEST);
+        echo HtmlInput::hidden('lc_id',$this->data->lc_id);
+        echo HtmlInput::submit("generate_document", "Génération des documents");
+        echo '</form>';
+        
+    }
+   
 }

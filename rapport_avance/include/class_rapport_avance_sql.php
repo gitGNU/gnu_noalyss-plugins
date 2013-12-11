@@ -293,7 +293,15 @@ class RAPAV_Declaration_Row_Detail_SQL extends Phpcompta_SQL
 
 class RAPAV_Listing_SQL extends Phpcompta_SQL
 {
-
+    var $l_id;
+    var $l_description;
+    var $l_name;
+    var $l_lob;
+    var $l_filename;
+    var $l_mimetype;
+    var $l_size;
+    var $fd_id;
+    
     function __construct($p_id = -1)
     {
         $this->table = "rapport_advanced.listing";
@@ -418,8 +426,6 @@ class RAPAV_Listing_Compute_SQL extends Phpcompta_SQL
 
     function __construct($p_id = -1)
     {
-
-
         $this->table = "rapport_advanced.listing_compute";
         $this->primary_key = "lc_id";
 

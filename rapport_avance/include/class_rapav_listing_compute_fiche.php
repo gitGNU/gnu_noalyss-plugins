@@ -14,7 +14,11 @@
 class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
 {
 
-    private function get_file_to_parse(RAPAV_Listing_Compute &$listing_compute)
+    function set_listing_compute(RAPAV_Listing_Compute &$listing_compute)
+    {
+        $this->listing_compute=$listing_compute;
+    }
+    private function get_file_to_parse()
     {
         global $cn;
         // create a temp directory in /tmp to unpack file and to parse it
@@ -28,8 +32,8 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         $cn->start();
 
 
-        $filename = $listing->Data->l_filename;
-        $exp = $cn->lo_export($listing_compute->listing->Data->l_lob, $dirname . DIRECTORY_SEPARATOR . $filename);
+        $filename = $this->listing_compute->listing->data->l_filename;
+        $exp = $cn->lo_export($this->listing_compute->listing->data->l_lob, $dirname . DIRECTORY_SEPARATOR . $filename);
 
         if ($exp === false)
             echo_warning(__FILE__ . ":" . __LINE__ . "Export NOK $filename");
@@ -37,7 +41,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         $type = "n";
         // if the doc is a OOo, we need to unzip it first
         // and the name of the file to change is always content.xml
-        if (strpos($listing_compute->listing->Data->l_mimetype, 'vnd.oasis') != 0)
+        if (strpos($this->listing_compute->listing->data->l_mimetype, 'vnd.oasis') != 0)
         {
             ob_start();
             $zip = new Zip_Extended;
@@ -62,14 +66,14 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         return array($file_to_parse, $dirname, $type);
     }
 
-    private function generate_document(RAPAV_Listing_Compute &$listing_compute)
+    function generate_document()
     {
         global $cn;
 
-        if ($listing_compute->listing->Data->l_filename == "")
+        if ($this->listing_compute->listing->data->l_filename == "")
             return;
 
-        list($file_to_parse, $dirname, $type) = $this->get_file_to_parse($listing_compute);
+        list($file_to_parse, $dirname, $type) = $this->get_file_to_parse();
 
         // parse the document
         $this->parse_document($dirname, $file_to_parse, $type);
@@ -82,7 +86,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         {
             ob_start();
             $zip = new Zip_Extended;
-            $res = $zip->open($listing_compute->listing->Data->l_filename, ZipArchive::CREATE);
+            $res = $zip->open($this->listing_compute->listing->data->l_filename, ZipArchive::CREATE);
             if ($res !== TRUE)
             {
                 echo __FILE__ . ":" . __LINE__ . "cannot recreate zip";
@@ -93,7 +97,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
 
             ob_end_clean();
 
-            $file_to_save = $listing_compute->listing->Data->l_filename;
+            $file_to_save = $this->listing_compute->listing->data->l_filename;
         } else
         {
             $file_to_save = $file_to_parse;
@@ -109,7 +113,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         if ($p_type == "OOo")
         {
             $array = $cn->get_array("select '&lt;&lt;'||lc_code||'&gt;&gt;' as code,
-                    coalesce(ld_value_numeric,ld_value_text,ld_value_date) as value,
+                    ld_value_numeric,ld_value_text,ld_value_date,
                     case 
                         when ld_value_numeric is not null then 1 
                         when ld_value_text is not null then 2
@@ -121,7 +125,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         } else
         {
             $array = $cn->get_array("select '<<'||lc_code||'>>' as code,
-                    coalesce(ld_value_numeric,ld_value_text,ld_value_date) as value  
+                   ld_value_numeric,ld_value_text,ld_value_date, 
                     case 
                         when ld_value_numeric is not null then 1 
                         when ld_value_text is not null then 2
@@ -156,13 +160,28 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
             // for each code replace in p_filename the code surrounded by << >> by the amount (value) or &lt; or &gt;
             foreach ($array as $key => $value)
             {
-                if ($value['type']==1)
+                switch ($value['type'])
                 {
-                    $searched = 'office:value-type="string"><text:p>' . $value['code'];
-                    $replaced = 'office:value-type="float" office:value="' . $value['value'] . '"><text:p>' . $value['code'];
-                    $buffer = str_replace($searched, $replaced, $buffer);
+                    case 1:
+                        if ($p_type=='OOo')
+                        {
+                            $searched = 'office:value-type="string"><text:p>' . $value['code'];
+                            $replaced = 'office:value-type="float" office:value="' . $value['ld_value_numeric'] . '"><text:p>' . $value['code'];
+                            $buffer = str_replace($searched, $replaced, $buffer);
+                        }
+                    // everybody
+                        $buffer = str_replace($value['code'], $value['ld_value_numeric'], $buffer);
+                    break;
+                    case 2:
+                         $buffer = str_replace($value['code'], $value['ld_value_text'], $buffer);
+                        break;
+                    case 3:
+                         $buffer = str_replace($value['code'], $value['ld_value_date'], $buffer);
+                        break;
+                    default:
+                        throw new Exception(__FILE__.':'.__LINE__.' type inconnu');
+                        break;
                 }
-                $buffer = str_replace($value['code'], $value['value'], $buffer);
             }
             // write to output
             fwrite($ofile, $buffer);
@@ -179,12 +198,12 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         unlink($oname);
     }
 
-    private function special_tag($p_dir, $p_filename, $p_type,RAPAV_Listing_Compute &$listing_compute)
+    private function special_tag($p_dir, $p_filename, $p_type)
     {
         global $cn, $g_parameter;
         // Retrieve all the code + libelle
-        $array[] = array('code' => 'PERIODE_DECLARATION', 'value' => format_date($listing_compute->Data->l_start) . " - " . format_date($listing_compute->Data->l_end));
-        $array[] = array('code' => 'TITRE', 'value' => $listing_compute->listing->Data->l_name);
+        $array[] = array('code' => 'PERIODE_DECLARATION', 'value' => format_date($this->listing_compute->data->l_start) . " - " . format_date($this->listing_compute->data->l_end));
+        $array[] = array('code' => 'TITRE', 'value' => $this->listing_compute->listing->data->l_name);
         $array[] = array('code' => 'DOSSIER', 'value' => $cn->format_name($_REQUEST['gDossier'], 'dos'));
         $array[] = array('code' => 'NAME', 'value' => $g_parameter->MY_NAME);
         $array[] = array('code' => 'STREET', 'value' => $g_parameter->MY_STREET);
@@ -194,7 +213,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         $array[] = array('code' => 'PHONE', 'value' => $g_parameter->MY_TEL);
         $array[] = array('code' => 'CEDEX', 'value' => $g_parameter->MY_CP);
         $array[] = array('code' => 'FAX', 'value' => $g_parameter->MY_FAX);
-        $array[] = array('code' => 'NOTE', 'value' => $listing_compute->$Data->l_description);
+        $array[] = array('code' => 'NOTE', 'value' => $this->listing_compute->data->l_description);
 
         // open the files
         $ifile = fopen($p_dir . '/' . $p_filename, 'r');
@@ -251,7 +270,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         unlink($oname);
     }
 
-    private function load_document_card($p_file)
+    private function load_document($p_file)
     {
         global $cn;
         $cn->start();
@@ -263,7 +282,8 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         }
         $this->lf_size = filesize($p_file);
         $date = date('ymd-Hi');
-        $this->lf_filename = $date . '-' . $this->d_filename;
+        $this->lf_filename = $date . '-' . $this->listing_compute->listing->data->l_filename;
+        $this->lf_mimetype= $this->listing_compute->listing->data->l_mimetype;
         $this->update();
         $cn->commit();
     }

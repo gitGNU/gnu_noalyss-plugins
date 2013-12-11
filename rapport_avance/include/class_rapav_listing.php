@@ -17,14 +17,14 @@ require_once 'class_rapav_listing_param.php';
 class Rapav_Listing
 {
 
-    public $Data; /* !< RAPAV_Listing_SQL */
+    public $data; /* !< RAPAV_Listing_SQL */
     public $a_detail; /* !< array of RAPAV_Listing_Param corresponding to the listing */
 
    
 
     function __construct($p_id = -1)
     {
-        $this->Data = new RAPAV_Listing_SQL($p_id);
+        $this->data = new RAPAV_Listing_SQL($p_id);
         $this->a_detail = array();
     }
 
@@ -33,7 +33,7 @@ class Rapav_Listing
      */
     function to_list()
     {
-        $res = $this->Data->seek('join fiche_def using (fd_id) order by l_name');
+        $res = $this->data->seek('join fiche_def using (fd_id) order by l_name');
         require 'template/rapav_listing_to_list.php';
     }
 
@@ -70,15 +70,15 @@ class Rapav_Listing
         /*
          * if $this->l_id <> -1 then modification otherwise add
          */
-        if ($this->Data->l_id <> -1)
+        if ($this->data->l_id <> -1)
         {
-            $name->value = $this->Data->l_name;
-            $description->value = $this->Data->l_description;
-            $fichedef->selected = $this->Data->fd_id;
+            $name->value = $this->data->l_name;
+            $description->value = $this->data->l_description;
+            $fichedef->selected = $this->data->fd_id;
             $ck = new ICheckBox('remove');
             $str_remove = " Cochez pour effacer " . $ck->input();
             // If there is a file
-            if ($this->Data->l_filename != "")
+            if ($this->data->l_filename != "")
             {
                 $file = new ISpan('listing_mod_id');
                 // Add js for removing 
@@ -86,11 +86,11 @@ class Rapav_Listing
                     'gDossier' => Dossier::id(),
                     'ac' => $_REQUEST['ac'],
                     'pc' => $_REQUEST['plugin_code'],
-                    'id' => $this->Data->l_id,
+                    'id' => $this->data->l_id,
                     'cin' => '',
                     'cout' => 'listing_mod_id');
                 $json = 'listing_remove_modele(' . str_replace('"', "'", json_encode($arg)) . ')';
-                $file->value = $this->Data->l_filename . HtmlInput::anchor(' <span style="background-color:red">X </span>', "", ' onclick="' . $json . '"');
+                $file->value = $this->data->l_filename . HtmlInput::anchor(' <span style="background-color:red">X </span>', "", ' onclick="' . $json . '"');
             }
         }
         require 'template/rapav_listing_form_modify.php';
@@ -114,10 +114,10 @@ class Rapav_Listing
                 throw new Exception('Le nom ne peut pas être vide');
             }
 
-            $this->Data->setp('name', $p_array['name']);
-            $this->Data->setp('description', $p_array['description']);
-            $this->Data->setp('fiche_def_id', $p_array['fiche_def']);
-            $this->Data->save();
+            $this->data->setp('name', $p_array['name']);
+            $this->data->setp('description', $p_array['description']);
+            $this->data->setp('fiche_def_id', $p_array['fiche_def']);
+            $this->data->save();
             $this->load_file();
             $cn->commit();
         } catch (Exception $ex)
@@ -156,13 +156,13 @@ class Rapav_Listing
                     }
                 }
                 // the upload in the database is successfull
-                $this->Data->l_lob = $oid;
-                $this->Data->l_filename = $_FILES['listing_mod']['name'];
-                $this->Data->l_mimetype = $_FILES['listing_mod']['type'];
-                $this->Data->l_size = $_FILES['listing_mod']['size'];
+                $this->data->l_lob = $oid;
+                $this->data->l_filename = $_FILES['listing_mod']['name'];
+                $this->data->l_mimetype = $_FILES['listing_mod']['type'];
+                $this->data->l_size = $_FILES['listing_mod']['size'];
 
                 // update rapav
-                $this->Data->update();
+                $this->data->update();
             }
         } catch (Exception $ex)
         {
@@ -179,17 +179,17 @@ class Rapav_Listing
     function remove_modele()
     {
         global $cn;
-        if ($this->Data->l_lob == null)
+        if ($this->data->l_lob == null)
             return;
         try
         {
             $cn->start();
-            $this->Data->cn->lo_unlink($this->Data->l_lob);
-            $this->Data->l_filename = null;
-            $this->Data->l_lob = null;
-            $this->Data->l_size = null;
-            $this->Data->l_mimetype = null;
-            $this->Data->update();
+            $this->data->cn->lo_unlink($this->data->l_lob);
+            $this->data->l_filename = null;
+            $this->data->l_lob = null;
+            $this->data->l_size = null;
+            $this->data->l_mimetype = null;
+            $this->data->update();
             $cn->commit();
         } catch (Exception $e)
         {
@@ -207,7 +207,7 @@ class Rapav_Listing
         try
         {
             $this->remove_modele();
-            $this->Data->delete();
+            $this->data->delete();
         } catch (Exception $e)
         {
             $cn->rollback;
@@ -231,7 +231,7 @@ class Rapav_Listing
             'gDossier' => Dossier::id(),
             'ac' => $_REQUEST['ac'],
             'pc' => $_REQUEST['plugin_code'],
-            'id' => $this->Data->l_id,
+            'id' => $this->data->l_id,
             'cin' => 'listing_tb_id',
             'cout' => 'listing_mod_div');
         $json = 'listing_modify(' . str_replace('"', "'", json_encode($arg)) . ')';
@@ -248,9 +248,9 @@ class Rapav_Listing
      */
     function load_detail()
     {
-        if ($this->Data->getp('id') == -1)
+        if ($this->data->getp('id') == -1)
             throw new Exception("Undefined objet " . __FILE__ . ':' . __LINE__);
-        $this->a_detail = RAPAV_Listing_Param::get_listing_detail($this->Data->getp('id'));
+        $this->a_detail = RAPAV_Listing_Param::get_listing_detail($this->data->getp('id'));
     }
 
     /**
@@ -262,7 +262,7 @@ class Rapav_Listing
         $arg = json_encode(array(
             'cin' => 'listing_param_input_div_id',
             'gDossier' => Dossier::id(),
-            'id' => $this->Data->getp('id'),
+            'id' => $this->data->getp('id'),
             'tb_id' => 'definition_tb_id',
             'ac' => $_REQUEST['ac'],
             'pc' => $_REQUEST['plugin_code'])
@@ -276,7 +276,7 @@ class Rapav_Listing
     {
         $param = new RAPAV_Listing_Param();
         $param->Param->l_id=$l_id;
-        $param->input($this->Data->getp("id"));
+        $param->input($this->data->getp("id"));
     }
 
     /**
@@ -287,9 +287,9 @@ class Rapav_Listing
     function get_categorie_name()
     {
         global $cn;
-        if ($this->Data->getp('id') == 0)
+        if ($this->data->getp('id') == 0)
             return;
-        $cat = $cn->get_value('select fd_label from fiche_def where fd_id=$1', array($this->Data->getp('fiche_def_id')));
+        $cat = $cn->get_value('select fd_label from fiche_def where fd_id=$1', array($this->data->getp('fiche_def_id')));
         return $cat;
     }
 
@@ -301,9 +301,9 @@ class Rapav_Listing
     function get_categorie_description()
     {
         global $cn;
-        if ($this->Data->getp('id') == 0)
+        if ($this->data->getp('id') == 0)
             return;
-        $cat = $cn->get_value('select fd_description from fiche_def where fd_id=$1', array($this->Data->getp('fiche_def_id')));
+        $cat = $cn->get_value('select fd_description from fiche_def where fd_id=$1', array($this->data->getp('fiche_def_id')));
         return $cat;
     }
 
