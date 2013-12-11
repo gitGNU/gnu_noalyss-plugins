@@ -147,7 +147,8 @@ class RAPAV_Listing_Compute
     }
     /**
      * Display the result of the computing, no card are deleted for the moment
-     * @param $with true display the checkbox, false don't
+     * @param $with_sel true display the checkbox, false don't
+     * @param $form_name Name of the form (to compute it id)
      * @global type $cn
      */
     function display($with_sel,$form_name="")
@@ -185,6 +186,7 @@ class RAPAV_Listing_Compute
                     $detail=$odetail->next($r_detail,$e);
                     echo th( $detail->lc_code);
                 }
+                echo th("");
                 echo '</tr>';
             }
             /** for each detail */
@@ -201,6 +203,16 @@ class RAPAV_Listing_Compute
                 echo (($detail->ld_value_numeric !== null)?td(nbm($detail->ld_value_numeric),'class="num"'):"");
                 echo (($detail->ld_value_text !== null)?td($detail->ld_value_text):"");
                 echo (($detail->ld_value_date!== null)?td($detail->ld_value_date):"");
+            }
+            if ( $fiche->lf_filename != "")
+            {
+                $arg=array("gDossier"=>$_REQUEST['gDossier'],
+                    "plugin_code"=>$_REQUEST['plugin_code'],
+                    "ac"=>$_REQUEST['ac'],
+                    'act'=>'show_file',
+                    'lf_id'=>$fiche->lf_id);
+                $href=  "extension.raw.php?".http_build_query($arg);
+                echo td('<a href="'.$href.'">'.$fiche->lf_filename);
             }
             echo '</tr>';
         }

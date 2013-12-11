@@ -6,10 +6,10 @@
  */
 ?>
 <p>
-    Nom listing <?php echo h($this->Data->getp('name')); ?>
+    Nom listing <?php echo h($this->data->getp('name')); ?>
 </p>
 <p>
-    Description <?php echo h($this->Data->getp('description')); ?>
+    Description <?php echo h($this->data->getp('description')); ?>
 </p>
 <p>
     Catégorie <?php echo h($this->get_categorie_name()); ?>

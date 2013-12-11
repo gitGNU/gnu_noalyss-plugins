@@ -92,6 +92,8 @@ if ( isset($_GET['generate_document']) )
     $listing=new RAPAV_Listing_Compute();
     $listing->load($_GET['lc_id']);
     $listing->generate();
+    $listing->display(false);
+    exit();
 }
 /**
  * Save listing now you can export them to csv and generate file if any

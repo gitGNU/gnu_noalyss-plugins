@@ -26,6 +26,8 @@
  */
 require_once 'include/class_formulaire_param.php';
 require_once 'include/class_rapav_declaration.php';
+require_once 'include/class_rapav_listing_compute_fiche.php';
+
 extract($_REQUEST);
 if ($act == 'rapav_form_export')
 {
@@ -136,5 +138,52 @@ if ($act == 'export_listing_csv')
      * to finish
      */
     echo 'export-listing-csv';
+}
+/**
+ * Show generated file
+ */
+if ($act=="show_file")
+{
+        $decl = new RAPAV_Listing_Compute_Fiche();
+	$decl->lf_id = $lf_id;
+	$decl->load();
+
+	$cn->start();
+	if ($decl->lf_filename == "")
+	{
+		ini_set('zlib.output_compression', 'Off');
+		header("Pragma: public");
+		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+		header("Cache-Control: must-revalidate");
+		header('Content-type: ' . 'text/plain');
+		header('Content-Disposition: attachment;filename=vide.txt', FALSE);
+		header("Accept-Ranges: bytes");
+		echo "******************";
+		echo _("Fichier effacé");
+		echo "******************";
+		exit();
+	}
+	$tmp = tempnam($_ENV['TMP'], 'document_');
+
+	$cn->lo_export($decl->lf_lob, $tmp);
+
+	ini_set('zlib.output_compression', 'Off');
+	header("Pragma: public");
+	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+	header("Cache-Control: must-revalidate");
+	header('Content-type: ' . $decl->lf_mimetype);
+	header('Content-Disposition: attachment;filename="' . $decl->lf_filename . '"', FALSE);
+	header("Accept-Ranges: bytes");
+	$file = fopen($tmp, 'r');
+	while (!feof($file))
+		echo fread($file, 8192);
+
+	fclose($file);
+
+	unlink($tmp);
+
+	$cn->commit();
 }
 ?>
