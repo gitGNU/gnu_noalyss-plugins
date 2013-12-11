@@ -298,5 +298,54 @@ class RAPAV_Listing_Compute
         echo '</form>';
         
     }
-   
+    /**
+     * @brief export to CSV
+     */
+    function to_csv()
+    {
+        $title = mb_strtolower($this->listing->data->l_name, 'UTF-8');
+        $title = str_replace(array('/', '*', '<', '>', '*', '.', '+', ':', '?', '!', " ", ";"), "_", $title);
+
+        $out = fopen("php://output", "w");
+        header('Pragma: public');
+        header('Content-type: application/csv');
+        header('Content-Disposition: attachment;filename="' . $title . '.csv"', FALSE);
+        $ofiche=new RAPAV_Listing_Compute_Fiche_SQL();
+        $r_fiche=$ofiche->seek (" where lc_id = $1",array($this->data->lc_id));
+        $nb_fiche=Database::num_row($r_fiche);
+
+        /* For each card */
+        for ($i = 0;$i < $nb_fiche;$i++)
+        {
+            $fiche=$ofiche->next($r_fiche,$i);
+            
+            $odetail=new RAPAV_Listing_Compute_Detail_SQL();
+            $r_detail=$odetail->seek(" where lf_id=$1 order by lc_order",array($fiche->lf_id));
+            $nb_detail=Database::num_row($r_detail);
+            // table header
+            if ($nb_detail > 0 && $i == 0)
+            {
+                $col=array();
+                for ($e=0;$e<$nb_detail;$e++)
+                {
+                    $detail=$odetail->next($r_detail,$e);
+                    $col[]=$detail->lc_code;
+                }
+                fputcsv($out, $col, ";", '"');
+            }
+            /** for each detail */
+            $det_csv=array();
+            for ($e=0;$e <$nb_detail;$e++)
+            {
+                $detail=$odetail->next($r_detail,$e);
+                $value= (($detail->ld_value_numeric !== null)?nb($detail->ld_value_numeric):"");
+                $value.=(($detail->ld_value_text !== null)?$detail->ld_value_text:"");
+                $value.=(($detail->ld_value_date!== null)?$detail->ld_value_date:"");
+                $det_csv[]=$value;
+            }
+            fputcsv($out, $det_csv, ';', '"');
+        }
+        
+    }
+
 }

@@ -27,6 +27,7 @@
 require_once 'include/class_formulaire_param.php';
 require_once 'include/class_rapav_declaration.php';
 require_once 'include/class_rapav_listing_compute_fiche.php';
+require_once 'include/class_rapav_listing_compute.php';
 
 extract($_REQUEST);
 if ($act == 'rapav_form_export')
@@ -133,11 +134,10 @@ if ($act == 'export_definition_modele')
 }
 if ($act == 'export_listing_csv')
 {
-    /**
-     * @todo
-     * to finish
-     */
-    echo 'export-listing-csv';
+   $decl = new RAPAV_Listing_Compute();
+   $decl->load($lc_id);
+   $decl->to_csv();
+   exit();
 }
 /**
  * Show generated file
