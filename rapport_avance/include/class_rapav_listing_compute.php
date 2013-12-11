@@ -258,18 +258,20 @@ class RAPAV_Listing_Compute
         $cn->exec_sql(" delete from rapport_advanced.listing_compute_fiche
             where lf_id not in ($to_keep) and lc_id=$1",array($this->data->lc_id));
     }
-    function generate()
+    function generate($p_id)
     {
         global $cn;
         $ofiche=new RAPAV_Listing_Compute_Fiche();
         $r_fiche=$ofiche->seek (" where lc_id = $1",array($this->data->lc_id));
         $nb_fiche=Database::num_row($r_fiche);
-
+        if (isNumber($p_id)==0) {$p_id=0;}
         /* For each card */
         for ($i = 0;$i < $nb_fiche;$i++)
         {
             $fiche=$ofiche->next($r_fiche,$i);
             $fiche->set_listing_compute($this);
+            $fiche->set_number($p_id);
+            $p_id++;
             $fiche->generate_document();
         }
     }
@@ -292,6 +294,8 @@ class RAPAV_Listing_Compute
     function propose_generate()
     {
         echo '<form method="GET" action="do.php" class="noprint" style="display:inline">';
+        $num=new IText('numerotation');
+        echo "Numéro de document ".$num->input();
         echo HtmlInput::array_to_hidden(array('ac','gDossier','plugin_code','sa'), $_REQUEST);
         echo HtmlInput::hidden('lc_id',$this->data->lc_id);
         echo HtmlInput::submit("generate_document", "Génération des documents");

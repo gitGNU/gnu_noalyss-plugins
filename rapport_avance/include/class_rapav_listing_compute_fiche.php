@@ -13,7 +13,13 @@
  */
 class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
 {
-
+    var $listing_compute;
+    var $number;
+    
+    function set_number($p_id)
+    {
+        $this->number=$p_id;
+    }
     function set_listing_compute(RAPAV_Listing_Compute &$listing_compute)
     {
         $this->listing_compute=$listing_compute;
@@ -214,6 +220,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         $array[] = array('code' => 'CEDEX', 'value' => $g_parameter->MY_CP);
         $array[] = array('code' => 'FAX', 'value' => $g_parameter->MY_FAX);
         $array[] = array('code' => 'NOTE', 'value' => $this->listing_compute->data->l_description);
+        $array[] = array('code' => 'NUM_PIECE', 'value' => $this->number);
 
         // open the files
         $ifile = fopen($p_dir . '/' . $p_filename, 'r');

@@ -91,7 +91,7 @@ if ( isset($_GET['generate_document']) )
 {
     $listing=new RAPAV_Listing_Compute();
     $listing->load($_GET['lc_id']);
-    $listing->generate();
+    $listing->generate($_GET['numerotation']);
     $listing->display(false);
     exit();
 }
