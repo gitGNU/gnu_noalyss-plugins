@@ -313,7 +313,7 @@ class RAPAV_Listing_Compute
         echo HtmlInput::array_to_hidden(array('ac','gDossier','plugin_code','sa'), $_REQUEST);
         echo HtmlInput::hidden('lc_id',$this->data->lc_id);
         echo HtmlInput::hidden('act','export_listing_csv');
-        echo HtmlInput::submit("export_listing", "Export CSV");
+        echo HtmlInput::submit("export_listing", "Export CSV","","smallbutton");
         echo '</form>';
     }
     /**
@@ -327,7 +327,7 @@ class RAPAV_Listing_Compute
         echo "Numéro de document ".$num->input();
         echo HtmlInput::array_to_hidden(array('ac','gDossier','plugin_code','sa'), $_REQUEST);
         echo HtmlInput::hidden('lc_id',$this->data->lc_id);
-        echo HtmlInput::submit("generate_document", "Génération des documents");
+        echo HtmlInput::submit("generate_document", "Génération des documents","","smallbutton");
         echo '</form>';
         
     }
@@ -379,6 +379,39 @@ class RAPAV_Listing_Compute
             fputcsv($out, $det_csv, ';', '"');
         }
         
+    }
+    function propose_send_mail()
+    {
+        
+        echo '<form method="GET" action="extension.raw.php" class="noprint" style="display:inline">';
+        echo HtmlInput::array_to_hidden(array('ac','gDossier','plugin_code','sa'), $_REQUEST);
+        echo HtmlInput::hidden('lc_id',$this->data->lc_id);
+        echo HtmlInput::hidden('act','export_send_mail');
+        echo HtmlInput::submit("export_send_mail", "Envoi par email","","smallbutton");
+        echo '</form>';
+        return 0;
+    }
+    function propose_include_follow()
+    {
+        
+        echo '<form method="GET" action="extension.raw.php" class="noprint" style="display:inline">';
+        echo HtmlInput::array_to_hidden(array('ac','gDossier','plugin_code','sa'), $_REQUEST);
+        echo HtmlInput::hidden('lc_id',$this->data->lc_id);
+        echo HtmlInput::hidden('act','include_follow_up');
+        echo HtmlInput::submit("include_follow_up", "Inclure dans les actions","","smallbutton");
+        echo '</form>';
+        return 0;
+    }
+    function propose_download_all()
+    {
+        
+        echo '<form method="GET" action="extension.raw.php" class="noprint" style="display:inline">';
+        echo HtmlInput::array_to_hidden(array('ac','gDossier','plugin_code','sa'), $_REQUEST);
+        echo HtmlInput::hidden('lc_id',$this->data->lc_id);
+        echo HtmlInput::hidden('act','export_download_all');
+        echo HtmlInput::submit("export_download_all", "Télécharger tous les documents","","smallbutton");
+        echo '</form>';
+        return 0;
     }
 
 }

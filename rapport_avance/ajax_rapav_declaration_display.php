@@ -27,7 +27,7 @@
  */
 require_once 'include/class_rapav_declaration.php';
 global $cn;
-echo HtmlInput::button_action("Retour","$('declaration_list_div').show(); $('declaration_display_div').hide();");
+echo HtmlInput::button_action("Retour","$('declaration_list_div').show(); $('declaration_display_div').hide();",'rt'.$_GET['d_id'],'smallbutton');
 $decl = new Rapav_Declaration();
 $decl->d_id = $_GET['d_id'];
 $decl->load();
@@ -36,6 +36,6 @@ echo $decl->anchor_document();
 echo '<hr>';
 $ref=HtmlInput::array_to_string(array('gDossier','plugin_code','d_id'),$_GET,'extension.raw.php?');
 $ref.="&amp;act=export_decla_csv";
-echo HtmlInput::button_anchor("Export CSV",$ref,'export_id');
-echo HtmlInput::button_action("Retour","$('declaration_list_div').show(); $('declaration_display_div').hide();");
+echo HtmlInput::button_anchor("Export CSV",$ref,'export_id','','smallbutton');
+echo HtmlInput::button_action("Retour","$('declaration_list_div').show(); $('declaration_display_div').hide();",'rt','smallbutton');
 ?>

@@ -58,7 +58,7 @@ if (isset($_POST['save']))
 
     $ref_csv = HtmlInput::array_to_string(array('gDossier', 'plugin_code', 'd_id'), $_REQUEST, 'extension.raw.php?');
     $ref_csv.="&amp;act=export_decla_csv";
-    echo HtmlInput::button_anchor("Export CSV", $ref_csv, 'export_id');
+    echo HtmlInput::button_anchor("Export CSV", $ref_csv, 'export_id',"",'small_button');
     if ($decl->d_filename != '' && $decl->d_step == 0)
         echo $decl->anchor_document();
     exit();
@@ -97,6 +97,9 @@ if ( isset($_GET['generate_document']) )
         $listing->create_pdf();
     
     $listing->display(false);
+    $listing->propose_send_mail();
+    $listing->propose_include_follow();
+    $listing->propose_download_all();
     exit();
 }
 /**

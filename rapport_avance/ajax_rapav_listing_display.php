@@ -6,14 +6,21 @@
 require_once 'rapav_constant.php';
 require_once 'include/class_rapav_listing_compute.php';
 global $cn;
-echo HtmlInput::button_action("Retour","$('declaration_list_div').show(); $('declaration_display_div').hide();");
-$decl = new RAPAV_Listing_Compute();
-$decl->load($_GET['d_id']);
-$decl->display(false);
-//echo $decl->anchor_document();
+echo '<div class="content">';
+echo '<p>';
+echo HtmlInput::button_action("Retour","$('declaration_list_div').show(); $('declaration_display_div').hide();",'rttop'.$_GET['d_id'],'smallbutton');
+echo '</p>';
+$listing = new RAPAV_Listing_Compute();
+$listing->load($_GET['d_id']);
+$listing->display(false);
+//echo $listing->anchor_document();
 echo '<hr>';
-$decl->propose_CSV();
-echo HtmlInput::button_action("Retour","$('declaration_list_div').show(); $('declaration_display_div').hide();");
-// require_once '.php';
+$listing->propose_CSV();
+$listing->propose_send_mail();
+$listing->propose_include_follow();
+$listing->propose_download_all();
+
+echo HtmlInput::button_action("Retour","$('declaration_list_div').show(); $('declaration_display_div').hide();",'rt'.$_GET['d_id'],'smallbutton');
+echo '</div>';
 
 ?>        
