@@ -3,6 +3,7 @@
  * @file
  * @brief display a declaration from history but you can't modify it
  */
+require_once 'rapav_constant.php';
 require_once 'include/class_rapav_listing_compute.php';
 global $cn;
 echo HtmlInput::button_action("Retour","$('declaration_list_div').show(); $('declaration_display_div').hide();");
