@@ -2,5 +2,7 @@
 -- TABLES are :
 -- 1. listing_compute
 -- 2. listing_compute_detail
+-- 2. listing_compute_fiche
+-- 2. listing_compute_historique
 -- 3. listing_condition
 -- 4. listing_compute_fiche

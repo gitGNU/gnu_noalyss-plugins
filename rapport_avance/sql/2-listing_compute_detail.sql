@@ -1,9 +1,12 @@
+\set ECHO all
+
+begin;
 ALTER TABLE rapport_advanced.listing_param ADD COLUMN lp_histo integer;
 ALTER TABLE rapport_advanced.listing_param ALTER COLUMN lp_histo SET DEFAULT 0;
 COMMENT ON COLUMN rapport_advanced.listing_param.lp_histo IS '0 : no history 1 : with history';
-﻿-- Table: rapport_advanced.listing_compute_detail
+-- Table: rapport_advanced.listing_compute_detail
 
--- DROP TABLE rapport_advanced.listing_compute_detail;
+-- DROP TABLE rapport_advanced.listing_compute_detail
 
 CREATE TABLE rapport_advanced.listing_compute_detail
 (
@@ -22,17 +25,8 @@ CREATE TABLE rapport_advanced.listing_compute_detail
   CONSTRAINT listing_compute_detail_lc_id_fkey FOREIGN KEY (lc_id)
       REFERENCES rapport_advanced.listing_compute (lc_id) MATCH SIMPLE
       ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT listing_compute_detail_lp_id_fkey FOREIGN KEY (lp_id)
-      REFERENCES rapport_advanced.listing_param (lp_id) MATCH SIMPLE
-      ON UPDATE SET NULL ON DELETE SET NULL
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE rapport_advanced.listing_compute_detail
-  OWNER TO phpcompta;
-COMMENT ON TABLE rapport_advanced.listing_compute_detail
-  IS 'Detail of computing listing_param';
+  CONSTRAINT listing_compute_detail_lp_id_fkey FOREIGN KEY (lp_id) REFERENCES rapport_advanced.listing_param (lp_id) MATCH SIMPLE ON UPDATE SET NULL ON DELETE SET NULL);
+COMMENT ON TABLE rapport_advanced.listing_compute_detail  IS 'Detail of computing listing_param';
 COMMENT ON COLUMN rapport_advanced.listing_compute_detail.ld_id IS 'PK';
 COMMENT ON COLUMN rapport_advanced.listing_compute_detail.lc_id IS 'fk to listing_compute';
 COMMENT ON COLUMN rapport_advanced.listing_compute_detail.ld_value_date IS 'Used when computed value is a date';
