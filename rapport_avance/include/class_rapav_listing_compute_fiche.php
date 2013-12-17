@@ -550,6 +550,9 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
             $result = $fiche->strAttribut(ATTR_DEF_QUICKCODE) . ' message envoyé email : ' . $fiche->strAttribut(ATTR_DEF_EMAIL);
             $this->lf_email_send_result=$result;
             $this->update();
+            /**
+             * Add parameter copie à soi-même
+             */
             return $result;
         } catch (Exception $ex)
         {
