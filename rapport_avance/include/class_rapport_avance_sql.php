@@ -486,6 +486,10 @@ class RAPAV_Listing_Compute_Fiche_SQL extends Phpcompta_SQL
     var $lc_id;
     var $lf_pdf;
     var $lf_pdf_filename;
+    var $lf_action_included;
+    var $lf_email_send_date;
+    var $lf_email_send_result;
+    
 
     /* example private $variable=array("easy_name"=>column_name,"email"=>"column_name_email","val3"=>0); */
 
@@ -505,6 +509,9 @@ class RAPAV_Listing_Compute_Fiche_SQL extends Phpcompta_SQL
             , "lf_mimetype" => "lf_mimetype"
             , "lf_pdf" => "lf_pdf"
             , "lf_pdf_filename" => "lf_pdf_filename"
+            ,'action_included'=>'lf_action_included'
+            , 'email_send_date'=>'lf_email_send_date'
+            , 'email_send_result'=>'lf_email_send_result'
         );
 
         $this->type = array(
@@ -516,6 +523,9 @@ class RAPAV_Listing_Compute_Fiche_SQL extends Phpcompta_SQL
             , "lf_mimetype" => "text"
             , "lf_pdf" => "oid"
             , "lf_pdf_filename" => "text"
+            ,'lf_action_included'=>'text'
+            , 'lf_email_send_date'=>'text'
+            , 'lf_email_send_result'=>'text'
         );
 
         $this->default = array(

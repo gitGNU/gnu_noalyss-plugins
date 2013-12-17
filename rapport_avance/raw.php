@@ -233,4 +233,5 @@ if ($act=="show_pdf")
 
 	$cn->commit();
 }
+
 ?>

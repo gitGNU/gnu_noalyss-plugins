@@ -294,6 +294,22 @@ class RAPAV_Listing_Compute
             $fiche->generate_document();
         }
     }
+    function send_mail($p_from,$p_subject,$p_message,$p_attach)
+    {
+        global $cn;
+        $ofiche=new RAPAV_Listing_Compute_Fiche();
+        $r_fiche=$ofiche->seek (" where lc_id = $1",array($this->data->lc_id));
+        $nb_fiche=Database::num_row($r_fiche);
+        if (isNumber($p_id)==0) {$p_id=0;}
+        $a_result=array();
+        /* For each card */
+        for ($i = 0;$i < $nb_fiche;$i++)
+        {
+            $fiche=$ofiche->next($r_fiche,$i);
+            $a_result[]=$fiche->send_mail($p_from,$p_subject,$p_message,$p_attach);
+        }
+        return $a_result;
+    }
     function create_pdf()
     {
         global $cn;
@@ -387,10 +403,10 @@ class RAPAV_Listing_Compute
     function propose_send_mail()
     {
         
-        echo '<form method="GET" action="extension.raw.php" class="noprint" style="display:inline">';
+        echo '<form method="GET" action="ajax.php" id="parameter_send_mail_frm" onsubmit="parameter_send_mail();return false;" class="noprint" style="display:inline">';
         echo HtmlInput::array_to_hidden(array('ac','gDossier','plugin_code','sa'), $_REQUEST);
         echo HtmlInput::hidden('lc_id',$this->data->lc_id);
-        echo HtmlInput::hidden('act','export_send_mail');
+        echo HtmlInput::hidden('act','parameter_send_mail');
         echo HtmlInput::submit("export_send_mail", "Envoi par email","","smallbutton");
         echo '</form>';
         return 0;

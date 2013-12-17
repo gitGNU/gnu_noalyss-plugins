@@ -12,6 +12,9 @@ CREATE TABLE rapport_advanced.listing_compute_fiche
   lf_pdf_filename text, -- Generated file if any
   lf_mimetype text, -- Same mimetype as in table listing
   lc_id bigint,
+  lf_action_included text,
+  lf_email_send_date timestamp,
+  lf_email_send_result text,
   CONSTRAINT listing_compute_fiche_pkey PRIMARY KEY (lf_id ),
   CONSTRAINT fk_listing_compute_lc_id FOREIGN KEY (lc_id)
       REFERENCES rapport_advanced.listing_compute (lc_id) MATCH SIMPLE

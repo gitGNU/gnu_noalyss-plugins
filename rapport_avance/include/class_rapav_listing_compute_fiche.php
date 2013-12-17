@@ -5,7 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
+require_once 'class_sendmail.php';
 /**
  * Description of class_rapav_listing_compute_fiche
  *
@@ -466,6 +466,98 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         $this->update();
         $cn->commit();
         
+    }
+    /**
+     * 
+     * @global type $cn
+     * @param type $p_from
+     * @param type $p_subject
+     * @param type $p_message
+     * @param type $p_attach
+     * @return type
+     */
+    function send_mail($p_from, $p_subject, $p_message, $p_attach)
+    {
+        global $cn;
+        $fiche = new Fiche($cn, $this->f_id);
+
+        $email = $fiche->strAttribut(ATTR_DEF_EMAIL);
+        $result = "";
+        $this->lf_email_send_date = date('Y.m.d H:i');
+
+        if ($email == "")
+        {
+            $result = $fiche->strAttribut(ATTR_DEF_QUICKCODE) . " n'a pas d'email ";
+
+            $this->lf_email_send_result = $result;
+            $this->update();
+
+            return $result;
+        }
+        $mail = new Sendmail();
+        $mail->set_from($p_from);
+        $mail->set_message($p_message);
+        $mail->set_subject($p_subject);
+        $mail->mailto($email);
+        switch ($p_attach)
+        {
+            case 0:
+                /* no attach */
+                break;
+            case 1:
+                /* -- PDF -- */
+                if ($this->lf_pdf_filename == "")
+                {
+                    $result = $fiche->strAttribut(ATTR_DEF_QUICKCODE) . " n'a pas de document en PDF";
+                    $this->lf_email_send_result = $result;
+                    $this->update();
+
+                    return $result;
+                }
+                $cn->start();
+                $file = $this->lf_pdf_filename;
+                $dir = tempnam($_ENV['TMP'], 'mail');
+                unlink($dir);
+                mkdir($dir);
+                $cn->lo_export($this->lf_pdf, $dir . '/' . $file);
+                $ofile = new FileToSend($dir . '/' . $file);
+                $mail->add_file($ofile);
+                break;
+            case 2:
+                /* -- Doc généré -- */
+                if ($this->lf_filename == "")
+                {
+                    $result = $fiche->strAttribut(ATTR_DEF_QUICKCODE) . " n'a pas de document généré";
+                    $this->lf_email_send_result = $result;
+                    $this->update();
+
+                    return $result;
+                }
+                $cn->start();
+                $file = $this->lf_filename;
+                $dir = tempnam($_ENV['TMP'], 'mail');
+                unlink($dir);
+                mkdir($dir);
+                $cn->lo_export($this->lf_lob, $dir . '/' . $file);
+                $ofile = new FileToSend($dir . '/' . $file);
+                $mail->add_file($ofile);
+                break;
+        }
+        $cn->commit();
+        try
+        {
+            $mail->send();
+            $result = $fiche->strAttribut(ATTR_DEF_QUICKCODE) . ' message envoyé email : ' . $fiche->strAttribut(ATTR_DEF_EMAIL);
+            $this->lf_email_send_result=$result;
+            $this->update();
+            return $result;
+        } catch (Exception $ex)
+        {
+            $result = $fiche->strAttribut(ATTR_DEF_QUICKCODE) . " erreur mail " . $ex->getMessage();
+            $this->lf_email_send_result=$result;
+            $this->update();
+            return $result;
+        }
     }
 
 }
