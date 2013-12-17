@@ -19,9 +19,12 @@ class RAPAV_Listing_Compute
 {
 
     /**
-     * < Data point to listing_compute
+     * < Data point to RAPAV_Listing_Compute_SQL
      */
     var $data;
+    /**
+     * < Data point to RAPAV_Listing
+     */
     var $listing;
 
     /**
@@ -158,7 +161,8 @@ class RAPAV_Listing_Compute
         $ofiche=new RAPAV_Listing_Compute_Fiche_SQL();
         $r_fiche=$ofiche->seek (" where lc_id = $1",array($this->data->lc_id));
         $nb_fiche=Database::num_row($r_fiche);
-
+        echo 'Description';
+        echo '<p id="description">'.h($this->data->l_description).'</p>';
         /* For each card */
         for ($i = 0;$i < $nb_fiche;$i++)
         {
