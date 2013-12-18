@@ -949,6 +949,9 @@ function parameter_send_mail()
 }
 function send_email()
 {
+    if (trim($('p_from').value)=="") { alert('champs obligatoire manquant'); $('p_from').style.border="solid 2px red";return false;}
+    if (trim($('p_subject').value)=="") { alert('champs obligatoire manquant'); $('p_subject').style.border="solid 2px red";return false;}
+    if (trim($('p_attach').value)=="") { alert('champs obligatoire manquant'); $('p_attach').style.border="solid 2px red";return false;}
    try {
         var qs = $('parameter_send_email_input_frm').serialize(false);
         waiting_box();
@@ -973,6 +976,83 @@ function send_email()
                         var position = fixed_position(451, 217) + ';width:50%';
                         add_div({'id': 'parameter_send_mail_result', 'cssclass': 'inner_box', 'drag': 1, 'style': position});
                         $('parameter_send_mail_result').innerHTML = code_html;
+                        remove_waiting_box();
+                    }
+                }
+        );
+        return false;
+    } catch (e)
+    {
+        alert(e.message);
+        return false;
+        
+    }
+}
+function js_include_follow()
+{
+   try {
+       console.log('include_follow');
+        var qs = $('include_follow_frm').serialize(false);
+        waiting_box();
+        var action = new Ajax.Request(
+                "ajax.php",
+                {
+                    method: 'get',
+                    parameters: qs,
+                    onFailure: ajax_misc_failure,
+                    onSuccess: function(req) {
+                        var answer = req.responseXML;
+                        var a = answer.getElementsByTagName('ctl');
+                        var html = answer.getElementsByTagName('code');
+                        if (a.length == 0) {
+                            var rec = req.responseText;
+                            throw 'cannot find ctl element';
+                        }
+                        remove_waiting_box();
+                        var code_html = getNodeText(html[0]);
+                        code_html = unescape_xml(code_html);
+                        console.log(code_html);
+                        var position = fixed_position(451, 217) + ';width:50%';
+                        add_div({'id': 'include_follow_result', 'cssclass': 'inner_box', 'drag': 1, 'style': position});
+                        $('include_follow_result').innerHTML = code_html;
+                        remove_waiting_box();
+                    }
+                }
+        );
+        return false;
+    } catch (e)
+    {
+        alert(e.message);
+        return false;
+        
+    }
+}
+function js_include_follow_save()
+{
+   try {
+        var qs = $('include_follow_save_frm').serialize(false);
+        waiting_box();
+        var action = new Ajax.Request(
+                "ajax.php",
+                {
+                    method: 'get',
+                    parameters: qs,
+                    onFailure: ajax_misc_failure,
+                    onSuccess: function(req) {
+                        var answer = req.responseXML;
+                        var a = answer.getElementsByTagName('ctl');
+                        var html = answer.getElementsByTagName('code');
+                        if (a.length == 0) {
+                            var rec = req.responseText;
+                            throw 'cannot find ctl element';
+                        }
+                        remove_waiting_box();
+                        var code_html = getNodeText(html[0]);
+                        code_html = unescape_xml(code_html);
+                        console.log(code_html);
+                        var position = fixed_position(451, 217) + ';width:50%';
+                        add_div({'id': 'include_follow_save_result', 'cssclass': 'inner_box', 'drag': 1, 'style': position});
+                        $('include_follow_save_result').innerHTML = code_html;
                         remove_waiting_box();
                     }
                 }

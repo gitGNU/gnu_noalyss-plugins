@@ -6,6 +6,8 @@
  * and open the template in the editor.
  */
 require_once 'class_sendmail.php';
+require_once 'class_follow_up.php';
+
 /**
  * Description of class_rapav_listing_compute_fiche
  *
@@ -561,6 +563,21 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
             $this->update();
             return $result;
         }
+    }
+    function include_follow($p_array)
+    {
+        global $cn;
+        $action=new Follow_Up($cn);
+        if (isDate($p_array['ag_date'])==null) $p_array['ag_date']=date('d.m.Y');
+        if ( trim($p_array['ag_title']) == "")$p_array['ag_title']="Ajouté depuis plugin";
+        
+        $action->fromArray($p_array);
+        
+        $action->f_id_dest=$this->f_id;
+        $fiche = new Fiche($cn, $this->f_id);
+        $action->qcode_dest=$fiche->strAttribut(ATTR_DEF_QUICKCODE);
+        $_POST['nb_item']=0;
+        $action->save();
     }
 
 }

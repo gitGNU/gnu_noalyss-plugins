@@ -9,7 +9,8 @@ $a_action=explode(',',
         'rapav_search_code,save_param_detail,rapav_declaration_display,'.
         'listing_modify,listing_remove_modele,listing_display_definition,'.
         'listing_param_add,save_param_listing,listing_detail_remove,'.
-        'listing_search_code,rapav_listing_display,parameter_send_mail,send_mail');
+        'listing_search_code,rapav_listing_display,parameter_send_mail,send_mail,'
+        . 'include_follow,include_follow_save');
 if ( in_array($act,$a_action ) == true )
 {
     include 'ajax_'.$act.'.php';

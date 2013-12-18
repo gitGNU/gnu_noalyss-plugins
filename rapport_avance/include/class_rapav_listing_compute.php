@@ -15,6 +15,7 @@ require_once 'class_rapav_listing.php';
 require_once 'class_rapav_listing_formula.php';
 require_once 'class_rapport_avance_sql.php';
 require_once 'class_rapav_listing_compute_fiche.php';
+
 class RAPAV_Listing_Compute
 {
 
@@ -300,7 +301,6 @@ class RAPAV_Listing_Compute
         $ofiche=new RAPAV_Listing_Compute_Fiche();
         $r_fiche=$ofiche->seek (" where lc_id = $1",array($this->data->lc_id));
         $nb_fiche=Database::num_row($r_fiche);
-        if (isNumber($p_id)==0) {$p_id=0;}
         $a_result=array();
         /* For each card */
         for ($i = 0;$i < $nb_fiche;$i++)
@@ -414,11 +414,11 @@ class RAPAV_Listing_Compute
     function propose_include_follow()
     {
         
-        echo '<form method="GET" action="extension.raw.php" class="noprint" style="display:inline">';
+        echo '<form method="GET" action="ajax.php" onsubmit="js_include_follow();return false;" id="include_follow_frm" class="noprint" style="display:inline">';
         echo HtmlInput::array_to_hidden(array('ac','gDossier','plugin_code','sa'), $_REQUEST);
         echo HtmlInput::hidden('lc_id',$this->data->lc_id);
-        echo HtmlInput::hidden('act','include_follow_up');
-        echo HtmlInput::submit("include_follow_up", "Inclure dans les actions","","smallbutton");
+        echo HtmlInput::hidden('act','include_follow');
+        echo HtmlInput::submit("include_follow", "Inclure dans les actions","","smallbutton");
         echo '</form>';
         return 0;
     }
@@ -433,5 +433,22 @@ class RAPAV_Listing_Compute
         echo '</form>';
         return 0;
     }
-
+    function include_follow($p_array)
+    {
+        global $cn;
+        $ofiche=new RAPAV_Listing_Compute_Fiche();
+        $r_fiche=$ofiche->seek (" where lc_id = $1",array($this->data->lc_id));
+        $nb_fiche=Database::num_row($r_fiche);
+        if (isNumber($p_id)==0) {$p_id=0;}
+        $a_result=array();
+        /* For each card */
+        $cn->start();
+        for ($i = 0;$i < $nb_fiche;$i++)
+        {
+            $fiche=$ofiche->next($r_fiche,$i);
+            $a_result[]=$fiche->include_follow($p_array);
+        }
+        $cn->commit();
+        return $a_result;
+    }
 }
