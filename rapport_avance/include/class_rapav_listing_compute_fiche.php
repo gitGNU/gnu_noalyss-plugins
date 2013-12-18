@@ -568,7 +568,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
     {
         global $cn;
         $action=new Follow_Up($cn);
-        if (isDate($p_array['ag_date'])==null) $p_array['ag_date']=date('d.m.Y');
+        if (isDate($p_array['ag_timestamp'])==null) $p_array['ag_timestamp']=date('d.m.Y');
         if ( trim($p_array['ag_title']) == "")$p_array['ag_title']="Ajouté depuis plugin";
         
         $action->fromArray($p_array);
@@ -578,6 +578,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         $action->qcode_dest=$fiche->strAttribut(ATTR_DEF_QUICKCODE);
         $_POST['nb_item']=0;
         $action->save();
+        return $fiche->strAttribut(ATTR_DEF_QUICKCODE).' inclus dans Suivi';
     }
 
 }

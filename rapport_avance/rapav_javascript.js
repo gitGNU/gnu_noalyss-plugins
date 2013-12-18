@@ -975,8 +975,9 @@ function send_email()
                         console.log(code_html);
                         var position = fixed_position(451, 217) + ';width:50%';
                         add_div({'id': 'parameter_send_mail_result', 'cssclass': 'inner_box', 'drag': 1, 'style': position});
-                        $('parameter_send_mail_result').innerHTML = code_html;
                         remove_waiting_box();
+                        $('parameter_send_mail_result').innerHTML = code_html;
+                        removeDiv('parameter_send_mail_input');
                     }
                 }
         );
@@ -991,7 +992,6 @@ function send_email()
 function js_include_follow()
 {
    try {
-       console.log('include_follow');
         var qs = $('include_follow_frm').serialize(false);
         waiting_box();
         var action = new Ajax.Request(
@@ -1052,8 +1052,9 @@ function js_include_follow_save()
                         console.log(code_html);
                         var position = fixed_position(451, 217) + ';width:50%';
                         add_div({'id': 'include_follow_save_result', 'cssclass': 'inner_box', 'drag': 1, 'style': position});
-                        $('include_follow_save_result').innerHTML = code_html;
                         remove_waiting_box();
+                        $('include_follow_save_result').innerHTML = code_html;
+                        removeDiv('include_follow_result');
                     }
                 }
         );
