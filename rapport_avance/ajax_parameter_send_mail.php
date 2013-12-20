@@ -24,6 +24,7 @@ if ( $fiche_def->HasAttribute(ATTR_DEF_EMAIL) == false) {
             array('value'=>1,'label'=>_('Document en PDF')),
             array('value'=>2,'label'=>_('Document généré'))
     );
+    $copy=new ICheckBox('copy');
     require_once 'include/template/parameter_send_mail_input.php';
     
 }
