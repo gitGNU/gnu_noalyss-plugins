@@ -42,7 +42,7 @@ $data=$cn->get_array("select d_id,d_title,
 		l_description,l_timestamp,
 		to_char(l_start,'YYMMDD') as fmt_start,
 		to_char(l_end,'YYMMDD') as fmt_end,
-		to_char(l_end,'YYMMDDHH24MI') as fmt_order_generated,
+		to_char(l_timestamp,'YYMMDDHH24MI') as fmt_order_generated,
                 2
 		from rapport_advanced.listing_compute
 order by d_start,d_title");
@@ -81,11 +81,11 @@ echo '<span style="display:block">';
 	</tr>
 	<?php for ($i=0;$i<count($data);$i++) :?>
 	<tr id="tr_<?php echo $data[$i]['d_id']?>">
-		<td sortable_customkey="<?php echo $data[$i]['fmt_start']?>">
+		<td sorttable_customkey="<?php echo $data[$i]['fmt_start']?>">
 
 			<?php echo format_date($data[$i]['d_start'])?>
 		</td>
-		<td sortable_customkey="<?php echo $data[$i]['fmt_end']?>">
+		<td sorttable_customkey="<?php echo $data[$i]['fmt_end']?>">
 			<?php echo format_date($data[$i]['d_end'])?>
 		</td>
 		<td>
@@ -94,7 +94,7 @@ echo '<span style="display:block">';
 		<td>
 			<?php echo h($data[$i]['d_description'])?>
 		</td>
-		<td sortable_customkey="<?php echo $data[$i]['fmt_order_generated']?>">
+		<td sorttable_customkey="<?php echo $data[$i]['fmt_order_generated']?>">
 			<?php echo h($data[$i]['fmt_generated'])?>
 		</td>
 <?php if  ($data[$i]['type']==1): ?>
