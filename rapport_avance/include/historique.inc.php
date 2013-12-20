@@ -80,7 +80,8 @@ echo '<span style="display:block">';
 		</th>
 	</tr>
 	<?php for ($i=0;$i<count($data);$i++) :?>
-	<tr id="tr_<?php echo $data[$i]['d_id']?>">
+        <?php $class=($i%2==0)?'class="even"':' class="odd" '; ?>
+	<tr id="tr_<?php echo $data[$i]['d_id']?>" <?php echo $class;?> >
 		<td sorttable_customkey="<?php echo $data[$i]['fmt_start']?>">
 
 			<?php echo format_date($data[$i]['d_start'])?>
