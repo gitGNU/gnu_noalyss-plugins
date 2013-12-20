@@ -4,7 +4,6 @@
      * @file
      * @brief manage the listing
      */
-    var_dump($_POST);
     require_once 'class_rapav_listing.php';
     global $cn;
     $listing = new Rapav_Listing();

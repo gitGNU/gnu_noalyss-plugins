@@ -316,7 +316,6 @@ $operation_paid->value = array(
         /**
          * @todo to adapt to listing
          */
-        console.log("in validate_listing");
         if (check_date_id('<?php echo $date_start_listing->id ?>') == false) {
             alert('Date de début incorrecte');
             $('<?php echo $date_start_listing->id ?>').style.borderColor = 'red';

@@ -466,7 +466,6 @@ function rapav_remove_doc_template(plugin_code, ac, dossier, f_id)
  */
 function listing_modify(json)
 {
-    console.log(json)
     try {
         var querystring = 'plugin_code=' + json.pc + '&ac=' + json.ac + '&gDossier=' + json.gDossier + '&act=listing_modify' + "&cin=" + json.cin + '&cout=' + json.cout + '&id=' + json.id;
         waiting_box();
@@ -492,8 +491,7 @@ function listing_modify(json)
                             add_div({'id': json.cout, 'cssclass': 'inner_box', 'drag': 1, 'style': position});
                             $(json.cout).innerHTML = code_html;
                         } catch (e) {
-                            console.log(e);
-                            console.log(code_html);
+                            alert(e.message);
                         }
                     }
                 }
@@ -530,7 +528,6 @@ function check_listing_add(form_id)
  */
 function listing_remove_modele(json)
 {
-    console.log(json)
     try {
         var querystring = 'plugin_code=' + json.pc + '&ac=' + json.ac + '&gDossier=' + json.gDossier + '&act=listing_remove_modele' + "&cin=" + json.cin + '&cout=' + json.cout + '&id=' + json.id;
         waiting_box();
@@ -552,11 +549,9 @@ function listing_remove_modele(json)
                             remove_waiting_box();
                             var code_html = getNodeText(html[0]);
                             code_html = unescape_xml(code_html);
-                            console.log(code_html);
                             $(json.cout).innerHTML = code_html;
                         } catch (e) {
-                            console.log(e);
-                            console.log(code_html);
+                            alert(e.message);
                         }
                     }
                 }
@@ -582,7 +577,6 @@ function listing_remove_modele(json)
  */
 function listing_definition(json)
 {
-    console.log(json)
     try {
         var querystring = 'plugin_code=' + json.pc + '&ac=' + json.ac + '&gDossier=' + json.gDossier + '&act=listing_display_definition' + "&cin=" + json.cin + '&cout=' + json.cout + '&id=' + json.id;
         waiting_box();
@@ -604,11 +598,9 @@ function listing_definition(json)
                             remove_waiting_box();
                             var code_html = getNodeText(html[0]);
                             code_html = unescape_xml(code_html);
-                            console.log(code_html);
                             $(json.cout).innerHTML = code_html;
                         } catch (e) {
-                            console.log(e);
-                            console.log(code_html);
+                            alert(e.message);
                         }
                     }
                 }
@@ -632,7 +624,6 @@ function listing_definition(json)
  */
 function listing_param_add(json)
 {
-    console.log(json);
     try {
         var querystring = 'plugin_code=' + json.pc + '&ac=' + json.ac + '&gDossier=' + json.gDossier + '&act=listing_param_add' + "&cin=" + json.cin + '&id=' + json.id;
         waiting_box();
@@ -654,16 +645,13 @@ function listing_param_add(json)
                             remove_waiting_box();
                             var code_html = getNodeText(html[0]);
                             code_html = unescape_xml(code_html);
-                            console.log(code_html);
                             var position = fixed_position(451, 217) + ';width:50%';
                             add_div({'id': json.cin, 'cssclass': 'inner_box', 'drag': 1, 'style': position});
                             $(json.cin).innerHTML = code_html;
                           
                         } catch (e) {
-                            console.log(e);
-                            console.log(code_html);
+                            alert(e.message);
                         }
-                        console.log('trying to execute javascript');
                         code_html.evalScripts();
                     }
                 }
@@ -785,12 +773,10 @@ function listing_detail_remove(dossier,plugin_code,ac,id)
                             
                             if (code == 'ok')
                             {
-                                console.log('tr_'+id);
                                 var row=$('tr_'+id);
                                 row.style.color="red";
                                 row.style.textDecoration='line-through';
                                 row.cells[row.cells.length-1].innerHTML="";
-                                console.log(row.length);
 
                             }
                             if (code == 'nok')
@@ -931,7 +917,6 @@ function parameter_send_mail()
                         remove_waiting_box();
                         var code_html = getNodeText(html[0]);
                         code_html = unescape_xml(code_html);
-                        console.log(code_html);
                         var position = fixed_position(451, 217) + ';width:50%';
                         add_div({'id': 'parameter_send_mail_input', 'cssclass': 'inner_box', 'drag': 1, 'style': position});
                         $('parameter_send_mail_input').innerHTML = code_html;
@@ -972,7 +957,6 @@ function send_email()
                         remove_waiting_box();
                         var code_html = getNodeText(html[0]);
                         code_html = unescape_xml(code_html);
-                        console.log(code_html);
                         var position = fixed_position(451, 217) + ';width:50%';
                         add_div({'id': 'parameter_send_mail_result', 'cssclass': 'inner_box', 'drag': 1, 'style': position});
                         remove_waiting_box();
@@ -1011,7 +995,6 @@ function js_include_follow()
                         remove_waiting_box();
                         var code_html = getNodeText(html[0]);
                         code_html = unescape_xml(code_html);
-                        console.log(code_html);
                         var position = fixed_position(451, 217) + ';width:50%';
                         add_div({'id': 'include_follow_result', 'cssclass': 'inner_box', 'drag': 1, 'style': position});
                         $('include_follow_result').innerHTML = code_html;
@@ -1049,7 +1032,6 @@ function js_include_follow_save()
                         remove_waiting_box();
                         var code_html = getNodeText(html[0]);
                         code_html = unescape_xml(code_html);
-                        console.log(code_html);
                         var position = fixed_position(451, 217) + ';width:50%';
                         add_div({'id': 'include_follow_save_result', 'cssclass': 'inner_box', 'drag': 1, 'style': position});
                         remove_waiting_box();
