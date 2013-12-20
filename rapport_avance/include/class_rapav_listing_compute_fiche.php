@@ -73,7 +73,11 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         $cn->commit();
         return array($file_to_parse, $dirname, $type);
     }
-
+    /**
+     * Generate the document, open the file and replace all the tags,
+     * by the found value.
+     * Load the file into the db
+     */
     function generate_document()
     {
         global $cn;
@@ -116,7 +120,14 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
 
         $this->load_document($dirname . DIRECTORY_SEPARATOR . $file_to_save);
     }
-
+    /**
+     * Replace into the file, the tags from the DB
+     * @param $p_dir path
+     * @param $p_filename filename (modele)
+     * @param $p_type mimetype of the file (OOo) 
+     * @throws Exception when the type from the DB is not a date, a text or a 
+     * numeric
+     */
     private function parse_document($p_dir, $p_filename, $p_type)
     {
         global $cn;
@@ -208,7 +219,13 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         }
         unlink($oname);
     }
-
+    /**
+     * Replace special tags (PERIODE_DECLARATION, TITRE, DOSSIER, NAME... 
+     * into the file
+     * @param $p_dir path
+     * @param $p_filename filename (modele)
+     * @param $p_type mimetype of the file (OOo) 
+     */
     private function special_tag($p_dir, $p_filename, $p_type)
     {
         global $cn, $g_parameter;
@@ -281,6 +298,20 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         }
         unlink($oname);
     }
+    /**
+     * Replace into the file the history tags
+     *     -  Code _DATE date of operation
+     *     -  Code _ECH limit date of operation
+     *     -  Code _MONTANT_OPERATION amount of operation
+     *     -  Code _PIECE Receipt number
+     *     -  Code _INTERNAL Internal number of op
+     *     -  Code _HTVA amount without VAT
+     *     -  Code _TVA amount VAT
+     *     -  Code _TOTAL amount HVAT + TVA
+    * @param $p_dir path
+     * @param $p_filename filename (modele)
+     * @param $p_type mimetype of the file (OOo) 
+     */
     private function histo($p_dir, $p_filename, $p_type)
     {
         global $cn, $g_parameter;
@@ -429,6 +460,9 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         }
         unlink($oname);
     }
+    /**
+     * Load the document into DB
+     */
     private function load_document($p_file)
     {
         global $cn;
@@ -446,6 +480,10 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         $this->update();
         $cn->commit();
     }
+    /**
+     * Create a PDF if GENERATE_PDF is different of NO and load it into
+     * DB
+     */
     function create_pdf()
     {
         global $cn;
@@ -470,13 +508,14 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         
     }
     /**
-     * 
-     * @global type $cn
-     * @param type $p_from
-     * @param type $p_subject
-     * @param type $p_message
-     * @param type $p_attach
-     * @return type
+     * Send email
+     * @param $p_from email sender
+     * @param $p_subject subject 
+     * @param $p_message message
+     * @param $p_attach 
+     *      - 0 no attach
+     *      - 1 PDF document
+     *      - 2 document from db
      */
     function send_mail($p_from, $p_subject, $p_message, $p_attach)
     {
@@ -564,6 +603,12 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
             return $result;
         }
     }
+    /**
+     * Include into FOLLOW
+     * @param type $p_array 
+     * @see Follow_Up::fromArray
+     * @return string with result
+     */
     function include_follow($p_array)
     {
         global $cn;
