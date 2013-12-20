@@ -475,7 +475,9 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         }
         $this->lf_size = filesize($p_file);
         $date = date('ymd-Hi');
-        $this->lf_filename = $date . '-' . $this->listing_compute->listing->data->l_filename;
+        $fiche = new Fiche($cn, $this->f_id);
+        $qcode=$fiche->strAttribut(ATTR_DEF_QUICKCODE);
+        $this->lf_filename = $qcode.'-'.$date . '-' . $this->listing_compute->listing->data->l_filename;
         $this->lf_mimetype= $this->listing_compute->listing->data->l_mimetype;
         $this->update();
         $cn->commit();
@@ -623,6 +625,8 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         $action->qcode_dest=$fiche->strAttribut(ATTR_DEF_QUICKCODE);
         $_POST['nb_item']=0;
         $action->save();
+        /** Copy the document in Follow_UP */
+        Document::insert_existing_document($action->ag_id, $this->lf_lob, $this->lf_filename, $this->lf_mimetype);
         return $fiche->strAttribut(ATTR_DEF_QUICKCODE).' inclus dans Suivi';
     }
 
