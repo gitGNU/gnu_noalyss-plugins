@@ -451,4 +451,41 @@ class RAPAV_Listing_Compute
         $cn->commit();
         return $a_result;
     }
+    function create_zip()
+    {
+        global $cn;
+        $ofiche = new RAPAV_Listing_Compute_Fiche();
+        $r_fiche = $ofiche->seek(" where 
+                coalesce(lf_filename,'') <> '' 
+                and lc_id = $1", array($this->data->lc_id));
+        $nb_fiche = Database::num_row($r_fiche);
+        // -- no doc to download
+        if ($nb_fiche == 0)
+            return "";
+
+        $dirname = tempnam($_ENV['TMP'],'download_');
+        unlink($dirname);
+        mkdir($dirname);
+
+        /* For each card */
+        $cn->start();
+        for ($i = 0; $i < $nb_fiche; $i++)
+        {
+            $fiche = $ofiche->next($r_fiche, $i);
+            $file = $dirname . '/' . $fiche->lf_filename;
+            $cn->lo_export($fiche->lf_lob, $file);
+        }
+        $zip = new Zip_Extended;
+        $file_download = $_ENV['TMP'].'/all_document-' . microtime(true) . ".zip";
+        $res = $zip->open($file_download, ZipArchive::CREATE);
+        if ($res !== TRUE)
+        {
+            echo __FILE__ . ":" . __LINE__ . "cannot recreate zip";
+            exit;
+        }
+        $zip->add_recurse_folder($dirname . DIRECTORY_SEPARATOR);
+        $zip->close();
+        $cn->commit();
+        return $file_download;
+    }
 }

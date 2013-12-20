@@ -233,5 +233,26 @@ if ($act=="show_pdf")
 
 	$cn->commit();
 }
+if ($act == 'export_download_all')
+{
+    $compute = new RAPAV_Listing_compute();
+    $compute->load($_GET['lc_id']);
+    $filename = $compute->create_zip();
+    if ($filename == "") exit();
+    ini_set('zlib.output_compression', 'Off');
+    header("Pragma: public");
+    header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+    header("Cache-Control: must-revalidate");
+    header('Content-type: application/zip');
+    header('Content-Disposition: attachment;filename="' . $filename.'"' , FALSE);
+    header("Accept-Ranges: bytes");
+    $file = fopen($filename, 'r');
+    while (!feof($file))
+        echo fread($file, 8192);
 
+    fclose($file);
+
+    unlink($filename);
+}
 ?>
