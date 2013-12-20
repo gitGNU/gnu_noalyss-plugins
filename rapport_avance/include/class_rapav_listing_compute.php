@@ -182,10 +182,10 @@ class RAPAV_Listing_Compute
                 }
                 $col_range=implode(",",$col);
                 echo "Filtre ".HtmlInput::filter_table($form_name."_tb", $col_range, 1);
-                echo '<table id="'.$form_name.'_tb" style="min-width:100%" class="result">';
+                echo '<table id="'.$form_name.'_tb" style="min-width:100%" class="sortable">';
                 echo '<tr>';
                 if ( $with_sel ) {
-                    echo '<TH><INPUT TYPE="CHECKBOX" onclick="toggle_checkbox(\''.$form_name.'\')"></TH>';
+                    echo '<TH sorttable_customkey="1" ><INPUT TYPE="CHECKBOX" onclick="toggle_checkbox(\''.$form_name.'\')">'.HtmlInput::infobulle(17).'</TH>';
                 }
                 for ($e=0;$e<$nb_detail;$e++)
                 {
@@ -208,11 +208,11 @@ class RAPAV_Listing_Compute
                 if ($e==0 && $with_sel)
                 {
                      $check_box=new ICheckBox("selected_card[]", $fiche->lf_id);
-                     echo td($check_box->input());
+                     echo td($check_box->input(),' sorttable_customkey="1" ');
                 }
                 echo (($detail->ld_value_numeric !== null)?td(nbm($detail->ld_value_numeric),'class="num"'):"");
                 echo (($detail->ld_value_text !== null)?td($detail->ld_value_text):"");
-                echo (($detail->ld_value_date!== null)?td($detail->ld_value_date):"");
+                echo (($detail->ld_value_date!== null)?td($detail->ld_value_date,' sorttable_customkey="'.$detail->ld_value_date.'"'):"");
             }
             if ( $fiche->lf_filename != "")
             {
