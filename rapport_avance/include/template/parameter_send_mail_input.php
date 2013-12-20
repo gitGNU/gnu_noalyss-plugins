@@ -16,6 +16,9 @@
 <p>
     <label>Attache</label><?php echo $attach->input();?>
 </p>
+<p>
+    <label>Copie pour l'expéditeur</label><?php echo $copy->input();?>
+</p>
 <?php
 echo HtmlInput::submit("send_mail", _('Envoi'), '', 'smallbutton');
 echo HtmlInput::button_close('parameter_send_mail_input');

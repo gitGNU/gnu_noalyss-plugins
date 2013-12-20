@@ -518,8 +518,11 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
      *      - 0 no attach
      *      - 1 PDF document
      *      - 2 document from db
+     * @param $p_copy 
+     *      - 0 no copy to the sender
+     *      - 1 copy to the sender
      */
-    function send_mail($p_from, $p_subject, $p_message, $p_attach)
+    function send_mail($p_from, $p_subject, $p_message, $p_attach,$p_copy)
     {
         global $cn;
         $fiche = new Fiche($cn, $this->f_id);
@@ -541,6 +544,9 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         $mail->set_from($p_from);
         $mail->set_message($p_message);
         $mail->set_subject($p_subject);
+        if ($p_copy == 1 ) {
+            $email.=','.$p_from;
+        }
         $mail->mailto($email);
         switch ($p_attach)
         {

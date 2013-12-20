@@ -295,7 +295,7 @@ class RAPAV_Listing_Compute
             $fiche->generate_document();
         }
     }
-    function send_mail($p_from,$p_subject,$p_message,$p_attach)
+    function send_mail($p_from,$p_subject,$p_message,$p_attach,$p_copy)
     {
         global $cn;
         $ofiche=new RAPAV_Listing_Compute_Fiche();
@@ -306,7 +306,7 @@ class RAPAV_Listing_Compute
         for ($i = 0;$i < $nb_fiche;$i++)
         {
             $fiche=$ofiche->next($r_fiche,$i);
-            $a_result[]=$fiche->send_mail($p_from,$p_subject,$p_message,$p_attach);
+            $a_result[]=$fiche->send_mail($p_from,$p_subject,$p_message,$p_attach,$p_copy);
         }
         return $a_result;
     }
