@@ -34,36 +34,7 @@ class RAPAV
         return $ledger;
     }
 
-    /**
-     * display a choice of ledger
-     * @global cn
-     */
-    static function input_ledger()
-    {
-        global $cn;
-        $select = new ISelect('p_ledger');
-        $a_ledger = $cn->make_array('select jrn_def_id,jrn_def_name from jrn_def order by 2', 1);
-        $a_ledger[0]['label'] = '-- Tous les journaux -- ';
-        $select->value = $a_ledger;
-
-        echo '<p> Filtrage par journal ' . $select->input() . '</p>';
-    }
-
-    /**
-     * Display a select for the date
-     */
-    static function input_date_paiement()
-    {
-        $s_date = new ISelect('p_paid');
-        $s_date->value = array();
-        $s_date->value[] = array("value" => 0, "label" => 'Date d\'opération');
-        $s_date->value[] = array("value" => 1, "label" => 'Date de paiement');
-        $s_date->value[] = array("value" => 2, "label" => 'Date d\'échéance');
-        echo '<p> Si la date donnée concerne la date de paiement ou d\'écheance, cela limitera la recherche aux journaux VEN et ACH ';
-        echo HtmlInput::infobulle(36);
-        echo $s_date->input();
-        echo '</p>';
-    }
+   
 
     /**
      * Compute the string to display for date
@@ -151,10 +122,11 @@ class RAPAV
 
         // remove the valid
         preg_match_all("/\[([A-Z]*[0-9]*)*([0-9]*[A-Z]*)\]/i", $formula, $e);
-        $formula = preg_replace("/\[([A-Z]*[0-9]*)*([0-9]*[A-Z]*)\]/i", '', $formula);
+        $formula = preg_replace("/\[([A-Z]*[0-9]*)*([0-9]*[A-Z]*)%*\]/i", '', $formula);
         $formula = preg_replace('/([0-9]+.{0,1}[0.9]*)*(\+|-|\*|\/)*/', '', $formula);
         $formula = preg_replace('/(\(|\))/', '', $formula);
         $formula = preg_replace('/\s/', '', $formula);
+        $formula = preg_replace('/FROM=/', '', $formula);
 
         // if something remains it should be a mistake
         if ($formula != '')

@@ -408,10 +408,8 @@ class Formulaire_Formula extends Formulaire_Row
 			echo '<td>';
 			echo $formula->display_row();
 			echo '</td>';
-			echo "<td id=\"del_" . $formula->fp_id . "\">";
-			echo HtmlInput::anchor("Effacer", "", sprintf("onclick=\"delete_param_detail('%s','%s','%s','%s')\""
-							, $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $formula->fp_id));
-			echo '</td>';
+                        echo $formula->button_delete();
+                        echo $formula->button_modify();
 			echo '</tr>';
 		}
 		if ($max == 0)

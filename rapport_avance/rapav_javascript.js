@@ -113,6 +113,41 @@ function add_param_detail(plugin_code, ac, dossier, p_id)
         alert("add_param_detail" + e.message);
     }
 }
+function modify_param_detail(plugin_code,ac,dossier,fp_id)
+{
+    try
+    {
+        var querystring = 'plugin_code=' + plugin_code + '&ac=' + ac + '&gDossier=' + dossier + '&act=modify_param_detail' + "&fp_id=" + fp_id;
+        waiting_box();
+        var action = new Ajax.Request(
+                "ajax.php",
+                {
+                    method: 'get',
+                    parameters: querystring,
+                    onFailure: error_get_predef,
+                    onSuccess: function(req) {
+                        remove_waiting_box();
+                        removeDiv('param_detail_div');
+                        var nTop = calcy(90);
+                        var nLeft = "200px";
+                        var str_style = "top:" + nTop + "px;left:" + nLeft + ";width:70em;height:auto";
+                        add_div({
+                            id: 'param_detail_div',
+                            style: str_style,
+                            cssclass: 'inner_box',
+                            drag: 1
+                        });
+                        $('param_detail_div').innerHTML = req.responseText;
+                        req.responseText.evalScripts();
+                    }
+                }
+        );
+
+    } catch (e)
+    {
+        alert("add_param_detail" + e.message);
+    }
+}
 /**
  *@brief display a popup and let you select an existing code
  */
@@ -292,12 +327,18 @@ function save_param_detail(p_form_id)
                                 var afpid = answer.getElementsByTagName('fp_id');
                                 var fp_id = afpid[0].firstChild.nodeValue;
                                 var p_id = ap_id[0].firstChild.nodeValue;
-                                // Ajoute une ligne avec résultat
-                                var mytable = g("table_" + p_id).tBodies[0];
-                                var nNumberRow = mytable.rows.length;
-                                var oRow = mytable.insertRow(nNumberRow);
-                                oRow.id = "tr_" + fp_id;
-                                oRow.innerHTML = code_html;
+                                var update=$('tr_'+fp_id);
+                                if ( update== undefined )
+                                {
+                                    // Ajoute une ligne avec résultat
+                                    var mytable = g("table_" + p_id).tBodies[0];
+                                    var nNumberRow = mytable.rows.length;
+                                    var oRow = mytable.insertRow(nNumberRow);
+                                    oRow.id = "tr_" + fp_id;
+                                    oRow.innerHTML = code_html;
+                                } else {
+                                    $(update).innerHTML=code_html;
+                                }
                                 removeDiv('param_detail_div');
 
                             }

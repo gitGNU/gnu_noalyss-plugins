@@ -31,11 +31,11 @@
  */
 require_once 'class_impress.php';
 require_once 'include/class_formulaire_param_detail.php';
-$fp_id = 0;
+$fp_id = HtmlInput::default_value_get('fp_id', '-1');
 switch ($tab)
 {
     case 'account_tva':
-        $acc_tva = new RAPAV_Account_Tva();
+        $acc_tva = new RAPAV_Account_Tva($fp_id);
         $acc_tva->tva_id = $code_tva;
         $acc_tva->tmp_val = $formtva;
         $acc_tva->jrn_def_type = $code_jrn;
@@ -50,7 +50,7 @@ switch ($tab)
             $html = "Erreur dans la formule " . $acc_tva->errcode;
         } else
         {
-            $acc_tva->insert();
+            $acc_tva->save();
             $code = 'ok';
             $fp_id = $acc_tva->fp_id;
             $html = '<td>';
@@ -59,14 +59,12 @@ switch ($tab)
             $html.=ob_get_contents();
             ob_end_clean();
             $html.= '</td>';
-            $html.='<td id="del_' . $acc_tva->fp_id . '">';
-            $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"delete_param_detail('%s','%s','%s','%s')\""
-                                    , $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $acc_tva->fp_id));
-            $html.= '</td>';
+            $html.=$acc_tva->button_delete();
+            $html.=$acc_tva->button_modify();
         }
         break;
     case 'formula':
-        $acc_formula = new RAPAV_Formula();
+        $acc_formula = new RAPAV_Formula($fp_id);
         $acc_formula->fp_formula = $formula_new;
         $acc_formula->p_id = $p_id;
         $acc_formula->type_detail = 1;
@@ -78,7 +76,7 @@ switch ($tab)
             $html = $acc_formula->errcode;
         } else
         {
-            $acc_formula->insert();
+            $acc_formula->save();
             $fp_id = $acc_formula->fp_id;
             $code = 'ok';
             $html = '<td>';
@@ -87,14 +85,12 @@ switch ($tab)
             $html.=ob_get_contents();
             ob_end_clean();
             $html.= '</td>';
-            $html.='<td id="del_' . $acc_formula->fp_id . '">';
-            $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"delete_param_detail('%s','%s','%s','%s')\""
-                                    , $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $acc_formula->fp_id));
-            $html.='</td>';
+            $html.=$acc_formula->button_delete();
+            $html.=$acc_formula->button_modify();
         }
         break;
     case 'compute_id':
-        $acc_compute = new RAPAV_Compute();
+        $acc_compute = new RAPAV_Compute($fp_id);
         $acc_compute->fp_formula = $form_compute;
         $acc_compute->p_id = $p_id;
         $acc_compute->type_detail = 3;
@@ -105,7 +101,7 @@ switch ($tab)
             $html = $acc_compute->errcode;
         } else
         {
-            $acc_compute->insert();
+            $acc_compute->save();
             $fp_id = $acc_compute->fp_id;
             $code = 'ok';
             $html = '<td>';
@@ -114,14 +110,12 @@ switch ($tab)
             $html.=ob_get_contents();
             ob_end_clean();
             $html.= '</td>';
-            $html.='<td id="del_' . $acc_compute->fp_id . '">';
-            $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"delete_param_detail('%s','%s','%s','%s')\""
-                                    , $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $acc_compute->fp_id));
-            $html.='</td>';
+            $html.=$acc_compute->button_delete();
+            $html.=$acc_compute->button_modify();
         }
         break;
     case 'new_account_id':
-        $acc_account = new RAPAV_Account();
+        $acc_account = new RAPAV_Account($fp_id);
         $acc_account->tmp_val = $account_first;
         $acc_account->with_tmp_val = $account_second;
         $acc_account->p_id = $p_id;
@@ -135,7 +129,7 @@ switch ($tab)
             $html = $acc_account->errcode;
         } else
         {
-            $acc_account->insert();
+            $acc_account->save();
             $fp_id = $acc_account->fp_id;
             $code = 'ok';
             $html = '<td>';
@@ -144,15 +138,13 @@ switch ($tab)
             $html.=ob_get_contents();
             ob_end_clean();
             $html.= '</td>';
-            $html.='<td id="del_' . $acc_account->fp_id . '">';
-            $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"delete_param_detail('%s','%s','%s','%s')\""
-                                    , $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $acc_account->fp_id));
-            $html.='</td>';
+            $html.=$acc_account->button_delete();
+            $html.=$acc_account->button_modify();
         }
         break;
 
     case 'new_reconcile_id':
-        $acc_account = new RAPAV_Reconcile();
+        $acc_account = new RAPAV_Reconcile($fp_id);
         $acc_account->tmp_val = $acrec_first;
         $acc_account->with_tmp_val = $acrec_second;
         $acc_account->operation_pcm_val = $acrec_third;
@@ -166,7 +158,7 @@ switch ($tab)
             $html = $acc_account->errcode;
         } else
         {
-            $acc_account->insert();
+            $acc_account->save();
             $fp_id = $acc_account->fp_id;
             $code = 'ok';
             $html = '<td>';
@@ -175,10 +167,8 @@ switch ($tab)
             $html.=ob_get_contents();
             ob_end_clean();
             $html.= '</td>';
-            $html.='<td id="del_' . $acc_account->fp_id . '">';
-            $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"delete_param_detail('%s','%s','%s','%s')\""
-                                    , $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $acc_account->fp_id));
-            $html.='</td>';
+            $html.=$acc_account->button_delete();
+            $html.=$acc_account->button_modify();
         }
         break;
 }
