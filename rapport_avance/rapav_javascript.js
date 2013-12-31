@@ -772,15 +772,10 @@ function save_param_listing(p_form_id)
                     onSuccess: function(req, json) {
                         try {
                             remove_waiting_box();
-                             console.log(775);
                             var answer = req.responseXML;
-                             console.log(777);
                             var acode = answer.getElementsByTagName('code');
-                             console.log(778);
                             var ap_id = answer.getElementsByTagName('l_id');
-                             console.log(779);
                             var html = answer.getElementsByTagName('html');
-                             console.log(780);
 
                             if (acode.length == 0) {
                                 var rec = req.responseText;
@@ -791,7 +786,6 @@ function save_param_listing(p_form_id)
                             var code_html = unescape_xml(code_xml);
                             if (code == 'ok')
                             {
-                                console.log('ok');
                                 var afpid = answer.getElementsByTagName('lp_id');
                                 var fp_id = afpid[0].firstChild.nodeValue;
                                 var p_id = ap_id[0].firstChild.nodeValue;
@@ -819,7 +813,6 @@ function save_param_listing(p_form_id)
                         }
                         catch (e) {
                             alert("save_param_detail " + e.message);
-                            console.log(e.message);
                             return false;
                         }
                         try {
@@ -827,7 +820,6 @@ function save_param_listing(p_form_id)
                         }
                         catch (e) {
                             alert("save_param_detail Impossible executer script de la reponse\n" + e.message);
-                            console.log(e.message);
                         }
 
                     }

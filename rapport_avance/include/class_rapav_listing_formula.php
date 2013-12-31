@@ -172,11 +172,11 @@ class RAPAV_Formula_Attribute extends RAPAV_Listing_Formula
     var $data;
 
     /**
-     * < RAPAV_Listing_Compute_SQL object */
+     * < RAPAV_Listing_Compute_Fiche_SQL object */
     var $fiche;
 
     /**
-     * < RAPAV_Listing_Detail_SQL object */
+     * < RAPAV_Listing_Compute_Detail_SQL object */
     var $detail;
 
     /**
@@ -287,7 +287,7 @@ class RAPAV_Formula_Formula extends RAPAV_Listing_Formula
     var $data;
 
     /**
-     * < RAPAV_Listing_Detail_SQL object */
+     * < RAPAV_Listing_Compute_Fiche_SQL object */
     var $fiche;
 
     /**
@@ -296,7 +296,7 @@ class RAPAV_Formula_Formula extends RAPAV_Listing_Formula
     var $sig;
 
     /**
-     * < RAPAV_Listing_Detail_SQL object */
+     * < RAPAV_Listing_Compute_Detail_SQL object */
     var $detail;
 
     function __construct(RAPAV_Listing_Param_SQL $obj, $p_cat_id = 0)
@@ -429,7 +429,7 @@ class RAPAV_Formula_Compute extends RAPAV_Listing_Formula
     var $data;
 
     /**
-     * < RAPAV_Listing_Detail_SQL object */
+     * < RAPAV_Listing_Compute_Fiche_SQL object */
     var $fiche;
 
     /**
@@ -438,7 +438,7 @@ class RAPAV_Formula_Compute extends RAPAV_Listing_Formula
     var $sig;
 
     /**
-     * < RAPAV_Listing_Detail_SQL object */
+     * < RAPAV_Listing_Compute_Detail_SQL object */
     var $detail;
 
     function __construct(RAPAV_Listing_Param_SQL $obj)
@@ -557,7 +557,8 @@ class RAPAV_Formula_Compute extends RAPAV_Listing_Formula
  *   - fp_formula
  *   - jrn_def_id
  *   - date_paid
- *   - tt
+ *   - lp_card_saldo
+ *   - type_sum_account
  *  
  */
 class RAPAV_Formula_Account extends RAPAV_Listing_Formula
@@ -568,7 +569,7 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
     var $data;
 
     /**
-     * < RAPAV_Listing_Detail_SQL object */
+     * < RAPAV_Listing_Compute_Fiche_SQL */
     var $fiche;
 
     /**
@@ -577,7 +578,7 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
     var $sig;
 
     /**
-     * < RAPAV_Listing_Detail_SQL object */
+     * < RAPAV_Listing_Compute_Detail_SQL object */
     var $detail;
 
     function __construct(RAPAV_Listing_Param_SQL $obj)
@@ -789,7 +790,7 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
         $sel_total_type_row = new ISelect('tt_id');
         $sel_total_type_row->value = $cn->make_array('select tt_id,tt_label from '
                 . ' rapport_advanced.total_type_account order by 2');
-        $sel_total_type_row->selected=$this->data->tt_id;
+        $sel_total_type_row->selected=$this->data->type_sum_account;
         echo '<p>';
         echo "Reprendre historique opération: " . $histo_operation->input();
         echo '</p>';
