@@ -57,12 +57,12 @@ for ($i = 0; $i < $nb; $i++):
             </td>
             <td>
     <?php
-    $json = sprintf(" onclick=\"listing_detail_remove('%s','%s','%s','%s')\"", 
-            Dossier::id(), 
-            $_REQUEST['plugin_code'], 
-            $_REQUEST['ac'], 
-            $this->a_detail[$i]->Param->getp('lp_id') );
-    echo HtmlInput::anchor("Effacer", "", $json)
+    echo $this->a_detail[$i]->button_delete();
+    ?>
+            </td>
+            <td>
+    <?php
+    echo $this->a_detail[$i]->button_modify();
     ?>
             </td>
 

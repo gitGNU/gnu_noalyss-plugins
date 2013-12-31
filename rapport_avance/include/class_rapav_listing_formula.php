@@ -73,9 +73,6 @@ abstract class RAPAV_Listing_Formula
             case 'COMP':
                 $ret = new Rapav_Formula_Compute($obj);
                 break;
-            case 'COMP':
-                $ret = new Rapav_Formula_Histo($obj);
-                break;
             default:
                 throw new Exception('Object ' . var_export($obj, true) . ' invalide ');
                 break;
@@ -113,10 +110,48 @@ abstract class RAPAV_Listing_Formula
         $this->fiche->f_id = $f_id;
     }
 
-
     function filter_operation($param)
     {
         $this->type_operation = $param;
+    }
+
+    /**
+     * display a choice of ledger
+     * @global cn
+     */
+    function input_ledger()
+    {
+        global $cn;
+        $select = new ISelect('p_ledger');
+        $a_ledger = $cn->make_array('select jrn_def_id,jrn_def_name from jrn_def order by 2', 1);
+        $a_ledger[0]['label'] = '-- Tous les journaux -- ';
+        $select->value = $a_ledger;
+        if ($this->data->lp_id!= -1)
+        {
+            $select->selected = $this->data->jrn_def_id;
+        }
+
+        echo '<p> Filtrage par journal ' . $select->input() . '</p>';
+    }
+
+    /**
+     * Display a select for the date
+     */
+    function input_date_paiement()
+    {
+        $s_date = new ISelect('p_paid');
+        $s_date->value = array();
+        $s_date->value[] = array("value" => 0, "label" => 'Date d\'opération');
+        $s_date->value[] = array("value" => 1, "label" => 'Date de paiement');
+        $s_date->value[] = array("value" => 2, "label" => 'Date d\'échéance');
+        echo '<p> Si la date donnée concerne la date de paiement ou d\'écheance, cela limitera la recherche aux journaux VEN et ACH ';
+        echo HtmlInput::infobulle(36);
+        if ($this->data->lp_id != -1)
+        {
+            $s_date->selected = $this->data->date_paid;
+        }
+        echo $s_date->input();
+        echo '</p>';
     }
 
 }
@@ -289,17 +324,17 @@ class RAPAV_Formula_Formula extends RAPAV_Listing_Formula
         switch ($this->type_operation)
         {
             case 0:
-                /*--all operation --*/
-                $sql_filter_operation="";
+                /* --all operation -- */
+                $sql_filter_operation = "";
                 break;
             case '1':
-                /* -- only paid --*/
-                $sql_filter_operation=" and j_id in (select j_id from jrnx join 
+                /* -- only paid -- */
+                $sql_filter_operation = " and j_id in (select j_id from jrnx join 
                     jrn on (j_grpt=jr_grpt_id) where jr_rapt='paid')";
                 break;
             case '2':
-                /*-- only unpaid --*/
-                $sql_filter_operation=" and j_id in (select j_id from jrnx join 
+                /* -- only unpaid -- */
+                $sql_filter_operation = " and j_id in (select j_id from jrnx join 
                     jrn on (j_grpt=jr_grpt_id) 
                     join jrn_def on (jrn_def_id=jr_def_id)
                     where coalesce(jr_rapt,'')='' and jrn_def_type in ('ACH','VEN'))";
@@ -336,9 +371,10 @@ class RAPAV_Formula_Formula extends RAPAV_Listing_Formula
         $account->set_attribute('no_overwrite', 1);
         $account->set_attribute('noquery', 1);
         $account->set_attribute('account', "formula_input_id");
+        $account->value=$this->data->fp_formula;
         echo $account->input();
-        RAPAV::input_date_paiement();
-        RAPAV::input_ledger();
+        $this->input_date_paiement();
+        $this->input_ledger();
     }
 
     function save($p_array)
@@ -447,18 +483,19 @@ class RAPAV_Formula_Compute extends RAPAV_Listing_Formula
                                 ld.lc_id=$1 
                                 and lp.lp_code=$2
                                 and lf.f_id = $3
-                                ', array($this->detail->lc_id, $search,$this->fiche->f_id));
+                                ', array($this->detail->lc_id, $search, $this->fiche->f_id));
             $formula = str_replace($piece, $value, $formula);
         }
         /** Protect against division by zero */
-        if ( strpos("1".$formula,"/0.0000") != 0)
+        if (strpos("1" . $formula, "/0.0000") != 0)
         {
-            $amount=0;
-        } else {
+            $amount = 0;
+        } else
+        {
             eval('$amount = ' . $formula . ';');
         }
         //
-        $this->detail->ld_value_numeric= $amount;
+        $this->detail->ld_value_numeric = $amount;
     }
 
     function input()
@@ -466,6 +503,7 @@ class RAPAV_Formula_Compute extends RAPAV_Listing_Formula
         global $cn;
         $f_id = $this->data->getp('listing_id');
         $account = new IText("form_compute");
+        $account->value=$this->data->fp_formula;
         $account->size = 50;
         echo $account->input();
         echo HtmlInput::button('listing_search_code_bt', 'Cherche codes', sprintf(" onclick=\"listing_search_code('%s','%s','%s','%s')\"", $_REQUEST['ac'], $_REQUEST['plugin_code'], $_REQUEST['gDossier'], $f_id));
@@ -555,20 +593,16 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
     {
         $ledger = RAPAV::get_ledger_name($this->data->jrn_def_id);
         $paid = RAPAV::str_date_type($this->data->date_paid);
-        $a_sum=explode(',','invalid,Débit,Crédit,Débit-Crédit,Crédit-Débit');
-        $sumof=($this->data->lp_card_saldo==0)?" du poste comptable":"de la fiche";
-        $str = sprintf("%s %s %s utilisant $ledger %s", 
-                $a_sum[$this->data->type_sum_account],
-                $sumof,
-                $this->data->fp_formula, 
-                $paid);
+        $a_sum = explode(',', 'invalid,Débit,Crédit,Débit-Crédit,Crédit-Débit');
+        $sumof = ($this->data->lp_card_saldo == 0) ? " du poste comptable" : "de la fiche";
+        $str = sprintf("%s %s %s utilisant $ledger %s", $a_sum[$this->data->type_sum_account], $sumof, $this->data->fp_formula, $paid);
         return $str;
     }
 
     function compute($p_start, $p_end)
     {
         global $cn;
-        $this->histo=array();
+        $this->histo = array();
         $filter_ledger = "";
         if ($this->data->jrn_def_id != "")
         {
@@ -576,21 +610,21 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
         }
 
         $card_saldo = ($this->data->lp_card_saldo == 0) ? "jrn1" : "jrn2";
-        $sql_date = RAPAV::get_sql_date($this->data->date_paid,$card_saldo);
-         switch ($this->type_operation)
+        $sql_date = RAPAV::get_sql_date($this->data->date_paid, $card_saldo);
+        switch ($this->type_operation)
         {
             case 0:
-                /*--all operation --*/
-                $sql_filter_operation="";
+                /* --all operation -- */
+                $sql_filter_operation = "";
                 break;
             case '1':
-                /* -- only paid --*/
-                $sql_filter_operation=" and $card_saldo.j_id in (select j_id from jrnx join 
+                /* -- only paid -- */
+                $sql_filter_operation = " and $card_saldo.j_id in (select j_id from jrnx join 
                     jrn on (j_grpt=jr_grpt_id) where jr_rapt='paid')";
                 break;
             case '2':
-                /*-- only unpaid --*/
-                $sql_filter_operation=" and $card_saldo.j_id in (select j_id from jrnx join 
+                /* -- only unpaid -- */
+                $sql_filter_operation = " and $card_saldo.j_id in (select j_id from jrnx join 
                     jrn on (j_grpt=jr_grpt_id) 
                     join jrn_def on (jrn_def_id=jr_def_id)
                     where coalesce(jr_rapt,'')='' and jrn_def_type in ('ACH','VEN'))";
@@ -618,21 +652,20 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
                                 $sql_filter_operation    
                                 ) as tv_amount
 							 ";
-                $amount = $cn->get_value("select sum(jrnx_amount) from ".$sql, array(
+                $amount = $cn->get_value("select sum(jrnx_amount) from " . $sql, array(
                     $this->data->fp_formula,
                     $p_start,
                     $p_end,
                     $this->fiche->f_id
                 ));
-                if ($this->data->lp_histo == 1 ) 
+                if ($this->data->lp_histo == 1)
                 {
-                    $this->histo=$cn->get_array("select distinct jr_id from 
-                        jrn join $sql on (j_grpt=jr_grpt_id) ",array (
+                    $this->histo = $cn->get_array("select distinct jr_id from 
+                        jrn join $sql on (j_grpt=jr_grpt_id) ", array(
                         $this->data->fp_formula,
                         $p_start,
                         $p_end,
                         $this->fiche->f_id));
-
                 }
                 // if C-D is asked then reverse the result
                 if ($this->data->type_sum_account == 2)
@@ -656,21 +689,20 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
                                 $sql_filter_operation
                                 ) as tv_amount
 							 ";
-                $amount = $cn->get_value("select sum(jrnx_amount) from".$sql, array(
+                $amount = $cn->get_value("select sum(jrnx_amount) from" . $sql, array(
                     $this->data->fp_formula,
                     $p_start,
                     $p_end,
                     $this->fiche->f_id
                 ));
-               if ($this->data->lp_histo == 1 ) 
+                if ($this->data->lp_histo == 1)
                 {
-                    $this->histo=$cn->get_array("select distinct jr_id from 
-                        jrn join $sql on (j_grpt=jr_grpt_id) ",array (
+                    $this->histo = $cn->get_array("select distinct jr_id from 
+                        jrn join $sql on (j_grpt=jr_grpt_id) ", array(
                         $this->data->fp_formula,
                         $p_start,
                         $p_end,
                         $this->fiche->f_id));
-
                 }
 
                 break;
@@ -692,21 +724,20 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
                                 $sql_filter_operation
                                 ) as tv_amount
 							 ";
-                $amount = $cn->get_value("select sum(jrnx_amount) from ".$sql, array(
+                $amount = $cn->get_value("select sum(jrnx_amount) from " . $sql, array(
                     $this->data->fp_formula,
                     $p_start,
                     $p_end,
                     $this->fiche->f_id
                 ));
-               if ($this->data->lp_histo == 1 ) 
+                if ($this->data->lp_histo == 1)
                 {
-                    $this->histo=$cn->get_array("select distinct jr_id from 
-                        jrn join $sql on (j_grpt=jr_grpt_id) ",array (
+                    $this->histo = $cn->get_array("select distinct jr_id from 
+                        jrn join $sql on (j_grpt=jr_grpt_id) ", array(
                         $this->data->fp_formula,
                         $p_start,
                         $p_end,
                         $this->fiche->f_id));
-
                 }
 
                 break;
@@ -720,22 +751,24 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
         /*
          * 4 possibilities with type_sum_account
          */
-        if ($amount=="") $amount=0;
+        if ($amount == "")
+            $amount = 0;
         $this->detail->ld_value_numeric = $amount;
     }
+
     function save_computed()
     {
         parent::save_computed();
         /*
          * Save history now
          */
-        if ($this->data->lp_histo == 1 ) 
+        if ($this->data->lp_histo == 1)
         {
-            for ($e=0;$e<  count($this->histo);$e++)
+            for ($e = 0; $e < count($this->histo); $e++)
             {
-                $histo=new RAPAV_Listing_Compute_Historique_SQL();
-                $histo->jr_id=$this->histo[$e]['jr_id'];
-                $histo->ld_id=$this->detail->ld_id;
+                $histo = new RAPAV_Listing_Compute_Historique_SQL();
+                $histo->jr_id = $this->histo[$e]['jr_id'];
+                $histo->ld_id = $this->detail->ld_id;
                 $histo->save();
                 unset($histo);
             }
@@ -745,30 +778,33 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
     function input()
     {
         global $cn;
-        $histo_operation=new ICheckBox('histo');
+        $histo_operation = new ICheckBox('histo');
+        $histo_operation->set_check( $this->data->lp_histo);
         $account = new IPoste("p_formula", "", "formula_acc_input_id");
         $account->label = _("Recherche poste");
         $account->set_attribute('gDossier', dossier::id());
         $account->set_attribute('account', "formula_acc_input_id");
+        $account->value=$this->data->fp_formula;
         echo "Poste comptable utilisée avec chaque fiche " . $account->input();
         $sel_total_type_row = new ISelect('tt_id');
         $sel_total_type_row->value = $cn->make_array('select tt_id,tt_label from '
                 . ' rapport_advanced.total_type_account order by 2');
-
+        $sel_total_type_row->selected=$this->data->tt_id;
         echo '<p>';
         echo "Reprendre historique opération: " . $histo_operation->input();
         echo '</p>';
-        
+
         echo '<p>';
         echo "type de total : " . $sel_total_type_row->input();
         echo '</p>';
 
         $ck = new ICheckBox('card_saldo');
+        $ck->set_check($this->data->lp_card_saldo);
         echo '<p>';
         echo 'Prendre le total de la fiche ' . $ck->input();
         echo '</p>';
-        RAPAV::input_date_paiement();
-        RAPAV::input_ledger();
+        $this->input_date_paiement();
+        $this->input_ledger();
     }
 
     function save($p_array)

@@ -19,8 +19,10 @@
  */
 require_once 'class_impress.php';
 require_once 'include/class_rapav_listing_param.php';
-$formula = new RAPAV_Listing_Param_SQL();
+$lp_id = HtmlInput::default_value_get('lp_id', -1);
+$formula = new RAPAV_Listing_Param_SQL($lp_id);
 
+$html = "";
 switch ($tab)
 {
     case 'formula':
@@ -49,6 +51,7 @@ switch ($tab)
             $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"listing_detail_remove('%s','%s','%s','%s')\""
                                     , $_REQUEST['gDossier'], $_REQUEST['plugin_code'], $_REQUEST['ac'], $lp_id));
             $html.='</td>';
+         
         }
         break;
     case 'compute_id':
@@ -77,6 +80,7 @@ switch ($tab)
             $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"listing_detail_remove('%s','%s','%s','%s')\""
                                     , $_REQUEST['gDossier'], $_REQUEST['plugin_code'], $_REQUEST['ac'], $lp_id));
             $html.='</td>';
+            
         }
         break;
     case 'new_account_id':
@@ -105,6 +109,7 @@ switch ($tab)
             $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"listing_detail_remove('%s','%s','%s','%s')\""
                                     , $_REQUEST['gDossier'], $_REQUEST['plugin_code'], $_REQUEST['ac'], $lp_id));
             $html.='</td>';
+            
         }
         break;
     case 'new_attribute_id':
@@ -124,8 +129,17 @@ switch ($tab)
         $html.='<td>';
         $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"listing_detail_remove('%s','%s','%s','%s')\"", $_REQUEST['gDossier'], $_REQUEST['plugin_code'], $_REQUEST['ac'], $lp_id));
         $html.='</td>';
+       
+
         break;
 }
+ob_start();
+ echo '<td>';
+ $obj = new Rapav_Listing_Param($lp_id);
+$obj->button_modify();
+echo '</td>';
+$html.=ob_get_clean();
+ob_end_clean();
 
 //echo $html;exit();
 $html = escape_xml($html);

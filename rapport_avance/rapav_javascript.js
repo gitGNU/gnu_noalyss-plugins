@@ -113,7 +113,7 @@ function add_param_detail(plugin_code, ac, dossier, p_id)
         alert("add_param_detail" + e.message);
     }
 }
-function modify_param_detail(plugin_code,ac,dossier,fp_id)
+function modify_param_detail(plugin_code, ac, dossier, fp_id)
 {
     try
     {
@@ -327,8 +327,8 @@ function save_param_detail(p_form_id)
                                 var afpid = answer.getElementsByTagName('fp_id');
                                 var fp_id = afpid[0].firstChild.nodeValue;
                                 var p_id = ap_id[0].firstChild.nodeValue;
-                                var update=$('tr_'+fp_id);
-                                if ( update== undefined )
+                                var update = $('tr_' + fp_id);
+                                if (update == undefined)
                                 {
                                     // Ajoute une ligne avec résultat
                                     var mytable = g("table_" + p_id).tBodies[0];
@@ -337,7 +337,7 @@ function save_param_detail(p_form_id)
                                     oRow.id = "tr_" + fp_id;
                                     oRow.innerHTML = code_html;
                                 } else {
-                                    $(update).innerHTML=code_html;
+                                    $(update).innerHTML = code_html;
                                 }
                                 removeDiv('param_detail_div');
 
@@ -653,20 +653,10 @@ function listing_definition(json)
 
     }
 }
-/**
- * @brief display a form for adding a parameter to the current listing
- * @param  json
- * Attributes are 
- *     - cin      the div to fill
- *     - tb_id    the table to update
- *     - gDossier dossier 
- *     - ac       the AC code
- *     - pc       plugin_code
- */
-function listing_param_add(json)
+function listing_detail_modify(json)
 {
     try {
-        var querystring = 'plugin_code=' + json.pc + '&ac=' + json.ac + '&gDossier=' + json.gDossier + '&act=listing_param_add' + "&cin=" + json.cin + '&id=' + json.id;
+        var querystring = 'plugin_code=' + json.pc + '&ac=' + json.ac + '&gDossier=' + json.gDossier + '&act=listing_detail_modify' + "&cin=" + json.cin + '&id=' + json.id;
         waiting_box();
         var action = new Ajax.Request(
                 "ajax.php",
@@ -689,7 +679,58 @@ function listing_param_add(json)
                             var position = fixed_position(451, 217) + ';width:50%';
                             add_div({'id': json.cin, 'cssclass': 'inner_box', 'drag': 1, 'style': position});
                             $(json.cin).innerHTML = code_html;
-                          
+
+                        } catch (e) {
+                            alert(e.message);
+                        }
+                        code_html.evalScripts();
+                    }
+                }
+        );
+
+    } catch (e)
+    {
+        alert(e.message);
+
+    }
+}
+/**
+ * @brief display a form for adding a parameter to the current listing
+ * @param  json
+ * Attributes are 
+ *     - cin      the div to fill
+ *     - tb_id    the table to update
+ *     - gDossier dossier 
+ *     - ac       the AC code
+ *     - pc       plugin_code
+ */
+function listing_detail_add(json)
+{
+    try {
+        var querystring = 'plugin_code=' + json.pc + '&ac=' + json.ac + '&gDossier=' + json.gDossier + '&act=listing_detail_add' + "&cin=" + json.cin + '&id=' + json.id;
+        waiting_box();
+        var action = new Ajax.Request(
+                "ajax.php",
+                {
+                    method: 'get',
+                    parameters: querystring,
+                    onFailure: error_get_predef,
+                    onSuccess: function(req) {
+                        try {
+                            var answer = req.responseXML;
+                            var a = answer.getElementsByTagName('ctl');
+                            var html = answer.getElementsByTagName('code');
+                            if (a.length == 0) {
+                                var rec = req.responseText;
+                                throw 'cannot find ctl element';
+                            }
+                            remove_waiting_box();
+                            var code_html = getNodeText(html[0]);
+                            code_html = unescape_xml(code_html);
+                            var position = fixed_position(451, 217) + ';width:50%';
+                            add_div({'id': json.cin, 'cssclass': 'inner_box', 'drag': 1, 'style': position});
+                            $(json.cin).innerHTML = code_html;
+
                         } catch (e) {
                             alert(e.message);
                         }
@@ -713,14 +754,14 @@ function save_param_listing(p_form_id)
     /**
      * code_id can not be empty
      */
-    if ( $('code_id').value.trim()=='') {
-       $('code_id').style.border="solid 2px red";
-       $('code_id_span').innerHTML=' Code ne peut pas être vide';
+    if ($('code_id').value.trim() == '') {
+        $('code_id').style.border = "solid 2px red";
+        $('code_id_span').innerHTML = ' Code ne peut pas être vide';
         return false;
     }
     try
     {
-        var qs = $(p_form_id).serialize() + '&act=save_param_listing&'+$('common_frm').serialize();
+        var qs = $(p_form_id).serialize() + '&act=save_param_listing&' + $('common_frm').serialize();
         waiting_box();
         var action = new Ajax.Request(
                 "ajax.php",
@@ -728,13 +769,18 @@ function save_param_listing(p_form_id)
                     method: 'get',
                     parameters: qs,
                     onFailure: error_get_predef,
-                    onSuccess: function (req, json) {
+                    onSuccess: function(req, json) {
                         try {
                             remove_waiting_box();
+                             console.log(775);
                             var answer = req.responseXML;
+                             console.log(777);
                             var acode = answer.getElementsByTagName('code');
+                             console.log(778);
                             var ap_id = answer.getElementsByTagName('l_id');
+                             console.log(779);
                             var html = answer.getElementsByTagName('html');
+                             console.log(780);
 
                             if (acode.length == 0) {
                                 var rec = req.responseText;
@@ -745,15 +791,23 @@ function save_param_listing(p_form_id)
                             var code_html = unescape_xml(code_xml);
                             if (code == 'ok')
                             {
+                                console.log('ok');
                                 var afpid = answer.getElementsByTagName('lp_id');
                                 var fp_id = afpid[0].firstChild.nodeValue;
                                 var p_id = ap_id[0].firstChild.nodeValue;
-                                // Ajoute une ligne avec résultat
-                                var mytable = g("definition_tb_id").tBodies[0];
-                                var nNumberRow = mytable.rows.length;
-                                var oRow = mytable.insertRow(nNumberRow);
-                                oRow.id = "tr_" + fp_id;
-                                oRow.innerHTML = code_html;
+                                var update = $('tr_' + fp_id);
+                                if (update == undefined)
+                                {
+                                    // Ajoute une ligne avec résultat
+                                    var mytable = g("definition_tb_id").tBodies[0];
+                                    var nNumberRow = mytable.rows.length;
+                                    var oRow = mytable.insertRow(nNumberRow);
+                                    oRow.id = "tr_" + fp_id;
+                                    oRow.innerHTML = code_html;
+                                }
+                                else {
+                                    update.innerHTML = code_html;
+                                }
                                 removeDiv('listing_param_input_div_id');
 
                             }
@@ -765,12 +819,15 @@ function save_param_listing(p_form_id)
                         }
                         catch (e) {
                             alert("save_param_detail " + e.message);
+                            console.log(e.message);
+                            return false;
                         }
                         try {
                             code_html.evalScripts();
                         }
                         catch (e) {
                             alert("save_param_detail Impossible executer script de la reponse\n" + e.message);
+                            console.log(e.message);
                         }
 
                     }
@@ -780,18 +837,19 @@ function save_param_listing(p_form_id)
     catch (e)
     {
         alert(e.message);
+        return false;
     }
 
     return false;
 }
-function listing_detail_remove(dossier,plugin_code,ac,id)
+function listing_detail_remove(dossier, plugin_code, ac, id)
 {
-    if ( confirm('Confirmez-vous effacer ce détail ?') == false )
+    if (confirm('Confirmez-vous effacer ce détail ?') == false)
     {
         return;
     }
     try {
-        var query='plugin_code=' + plugin_code+ '&ac=' + ac+ '&gDossier=' +dossier+ '&act=listing_detail_remove' + "&id="+id;
+        var query = 'plugin_code=' + plugin_code + '&ac=' + ac + '&gDossier=' + dossier + '&act=listing_detail_remove' + "&id=" + id;
         waiting_box();
         var action = new Ajax.Request(
                 "ajax.php",
@@ -799,7 +857,7 @@ function listing_detail_remove(dossier,plugin_code,ac,id)
                     method: 'get',
                     parameters: query,
                     onFailure: error_get_predef,
-                    onSuccess: function (req, json) {
+                    onSuccess: function(req, json) {
                         try {
                             remove_waiting_box();
                             var answer = req.responseXML;
@@ -811,13 +869,13 @@ function listing_detail_remove(dossier,plugin_code,ac,id)
                                 alert('erreur :' + rec);
                             }
                             var code = acode[0].firstChild.nodeValue;
-                            
+
                             if (code == 'ok')
                             {
-                                var row=$('tr_'+id);
-                                row.style.color="red";
-                                row.style.textDecoration='line-through';
-                                row.cells[row.cells.length-1].innerHTML="";
+                                var row = $('tr_' + id);
+                                row.style.color = "red";
+                                row.style.textDecoration = 'line-through';
+                                row.cells[row.cells.length - 1].innerHTML = "";
 
                             }
                             if (code == 'nok')
@@ -833,7 +891,7 @@ function listing_detail_remove(dossier,plugin_code,ac,id)
                     }
                 }
         );
-    } catch(e)
+    } catch (e)
     {
         alert(e.message);
     }
@@ -970,15 +1028,27 @@ function parameter_send_mail()
     {
         alert(e.message);
         return false;
-        
+
     }
 }
 function send_email()
 {
-    if (trim($('p_from').value)=="") { alert('champs obligatoire manquant'); $('p_from').style.border="solid 2px red";return false;}
-    if (trim($('p_subject').value)=="") { alert('champs obligatoire manquant'); $('p_subject').style.border="solid 2px red";return false;}
-    if (trim($('p_attach').value)=="") { alert('champs obligatoire manquant'); $('p_attach').style.border="solid 2px red";return false;}
-   try {
+    if (trim($('p_from').value) == "") {
+        alert('champs obligatoire manquant');
+        $('p_from').style.border = "solid 2px red";
+        return false;
+    }
+    if (trim($('p_subject').value) == "") {
+        alert('champs obligatoire manquant');
+        $('p_subject').style.border = "solid 2px red";
+        return false;
+    }
+    if (trim($('p_attach').value) == "") {
+        alert('champs obligatoire manquant');
+        $('p_attach').style.border = "solid 2px red";
+        return false;
+    }
+    try {
         var qs = $('parameter_send_email_input_frm').serialize(false);
         waiting_box();
         var action = new Ajax.Request(
@@ -1011,12 +1081,12 @@ function send_email()
     {
         alert(e.message);
         return false;
-        
+
     }
 }
 function js_include_follow()
 {
-   try {
+    try {
         var qs = $('include_follow_frm').serialize(false);
         waiting_box();
         var action = new Ajax.Request(
@@ -1048,12 +1118,12 @@ function js_include_follow()
     {
         alert(e.message);
         return false;
-        
+
     }
 }
 function js_include_follow_save()
 {
-   try {
+    try {
         var qs = $('include_follow_save_frm').serialize(false);
         waiting_box();
         var action = new Ajax.Request(
@@ -1086,6 +1156,6 @@ function js_include_follow_save()
     {
         alert(e.message);
         return false;
-        
+
     }
 }

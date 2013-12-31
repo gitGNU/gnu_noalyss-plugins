@@ -268,7 +268,7 @@ class Rapav_Listing
             'pc' => $_REQUEST['plugin_code'])
         );
         $arg = str_replace('"', "'", $arg);
-        $button->javascript = 'listing_param_add(' . $arg . ')';
+        $button->javascript = 'listing_detail_add(' . $arg . ')';
         echo $button->input();
     }
 
@@ -306,6 +306,6 @@ class Rapav_Listing
         $cat = $cn->get_value('select fd_description from fiche_def where fd_id=$1', array($this->data->getp('fiche_def_id')));
         return $cat;
     }
-
+    
 
 }

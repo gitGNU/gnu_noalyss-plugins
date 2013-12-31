@@ -92,4 +92,25 @@ class RAPAV_Listing_Param {
         $attribute->set_listing($p_id);
         require 'template/listing_param_input.php';
     }
+    function button_delete()
+    {
+         $json = sprintf(" onclick=\"listing_detail_remove('%s','%s','%s','%s')\"", 
+            Dossier::id(), 
+            $_REQUEST['plugin_code'], 
+            $_REQUEST['ac'], 
+            $this->Param->getp('lp_id') );
+         echo HtmlInput::anchor("Effacer", "", $json);
+    }
+    function button_modify()
+    {
+        $json=json_encode(array('pc'=>$_REQUEST['plugin_code'],
+            'ac'=>$_REQUEST['ac'],
+            'gDossier'=>Dossier::id(),
+            'id'=>$this->Param->getp('lp_id'),
+            'cin'=>'listing_param_input_div_id'));
+        $json=  str_replace('"', "'", $json);
+         $js = sprintf(" onclick=\"listing_detail_modify(%s)\"", 
+                 $json             );
+         echo HtmlInput::anchor("Modifier", "", $js);
+    }
 }
