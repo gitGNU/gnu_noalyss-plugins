@@ -28,6 +28,7 @@
  */
 global $cn;
 $cn->exec_sql("delete from rapport_advanced.declaration where to_keep='N' and d_generated < now() - interval '5 hours'");
+$cn->exec_sql("delete from rapport_advanced.listing_compute where l_keep='N' and l_timestamp < now() - interval '5 hours'");
 $data=$cn->get_array("select d_id,d_title,
 		d_start,d_end,to_char(d_generated,'DD/MM/YY HH24:MI') as fmt_generated,
 		d_description,d_generated,
