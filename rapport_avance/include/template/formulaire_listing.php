@@ -39,8 +39,9 @@
 	</tr>
 <?php 
 	for ($i=0;$i<count($alist);$i++):
+            $class=($i%2==0)?'class="odd"':'class="even"';
 ?>
-	<tr>
+	<tr <?php echo $class; ?>>
 		<td>
 			<?php echo h($alist[$i]['f_title'])?>
 		</td>
