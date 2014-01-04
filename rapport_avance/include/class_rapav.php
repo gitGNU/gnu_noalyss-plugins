@@ -126,7 +126,10 @@ class RAPAV
         $formula = preg_replace('/([0-9]+.{0,1}[0.9]*)*(\+|-|\*|\/)*/', '', $formula);
         $formula = preg_replace('/(\(|\))/', '', $formula);
         $formula = preg_replace('/\s/', '', $formula);
-        $formula = preg_replace('/FROM=/', '', $formula);
+        $formula = preg_replace('/</', '', $formula);
+        $formula = preg_replace('/>/', '', $formula);
+        $formula = preg_replace('/=/', '', $formula);
+        $formula = preg_replace('/\?/', '', $formula);
 
         // if something remains it should be a mistake
         if ($formula != '')
