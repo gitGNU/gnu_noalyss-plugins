@@ -210,6 +210,7 @@ function delete_param_detail(plugin_code, ac, dossier, fp_id)
                         $('tr_' + fp_id).style.textDecoration = "line-through";
                         $('tr_' + fp_id).style.color = "red";
                         $('del_' + fp_id).innerHTML = "";
+                        $('mod_' + fp_id).innerHTML = "";
                     }
                 }
         );
@@ -868,6 +869,7 @@ function listing_detail_remove(dossier, plugin_code, ac, id)
                                 row.style.color = "red";
                                 row.style.textDecoration = 'line-through';
                                 row.cells[row.cells.length - 1].innerHTML = "";
+                                row.cells[row.cells.length - 2].innerHTML = "";
 
                             }
                             if (code == 'nok')
