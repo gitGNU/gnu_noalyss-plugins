@@ -210,7 +210,7 @@ class RAPAV_Listing_Compute
                      $check_box=new ICheckBox("selected_card[]", $fiche->lf_id);
                      echo td($check_box->input(),' sorttable_customkey="1" ');
                 }
-                echo (($detail->ld_value_numeric !== null)?td(nbm($detail->ld_value_numeric),'class="num"'):"");
+                echo (($detail->ld_value_numeric !== null)?td(nbm($detail->ld_value_numeric),' sorttable_customkey="'.$detail->ld_value_numeric.'"'.' class="num"'):"");
                 echo (($detail->ld_value_text !== null)?td($detail->ld_value_text):"");
                 echo (($detail->ld_value_date!== null)?td($detail->ld_value_date,' sorttable_customkey="'.$detail->ld_value_date.'"'):"");
             }
@@ -224,6 +224,10 @@ class RAPAV_Listing_Compute
                 $href=  "extension.raw.php?".http_build_query($arg);
                 echo td('<a href="'.$href.'">'.$fiche->lf_filename);
             }
+            else 
+            { 
+                echo td();
+            }
             if ( $fiche->lf_pdf != "")
             {
                 $arg=array("gDossier"=>$_REQUEST['gDossier'],
@@ -234,6 +238,11 @@ class RAPAV_Listing_Compute
                 $href=  "extension.raw.php?".http_build_query($arg);
                 echo td('<a href="'.$href.'">'.$fiche->lf_pdf_filename);
             }
+            else 
+            { 
+                echo td();
+            }
+
             echo '</tr>';
         }
         echo '</table>';
