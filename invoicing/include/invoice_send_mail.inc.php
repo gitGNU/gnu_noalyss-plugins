@@ -35,10 +35,10 @@ $subject = HtmlInput::default_value_get('email_subject', 'null');
 $message = HtmlInput::default_value_get('email_message', 'null');
 $copy = HtmlInput::default_value_get('email_copy', 'null');
 $pdf = HtmlInput::default_value_get('pdf', 'null');
-if ($email_from == "null") {
+if ($from == "null") {
     die (_("Désolé mais il faut donner l'email de celui qui envoie"));
 }
-if ($email_subject == "null") {
+if ($subject == "null") {
     die (_("Le sujet est obligatoire"));
 }
 $feedback = array();
