@@ -115,10 +115,10 @@ foreach ($_GET['sel_sale'] as $key => $value)
         {
             $feedback[] = _('Envoi echoué') . " $dest_qcode $dest_name $dest_mail";
         }
-    } else if ($invoice['jr_pj_name'] != "" || $invoice['jr_pj'] != "")
+    } else if ($invoice['jr_pj_name'] == "" || $invoice['jr_pj'] == "")
     {
         $feedback[] = _('Aucune pièce à envoyer') . " $dest_qcode $dest_name $dest_mail";
-    } else if ($dest_mail == "")
+    } else if ($dest_mail == "" || $dest_mail == NOTFOUND )
     {
         $feedback[] = _('Aucune adresse email trouvée') . " $dest_qcode $dest_name $dest_mail";
     }
