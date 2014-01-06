@@ -99,9 +99,9 @@ foreach ($_GET['sel_sale'] as $key => $value)
 
         if ($copy != 'null')
         {
-            $to = $dest_mail . ',' . $from;
+            $dest_mail= $dest_mail . ',' . $from;
         }
-        $sendmail->mailto($from);
+        $sendmail->mailto($dest_mail);
         $sendmail->set_subject($subject);
         $sendmail->set_message($message);
         $ofile = new FileToSend($filetosend);
