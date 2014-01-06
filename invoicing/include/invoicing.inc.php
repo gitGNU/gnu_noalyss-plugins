@@ -68,7 +68,7 @@ $document_to_send->value=array(
     array('value'=>'2','Envoi de la facture sans conversion en PDF')
 )
 ?>
-<form method="GET" id="sel_sale_frm">
+<form method="GET" id="sel_sale_frm" onsubmit="return verify_invoicing()">
     Ajouter dans le form les valeurs de la recherches
     <?php
     echo HtmlInput::request_to_hidden(array('gDossier', 'ac', 'plugin_code'));
@@ -97,7 +97,7 @@ $document_to_send->value=array(
         </li>
         <li>
             
-            <input type="radio" name="action" value="3" 
+            <input type="radio" name="action" id="invoice_radio" value="3" 
                    onclick="$('invoice_div').hide();$('send_mail_div').show();">
             <?php echo _('Envoi des factures par email') ?>
             <div id="send_mail_div" style="display:none">
@@ -107,12 +107,14 @@ $document_to_send->value=array(
                 </p>
                 <p>
                     <?php echo _('Email envoyé par'); ?> :
-                     <input type="text" name="email_from" class="input_text">
+                     <input type="text" id="email_from" name="email_from" class="input_text">
+                     <span class="notice" id="email_from_span"></span>
                 </p>
                 
                 <p>
                     <?php echo _('Sujet')?> : 
-                    <input type="text" name="email_subject" class="input_text">
+                    <input type="text" id="email_subject" name="email_subject" class="input_text">
+                    <span class="notice" id="email_subject_span"></span>
                 </p>
                 <p>
                     <?php echo _('Message')?> : 
@@ -131,3 +133,28 @@ $document_to_send->value=array(
         ?>
     </p>
 </form>
+<script>
+    function verify_invoicing()
+    {
+        if ($('invoice_radio').checked) {
+            if ($('email_from').value.trim()=="") {
+                $('email_from').style.border="solid 2px red";
+                $('email_from_span').innerHTML=" Obligatoire";
+                return false;
+            } else {
+                $('email_from_span').hide();
+                $('email_from').style.border="";
+            }
+            if ($('email_subject').value.trim()=="") {
+                $('email_subject').style.border="solid 2px red";
+                $('email_subject_span').innerHTML=" Obligatoire";
+                return false;
+            }else {
+                $('email_subject_pan').hide();
+                $('email_subject').style.border="";
+            }
+        }
+    }
+</script>
+    
+    

@@ -21,25 +21,12 @@
 /**
  * @file
  * @brief 
- * @param type $name Descriptionara
-  @note
-  array
-  'gDossier' => string '27' (length=2)
-  'ac' => string 'EXT/INVOICING' (length=13)
-  'plugin_code' => string 'INVOICING' (length=9)
-  'sel_sale' =>
-  array
-  0 => string '2871' (length=4)
-  'document' => string '16' (length=2)
-  'action' => string '3' (length=1)
-  'pdf' => string 'on' (length=2)
-  'email_from' => string 'copy@aevalys.eu' (length=15)
-  'email_subject' => string 'Facture' (length=7)
-  'email_message' => string 'Message test               ' (length=27)
-  'copy' => string 'on' (length=2)
-  'choice_sel' => string 'Exécuter' (length=9)
-
-  @endnote
+ * @param email_from send of emails
+ * @param email_subject subject of email
+ * @param email_message text 
+ * @param email_copy copy to sender
+ * @param pdf convert to pdf
+   @endnote
  */
 require_once 'class_sendmail.php';
 
@@ -48,8 +35,12 @@ $subject = HtmlInput::default_value_get('email_subject', 'null');
 $message = HtmlInput::default_value_get('email_message', 'null');
 $copy = HtmlInput::default_value_get('email_copy', 'null');
 $pdf = HtmlInput::default_value_get('pdf', 'null');
-
-
+if ($email_from == "null") {
+    die (_("Désolé mais il faut donner l'email de celui qui envoie"));
+}
+if ($email_subject == "null") {
+    die (_("Le sujet est obligatoire"));
+}
 $feedback = array();
 $dirname = tempnam($_ENV['TMP'], 'invoice');
 unlink($dirname);
