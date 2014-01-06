@@ -531,7 +531,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         $result = "";
         $this->lf_email_send_date = date('Y.m.d H:i');
 
-        if ($email == "")
+        if ($email == "" || $email == NOTFOUND )
         {
             $result = $fiche->strAttribut(ATTR_DEF_QUICKCODE) . " n'a pas d'email ";
 
@@ -595,6 +595,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         $cn->commit();
         try
         {
+            $mail->compose();
             $mail->send();
             $result = $fiche->strAttribut(ATTR_DEF_QUICKCODE) . ' message envoyé email : ' . $fiche->strAttribut(ATTR_DEF_EMAIL);
             $this->lf_email_send_result=$result;
