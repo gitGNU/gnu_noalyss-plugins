@@ -60,7 +60,7 @@ list($count, $html) = $ledger->list_operation($sql, $offset, 0);
 
 // --- template Invoice  to generate --- //
 $document=new ISelect('document');
-$document->value=$cn->make_array('select md_id,md_name from document_modele order by 2');
+$document->value=$cn->make_array("select md_id,md_name from document_modele where md_affect='VEN' order by 2");
 
 $document_to_send=new ISelect('format_document');
 $document_to_send->value=array(
@@ -106,18 +106,22 @@ $document_to_send->value=array(
                     <input type="checkbox" name="pdf"> <?php echo _('Conversion en PDF'); ?>
                 </p>
                 <p>
-                    <input type="checkbox" name="copy"> <?php echo _('Copie envoyée à'); ?>
-                    <input type="text" name="email_copy" class="input_text">
+                    <?php echo _('Email envoyé par'); ?> :
+                     <input type="text" name="email_from" class="input_text">
                 </p>
+                
                 <p>
                     <?php echo _('Sujet')?> : 
                     <input type="text" name="email_subject" class="input_text">
                 </p>
                 <p>
                     <?php echo _('Message')?> : 
-                    <textarea style="vertical-align: top;width:23%;height:10%" name="message" class="input_text">               </textarea>
+                    <textarea style="vertical-align: top;width:23%;height:10%" name="email_message" class="input_text">               </textarea>
                 </p>
-                
+                <p>
+                    <input type="checkbox" name="copy"> <?php echo _("Envoyer copie à l'expéditeur"); ?>
+                   
+                </p>
             </div>
         </li>
     </ul>   

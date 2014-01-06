@@ -52,13 +52,12 @@ $zip = new Zip_Extended();
 $res = $zip->open($zip_file, ZipArchive::CREATE);
 if ($res != true)
 {
-    var_dump($res);
-    exit();
+    die("Cannot create zip file");
 }
 $zip->add_recurse_folder($dirname . "/");
 $zip->close();
 //-- send the zip
-$link = http_build_query(array('gDossier' => Dossier::id(), 'ac' => $_REQUEST['ac'], 'plugin_code' => $_REQUEST['plugin_code'], 'file' => $zip_file));
+$link = http_build_query(array('gDossier' => Dossier::id(), 'ac' => $_REQUEST['ac'], 'plugin_code' => $_REQUEST['plugin_code'], 'file' => basename($zip_file)));
 ?>
 <p>
 <h2>
@@ -73,4 +72,6 @@ $link = http_build_query(array('gDossier' => Dossier::id(), 'ac' => $_REQUEST['a
     <?php endforeach; ?>
 </ol>
 </p>
-<a class="detail" style="display:inline;text-decoration: underline" href="extension.raw.php?<?php echo $link; ?>"> <?php echo _('Télécharger le fichier') ?></a>
+<p>
+<a class="button" style="display:inline;" href="extension.raw.php?<?php echo $link; ?>"> <?php echo _('Télécharger le fichier') ?></a>
+</p>

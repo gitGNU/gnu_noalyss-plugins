@@ -30,9 +30,11 @@ if ($zip_file=='null')
 {
     die ('No file asked');
 }
-echo filesize($zip_file);
+
+$zip_file=$_ENV['TMP']."/".$zip_file;
+
 header('Content-type: application/zip');
-header('Content-Disposition: attachment; filename="' . basename($file));
+header('Content-Disposition: attachment; filename="' . $file);
 $h_file=fopen($zip_file,"r");
 if ($h_file != true) {
     die ('cannot open file');

@@ -21,7 +21,8 @@
 
 /**
  * @file
- * @brief 
+ * @brief regenerate all the invoice
  * @param type $name Descriptionara
  */
+var_dump($_REQUEST);
 ?>
