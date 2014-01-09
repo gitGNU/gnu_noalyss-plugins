@@ -90,6 +90,7 @@ if ( $_POST['jrn_type'] == 'ACH')
     $obj->save_extra($jrn->jr_id, $_POST);
     printf('<a class="line" style="display:inline" href="javascript:modifyOperation(%d,%d)">%s</a><hr>', $_POST['ext_jr_id'], dossier::id(), $new_internal);
     // Feedback
+    $jrn->internal=$_POST['ext_jr_internal'];
     echo $jrn->confirm($_POST, true);
     if (isset($jrn->doc))
       {
@@ -168,6 +169,7 @@ if ( $_POST['jrn_type'] == 'VEN')
 
             printf ('<a class="line" style="display:inline" href="javascript:modifyOperation(%d,%d)">%s</a><hr>',
                     $jr_id,dossier::id(),$new_internal);
+            $jrn->internal=$_POST['ext_jr_internal'];
 			echo $jrn->confirm($_POST,true);
             /* Show link for Invoice */
             if (isset ($jrn->doc) )
