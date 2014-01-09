@@ -19,7 +19,7 @@
  */
 
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
-
+require_once 'class_acc_ledger_sold.php';
 class Acc_Ledger_Sold_Generate extends Acc_Ledger_Sold
 {
 
@@ -285,5 +285,73 @@ class Acc_Ledger_Sold_Generate extends Acc_Ledger_Sold
 
         return array($count, $r);
     }
-
+    /**
+     * @brief
+     */
+    function convert_to_array(Acc_Sold $sold)
+    {
+        $item=count($sold->det->array);
+        if ( $item ==0)
+        {
+            throw new Exception('No Data in Quant_Purchase');
+        }
+        $array=array();
+        
+        $array['e_ech']=$sold->det->jrn_ech;
+        $array['e_comm']=$sold->det->jr_comment;
+        $array['p_jrn']=$sold->det->jr_def_id;
+        $array['nb_item']=$item;
+        $array['ledger_type']=$sold->signature;
+        $array['e_date']=  format_date($sold->det->jr_date);
+        $array['e_pj']=  $sold->det->jr_pj_number;
+        
+        $this->pj=$array['e_pj'];
+        $array['internal']=$sold->det->jr_internal;
+                
+        $client=new Fiche($sold->db,$sold->det->array[0]['qs_client']);
+        $array['e_client']=$client->get_quick_code();
+        bcscale(2);
+        for ($i=0;$i < $item ; $i++)
+        {
+            $idx='e_march';
+            $serv=new Fiche($sold->db,$sold->det->array[$i]['qs_fiche']);
+            $array[$idx.$i]=$serv->get_quick_code();
+            $array[$idx.$i.'_label']=$sold->det->array[$i]['j_text'];
+            $array[$idx.$i.'_price']=bcdiv($sold->det->array[$i]['qs_price'],$sold->det->array[$i]['qs_quantite']);
+            $array[$idx.$i.'_tva_id']=$sold->det->array[$i]['qs_vat_code'];
+            $array[$idx.$i.'_tva_amount']=$sold->det->array[$i]['qs_vat'];
+            $array['e_quant'.$i]=$sold->det->array[$i]['qs_quantite'];
+        }
+        return $array;
+       
+        
+    }
+    /**
+     * 
+     * @param type $p_array
+     * @param type $p_doc
+     * @return type
+     */
+    function create_document($p_array,$p_doc)
+    {
+      $internal=$p_array['internal'];  
+      $p_array['gen_doc']=$p_doc;
+      return parent::create_document($internal,$p_array);
+    }
+    static function test_me($p_string = '')
+    {
+         $_SESSION['g_user']='phpcompta';
+        $_SESSION['g_pass']='phpcompta';
+        global $g_user;
+        $cn=new Database(dossier::id());
+        $g_user=new User($cn);
+        $a=new Acc_Operation($cn);
+        $a->jr_id=2889;
+        $b=$a->get_quant();
+        var_dump($b);
+        $c=new Acc_Ledger_Sold_Generate($cn,$b->det->jr_def_id);
+        $array=$c->convert_to_array($b);
+        var_dump($array);
+        echo $c->create_document($array, 8);
+    }
 }
