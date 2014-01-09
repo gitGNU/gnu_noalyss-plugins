@@ -190,7 +190,10 @@ class RAPAV_Listing_Compute
                 for ($e=0;$e<$nb_detail;$e++)
                 {
                     $detail=$odetail->next($r_detail,$e);
-                    echo th( $detail->lc_code);
+                    if ( $detail->ld_value_numeric !== null )
+                        echo th( $detail->lc_code,' style="text-align:right"');
+                    else
+                        echo th( $detail->lc_code,' style="text-align:center"');
                 }
                 echo th("Fichier");
                 if ( GENERATE_PDF == 'YES')
