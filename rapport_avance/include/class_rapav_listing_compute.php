@@ -126,7 +126,7 @@ class RAPAV_Listing_Compute
                  */
                 for ($i = 0; $i < $nb_later; $i++)
                 {
-                    $compute->set_listing_compute($this->data->lc_id);
+                    $a_later[$i]->set_listing_compute($this->data->lc_id);
                     $a_later[$i]->compute($p_date_start, $p_date_end);
                     $a_later[$i]->save_computed();
                 }
