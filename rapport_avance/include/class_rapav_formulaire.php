@@ -177,6 +177,7 @@ class RAPAV_Formulaire extends Formulaire_Sql
 			else
 				$form_param->update();
 		}
+                
 		// delete checked rows
 		if ( isset ($p_array["del_row"]))
 		{
@@ -187,6 +188,17 @@ class RAPAV_Formulaire extends Formulaire_Sql
 				}
 			}
 		}
+                // Reorder
+                //
+                $order_param=new formulaire_param_sql();
+                $ret=$order_param->seek(' where f_id=$1 order by p_order',array($p_array['f_id']));
+                $nb_rows=Database::num_row($ret);
+                for ($i=0;$i < $nb_rows;$i++)
+                {
+                    $param=$order_param->next($ret,$i);
+                    $param->p_order=($i+1)*10;
+                    $param->update();
+                }
 		self::load_file($rapav);
 	}
 
