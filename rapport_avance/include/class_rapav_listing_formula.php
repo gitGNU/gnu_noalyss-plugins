@@ -485,6 +485,7 @@ class RAPAV_Formula_Compute extends RAPAV_Listing_Formula
                                 and lf.f_id = $3
                                 ', array($this->detail->lc_id, $search, $this->fiche->f_id));
             $formula = str_replace($piece, $value, $formula);
+           
         }
         /** Protect against division by zero */
         if (strpos("1" . $formula, "/0.0000") != 0)
@@ -637,6 +638,8 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
             // Saldo
             case 1:
             case 2:
+                 $card_saldo = ($this->data->lp_card_saldo == 0) ? "jrn1" : "jrn2";
+                 $card_saldo = ($this->data->lp_card_saldo == 0) ? "jrn1" : "jrn2";
                 // Compute D-C
                 $sql = "
                         
@@ -800,6 +803,7 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
         echo '</p>';
 
         $ck = new ICheckBox('card_saldo');
+        $ck->value=1;
         $ck->set_check($this->data->lp_card_saldo);
         echo '<p>';
         echo 'Prendre le total de la fiche ' . $ck->input();
