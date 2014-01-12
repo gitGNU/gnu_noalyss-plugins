@@ -1052,7 +1052,7 @@ class Rapav_dd_Account extends Rapav_Declaration_Detail
                                 jrn1.j_poste like $1
                                 $sql_date
                                 and
-                                jrn2.j_poste like $2
+                                jrn2.j_poste like $4
                                 and
                                 jrn1.j_debit='f'
                                 $filter_ledger
