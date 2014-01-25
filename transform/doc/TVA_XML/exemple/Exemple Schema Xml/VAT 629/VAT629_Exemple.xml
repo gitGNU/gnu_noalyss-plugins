@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:VAT629Consignment xmlns="http://www.minfin.fgov.be/InputCommon" xmlns:ns2="http://www.minfin.fgov.be/VAT629Consignment" VAT629DeclarationsNbr="1">
+    <ns2:Representative>
+		<RepresentativeID otherQlf="OtherType" identificationType="other" issuedBy="BE">0000000097</RepresentativeID>
+        <Name>Representative Name</Name>
+        <Street>Representative Street</Street>
+        <PostCode>Representative Postal Code</PostCode>
+        <City>Representative City</City>
+        <CountryCode>Representative Country</CountryCode>
+        <EmailAddress>test@test.be</EmailAddress>
+        <Phone>02378949396</Phone>
+    </ns2:Representative>
+    <ns2:RepresentativeReference>refmand</ns2:RepresentativeReference>
+    <ns2:VAT629Declaration DeclarantReference="refdecl" SequenceNumber="1">
+        <ns2:Declarant>
+            <VATNumber>0000000097</VATNumber>
+            <Name>NAME</Name>
+            <Street>Street</Street>
+            <PostCode>Postal Code</PostCode>
+            <City>CITY</City>
+            <CountryCode>BE</CountryCode>
+            <EmailAddress>test@test.be</EmailAddress>
+            <Phone>02378949396</Phone>
+        </ns2:Declarant>
+        <ns2:Period>
+            <ns2:Quarter>1</ns2:Quarter>
+            <ns2:Year>2012</ns2:Year>
+        </ns2:Period>
+        <ns2:Data>
+            <ns2:Amount GridNumber="71">100.00</ns2:Amount>
+            <ns2:Amount GridNumber="72">200.00</ns2:Amount>
+            <ns2:Amount GridNumber="73">300.00</ns2:Amount>
+            <ns2:Amount GridNumber="75">400.01</ns2:Amount>
+            <ns2:Amount GridNumber="76">500.00</ns2:Amount>
+            <ns2:Amount GridNumber="77">600.00</ns2:Amount>
+            <ns2:Amount GridNumber="78">700.00</ns2:Amount>
+            <ns2:Amount GridNumber="80">800.00</ns2:Amount>
+            <ns2:Amount GridNumber="81">900.00</ns2:Amount>
+            <ns2:Amount GridNumber="82">1000.00</ns2:Amount>
+            <ns2:Amount GridNumber="83">700.00</ns2:Amount>
+        </ns2:Data>
+        <ns2:Comment>comment</ns2:Comment>
+    </ns2:VAT629Declaration>
+</ns2:VAT629Consignment>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>    
+	<ns2:VATConsignment xmlns="http://www.minfin.fgov.be/InputCommon" xmlns:ns2="http://www.minfin.fgov.be/VATConsignment" VATDeclarationsNbr="1">
+		<ns2:Representative>
+			<RepresentativeID identificationType="TIN" issuedBy="BE">0000000097</RepresentativeID>
+			<Name>TEST Gevolmachtigde Manadataire NV SA</Name>
+			<Street>AV Test-laan 8</Street>
+			<PostCode>9999</PostCode>
+			<City> TestCity </City>
+			<CountryCode>DE</CountryCode>
+			<EmailAddress>something@something.be</EmailAddress>
+			<Phone>2555555</Phone>
+		</ns2:Representative>
+		<ns2:VATDeclaration SequenceNumber="1">
+			<ns2:Declarant>
+				<VATNumber>0000000097</VATNumber>
+				<Name>TEST NV - SA</Name>
+				<Street>Av Tesst-laan 12</Street>
+				<PostCode>9999</PostCode>
+				<City> TESTCITY</City>
+				<CountryCode>GB</CountryCode>
+				<EmailAddress>cedric@francis.be</EmailAddress>
+				<Phone>0255555555</Phone>
+			</ns2:Declarant>
+			<ns2:Period>
+				<ns2:Month>7</ns2:Month>
+				<ns2:Year>2011</ns2:Year>
+			</ns2:Period>
+			<ns2:Data>
+				<ns2:Amount GridNumber="54">10.00</ns2:Amount>
+				<ns2:Amount GridNumber="59">5.00</ns2:Amount>
+				<ns2:Amount GridNumber="71">5.00</ns2:Amount>
+			</ns2:Data>
+			<ns2:ClientListingNihil>NO</ns2:ClientListingNihil>
+			<ns2:Ask Payment="NO" Restitution="NO"/>
+			<ns2:Comment>free text max 2000 characters</ns2:Comment>
+		</ns2:VATDeclaration>
+	</ns2:VATConsignment>    

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>     
+	<ns2:IntraConsignment xmlns="http://www.minfin.fgov.be/InputCommon" xmlns:ns2="http://www.minfin.fgov.be/IntraConsignment" IntraListingsNbr="1">
+		<ns2:Representative>
+			<RepresentativeID identificationType="NVAT" issuedBy="BE">0000000097</RepresentativeID>
+			<Name>TEST Gevolmachtigde Manadataire NV SA</Name>
+			<Street>AV Test-laan 8</Street>
+			<PostCode>9999</PostCode>
+			<City>TESTCITY</City>
+			<CountryCode>BE</CountryCode>
+			<EmailAddress>scsdferfzefc@dsfsdf.be</EmailAddress>
+			<Phone>0212487645648</Phone>
+		</ns2:Representative>
+		<ns2:RepresentativeReference>CCFFLot2 LK</ns2:RepresentativeReference>
+		<ns2:IntraListing AmountSum="1000.00" DeclarantReference="" ClientsNbr="1" SequenceNumber="1">
+			<ns2:Declarant>
+				<VATNumber>0000000097</VATNumber>
+				<Name>BELGIUM nv sa</Name>
+				<Street>AV. testLAAN 20</Street>
+				<PostCode>9999</PostCode>
+				<City>TESTCITY</City>
+				<CountryCode>BE</CountryCode>
+				<EmailAddress>scsdferfzefc@dsfsdf.be</EmailAddress>
+				<Phone>0212487645648</Phone>
+			</ns2:Declarant>
+			<ns2:Period>
+				<ns2:Month>11</ns2:Month>
+				<ns2:Year>2011</ns2:Year>
+			</ns2:Period>
+			<ns2:IntraClient SequenceNumber="1">
+				<ns2:CompanyVATNumber issuedBy="IT">00399999991</ns2:CompanyVATNumber>
+				<ns2:Code>L</ns2:Code>
+				<ns2:Amount>1000.00</ns2:Amount>
+				<ns2:CorrectingPeriod>
+					<ns2:Month>11</ns2:Month>
+					<ns2:Year>2010</ns2:Year>
+				</ns2:CorrectingPeriod>
+			</ns2:IntraClient>
+			<ns2:Comment>free text max 2000 characters</ns2:Comment>
+		</ns2:IntraListing>
+	</ns2:IntraConsignment>    

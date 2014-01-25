@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>     
+	<ns2:MTNConsignment xmlns="http://www.minfin.fgov.be/InputCommon" xmlns:ns2="http://www.minfin.fgov.be/MTNConsignment" MTNDeclarationsNbr="1">
+		<ns2:Representative>
+			<RepresentativeID identificationType="NVAT" issuedBy="BE">0466851003</RepresentativeID>
+			<Name>POLLARD MYRIAM</Name>
+			<Street>R DE FLEMALLE GRANDE 18</Street>
+			<PostCode>4400</PostCode>
+			<City>FLEMALLE</City>
+			<CountryCode>BE</CountryCode>
+			<EmailAddress>scsdferfzefc@dsfsdf.be</EmailAddress>
+			<Phone>0212487645648</Phone>
+		</ns2:Representative>
+		<ns2:RepresentativeReference>00000000000000</ns2:RepresentativeReference>
+		<ns2:MTNDeclaration DeclarantReference="" MTNSuppliesNbr="1" SequenceNumber="1">
+			<ns2:Declarant>
+				<VATNumber>0448826918</VATNumber>
+				<Name>CARREFOUR BELGIUM</Name>
+				<Street>AV. DES OLYMPIADES 20</Street>
+				<PostCode>1140</PostCode>
+				<City>EVERE</City>
+				<CountryCode>BE</CountryCode>
+				<EmailAddress>something@something.be</EmailAddress>
+				<Phone>02555555</Phone>
+			</ns2:Declarant>
+			<ns2:Period>
+				<ns2:Quarter>2</ns2:Quarter>
+				<ns2:Year>2011</ns2:Year>
+			</ns2:Period>
+			<ns2:MTNSupply>
+				<ns2:Invoice>
+					<ns2:InvoiceType>creditNote</ns2:InvoiceType>
+					<ns2:InvoiceDate>2011-05-20</ns2:InvoiceDate>
+					<ns2:InvoiceReference>REF2011-0001</ns2:InvoiceReference>
+					<ns2:InvoiceAmount>-1532.61</ns2:InvoiceAmount>
+				</ns2:Invoice>
+				<ns2:Customer>
+					<ns2:Name>Mr Dupont</ns2:Name>
+					<ns2:Street>Avenue des Champs Elysées, 5</ns2:Street>
+					<ns2:PostCode>75000</ns2:PostCode>
+					<ns2:City>Paris</ns2:City>
+					<ns2:CountryCode>FR</ns2:CountryCode>
+				</ns2:Customer>
+				<ns2:DestinationCountryCode>FR</ns2:DestinationCountryCode>
+				<ns2:DeliveryDate>2010-09-06</ns2:DeliveryDate>
+				<ns2:MeanOfTransport>
+					<ns2:LandVehicle>
+						<ns2:IdentificationNumber>VF3 WA9GYC 33845862</ns2:IdentificationNumber>
+						<ns2:Mark>Renault</ns2:Mark>
+						<ns2:Type>Scenic Expression</ns2:Type>
+						<ns2:Capacity>1200</ns2:Capacity>
+					</ns2:LandVehicle>
+				</ns2:MeanOfTransport>
+			</ns2:MTNSupply>
+			<ns2:Comment>Ceci est mon commentaire...</ns2:Comment>
+		</ns2:MTNDeclaration>
+	</ns2:MTNConsignment>    

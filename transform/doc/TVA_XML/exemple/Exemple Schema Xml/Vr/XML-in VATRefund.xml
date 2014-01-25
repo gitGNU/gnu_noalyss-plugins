@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>     
+	<ns2:VATRefundConsignment xmlns="http://www.minfin.fgov.be/InputCommon" xmlns:ns2="http://www.minfin.fgov.be/VATRefundConsignment" GlobalVatRefundApplicationsNbr="1">
+		<ns2:Representative>
+			<RepresentativeID otherQlf="other description" identificationType="other" issuedBy="BE">0421506570</RepresentativeID>
+			<Name>POLLARD MYRIAM</Name>
+			<Street>R DE FLEMALLE GRANDE 18</Street>
+			<PostCode>4400</PostCode>
+			<City>FLEMALLE</City>
+			<CountryCode>BE</CountryCode>
+			<EmailAddress>scsdferfzefc@dsfsdf.be</EmailAddress>
+			<Phone>0212487645648</Phone>
+		</ns2:Representative>
+		<ns2:RepresentativeReference>00000000000000</ns2:RepresentativeReference>
+		<ns2:GlobalVatRefundApplication VATRefundRequestsNbr="1" SequenceNumber="1">
+			<ns2:GlobalVatRefundReference>BE0000000000001515</ns2:GlobalVatRefundReference>
+				<ns2:Applicant>
+					<VATNumber>0448826918</VATNumber>
+					<Name>Mr requérant</Name>
+					<Street>rue du requérant, 65</Street>
+					<PostCode>8671</PostCode>
+					<City>requérant-city</City>
+					<CountryCode>BE</CountryCode>
+					<EmailAddress>requerant.vatrefund@gmail.com</EmailAddress>
+					<Phone>025538749</Phone>
+				</ns2:Applicant>
+				<ns2:RefundPeriod>
+					<ns2:Quarter>2</ns2:Quarter>
+					<ns2:Quarter>3</ns2:Quarter>
+					<ns2:Year>2009</ns2:Year>
+				</ns2:RefundPeriod>
+				<ns2:BusinessDescription>
+					<ns2:BusinessActivity>4711</ns2:BusinessActivity>
+					<ns2:BusinessActivity>2931</ns2:BusinessActivity>
+					<ns2:BusinessActivity>1420</ns2:BusinessActivity>
+					<ns2:BusinessActivity>3600</ns2:BusinessActivity>
+					<ns2:BusinessActivity>7022</ns2:BusinessActivity>
+					<ns2:BusinessActivity>0220</ns2:BusinessActivity>
+				</ns2:BusinessDescription>
+				<ns2:DefaultBankAccount>
+					<ns2:OwnerName>proprio compte</ns2:OwnerName>
+					<ns2:OwnerType>applicant</ns2:OwnerType>
+					<ns2:IBAN>BE41063012345610</ns2:IBAN>
+					<ns2:BIC>GKCCBEBB</ns2:BIC>
+					<ns2:Currency>GBP</ns2:Currency>
+				</ns2:DefaultBankAccount>
+				<ns2:StandardDeclaration>true</ns2:StandardDeclaration>
+				<ns2:Comment>Ceci est mon commentaire...</ns2:Comment>
+				<ns2:VATRefundRequests>
+					<ns2:RefundingCountryCode>ES</ns2:RefundingCountryCode>
+					<ns2:ImportInformation>
+						<ns2:SequenceNumber>1</ns2:SequenceNumber>
+						<ns2:ReferenceInformation>AB126668</ns2:ReferenceInformation>
+						<ns2:IssuingDate>2008-09-02</ns2:IssuingDate>
+						<ns2:Supplier>
+							<ns2:Name>Melle fournisseur</ns2:Name>
+							<ns2:Street>Rue du fournisseur, 53</ns2:Street>
+							<ns2:PostCode>U-5690</ns2:PostCode>
+							<ns2:City>Fournisseur-city</ns2:City>
+							<ns2:CountryCode>US</ns2:CountryCode>
+						</ns2:Supplier>
+						<ns2:GoodsDescription>
+							<ns2:Code>10</ns2:Code>
+							<ns2:SubCode>10.5.4</ns2:SubCode>
+						</ns2:GoodsDescription>
+						<ns2:GoodsDescription>
+							<ns2:Code>2</ns2:Code>
+							<ns2:SubCode>2.3</ns2:SubCode>
+						</ns2:GoodsDescription>
+						<ns2:TransactionDescription>
+							<ns2:TaxableAmount currency="EUR">369.15</ns2:TaxableAmount>
+							<ns2:VATAmount currency="EUR">52.13</ns2:VATAmount>
+						</ns2:TransactionDescription>
+						<ns2:Deduction>
+							<ns2:ProRataRate>99</ns2:ProRataRate>
+							<ns2:DeductibleVATAmount currency="EUR">51.61</ns2:DeductibleVATAmount>
+						</ns2:Deduction>
+					</ns2:ImportInformation>
+					<ns2:PurchaseInformation simplifiedInvoice="true">
+						<ns2:SequenceNumber>2</ns2:SequenceNumber>
+						<ns2:ReferenceNumber>ma référence</ns2:ReferenceNumber>
+						<ns2:IssuingDate>2009-08-06</ns2:IssuingDate>
+						<ns2:EUSupplier>
+							<ns2:EUTraderID>
+							<ns2:VATIdentificationNumber issuedBy="ES">A12206793</ns2:VATIdentificationNumber>
+							</ns2:EUTraderID>
+							<ns2:Name>fournisseur italien</ns2:Name>
+							<ns2:Street>rue de la fontaine de Trevi, 45</ns2:Street>
+							<ns2:PostCode>563970</ns2:PostCode>
+							<ns2:City>Roma</ns2:City>
+							<ns2:CountryCode>IT</ns2:CountryCode>
+						</ns2:EUSupplier>
+						<ns2:GoodsDescription>
+							<ns2:Code>3</ns2:Code>
+							<ns2:SubCode>3.14</ns2:SubCode>
+						</ns2:GoodsDescription>
+						<ns2:TransactionDescription>
+							<ns2:TaxableAmount currency="EUR">600.00</ns2:TaxableAmount>
+							<ns2:VATAmount currency="EUR">420.00</ns2:VATAmount>
+						</ns2:TransactionDescription>
+						<ns2:Deduction>
+							<ns2:ProRataRate>99</ns2:ProRataRate>
+							<ns2:DeductibleVATAmount currency="EUR">415.80</ns2:DeductibleVATAmount>
+						</ns2:Deduction>
+					</ns2:PurchaseInformation>
+				</ns2:VATRefundRequests>
+			</ns2:GlobalVatRefundApplication>
+		</ns2:VATRefundConsignment>    
