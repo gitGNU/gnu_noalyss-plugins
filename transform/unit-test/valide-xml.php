@@ -45,7 +45,7 @@ libxml_use_internal_errors(true);
 
 //$file = "valide-exemple-listing.xml";
 $file = "test.xml";
-$schema = "NewLK-in_v0_7.xsd";
+$schema = "xsd/NewLK-in_v0_7.xsd";
 
 // Instanciation d’un DOMDocument
 $dom = new DOMDocument("1.0");
