@@ -2,52 +2,53 @@
 
 /**
  * Testing of class_intervat
- *  phpunit-skelgen --bootstrap bootstrap.php --test -- Intervat ../include/class_intervat.php
- * phpunit --bootstrap bootstrap.php IntervatTest.php 
+ *  phpunit-skelgen --bootstrap bootstrap.php --test -- Intervat ../include/class_transform_intervat.php
+ * phpunit --bootstrap bootstrap.php transform_IntervatTest.php 
  * @author dany
  * Expected result
  * @code
  * <?xml version="1.0" encoding="ISO-8859-1"?>
-<ns2:ClientListingConsignment xmlns:ns2="http://www.minfin.fgov.be/ClientListingConsignment" xmlns="http://www.minfin.fgov.be/InputCommon" ClientListingsNbr="1">
+  <ns2:ClientListingConsignment xmlns:ns2="http://www.minfin.fgov.be/ClientListingConsignment" xmlns="http://www.minfin.fgov.be/InputCommon" ClientListingsNbr="1">
   <ns2:Representative>
-    <RepresentativeID identificationType="TIN" issuedBy="BE">0000000097</RepresentativeID>
-    <Name>Nom Mandataire</Name>
-    <Street>Nom de rue</Street>
-    <PostCode>9999</PostCode>
-    <City>TESTCITY</City>
-    <CountryCode>BE</CountryCode>
-    <EmailAddress>dany@alch.be</EmailAddress>
-    <Phone>000000000</Phone>
+  <RepresentativeID identificationType="TIN" issuedBy="BE">0000000097</RepresentativeID>
+  <Name>Nom Mandataire</Name>
+  <Street>Nom de rue</Street>
+  <PostCode>9999</PostCode>
+  <City>TESTCITY</City>
+  <CountryCode>BE</CountryCode>
+  <EmailAddress>dany@alch.be</EmailAddress>
+  <Phone>000000000</Phone>
   </ns2:Representative>
   <ns2:ClientListing VATAmountSum="0" TurnOverSum="0" ClientsNbr="2" SequenceNumber="1">
-    <ns2:Declarant>
-      <VATNumber>0000000097</VATNumber>
-      <Name>Nom Déclarant</Name>
-      <Street>Rue du déclarant</Street>
-      <PostCode>9999</PostCode>
-      <City>TESTCITY</City>
-      <CountryCode>BE</CountryCode>
-      <EmailAddress>dany@alch.be</EmailAddress>
-      <Phone>000000000</Phone>
-    </ns2:Declarant>
-    <ns2:Period>2009</ns2:Period>
-    <ns2:Client SequenceNumber="1">
-      <ns2:CompanyVATNumber issuedBy="BE">0000000097</ns2:CompanyVATNumber>
-      <ns2:TurnOver>500</ns2:TurnOver>
-      <ns2:VATAmount>0</ns2:VATAmount>
-    </ns2:Client>
-    <ns2:Client SequenceNumber="2">
-      <ns2:CompanyVATNumber issuedBy="BE">0000000097</ns2:CompanyVATNumber>
-      <ns2:TurnOver>500</ns2:TurnOver>
-      <ns2:VATAmount>0</ns2:VATAmount>
-    </ns2:Client>
-    <ns2:Comment>Commentaire</ns2:Comment>
+  <ns2:Declarant>
+  <VATNumber>0000000097</VATNumber>
+  <Name>Nom Déclarant</Name>
+  <Street>Rue du déclarant</Street>
+  <PostCode>9999</PostCode>
+  <City>TESTCITY</City>
+  <CountryCode>BE</CountryCode>
+  <EmailAddress>dany@alch.be</EmailAddress>
+  <Phone>000000000</Phone>
+  </ns2:Declarant>
+  <ns2:Period>2009</ns2:Period>
+  <ns2:Client SequenceNumber="1">
+  <ns2:CompanyVATNumber issuedBy="BE">0000000097</ns2:CompanyVATNumber>
+  <ns2:TurnOver>500</ns2:TurnOver>
+  <ns2:VATAmount>0</ns2:VATAmount>
+  </ns2:Client>
+  <ns2:Client SequenceNumber="2">
+  <ns2:CompanyVATNumber issuedBy="BE">0000000097</ns2:CompanyVATNumber>
+  <ns2:TurnOver>500</ns2:TurnOver>
+  <ns2:VATAmount>0</ns2:VATAmount>
+  </ns2:Client>
+  <ns2:Comment>Commentaire</ns2:Comment>
   </ns2:ClientListing>
-</ns2:ClientListingConsignment>
+  </ns2:ClientListingConsignment>
  * @endcode
  * 
  */
-require_once 'class_intervat.php';
+require_once 'class_transform_intervat.php';
+require_once 'class_transform_representative.php';
 require_once 'bootstrap.php';
 
 /**
@@ -67,8 +68,8 @@ class IntervatTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->object = new Intervat;
-        $this->result='<?xml version="1.0" encoding="ISO-8859-1"?>
+        $this->object = new Transform_Intervat;
+        $this->result = '<?xml version="1.0" encoding="ISO-8859-1"?>
 <ns2:ClientListingConsignment xmlns:ns2="http://www.minfin.fgov.be/ClientListingConsignment" xmlns="http://www.minfin.fgov.be/InputCommon" ClientListingsNbr="1">
   <ns2:Representative>
     <RepresentativeID identificationType="TIN" issuedBy="BE">0000000097</RepresentativeID>
@@ -106,6 +107,29 @@ class IntervatTest extends PHPUnit_Framework_TestCase
   </ns2:ClientListing>
 </ns2:ClientListingConsignment>
 ';
+        $this->representative = new Transform_Representative();
+        $this->representative->id = "0000000097";
+        $this->representative->issued = "BE";
+        $this->representative->type = 'TIN';
+        $this->representative->name = "Nom Mandataire";
+        $this->representative->street = "Nom de rue";
+        $this->representative->postcode = "9999";
+        $this->representative->city = "TESTCITY";
+        $this->representative->countrycode = "BE";
+        $this->representative->email = "dany@alch.be";
+        $this->representative->phone = "000000000";
+              /*
+         * Variables
+         */
+        $this->declarant=new Transform_Declarant();
+        $this->declarant->vat_number = "0000000097";
+        $this->declarant->name = "Nom Declarant";
+        $this->declarant->street = "Rue du declarant";
+        $this->declarant->postcode = "9999";
+        $this->declarant->city = "TESTCITY";
+        $this->declarant->countrycode = "BE";
+        $this->declarant->email = "dany@alch.be";
+        $this->declarant->phone = "000000000";
     }
 
     /**
@@ -133,25 +157,27 @@ class IntervatTest extends PHPUnit_Framework_TestCase
         $this->assertContains('xmlns:ns2="http://www.minfin.fgov.be/ClientListingConsignment"', $result);
         $this->assertContains('ClientListingsNbr="1"', $result);
     }
+
     public function testAppend_representative()
     {
-          $this->object->append_root();
-        $this->object->append_representative();
+
+        $this->object->append_root();
+        $this->object->append_representative($this->representative);
         $result = $this->object->domdoc->saveXML();
-        $this->assertContains('ns2:Representative',$result);
+        $this->assertContains('ns2:Representative', $result);
     }
-   /**
+
+    /**
      * @covers Intervat::append_client_listing
      * @todo   Implement testAppend_client_listing().
      */
     public function testAppend_client_listing()
     {
-      $this->object->append_root();
-      $this->object->append_representative();
-      $this->object->append_client_listing(array());
-      $result = $this->object->domdoc->saveXML();
-      $this->assertEquals($this->result,$result);
-      
+        $this->object->append_root();
+        $this->object->append_representative($this->representative);
+        $this->object->append_client_listing($this->declarant,array());
+        $result = $this->object->domdoc->saveXML();
+        $this->assertEquals($this->result, $result);
     }
 
     /**
@@ -160,17 +186,12 @@ class IntervatTest extends PHPUnit_Framework_TestCase
      */
     public function testAppend_declarant()
     {
-        
+        $this->object->append_root();
+        $this->object->append_representative($this->representative);
+        $this->object->append_client_listing($this->declarant,array());
+        $result = $this->object->domdoc->saveXML();
+        $this->assertEquals($this->result, $result);
     }
 
-    /**
-     * @covers Intervat::append_listing
-     * @todo   Implement testAppend_listing().
-     */
-    public function testAppend_listing()
-    {
-        
-    }
-    
 
 }

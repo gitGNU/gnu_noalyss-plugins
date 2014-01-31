@@ -17,7 +17,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-
+require_once 'class_transform_declarant.php';
+require_once 'class_transform_representative.php';
 
 
 /**
@@ -25,7 +26,7 @@
  *
  * @author dany
  */
-class Intervat
+class Transform_Intervat
 {
 
     /**
@@ -73,36 +74,27 @@ class Intervat
 		</ns2:Representative>
      @endcode
      */
-    function append_representative()
+    function append_representative(Transform_Representative $p_representative)
     {
         /*
          * Variables
          */
-        $ID = "0000000097";
-        $issued = "BE";
-        $type = 'TIN';
-        $name = "Nom Mandataire";
-        $street = "Nom de rue";
-        $postcode = "9999";
-        $city = "TESTCITY";
-        $countrycode = "BE";
-        $email = "dany@alch.be";
-        $phone = "000000000";
+        
 
         $representative = $this->domdoc->createElementNS($this->ns, "ns2:Representative");
         $rep_id = $this->domdoc->createElement("RepresentativeID");
-        $at = $rep_id->setAttribute('identificationType', $type);
-        $ai = $rep_id->setAttribute('issuedBy', $issued);
-        $value = $this->domdoc->createTextNode($ID);
+        $at = $rep_id->setAttribute('identificationType', $p_representative->type);
+        $ai = $rep_id->setAttribute('issuedBy', $p_representative->issued);
+        $value = $this->domdoc->createTextNode($p_representative->id);
         $rep_id->appendChild($value);
         $representative->appendChild($rep_id);
-        $representative->appendChild($this->domdoc->createElement("Name", $name));
-        $representative->appendChild($this->domdoc->createElement("Street", $street));
-        $representative->appendChild($this->domdoc->createElement("PostCode", $postcode));
-        $representative->appendChild($this->domdoc->createElement("City", $city));
-        $representative->appendChild($this->domdoc->createElement("CountryCode", $countrycode));
-        $representative->appendChild($this->domdoc->createElement("EmailAddress", $email));
-        $representative->appendChild($this->domdoc->createElement("Phone", $phone));
+        $representative->appendChild($this->domdoc->createElement("Name", $p_representative->name));
+        $representative->appendChild($this->domdoc->createElement("Street", $p_representative->street));
+        $representative->appendChild($this->domdoc->createElement("PostCode", $p_representative->postcode));
+        $representative->appendChild($this->domdoc->createElement("City", $p_representative->city));
+        $representative->appendChild($this->domdoc->createElement("CountryCode", $p_representative->countrycode));
+        $representative->appendChild($this->domdoc->createElement("EmailAddress", $p_representative->email));
+        $representative->appendChild($this->domdoc->createElement("Phone", $p_representative->phone));
 
         $l = $this->domdoc->getElementsByTagNameNS($this->ns, "ClientListingConsignment");
         $nb = $l->length;
@@ -120,7 +112,7 @@ class Intervat
      @endcode
      * 
      */
-    function append_client_listing($p_array)
+    function append_client_listing(Transform_Declarant $p_declarant,$p_array)
     {
         // variable
         $vat_amount_sum = 0;
@@ -138,7 +130,7 @@ class Intervat
 
 
 
-        $this->append_declarant($decl, $p_array);
+        $this->append_declarant($decl, $p_declarant,$p_array);
 
         $periode = $this->domdoc->createElementNS($this->ns, "ns2:Period", $periode);
         $decl->appendChild($periode);
@@ -171,29 +163,19 @@ class Intervat
         </ns2:Declarant>
      @endcode
      */
-    function append_declarant(DOMElement $p_dom, $p_array)
+    function append_declarant(DOMElement $p_dom, Transform_Declarant $p_declarant,$p_array)
     {
-        /*
-         * Variables
-         */
-        $vat_number = "0000000097";
-        $name = "Nom Declarant";
-        $street = "Rue du declarant";
-        $postcode = "9999";
-        $city = "TESTCITY";
-        $countrycode = "BE";
-        $email = "dany@alch.be";
-        $phone = "000000000";
+  
 
         $declarant = $this->domdoc->createElementNS($this->ns, "ns2:Declarant");
-        $declarant->appendChild($this->domdoc->createElement("VATNumber", $vat_number));
-        $declarant->appendChild($this->domdoc->createElement("Name", $name));
-        $declarant->appendChild($this->domdoc->createElement("Street", $street));
-        $declarant->appendChild($this->domdoc->createElement("PostCode", $postcode));
-        $declarant->appendChild($this->domdoc->createElement("City", $city));
-        $declarant->appendChild($this->domdoc->createElement("CountryCode", $countrycode));
-        $declarant->appendChild($this->domdoc->createElement("EmailAddress", $email));
-        $declarant->appendChild($this->domdoc->createElement("Phone", $phone));
+        $declarant->appendChild($this->domdoc->createElement("VATNumber", $p_declarant->vat_number));
+        $declarant->appendChild($this->domdoc->createElement("Name", $p_declarant->name));
+        $declarant->appendChild($this->domdoc->createElement("Street", $p_declarant->street));
+        $declarant->appendChild($this->domdoc->createElement("PostCode", $p_declarant->postcode));
+        $declarant->appendChild($this->domdoc->createElement("City", $p_declarant->city));
+        $declarant->appendChild($this->domdoc->createElement("CountryCode", $p_declarant->countrycode));
+        $declarant->appendChild($this->domdoc->createElement("EmailAddress", $p_declarant->email));
+        $declarant->appendChild($this->domdoc->createElement("Phone", $p_declarant->phone));
         $p_dom->appendChild($declarant);
     }
     /** 
@@ -244,13 +226,3 @@ class Intervat
     }
 
 }
-/* 
- * Test 
-$a = new Intervat();
-$a->domdoc->formatOutput = true;
-
-$a->append_root();
-$a->append_representative();
-$a->append_client_listing(array());
-echo $a->domdoc->saveXML();
-*/
