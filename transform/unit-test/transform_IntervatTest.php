@@ -3,7 +3,7 @@
 /**
  * Testing of class_intervat
  *  phpunit-skelgen --bootstrap bootstrap.php --test -- Intervat ../include/class_transform_intervat.php
- * phpunit --bootstrap bootstrap.php transform_IntervatTest.php 
+ * phpunit  --colors --bootstrap bootstrap.php transform_IntervatTest.php 
  * @author dany
  * Expected result
  * @code
@@ -187,10 +187,26 @@ class IntervatTest extends PHPUnit_Framework_TestCase
     public function testAppend_declarant()
     {
         $this->object->append_root();
-        $this->object->append_representative($this->representative);
-        $this->object->append_client_listing($this->declarant,array());
+        $dom=$this->object->domdoc->createElement("Listing");
+        $this->object->append_declarant($dom,$this->declarant,array());
+        $this->object->domdoc->appendChild($dom);
         $result = $this->object->domdoc->saveXML();
-        $this->assertEquals($this->result, $result);
+        $expected='<?xml version="1.0" encoding="ISO-8859-1"?>
+<ns2:ClientListingConsignment xmlns:ns2="http://www.minfin.fgov.be/ClientListingConsignment" xmlns="http://www.minfin.fgov.be/InputCommon" ClientListingsNbr="1"/>
+<Listing xmlns:ns2="http://www.minfin.fgov.be/ClientListingConsignment">
+  <ns2:Declarant xmlns:ns2="http://www.minfin.fgov.be/ClientListingConsignment">
+    <VATNumber>0000000097</VATNumber>
+    <Name>Nom Declarant</Name>
+    <Street>Rue du declarant</Street>
+    <PostCode>9999</PostCode>
+    <City>TESTCITY</City>
+    <CountryCode>BE</CountryCode>
+    <EmailAddress>dany@alch.be</EmailAddress>
+    <Phone>000000000</Phone>
+  </ns2:Declarant>
+</Listing>
+';
+        $this->assertEquals($expected, $result);
     }
 
 

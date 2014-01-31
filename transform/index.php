@@ -18,7 +18,25 @@
 */
 
 // Copyright Author Dany De Bontridder danydb@aevalys.eu
+global $version_plugin;
+$version_plugin=SVNINFO;
+Extension::check_version(4400);
+$cn=new Database(dossier::id());
+$transform_version=1;
 
+if ( $cn->exist_schema('transform') == false)
+  {
+    require_once('include/class_install_transform.php');
+
+    $iplugn=new Install_Transform($cn);
+    $iplugn->install();
+ }
+ if ( $cn->get_value('select max(version_id) from transform.version') < $transform_version)
+{
+	require_once('include/class_rapav_install.php');
+	$iplugn = new Rapav_Install($cn);
+	$iplugn->upgrade($rapav_version);
+}
 echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=transformateur" target="_blank">Aide</a>'.
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
 '</div>';

@@ -1,4 +1,5 @@
 <?php
+
 /*
  *   This file is part of NOALYSS.
  *
@@ -15,24 +16,9 @@
  *   You should have received a copy of the GNU General Public License
  *   along with NOALYSS; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+*/
 
 // Copyright Author Dany De Bontridder danydb@aevalys.eu
-?>
-<h1>Listing Assujetti Intervat </h1>
-<?php
-$step=HtmlInput::default_value_request('st_transf',0);
 
-if ($step == 0 )
-{
-    require 'intervat_listing_assujetti_step_1.inc.php';
-}
-if ($step == 1 )
-{
-    require 'intervat_listing_assujetti_step_2.inc.php';
-}
-if ($step == 2 )
-{
-    require 'intervat_listing_assujetti_step_3.inc.php';
-}
-?>
+
+

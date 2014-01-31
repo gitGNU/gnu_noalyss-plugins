@@ -68,25 +68,25 @@ class Transform_Declarant
    var $vatnumber;
    function fromPost()
    {
-       $this->name=HtmlInput::default_value_post("p_name",null);
-       $this->street=HtmlInput::default_value_post("p_street",null);
-       $this->postcode=HtmlInput::default_value_post("p_postcode",null);
-       $this->city=HtmlInput::default_value_post("p_city",null);
-       $this->countrycode=HtmlInput::default_value_post("p_countrycode",null);
-       $this->email=HtmlInput::default_value_post("p_email",null);
-       $this->phone=HtmlInput::default_value_post("p_phone",null);
-       $this->vatnumber=HtmlInput::default_value_post("p_vatnumber",null);
+       $this->name=HtmlInput::default_value_post("p_dec_name",null);
+       $this->street=HtmlInput::default_value_post("p_dec_street",null);
+       $this->postcode=HtmlInput::default_value_post("p_dec_postcode",null);
+       $this->city=HtmlInput::default_value_post("p_dec_city",null);
+       $this->countrycode=HtmlInput::default_value_post("p_dec_countrycode",null);
+       $this->email=HtmlInput::default_value_post("p_dec_email",null);
+       $this->phone=HtmlInput::default_value_post("p_dec_phone",null);
+       $this->vatnumber=HtmlInput::default_value_post("p_dec_vatnumber",null);
    }
    function input()
    {
-       $h_name=new IText('p_name',$this->name);
-       $h_vatnumber=new IText('p_vatnumber',$this->vatnumber);
-       $h_street=new IText('p_street',$this->street);
-       $h_postcode=new IText('p_postcode',$this->postcode);
-       $h_city=new IText('p_city',$this->city);
-       $h_countrycode=new IText('p_countrycode',$this->countrycode);
-       $h_email=new IText('p_email',$this->email);
-       $h_phone=new IText('p_phone',$this->phone);
+       $h_name=new IText('p_dec_name',$this->name);
+       $h_vatnumber=new IText('p_dec_vatnumber',$this->vatnumber);
+       $h_street=new IText('p_dec_street',$this->street);
+       $h_postcode=new IText('p_dec_postcode',$this->postcode);
+       $h_city=new IText('p_dec_city',$this->city);
+       $h_countrycode=new IText('p_dec_countrycode',$this->countrycode);
+       $h_email=new IText('p_dec_email',$this->email);
+       $h_phone=new IText('p_dec_phone',$this->phone);
        require_once 'template/listing_assujetti_declarant.php';
 
    }

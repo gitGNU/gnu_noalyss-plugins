@@ -15,24 +15,36 @@
  *   You should have received a copy of the GNU General Public License
  *   along with NOALYSS; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
+*/
 
 // Copyright Author Dany De Bontridder danydb@aevalys.eu
-?>
-<h1>Listing Assujetti Intervat </h1>
-<?php
-$step=HtmlInput::default_value_request('st_transf',0);
 
-if ($step == 0 )
-{
-    require 'intervat_listing_assujetti_step_1.inc.php';
-}
-if ($step == 1 )
-{
-    require 'intervat_listing_assujetti_step_2.inc.php';
-}
-if ($step == 2 )
-{
-    require 'intervat_listing_assujetti_step_3.inc.php';
-}
+require_once 'class_transform_representative.php';
+require_once 'class_transform_declarant.php';
+$representative=new Transform_Representative();
+$declarant=new Transform_Declarant();
 ?>
+
+<form method="post" enctype="multipart/form-data">
+    <h2><?php echo _('Mandataire');?></h2>
+<?php
+$representative->input();
+?>
+    <h2><?php echo _('Déclarant');?></h2>
+<?php
+$declarant->input();
+?>
+    <p>
+    <?php
+    $file = new IFile('client_assujetti');
+    echo $file->input();
+    ?>
+    </p>
+    <p>
+        <?php
+        echo HtmlInput::request_to_hidden(array('gDossier', 'ac', 'plugin_code', 'sa'));
+        echo HtmlInput::hidden('st_transf',1);
+        echo HtmlInput::submit('send_list', 'Valider');
+        ?>
+    </p>
+</form>    
