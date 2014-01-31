@@ -21,63 +21,37 @@
 
 // Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
 
-/**\file
- * \brief this class manages the installation and the patch of the plugin
- replace SKEL by the plugin schema
+/**
+ * @file
+ * @brief install the  ... (SKEL plugin)
+ *
  */
-
-class Install_Plugin
+class SKEL_Install
 {
 
-	function __construct($p_cn)
-	{
-		$this->cn = $p_cn;
-	}
+    function __construct($cn)
+    {
+        $this->db = $cn;
+    }
 
-	/**
-	 * @brief install the plugin, create all the needed schema, tables, proc
-	 * in the database
-	 * @param $p_dossier is the dossier id
-	 */
-	function install()
-	{
-		$this->cn->start();
-		// create the schema
-		$this->create_schema();
-		// create table + put default values
-		$this->create_table_parameter();
-		$this->cn->commit();
-	}
+    function install()
+    {
+        $file = dirname(__FILE__);
+        $this->db->execute_script($file . '/../sql/install.sql');
+    }
 
-	function create_schema()
-	{
-		$this->cn->exec_sql('create schema SKEL');
-	}
-
-	function create_table_parameter()
-	{
-		$sql = <<<EOF
-CREATE TABLE SKEL.parameter
-(
-  pr_id text NOT NULL,
-  pr_value text,
-  CONSTRAINT SKEL_parameter_pkey PRIMARY KEY (pr_id)
- );
-EOF;
-		$this->cn->exec_sql($sql);
-// load default value
-		$array = array(
-			'GRIL00' => array('6'),
-			'GRIL01' => array('3'),
-			'GRIL02' => array('2', ''),
-
-		);
-
-		foreach ($array as $code => $value)
-		{
-			$this->cn->exec_sql('insert into SKEL.parameter(pr_id,pr_value,pr_other) values ($1,$2)', array($code, $value[0]));
-		}
-	}
+    function upgrade($p_version)
+    {
+        global $cn;
+        $cur_version = $cn->get_value('select max(version_id) from skel.version');
+        $cur_version++;
+        $file = dirname(__FILE__);
+        for ($e = $cur_version; $e <= $p_version; $e++)
+        {
+            $this->db->execute_script($file . '/../sql/upgrade' . $e . '.sql');
+        }
+    }
 
 }
 
+?>
