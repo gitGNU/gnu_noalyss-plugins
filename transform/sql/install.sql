@@ -1,9 +1,7 @@
-create schema transform;
-
+﻿create schema transform;
 create table transform.request(
-	r_id bigserial primary key,
-        r_date timestamp default now()
-);
+	r_id bigserial primary key
+	);
 create table transform.version(
 	v_id bigint primary key,
 	v_note text);
@@ -13,7 +11,7 @@ create table transform.intervat_representative
 	r_id bigint references transform.request(r_id) on update cascade on delete cascade,
 	rp_listing_id text,
 	rp_issued text,
-	rp_type text
+	rp_type text,
 	rp_name text,
 	rp_street text,
 	rp_postcode text,
@@ -46,4 +44,9 @@ create table transform.intervat_client
 	c_amount_vat text,
 	c_amount_novat text,
 	c_issuedby char(2) default 'BE'
-);
+)
+
+alter table transform.request add         r_date date
+alter table transform.request alter r_date set default now()
+alter table transform.request add         r_type text 
+
