@@ -43,7 +43,7 @@ class Install_Transform
     function upgrade($p_version)
     {
         global $cn;
-        $cur_version = $cn->get_value('select max(version_id) from transform.version');
+        $cur_version = $cn->get_value('select max(v_id) from transform.version');
         $cur_version++;
         $file = dirname(__FILE__);
         for ($e = $cur_version; $e <= $p_version; $e++)
