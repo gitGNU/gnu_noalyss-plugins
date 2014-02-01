@@ -77,9 +77,13 @@ class Transform_Representative
     * phone
     */
    var $phone;
+   /**
+    * Transform_Representative_SQL
+    */
+   var $data;
    function fromPost()
    {
-       $this->id=HtmlInput::default_value_post("p_id",null);
+       $this->id=HtmlInput::default_value_post("p_id",1);
        $this->type=HtmlInput::default_value_post("p_type",null);
        $this->name=HtmlInput::default_value_post("p_name",null);
        $this->street=HtmlInput::default_value_post("p_street",null);
@@ -110,6 +114,21 @@ class Transform_Representative
        $h_issued=new IText("p_issued",$this->issued);
        require_once 'template/listing_assujetti_representative.php';
 
+   }
+   function insert()
+   {
+       var_dump($this->id);
+       $this->data->rp_listing_id=$this->id;
+       $this->data->rp_issued=$this->issued;
+       $this->data->rp_type=$this->type;
+       $this->data->rp_name=$this->name;
+       $this->data->rp_street=$this->street;
+       $this->data->rp_postcode=$this->postcode;
+       $this->data->rp_countrycode=$this->countrycode;
+       $this->data->rp_email=$this->email;
+       $this->data->rp_phone=$this->phone;
+       
+       $this->data->insert();
    }
 }
 

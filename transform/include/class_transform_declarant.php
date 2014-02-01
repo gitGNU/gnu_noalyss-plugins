@@ -16,79 +16,106 @@
  *   You should have received a copy of the GNU General Public License
  *   along with NOALYSS; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
+
 /**
  * @brief contains declarant
-@code
-$vat_number = "0000000097";
-$name = "Nom Declarant";
-$street = "Rue du declarant";
-$postcode = "9999";
-$city = "TESTCITY";
-$countrycode = "BE";
-$email = "dany@alch.be";
-$phone = "000000000";
-@endcode
+  @code
+  $vat_number = "0000000097";
+  $name = "Nom Declarant";
+  $street = "Rue du declarant";
+  $postcode = "9999";
+  $city = "TESTCITY";
+  $countrycode = "BE";
+  $email = "dany@alch.be";
+  $phone = "000000000";
+  @endcode
  */
 // Copyright Author Dany De Bontridder danydb@aevalys.eu
 class Transform_Declarant
 {
-    
-   /**
-    * name
-    */
-   var $name;
-   /**
-    * street
-    */
-   var $street;
-   /**
-    * Postcode
-    */
-   var $postcode;
-   /**
-    * city
-    */
-   var $city;
-   /**
-    * country code (BE)
-    */
-   var $countrycode;
-   /**
-    * email
-    */
-   var $email;
-   /**
-    * phone
-    */
-   var $phone;
-   /**
-    * vatnumber
-    */
-   var $vatnumber;
-   function fromPost()
-   {
-       $this->name=HtmlInput::default_value_post("p_dec_name",null);
-       $this->street=HtmlInput::default_value_post("p_dec_street",null);
-       $this->postcode=HtmlInput::default_value_post("p_dec_postcode",null);
-       $this->city=HtmlInput::default_value_post("p_dec_city",null);
-       $this->countrycode=HtmlInput::default_value_post("p_dec_countrycode",null);
-       $this->email=HtmlInput::default_value_post("p_dec_email",null);
-       $this->phone=HtmlInput::default_value_post("p_dec_phone",null);
-       $this->vatnumber=HtmlInput::default_value_post("p_dec_vatnumber",null);
-   }
-   function input()
-   {
-       $h_name=new IText('p_dec_name',$this->name);
-       $h_vatnumber=new IText('p_dec_vatnumber',$this->vatnumber);
-       $h_street=new IText('p_dec_street',$this->street);
-       $h_postcode=new IText('p_dec_postcode',$this->postcode);
-       $h_city=new IText('p_dec_city',$this->city);
-       $h_countrycode=new IText('p_dec_countrycode',$this->countrycode);
-       $h_email=new IText('p_dec_email',$this->email);
-       $h_phone=new IText('p_dec_phone',$this->phone);
-       require_once 'template/listing_assujetti_declarant.php';
 
-   }
+    /**
+     * name
+     */
+    var $name;
+
+    /**
+     * street
+     */
+    var $street;
+
+    /**
+     * Postcode
+     */
+    var $postcode;
+
+    /**
+     * city
+     */
+    var $city;
+
+    /**
+     * country code (BE)
+     */
+    var $countrycode;
+
+    /**
+     * email
+     */
+    var $email;
+
+    /**
+     * phone
+     */
+    var $phone;
+
+    /**
+     * vatnumber
+     */
+    var $vatnumber;
+
+    function fromPost()
+    {
+        $this->name = HtmlInput::default_value_post("p_dec_name", null);
+        $this->street = HtmlInput::default_value_post("p_dec_street", null);
+        $this->postcode = HtmlInput::default_value_post("p_dec_postcode", null);
+        $this->city = HtmlInput::default_value_post("p_dec_city", null);
+        $this->countrycode = HtmlInput::default_value_post("p_dec_countrycode", null);
+        $this->email = HtmlInput::default_value_post("p_dec_email", null);
+        $this->phone = HtmlInput::default_value_post("p_dec_phone", null);
+        $this->vatnumber = HtmlInput::default_value_post("p_dec_vatnumber", null);
+        $this->year=HtmlInput::default_value_post('p_year',null);
+    }
+
+    function input()
+    {
+        $h_name = new IText('p_dec_name', $this->name);
+        $h_vatnumber = new IText('p_dec_vatnumber', $this->vatnumber);
+        $h_street = new IText('p_dec_street', $this->street);
+        $h_postcode = new IText('p_dec_postcode', $this->postcode);
+        $h_city = new IText('p_dec_city', $this->city);
+        $h_countrycode = new IText('p_dec_countrycode', $this->countrycode);
+        $h_email = new IText('p_dec_email', $this->email);
+        $h_phone = new IText('p_dec_phone', $this->phone);
+        require_once 'template/listing_assujetti_declarant.php';
+    }
+
+    function insert()
+    {
+        $this->data->d_name=$this->name;
+        $this->data->d_street=$this->street;
+        $this->data->d_postcode=$this->postcode;
+        $this->data->d_city=$this->city;
+        $this->data->d_countrycode=$this->countrycode;
+        $this->data->d_email=$this->email;
+        $this->data->d_phone=$this->phone;
+        $this->data->d_vatnumber=$this->vatnumber;
+        $this->data->d_countrycode=$this->countrycode;
+        
+        $this->data->insert();
+    }
+
 }
+
 ?>
