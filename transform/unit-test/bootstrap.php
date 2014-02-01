@@ -20,8 +20,16 @@
 
 // Copyright Author Dany De Bontridder danydb@aevalys.eu
 
-$path='/home/dany/developpement/phpcompta/phpcompta-trunk/include:..:../include';
+$path='/home/dany/developpement/phpcompta/rel671/include:..:../include:/usr/share/php/PHPUnit';
 $old_path=  get_include_path();
 set_include_path($old_path.':'.$path);
+require_once 'Framework/SelfDescribing.php';
+require_once 'Framework/Test.php';
+require_once 'Framework/Assert.php';
+require_once 'Framework/TestCase.php';
+require_once 'class_database.php';
+require_once 'class_transform_intervat.php';
+require_once 'constant.php';
+require_once 'class_own.php';
 
 

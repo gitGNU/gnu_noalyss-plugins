@@ -32,7 +32,8 @@ $inputtype = HtmlInput::default_value_post('p_inputtype', null);
 $year = HtmlInput::default_value_post('p_year', NULL);
 $atva = HtmlInput::default_value_post('h_tva', null);
 $compute_date = HtmlInput::default_value_post('p_compute_date', null);
-
+$rejected=array();
+    
 // If inputtype is null not choice between file or compute
 if ($inputtype == null)
 {
@@ -114,7 +115,7 @@ if ($inputtype == 1)
                 $i++;
                 if (count($data) != 4 || $i == 1)
                 {
-                    $o_data[$i] = _('Ligne non importée') . join(' - ', $data);
+                    $rejected[] = _('Ligne non importée') . join(' - ', $data);
                     continue;
                 }
                 /*
@@ -246,10 +247,14 @@ from
             $cn->rollback();
             throw new Exception(_('Ne peut pas ajouter ') . h($o_data[$i]->c_name) . '-' . h($o_data[$i]->c_vatnumber), 3);
         }
+}
     
     /**
      * Show the result 
      */
-}
-
+echo $representative->display();
+echo $declarant->display();
+$a_listing=new Intervat_Client_SQL;
+$ret=$a_listing->seek(' where d_id = $1',array($declarant->data->d_id));
+require 'template/listing_client_display.php';
 ?>

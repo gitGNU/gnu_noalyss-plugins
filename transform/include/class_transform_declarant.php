@@ -32,6 +32,7 @@
   @endcode
  */
 // Copyright Author Dany De Bontridder danydb@aevalys.eu
+require_once 'class_transform_sql.php';
 class Transform_Declarant
 {
 
@@ -74,30 +75,47 @@ class Transform_Declarant
      * vatnumber
      */
     var $vatnumber;
-
+    /**
+     * readOnly
+     */
+    var $readOnly;
+    function __construct()
+    {
+        $this->readOnly=false;
+        $this->data=new Intervat_Declarant_SQL;
+    }
     function fromPost()
     {
-        $this->name = HtmlInput::default_value_post("p_dec_name", null);
-        $this->street = HtmlInput::default_value_post("p_dec_street", null);
-        $this->postcode = HtmlInput::default_value_post("p_dec_postcode", null);
-        $this->city = HtmlInput::default_value_post("p_dec_city", null);
-        $this->countrycode = HtmlInput::default_value_post("p_dec_countrycode", null);
+        global $g_parameter;
+        $this->name = HtmlInput::default_value_post("p_dec_name", $g_parameter->MY_NAME);
+        $this->street = HtmlInput::default_value_post("p_dec_street", $g_parameter->MY_STREET);
+        $this->postcode = HtmlInput::default_value_post("p_dec_postcode", $g_parameter->MY_CP);
+        $this->city = HtmlInput::default_value_post("p_dec_city", $g_parameter->MY_COMMUNE);
+        $this->countrycode = HtmlInput::default_value_post("p_dec_countrycode", "BE");
         $this->email = HtmlInput::default_value_post("p_dec_email", null);
-        $this->phone = HtmlInput::default_value_post("p_dec_phone", null);
-        $this->vatnumber = HtmlInput::default_value_post("p_dec_vatnumber", null);
+        $this->phone = HtmlInput::default_value_post("p_dec_phone", $g_parameter->MY_TEL);
+        $this->vatnumber = HtmlInput::default_value_post("p_dec_vatnumber", $g_parameter->MY_TVA);
         $this->year=HtmlInput::default_value_post('p_year',null);
     }
 
     function input()
     {
         $h_name = new IText('p_dec_name', $this->name);
+        $h_name->readOnly=$this->readOnly;
         $h_vatnumber = new IText('p_dec_vatnumber', $this->vatnumber);
+        $h_vatnumber->readOnly=$this->readOnly;
         $h_street = new IText('p_dec_street', $this->street);
+        $h_street->readOnly=$this->readOnly;
         $h_postcode = new IText('p_dec_postcode', $this->postcode);
+        $h_postcode->readOnly=$this->readOnly;
         $h_city = new IText('p_dec_city', $this->city);
+        $h_city->readOnly=$this->readOnly;
         $h_countrycode = new IText('p_dec_countrycode', $this->countrycode);
+        $h_countrycode->readOnly=$this->readOnly;
         $h_email = new IText('p_dec_email', $this->email);
+        $h_email->readOnly=$this->readOnly;
         $h_phone = new IText('p_dec_phone', $this->phone);
+        $h_phone->readOnly=$this->readOnly;
         require_once 'template/listing_assujetti_declarant.php';
     }
 
@@ -114,6 +132,11 @@ class Transform_Declarant
         $this->data->d_countrycode=$this->countrycode;
         
         $this->data->insert();
+    }
+    function display()
+    {
+        $this->readOnly=true;
+        $this->input();
     }
 
 }

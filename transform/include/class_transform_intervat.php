@@ -112,7 +112,7 @@ class Transform_Intervat
      @endcode
      * 
      */
-    function append_client_listing(Transform_Declarant $p_declarant,$p_array)
+    function append_client_listing(Transform_Declarant $p_declarant)
     {
         // variable
         $vat_amount_sum = 0;
@@ -130,12 +130,12 @@ class Transform_Intervat
 
 
 
-        $this->append_declarant($decl, $p_declarant,$p_array);
+        $this->append_declarant($decl, $p_declarant);
 
         $periode = $this->domdoc->createElementNS($this->ns, "ns2:Period", $periode);
         $decl->appendChild($periode);
 
-        $this->append_listing($decl, $p_array);
+        $this->append_listing($decl, $p_declarant);
 
 
         $l = $this->domdoc->getElementsByTagNameNS($this->ns, "ClientListingConsignment");
@@ -163,7 +163,7 @@ class Transform_Intervat
         </ns2:Declarant>
      @endcode
      */
-    function append_declarant(DOMElement $p_dom, Transform_Declarant $p_declarant,$p_array)
+    function append_declarant(DOMElement $p_dom, Transform_Declarant $p_declarant)
     {
   
 
@@ -196,7 +196,7 @@ class Transform_Intervat
      * @param type $p_array
      */
 
-    function append_listing(DOMElement $p_dom, $p_array)
+    function append_listing(DOMElement $p_dom, Transform_Declarant $p_declarant)
     {
         /*
          * Client are in array
