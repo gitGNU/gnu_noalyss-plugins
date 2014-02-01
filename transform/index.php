@@ -22,7 +22,7 @@ global $version_plugin;
 $version_plugin=SVNINFO;
 Extension::check_version(4400);
 $cn=new Database(dossier::id());
-$transform_version=1;
+$transform_version=0;
 
 if ( $cn->exist_schema('transform') == false)
   {
@@ -31,11 +31,11 @@ if ( $cn->exist_schema('transform') == false)
     $iplugn=new Install_Transform($cn);
     $iplugn->install();
  }
- if ( $cn->get_value('select max(version_id) from transform.version') < $transform_version)
+ if ( $cn->get_value('select max(v_id) from transform.version') < $transform_version)
 {
-	require_once('include/class_rapav_install.php');
-	$iplugn = new Rapav_Install($cn);
-	$iplugn->upgrade($rapav_version);
+	require_once('include/class_install_transform.php');
+	$iplugn = new Install_Transform($cn);
+	$iplugn->upgrade($transform_version);
 }
 echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=transformateur" target="_blank">Aide</a>'.
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
