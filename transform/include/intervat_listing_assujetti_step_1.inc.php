@@ -22,7 +22,18 @@
 require_once 'class_transform_representative.php';
 require_once 'class_transform_declarant.php';
 $representative=new Transform_Representative();
+$representative->fromPost();
 $declarant=new Transform_Declarant();
+$declarant->fromPost();
+$radio=new IRadio('p_inputtype');
+$h_tva=new ICheckBox('h_tva[]');
+$h_year=new INum('p_year');
+$h_year->prec=0;
+$h_tva_compute_date=new ISelect('p_compute_date');
+$h_tva_compute_date->value=array(
+    array('value'=>1,'label'=>_('Par date paiement')),
+    array('value'=>1,'label'=>_('Par date opération'))
+    );
 ?>
 
 <form method="post" enctype="multipart/form-data">
@@ -35,11 +46,43 @@ $representative->input();
 $declarant->input();
 ?>
     <p>
+        <?php echo _('Année'),$h_year->input();?>
+    </p>
+    <p>
     <?php
+    
+    $radio->value=1;
+    echo $radio->input()._('Par fichier');
     $file = new IFile('client_assujetti');
     echo $file->input();
     ?>
     </p>
+    <p>
+        <?php
+        $radio->value=2;
+        echo $radio->input()._('Par calcul');
+        $atva=$cn->get_array('select tva_id,tva_rate,tva_comment from tva_rate order by 2');
+        $count_atva=count($atva);
+        ?>
+    <ul style="list-style: none">
+        <?php
+        for ($i=0;$i<$count_atva;$i++):
+        ?>
+        <li>
+            <?php
+                $h_tva->value=$atva[$i]['tva_id'];
+                echo $h_tva->input().h($atva[$i]['tva_rate'])." ".h($atva[$i]['tva_comment']);
+            ?>
+        </li>
+        <?php
+        endfor;
+        ?>
+    </ul>
+
+    <span style="margin-left:30px">
+    <?php echo _('Opération de vente'),$h_tva_compute_date->input();?>
+    </span>
+    </p>    
     <p>
         <?php
         echo HtmlInput::request_to_hidden(array('gDossier', 'ac', 'plugin_code', 'sa'));
