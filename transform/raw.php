@@ -44,13 +44,14 @@ switch ($act)
 
         $xml->append_root();
         $xml->append_client_listing($declarant);
-        $file = "listing_assujetti" . date('d.m.y.h.mi').".xml";
+        $file = "listing_assujetti" . date('d.m.y.hi') . ".xml";
         $ref = $_ENV['TMP'] . "/" . $file;
-        echo $xml->domdoc->save($ref);
+        $xml->domdoc->save($ref);
         header('Content-type: application/bin');
         header('Pragma: public');
-        header('Content-Disposition: attachment;filename="'.$ref.'"',FALSE);
-        $file_xml=fopen($ref,'r');
-        while ($in=fread($file_xml,8192)) { echo $in; }
+        header('Content-Disposition: attachment;filename="' . $file . '"', FALSE);
+        $file_xml = fopen($ref, 'r');
+        $in = fread($file_xml, filesize($ref));
+        echo $in;
         break;
 }
