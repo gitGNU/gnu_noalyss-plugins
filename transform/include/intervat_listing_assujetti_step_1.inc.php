@@ -32,8 +32,12 @@ $h_year->prec=0;
 $h_tva_compute_date=new ISelect('p_compute_date');
 $h_tva_compute_date->value=array(
     array('value'=>1,'label'=>_('Par date paiement')),
-    array('value'=>1,'label'=>_('Par date opération'))
+    array('value'=>2,'label'=>_('Par date opération'))
     );
+$start_date=new IDate('p_start_date');
+$start_date->value=HtmlInput::default_value_post('p_start_date','');
+$end_date=new IDate('p_end_date');
+$end_date->value=HtmlInput::default_value_post('p_end_date','');
 ?>
 
 <form method="post" enctype="multipart/form-data">
@@ -46,8 +50,9 @@ $representative->input();
 $declarant->input();
 ?>
     <p>
-        <?php echo _('Année'),$h_year->input();?>
+        <?php echo _('Période'),$h_year->input();?>
     </p>
+   
     <p>
     <?php
     
@@ -78,7 +83,9 @@ $declarant->input();
         endfor;
         ?>
     </ul>
-
+     <p style="margin-left:30px">
+        <?php printf(_('Entre les date %s et %s'),$start_date->input(),$end_date->input());?>
+    </p>
     <span style="margin-left:30px">
     <?php echo _('Opération de vente'),$h_tva_compute_date->input();?>
     </span>

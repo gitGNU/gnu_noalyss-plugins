@@ -19,6 +19,7 @@
  */
 require_once 'class_transform_declarant.php';
 require_once 'class_transform_representative.php';
+require_once 'class_transform_client.php';
 
 
 /**
@@ -114,13 +115,19 @@ class Transform_Intervat
      */
     function append_client_listing(Transform_Declarant $p_declarant)
     {
+        /*
+         * Fetch from intervat_client
+         */
+        $client=new Transform_Client;
+        $client->compute_value($p_declarant->data->d_id);
+        
         // variable
-        $vat_amount_sum = 0;
-        $turnoversum = 0;
-        $clientnb = 2;
+        $vat_amount_sum = $client->vat_amount_sum;
+        $turnoversum = $client->turnoversum;
+        $clientnb = $client->nb;
         $seqnb = 1;
-        $periode = 2009;
-        $commentaire="Commentaire";
+        $periode = $p_declarant->data->d_periode;
+        $commentaire="";
 
         $decl = $this->domdoc->createElementNS($this->ns, "ns2:ClientListing");
         $ai = $decl->setAttribute('VATAmountSum', $vat_amount_sum);
@@ -132,10 +139,10 @@ class Transform_Intervat
 
         $this->append_declarant($decl, $p_declarant);
 
-        $periode = $this->domdoc->createElementNS($this->ns, "ns2:Period", $periode);
+        $periode = $this->domdoc->createElementNS($this->ns, "ns2:Period", $p_declarant->year);
         $decl->appendChild($periode);
 
-        $this->append_listing($decl, $p_declarant);
+        $this->append_listing($decl, $client);
 
 
         $l = $this->domdoc->getElementsByTagNameNS($this->ns, "ClientListingConsignment");
@@ -168,7 +175,7 @@ class Transform_Intervat
   
 
         $declarant = $this->domdoc->createElementNS($this->ns, "ns2:Declarant");
-        $declarant->appendChild($this->domdoc->createElement("VATNumber", $p_declarant->vat_number));
+        $declarant->appendChild($this->domdoc->createElement("VATNumber", $p_declarant->vatnumber));
         $declarant->appendChild($this->domdoc->createElement("Name", $p_declarant->name));
         $declarant->appendChild($this->domdoc->createElement("Street", $p_declarant->street));
         $declarant->appendChild($this->domdoc->createElement("PostCode", $p_declarant->postcode));
@@ -196,33 +203,32 @@ class Transform_Intervat
      * @param type $p_array
      */
 
-    function append_listing(DOMElement $p_dom, Transform_Declarant $p_declarant)
+    function append_listing(DOMElement $p_dom, Transform_Client $p_client)
     {
         /*
-         * Client are in array
+         * Client are in array $p_client->array
          */
-        $nb_client = 2;
-        $vat_number = "0000000097";
-        $issued = "BE";
-        $turnover = 500;
-        $vat_amount = 0;
-        $vat_amount_sum = 0;
-
         
-        for ($i = 0; $i < $nb_client; $i++)
+        for ($i = 0; $i < $p_client->nb; $i++)
         {
-            $client = $this->domdoc->createElementNS($this->ns, "ns2:Client");
-            $ai = $client->setAttribute('SequenceNumber', $i+1);
+            $client=$p_client->array[$i];
+            $dom_client = $this->domdoc->createElementNS($this->ns, "ns2:Client");
+            $ai = $dom_client->setAttribute('SequenceNumber', $i+1);
             $company = $this->domdoc->createElementNS($this->ns, "ns2:CompanyVATNumber");
-            $company->setAttribute('issuedBy', 'BE');
-            $de_vat_number = $this->domdoc->createTextNode($vat_number);
+            $company->setAttribute('issuedBy', $client['c_issuedby']);
+            $de_vat_number = $this->domdoc->createTextNode($client['c_vatnumber']);
             $company->appendChild($de_vat_number);
-            $client->appendChild($company);
-            $client->appendChild($this->domdoc->createElementNS($this->ns,"ns2:TurnOver", $turnover));
-            $client->appendChild($this->domdoc->createElementNS($this->ns,"ns2:VATAmount", $vat_amount));
-            $p_dom->appendChild($client);
+            $dom_client->appendChild($company);
+            $dom_client->appendChild($this->domdoc->createElementNS($this->ns,"ns2:TurnOver", $client['c_amount_novat']));
+            $dom_client->appendChild($this->domdoc->createElementNS($this->ns,"ns2:VATAmount", $client['c_amount_vat']));
+            $p_dom->appendChild($dom_client);
         }
         
+    }
+    function toxml()
+    {
+        $str=$this->domdoc->saveXML();
+        return $str;
     }
 
 }

@@ -37,6 +37,8 @@ class Transform_Request_SQL extends Phpcompta_SQL
     var $r_id;
     var $r_date;
     var $r_type;
+    var $r_start_date;
+    var $r_end_date;
 
     /* example private $variable=array("easy_name"=>column_name,"email"=>"column_name_email","val3"=>0); */
 
@@ -50,13 +52,17 @@ class Transform_Request_SQL extends Phpcompta_SQL
         $this->name = array(
             "r_id" => "r_id",
             "r_date" => "r_date",
-            "r_type"=>'r_type'
+            "r_type"=>'r_type',
+            "r_start_date"=>'r_start_date',
+            "r_end_date"=>'r_end_date',
         );
 
         $this->type = array(
             "r_id" => "numeric",
             "r_date" => "date",
-            "r_type"=>"text"
+            "r_type"=>"text",
+            "r_start_date" => "date",
+            "r_end_date" => "date"
         );
 
         $this->default = array(

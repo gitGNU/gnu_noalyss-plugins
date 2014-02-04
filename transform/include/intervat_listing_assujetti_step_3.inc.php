@@ -21,4 +21,26 @@
 // Copyright Author Dany De Bontridder danydb@aevalys.eu
 
 
+$request_id=HtmlInput::default_value_post('r_id',null);
 
+if ($request_id == null)
+{
+    throw new Exception(_('Accès directe incorrecte'), 15);
+}
+
+require_once 'class_transform_declarant.php';
+require_once 'class_transform_representative.php';
+require_once 'class_transform_intervat.php';
+
+$declarant=new Transform_Declarant();
+$representative=new Transform_Representative;
+
+$declarant->from_db($request_id);
+$representative->from_db($request_id);
+
+$xml=new Transform_Intervat;
+
+$xml->append_root();
+$xml->append_client_listing($declarant);
+
+$xml->toxml();

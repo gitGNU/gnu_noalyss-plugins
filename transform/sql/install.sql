@@ -46,7 +46,10 @@ create table transform.intervat_client
 	c_issuedby char(2) default 'BE'
 )
 
-alter table transform.request add         r_date date
-alter table transform.request alter r_date set default now()
-alter table transform.request add         r_type text 
+alter table transform.request add         r_date date;
+alter table transform.request alter r_date set default now();
+alter table transform.request add         r_type text ;
+ALTER TABLE transform.request ADD COLUMN r_start_date date;
+ALTER TABLE transform.request ADD COLUMN r_end_date date;
+
 

@@ -32,6 +32,8 @@ $inputtype = HtmlInput::default_value_post('p_inputtype', null);
 $year = HtmlInput::default_value_post('p_year', NULL);
 $atva = HtmlInput::default_value_post('h_tva', null);
 $compute_date = HtmlInput::default_value_post('p_compute_date', null);
+$start_date=HtmlInput::default_value_post('p_start_date',null);
+$end_date=HtmlInput::default_value_post('p_end_date',null);
 $rejected=array();
     
 // If inputtype is null not choice between file or compute
@@ -39,6 +41,15 @@ if ($inputtype == null)
 {
     throw new Exception(_('Vous devez choisir par fichier ou par calcul'), 4);
 }
+if ($start_date == null || $end_date == null)
+{
+    throw new Exception(_('La date donnée est invalide'), 9);
+}
+if (isDate($start_date) == null || isDate($end_date) == null )
+{
+    throw new Exception(_('La date donnée est invalide'), 9);
+}
+
 // if inputtype is by computing (=2) then year must existe as exercice 
 // and tva_id must not be empty
 if ($inputtype == 2)
@@ -72,7 +83,8 @@ if ($inputtype == 2)
  */
 $request = new Transform_Request_SQL();
 $request->r_type = 'intervat';
-
+$request->r_start_date=$start_date;
+$request->r_end_date=$end_date;
 $request->insert();
 
 $representative = new Transform_Representative();
@@ -149,20 +161,15 @@ if ($inputtype == 2)
     if ($compute_date == 1)
     {
         $sql = "
-        with  c as 
+      with  c as 
         (select qs_client,
          sum(qs_vat) as vat_amount,
          sum(qs_price) as amount 
          from quant_sold  
+         join jrnx using (j_id)
          where 
-         qs_vat_code in $ltva 
-         and j_id in (select j_id 
-                        from jrnx 
-                        where 
-                        j_tech_per in 
-                            (select  p_id 
-                                from parm_periode 
-                                    where p_exercice=$1) ) 
+         qs_vat_code in $ltva and
+         j_date between to_date($1,'DD.MM.YYYY') and to_date($2,'DD.MM.YYYY')
         group by qs_client)
         ,f_name as 
         (select f_id,ad_value 
@@ -177,7 +184,8 @@ select f_name.ad_value as name,
    vat_amount,amount
 from 
     c join f_name on (qs_client=f_name.f_id)
-    join f_tvanum on (qs_client=f_tvanum.f_id)
+    join f_tvanum on (qs_client=f_tvanum.f_id);
+
     ";
     } elseif ($compute_date == 2) //------ Payment date ----------------
     {
@@ -189,12 +197,11 @@ from
         from 
             quant_sold join jrnx on (jrnx.j_id=quant_sold.j_id) 
         where 
-        qs_vat_code=1 
+        qs_vat_code $ltva
         and j_grpt in (select jr_grpt_id 
                         from jrn 
                         where 
-                        jr_date_paid >= (select min(p_start) from parm_periode where p_exercice=$1 ) 
-                        and jr_date_paid <=  (select max(p_start) from parm_periode where p_exercice=$1 ))
+                        jr_date_paid between to_date($1,'DD.MM.YYYY') and to_date($2,'DD.MM.YYYY'))
          group by qs_client)
     ,f_name as 
     (select f_id,
@@ -217,7 +224,7 @@ from
    join f_tvanum on (qs_client=f_tvanum.f_id)
 ";
     }
-    $a_listing = $cn->get_array($sql, array($year));
+    $a_listing = $cn->get_array($sql, array($start_date,$end_date));
     
     /**
      * Save data into Intervat_Client
@@ -258,3 +265,11 @@ $a_listing=new Intervat_Client_SQL;
 $ret=$a_listing->seek(' where d_id = $1',array($declarant->data->d_id));
 require 'template/listing_client_display.php';
 ?>
+<form method="POST">
+    <?php echo HtmlInput::hidden('r_id',$request->r_id);?>
+    <?php 
+        echo HtmlInput::request_to_hidden(array('gDossier', 'ac', 'plugin_code', 'sa'));
+        echo HtmlInput::hidden('st_transf',2);
+        echo HtmlInput::submit('submit','Valider');
+    ?>
+</form>

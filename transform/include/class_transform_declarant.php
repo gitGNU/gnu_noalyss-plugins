@@ -128,11 +128,28 @@ class Transform_Declarant
         $this->data->d_countrycode=$this->countrycode;
         $this->data->d_email=$this->email;
         $this->data->d_phone=$this->phone;
-        $this->data->d_vatnumber=$this->vatnumber;
+        $this->data->d_vat_number=$this->vatnumber;
         $this->data->d_countrycode=$this->countrycode;
-        
+        $this->data->d_periode=$this->year;
         $this->data->insert();
     }
+    function from_db($request_id)
+    {
+        global $cn;
+        $id = $cn->get_value("select d_id from transform.intervat_declarant where r_id=$1", array($request_id));
+        $this->data = new Intervat_Declarant_SQL($id);
+        $this->name = $this->data->d_name;
+        $this->street = $this->data->d_street;
+        $this->postcode = $this->data->d_postcode;
+        $this->city = $this->data->d_city;
+        $this->countrycode = $this->data->d_countrycode;
+        $this->email = $this->data->d_email;
+        $this->phone = $this->data->d_phone;
+        $this->vatnumber = $this->data->d_vat_number;
+        $this->countrycode = $this->data->d_countrycode;
+        $this->year = $this->data->d_periode;
+    }
+
     function display()
     {
         $this->readOnly=true;

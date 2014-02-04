@@ -35,6 +35,7 @@
   @endcode
  */
 require_once 'class_transform_sql.php';
+
 class Transform_Representative
 {
 
@@ -92,15 +93,18 @@ class Transform_Representative
      * Transform_Representative_SQL
      */
     var $data;
+
     /**
      * readOnly
      */
     var $readOnly;
+
     function __construct()
     {
-        $this->readOnly=false;
-        $this->data=new Intervat_Representative_SQL();
+        $this->readOnly = false;
+        $this->data = new Intervat_Representative_SQL();
     }
+
     function fromPost()
     {
         $this->id = HtmlInput::default_value_post("p_id", 1);
@@ -124,25 +128,25 @@ class Transform_Representative
             array("label" => 'other', "value" => "other")
         );
         $h_type->selected = $this->type;
-        $h_type->readOnly=$this->readOnly;
+        $h_type->readOnly = $this->readOnly;
         $h_name = new IText('p_name', $this->name);
-        $h_name->readOnly=$this->readOnly;
+        $h_name->readOnly = $this->readOnly;
         $h_street = new IText('p_street', $this->street);
-        $h_street->readOnly=$this->readOnly;
+        $h_street->readOnly = $this->readOnly;
         $h_postcode = new IText('p_postcode', $this->postcode);
-        $h_postcode->readOnly=$this->readOnly;
+        $h_postcode->readOnly = $this->readOnly;
         $h_city = new IText('p_city', $this->city);
-        $h_city->readOnly=$this->readOnly;
+        $h_city->readOnly = $this->readOnly;
         $h_countrycode = new IText('p_countrycode', $this->countrycode);
-        $h_countrycode->readOnly=$this->readOnly;
+        $h_countrycode->readOnly = $this->readOnly;
         $h_email = new IText('p_email', $this->email);
-        $h_email->readOnly=$this->readOnly;
+        $h_email->readOnly = $this->readOnly;
         $h_phone = new IText('p_phone', $this->phone);
-        $h_phone->readOnly=$this->readOnly;
+        $h_phone->readOnly = $this->readOnly;
         $h_id = new INum('p_id', $this->id);
-        $h_id->readOnly=$this->readOnly;
+        $h_id->readOnly = $this->readOnly;
         $h_issued = new IText("p_issued", $this->issued);
-        $h_issued->readOnly=$this->readOnly;
+        $h_issued->readOnly = $this->readOnly;
         require_once 'template/listing_assujetti_representative.php';
     }
 
@@ -165,6 +169,22 @@ class Transform_Representative
     {
         $this->readOnly = true;
         $this->input();
+    }
+
+    function from_db($request_id)
+    {
+        global $cn;
+        $id = $cn->get_value("select rp_id from transform.intervat_representative where r_id=$1", array($request_id));
+        $this->data = new Intervat_Representative_SQL($id);
+        $this->id = $this->data->rp_listing_id;
+        $this->issued = $this->data->rp_issued;
+        $this->type = $this->data->rp_type;
+        $this->name = $this->data->rp_name;
+        $this->street = $this->data->rp_street;
+        $this->postcode = $this->data->rp_postcode;
+        $this->countrycode = $this->data->rp_countrycode;
+        $this->email = $this->data->rp_email;
+        $this->phone = $this->data->rp_phone;
     }
 
 }

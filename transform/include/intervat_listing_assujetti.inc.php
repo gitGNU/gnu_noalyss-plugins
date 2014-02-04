@@ -34,7 +34,7 @@ if ($step == 1)
         require 'intervat_listing_assujetti_step_2.inc.php';
     } catch (Exception $e)
     {
-        echo '<p class="notice">'.$e->getMessage().'</p>';
+        echo '<p class="notice">' . $e->getMessage() . '</p>';
         if ($e->getCode() != 3)
         {
             require 'intervat_listing_assujetti_step_1.inc.php';
@@ -43,6 +43,13 @@ if ($step == 1)
 }
 if ($step == 2)
 {
-    require 'intervat_listing_assujetti_step_3.inc.php';
+    try
+    {
+        require 'intervat_listing_assujetti_step_3.inc.php';
+    } catch (Exception $e)
+    {
+        echo '<p class="notice">' . $e->getMessage() . '</p>';
+        require 'intervat_listing_assujetti_step_1.inc.php';
+    }
 }
 ?>

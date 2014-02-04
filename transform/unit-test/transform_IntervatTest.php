@@ -50,6 +50,7 @@
 require_once 'bootstrap.php';
 
 require_once 'class_transform_representative.php';
+require_once 'class_transform_sql.php';
 require_once 'class_dossier.php';
 global $cn, $g_parameter;
         $cn = new Database(26);
@@ -86,9 +87,9 @@ class IntervatTest extends PHPUnit_Framework_TestCase
     <EmailAddress>dany@alch.be</EmailAddress>
     <Phone>000000000</Phone>
   </ns2:Representative>
-  <ns2:ClientListing VATAmountSum="0" TurnOverSum="0" ClientsNbr="2" SequenceNumber="1">
+  <ns2:ClientListing VATAmountSum="0" TurnOverSum="1000" ClientsNbr="2" SequenceNumber="1">
     <ns2:Declarant>
-      <VATNumber>0000000097</VATNumber>
+      <VATNumber>1234567890</VATNumber>
       <Name>Nom Declarant</Name>
       <Street>Rue du declarant</Street>
       <PostCode>9999</PostCode>
@@ -108,13 +109,19 @@ class IntervatTest extends PHPUnit_Framework_TestCase
       <ns2:TurnOver>500</ns2:TurnOver>
       <ns2:VATAmount>0</ns2:VATAmount>
     </ns2:Client>
-    <ns2:Comment>Commentaire</ns2:Comment>
+    <ns2:Comment></ns2:Comment>
   </ns2:ClientListing>
 </ns2:ClientListingConsignment>
 ';
+        global $cn, $g_parameter;
+        $cn = new Database(26);
+        $g_parameter = new Own($cn);
+        $_REQUEST['gDossier'] = 26;
         
         $this->request = new Transform_Request_SQL;
         $this->request->r_type = 'phpunit-intervat';
+        $this->request->r_start_date='01.01.1900';
+        $this->request->r_end_date='01.01.1900';
         $this->request->insert();
 
         $this->representative = new Transform_Representative();
@@ -135,7 +142,7 @@ class IntervatTest extends PHPUnit_Framework_TestCase
          */
         $this->declarant = new Transform_Declarant();
         $this->declarant->data->r_id = $this->request->r_id;
-        $this->declarant->vat_number = "0000000097";
+        $this->declarant->vatnumber = "1234567890";
         $this->declarant->name = "Nom Declarant";
         $this->declarant->street = "Rue du declarant";
         $this->declarant->postcode = "9999";
@@ -143,7 +150,26 @@ class IntervatTest extends PHPUnit_Framework_TestCase
         $this->declarant->countrycode = "BE";
         $this->declarant->email = "dany@alch.be";
         $this->declarant->phone = "000000000";
+        $this->declarant->year = "2009";
         $this->declarant->insert();
+        
+        $client=new Intervat_Client_SQL;
+        $client->d_id=$this->declarant->data->d_id;
+        $client->c_name="";
+        $client->c_vatnumber="0000000097";
+        $client->c_issuedby="BE";
+        $client->c_amount_vat=0;
+        $client->c_amount_novat=500;
+        $client->insert();
+        //
+        $client=new Intervat_Client_SQL;
+        $client->d_id=$this->declarant->data->d_id;
+        $client->c_name="";
+        $client->c_vatnumber="0000000097";
+        $client->c_issuedby="BE";
+        $client->c_amount_vat=0;
+        $client->c_amount_novat=500;
+        $client->insert();
     }
 
     /**
@@ -217,7 +243,7 @@ class IntervatTest extends PHPUnit_Framework_TestCase
 <ns2:ClientListingConsignment xmlns:ns2="http://www.minfin.fgov.be/ClientListingConsignment" xmlns="http://www.minfin.fgov.be/InputCommon" ClientListingsNbr="1"/>
 <Listing xmlns:ns2="http://www.minfin.fgov.be/ClientListingConsignment">
   <ns2:Declarant xmlns:ns2="http://www.minfin.fgov.be/ClientListingConsignment">
-    <VATNumber>0000000097</VATNumber>
+    <VATNumber>1234567890</VATNumber>
     <Name>Nom Declarant</Name>
     <Street>Rue du declarant</Street>
     <PostCode>9999</PostCode>
