@@ -1,5 +1,4 @@
 <?php
-
 /*
  *   This file is part of NOALYSS.
  *
@@ -32,10 +31,10 @@ $inputtype = HtmlInput::default_value_post('p_inputtype', null);
 $year = HtmlInput::default_value_post('p_year', NULL);
 $atva = HtmlInput::default_value_post('h_tva', null);
 $compute_date = HtmlInput::default_value_post('p_compute_date', null);
-$start_date=HtmlInput::default_value_post('p_start_date',null);
-$end_date=HtmlInput::default_value_post('p_end_date',null);
-$rejected=array();
-    
+$start_date = HtmlInput::default_value_post('p_start_date', null);
+$end_date = HtmlInput::default_value_post('p_end_date', null);
+$rejected = array();
+
 // If inputtype is null not choice between file or compute
 if ($inputtype == null)
 {
@@ -45,7 +44,7 @@ if ($start_date == null || $end_date == null)
 {
     throw new Exception(_('La date donnée est invalide'), 9);
 }
-if (isDate($start_date) == null || isDate($end_date) == null )
+if (isDate($start_date) == null || isDate($end_date) == null)
 {
     throw new Exception(_('La date donnée est invalide'), 9);
 }
@@ -83,8 +82,8 @@ if ($inputtype == 2)
  */
 $request = new Transform_Request_SQL();
 $request->r_type = 'intervat';
-$request->r_start_date=$start_date;
-$request->r_end_date=$end_date;
+$request->r_start_date = $start_date;
+$request->r_end_date = $end_date;
 $request->insert();
 
 $representative = new Transform_Representative();
@@ -224,52 +223,58 @@ from
    join f_tvanum on (qs_client=f_tvanum.f_id)
 ";
     }
-    $a_listing = $cn->get_array($sql, array($start_date,$end_date));
-    
+    $a_listing = $cn->get_array($sql, array($start_date, $end_date));
+
     /**
      * Save data into Intervat_Client
      */
     $o_data = array();
-        try
+    try
+    {
+        $cn->start();
+        $nb = count($a_listing);
+        for ($i = 0; $i < $nb; $i++)
         {
-            $cn->start();
-            $nb=count($a_listing);
-            for ($i=0;$i <$nb; $i++)
-            {
-                /*
-                 * insert into transform.intervat_client
-                 */
-                $o_data[$i] = new Intervat_Client_SQL();
-                $o_data[$i]->d_id = $declarant->data->d_id;
-                $o_data[$i]->c_name = $a_listing[$i]['name'];
-                $o_data[$i]->c_issuedby = "BE";
-                $o_data[$i]->c_vatnumber = $a_listing[$i]['tvanumb'];
-                $o_data[$i]->c_amount_vat =  $a_listing[$i]['vat_amount'];
-                $o_data[$i]->c_amount_novat =  $a_listing[$i]['amount'];
-                $o_data[$i]->insert();
-            }
-            $cn->commit();
-        } catch (Exception $ex)
-        {
-            $cn->rollback();
-            throw new Exception(_('Ne peut pas ajouter ') . h($o_data[$i]->c_name) . '-' . h($o_data[$i]->c_vatnumber), 3);
+            /*
+             * insert into transform.intervat_client
+             */
+            $o_data[$i] = new Intervat_Client_SQL();
+            $o_data[$i]->d_id = $declarant->data->d_id;
+            $o_data[$i]->c_name = $a_listing[$i]['name'];
+            $o_data[$i]->c_issuedby = "BE";
+            $o_data[$i]->c_vatnumber = $a_listing[$i]['tvanumb'];
+            $o_data[$i]->c_amount_vat = $a_listing[$i]['vat_amount'];
+            $o_data[$i]->c_amount_novat = $a_listing[$i]['amount'];
+            $o_data[$i]->insert();
         }
+        $cn->commit();
+    } catch (Exception $ex)
+    {
+        $cn->rollback();
+        throw new Exception(_('Ne peut pas ajouter ') . h($o_data[$i]->c_name) . '-' . h($o_data[$i]->c_vatnumber), 3);
+    }
 }
-    
-    /**
-     * Show the result 
-     */
-echo $representative->display();
-echo $declarant->display();
-$a_listing=new Intervat_Client_SQL;
-$ret=$a_listing->seek(' where d_id = $1',array($declarant->data->d_id));
-require 'template/listing_client_display.php';
 ?>
+<h2> <?php echo _('Etape 2/3') ?></h2>
+<h3><?php echo _('Mandataire'); ?></h3>
+<?php
+$representative->display();
+?>
+<h3><?php echo _('Déclarant'); ?></h3>
+<?php
+$declarant->display();
+?>
+<p>
+    <?php
+    $a_listing = new Intervat_Client_SQL;
+    $ret = $a_listing->seek(' where d_id = $1', array($declarant->data->d_id));
+    require 'template/listing_client_display.php';
+    ?>
 <form method="POST">
-    <?php echo HtmlInput::hidden('r_id',$request->r_id);?>
-    <?php 
-        echo HtmlInput::request_to_hidden(array('gDossier', 'ac', 'plugin_code', 'sa'));
-        echo HtmlInput::hidden('st_transf',2);
-        echo HtmlInput::submit('submit','Valider');
+    <?php echo HtmlInput::hidden('r_id', $request->r_id); ?>
+    <?php
+    echo HtmlInput::request_to_hidden(array('gDossier', 'ac', 'plugin_code', 'sa'));
+    echo HtmlInput::hidden('st_transf', 2);
+    echo HtmlInput::submit('submit', 'Valider');
     ?>
 </form>

@@ -28,19 +28,14 @@ if ($request_id == null)
     throw new Exception(_('Accès directe incorrecte'), 15);
 }
 
-require_once 'class_transform_declarant.php';
-require_once 'class_transform_representative.php';
-require_once 'class_transform_intervat.php';
 
-$declarant=new Transform_Declarant();
-$representative=new Transform_Representative;
-
-$declarant->from_db($request_id);
-$representative->from_db($request_id);
-
-$xml=new Transform_Intervat;
-
-$xml->append_root();
-$xml->append_client_listing($declarant);
-
-$xml->toxml();
+?>
+<h2> <?php echo _('Etape 3/3') ?></h2>
+<form method="get" action="extension.raw.php">
+    
+    <?php
+    echo HtmlInput::post_to_hidden(array('r_id','ac','gDossier','plugin_code'));
+    echo HtmlInput::hidden('act','listing_assujetti');
+    echo HtmlInput::submit('get','Fichier XML');
+    ?>
+</form>

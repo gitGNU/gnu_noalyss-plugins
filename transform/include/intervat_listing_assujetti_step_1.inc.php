@@ -15,86 +15,130 @@
  *   You should have received a copy of the GNU General Public License
  *   along with NOALYSS; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 // Copyright Author Dany De Bontridder danydb@aevalys.eu
 
 require_once 'class_transform_representative.php';
 require_once 'class_transform_declarant.php';
-$representative=new Transform_Representative();
+$representative = new Transform_Representative();
 $representative->fromPost();
-$declarant=new Transform_Declarant();
+$declarant = new Transform_Declarant();
 $declarant->fromPost();
-$radio=new IRadio('p_inputtype');
-$h_tva=new ICheckBox('h_tva[]');
-$h_year=new INum('p_year');
-$h_year->prec=0;
-$h_tva_compute_date=new ISelect('p_compute_date');
-$h_tva_compute_date->value=array(
-    array('value'=>1,'label'=>_('Par date paiement')),
-    array('value'=>2,'label'=>_('Par date opération'))
-    );
-$start_date=new IDate('p_start_date');
-$start_date->value=HtmlInput::default_value_post('p_start_date','');
-$end_date=new IDate('p_end_date');
-$end_date->value=HtmlInput::default_value_post('p_end_date','');
-?>
+$radio = new IRadio('p_inputtype');
+$h_tva = new ICheckBox('h_tva[]');
+$h_year = new INum('p_year');
+$h_year->prec = 0;
+$h_tva_compute_date = new ISelect('p_compute_date');
+$h_tva_compute_date->value = array(
+    array('value' => 1, 'label' => _('Par date paiement')),
+    array('value' => 2, 'label' => _('Par date opération'))
+);
+$start_date = new IDate('p_start_date');
+$start_date->id="p_start_date_id";
+$start_date->value = HtmlInput::default_value_post('p_start_date', '');
+$end_date = new IDate('p_end_date');
+$end_date->value = HtmlInput::default_value_post('p_end_date', '');
+$end_date->id="p_end_date_id";
 
-<form method="post" enctype="multipart/form-data">
-    <h2><?php echo _('Mandataire');?></h2>
-<?php
-$representative->input();
 ?>
-    <h2><?php echo _('Déclarant');?></h2>
-<?php
-$declarant->input();
-?>
-    <p>
-        <?php echo _('Période'),$h_year->input();?>
-    </p>
-   
-    <p>
+<h2> <?php echo _('Etape 1/3') ?></h2>
+<form method="post" enctype="multipart/form-data" onsubmit="return check_form()">
+    <h3><?php echo _('Mandataire'); ?></h3>
     <?php
-    
-    $radio->value=1;
-    echo $radio->input()._('Par fichier');
-    $file = new IFile('client_assujetti');
-    echo $file->input();
+    $representative->input();
     ?>
+    <h3><?php echo _('Déclarant'); ?></h3>
+    <?php
+    $declarant->input();
+    ?>
+    <p>
+        <?php echo _('Période'), $h_year->input(); ?>
+    </p>
+
+    <p>
+        <input type="radio" name="p_inputtype" id="file_radio" value="1" onclick="show_file();">
+        <?php
+            echo  _('Par fichier');
+        ?>
+        <span id="sp_file" style="display:none">
+            <?php
+            $file = new IFile('client_assujetti');
+            echo $file->input();
+            ?>
+        </span>
     </p>
     <p>
+        <input type="radio" name="p_inputtype" id="calc_radio" value="2" onclick="show_calc()">
         <?php
-        $radio->value=2;
-        echo $radio->input()._('Par calcul');
-        $atva=$cn->get_array('select tva_id,tva_rate,tva_comment from tva_rate order by 2');
-        $count_atva=count($atva);
+        echo  _('Par calcul');
         ?>
-    <ul style="list-style: none">
-        <?php
-        for ($i=0;$i<$count_atva;$i++):
-        ?>
-        <li>
+        <div id="sp_calcul" style="display:none">
+            <p style="margin-left:30px">
+                <?php printf(_('Entre les date %s et %s'), $start_date->input(), $end_date->input()); ?>
+            </p>
             <?php
-                $h_tva->value=$atva[$i]['tva_id'];
-                echo $h_tva->input().h($atva[$i]['tva_rate'])." ".h($atva[$i]['tva_comment']);
+            $atva = $cn->get_array('select tva_id,tva_rate,tva_comment from tva_rate order by 2');
+            $count_atva = count($atva);
             ?>
-        </li>
-        <?php
-        endfor;
-        ?>
-    </ul>
-     <p style="margin-left:30px">
-        <?php printf(_('Entre les date %s et %s'),$start_date->input(),$end_date->input());?>
-    </p>
-    <span style="margin-left:30px">
-    <?php echo _('Opération de vente'),$h_tva_compute_date->input();?>
-    </span>
+            <ul style="list-style: none">
+                <?php
+                for ($i = 0; $i < $count_atva; $i++):
+                    ?>
+                    <li>
+                        <?php
+                        $h_tva->value = $atva[$i]['tva_id'];
+                        echo $h_tva->input() . h($atva[$i]['tva_rate']) . " " . h($atva[$i]['tva_comment']);
+                        ?>
+                    </li>
+                    <?php
+                endfor;
+                ?>
+            </ul>
+            
+            <span style="margin-left:30px">
+                <?php echo _('Opération de vente'), $h_tva_compute_date->input(); ?>
+            </span>
+        </div>
     </p>    
     <p>
         <?php
         echo HtmlInput::request_to_hidden(array('gDossier', 'ac', 'plugin_code', 'sa'));
-        echo HtmlInput::hidden('st_transf',1);
+        echo HtmlInput::hidden('st_transf', 1);
         echo HtmlInput::submit('send_list', 'Valider');
         ?>
     </p>
 </form>    
+<script>
+    function show_file() {
+        $('sp_file').show();
+        $('sp_calcul').hide();
+    }
+    function show_calc() {
+        $('sp_file').hide();
+        $('sp_calcul').show();
+    }
+    function check_form()
+    {
+        if ($('p_year').value=="") {
+            alert('Vous avez oublié la période');
+            $('p_year').style.borderColor="red";
+            return false;
+        }
+        if ( $('p_start_date_id').value=="" && $('calc_radio').checked) {
+            alert('Date incorrect');
+            $('p_start_date_id').style.borderColor="red";
+            return false;
+        }
+        if (  $('p_end_date_id').value=="" && $('calc_radio').checked) {
+            alert('Date incorrect');
+            $('p_end_date_id').style.borderColor="red";
+            return false;
+        }
+        if ( ! $('calc_radio').checked && ! $('file_radio').checked ) {
+            alert('Vous devez choisir par fichier ou par calcul');
+            return false
+        }
+        return true;
+    }
+</script>    

@@ -128,8 +128,7 @@ class Transform_Declarant
         $this->data->d_countrycode=$this->countrycode;
         $this->data->d_email=$this->email;
         $this->data->d_phone=$this->phone;
-        $this->data->d_vat_number=$this->vatnumber;
-        $this->data->d_countrycode=$this->countrycode;
+        $this->data->d_vat_number=str_ireplace("be", "", $this->vatnumber);
         $this->data->d_periode=$this->year;
         $this->data->insert();
     }
