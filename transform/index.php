@@ -23,6 +23,14 @@ $version_plugin=SVNINFO;
 Extension::check_version(4400);
 $cn=new Database(dossier::id());
 $transform_version=0;
+/*
+ * load javascript
+ */
+ob_start();
+require_once('transform_javascript.js');
+$j = ob_get_contents();
+ob_end_clean();
+echo create_script($j);
 
 if ( $cn->exist_schema('transform') == false)
   {

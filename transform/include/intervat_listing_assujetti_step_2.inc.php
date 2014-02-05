@@ -26,6 +26,7 @@ global $cn;
 require_once 'class_transform_sql.php';
 require_once 'class_transform_representative.php';
 require_once 'class_transform_declarant.php';
+require_once 'class_transform_client.php';
 
 $inputtype = HtmlInput::default_value_post('p_inputtype', null);
 $year = HtmlInput::default_value_post('p_year', NULL);
@@ -132,13 +133,14 @@ if ($inputtype == 1)
                 /*
                  * insert into transform.intervat_client
                  */
-                $o_data[$i] = new Intervat_Client_SQL();
+                $o_data[$i] = new Transform_Client();
                 $o_data[$i]->d_id = $declarant->data->d_id;
                 $o_data[$i]->c_name = $data[0];
                 $o_data[$i]->c_issuedby = "BE";
                 $o_data[$i]->c_vatnumber = $data[1];
                 $o_data[$i]->c_amount_vat = $data[2];
                 $o_data[$i]->c_amount_novat = $data[3];
+                $o_data[$i]->set_comment();
                 $o_data[$i]->insert();
             }
             $cn->commit();
@@ -238,13 +240,14 @@ from
             /*
              * insert into transform.intervat_client
              */
-            $o_data[$i] = new Intervat_Client_SQL();
+            $o_data[$i] = new Transform_Client();
             $o_data[$i]->d_id = $declarant->data->d_id;
             $o_data[$i]->c_name = $a_listing[$i]['name'];
             $o_data[$i]->c_issuedby = "BE";
             $o_data[$i]->c_vatnumber = $a_listing[$i]['tvanumb'];
             $o_data[$i]->c_amount_vat = $a_listing[$i]['vat_amount'];
             $o_data[$i]->c_amount_novat = $a_listing[$i]['amount'];
+            $o_data[$i]->set_comment();
             $o_data[$i]->insert();
         }
         $cn->commit();

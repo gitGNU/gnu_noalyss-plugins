@@ -41,14 +41,19 @@ $nb=Database::num_row($ret);
             <?php echo _('TVA'); ?>
         </th>
         <th>
-            Action
+            <?php echo _('Commentaire'); ?>
+        </th>
+        <th>
+            
         </th>
     </tr>
-<?php    
+<?php
     for ($i=0;$i<$nb;$i++):
         $data=$a_listing->next($ret,$i);
+        $js=sprintf('modify_intervat_assujetti(\'%s\',\'%s\',\'%s\',\'%s\')',
+                $_REQUEST['gDossier'],$_REQUEST['ac'],$_REQUEST['plugin_code'],$data->c_id);
 ?>
-    <tr>
+    <tr id="tr_<?php echo $data->c_id?>">
         <td>
             <?php 
             echo h($data->c_name);
@@ -70,7 +75,12 @@ $nb=Database::num_row($ret);
             ?>
         </td>
         <td>
-            Modifier / enlever
+            <?php 
+            echo h($data->c_comment);
+            ?>
+        </td>
+        <td>
+            <a class="line" href="javascript:void(0)" onclick="<?php echo $js; ?>"><?php echo _('Modifier')?></a>
         </td>
     </tr>
     <?php 

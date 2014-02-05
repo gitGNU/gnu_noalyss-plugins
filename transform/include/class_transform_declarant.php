@@ -121,6 +121,7 @@ class Transform_Declarant
 
     function insert()
     {
+        $this->verify();
         $this->data->d_name=$this->name;
         $this->data->d_street=$this->street;
         $this->data->d_postcode=$this->postcode;
@@ -154,7 +155,24 @@ class Transform_Declarant
         $this->readOnly=true;
         $this->input();
     }
-
+    function verify()
+    {
+        /* -- email must be valide */
+        if (!preg_match( '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/',$this->email))
+        {
+            throw new Exception(_('Email incorrect'),20);
+        }
+        if ($this->countrycode != 'BE') {
+            throw new Exception(_('Code Pays incorrect'),21);
+        }
+        
+        if ( ! preg_match('/^[0-9]+/',$this->phone)) {
+            throw new Exception(_('Numéro de téléphone incorrect'),22);
+        }
+        if ( ! preg_match('/^[0-9]+/',$this->vatnumber)) {
+            throw new Exception(_('Numéro de TVA incorrect'),23);
+        }
+    }
 }
 
 ?>

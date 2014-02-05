@@ -22,7 +22,9 @@
 /**
  * @brief manage the table intervat_client
  */
-class Transform_Client
+require_once 'class_transform_sql.php';
+
+class Transform_Client extends Intervat_Client_SQL
 {
 
     /**
@@ -68,7 +70,22 @@ class Transform_Client
         $cn->exec_sql("update transform.intervat_client set c_amount_vat=replace(c_amount_vat,',','.'),
             c_amount_novat=replace(c_amount_novat,',','.') where d_id=$1",array($p_declarant));
     }
-
+    function set_comment()
+    {
+        $this->c_comment="";
+        if ( ! preg_match('/^[0-9]{10}/', $this->c_vatnumber))
+        {
+            $this->c_comment=_('Numéro de tva incorrect');
+        }
+        if ( ! preg_match('/^[0-9]+\.[0-9]*/', $this->c_amount_novat))
+        {
+            $this->c_comment.=_('Montant incorrect');
+        }
+        if ( ! preg_match('/^[0-9]+\.[0-9]*/', $this->c_amount_vat))
+        {
+            $this->c_comment.=_('Montant TVA incorrect');
+        }
+    }
 }
 
 ?>

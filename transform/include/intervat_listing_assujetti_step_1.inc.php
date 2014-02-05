@@ -28,6 +28,7 @@ $declarant->fromPost();
 $radio = new IRadio('p_inputtype');
 $h_tva = new ICheckBox('h_tva[]');
 $h_year = new INum('p_year');
+$h_year->value=HtmlInput::default_value_post('p_year',$declarant->year);
 $h_year->prec = 0;
 $h_tva_compute_date = new ISelect('p_compute_date');
 $h_tva_compute_date->value = array(

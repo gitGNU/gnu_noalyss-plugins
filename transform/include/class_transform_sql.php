@@ -266,6 +266,7 @@ class Intervat_Client_SQL extends Phpcompta_SQL
             , "c_amount_vat" => "c_amount_vat"
             , "c_amount_novat" => "c_amount_novat"
             , "c_issuedby" => "c_issuedby"
+            ,'c_comment'=>'c_comment'
         );
 
         $this->type = array(
@@ -276,6 +277,7 @@ class Intervat_Client_SQL extends Phpcompta_SQL
             , "c_amount_vat" => "text"
             , "c_amount_novat" => "text"
             , "c_issuedby" => "text"
+            , "c_comment" => "text"
         );
 
         $this->default = array(
