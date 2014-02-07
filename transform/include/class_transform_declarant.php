@@ -98,7 +98,7 @@ class Transform_Declarant
         $this->year=HtmlInput::default_value_post('p_year',null);
     }
 
-    function input()
+    function input($error=0,$errmsg="")
     {
         $h_name = new IText('p_dec_name', $this->name);
         $h_name->readOnly=$this->readOnly;
@@ -160,17 +160,17 @@ class Transform_Declarant
         /* -- email must be valide */
         if (!preg_match( '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/',$this->email))
         {
-            throw new Exception(_('Email incorrect'),20);
+            throw new Exception(_('Email incorrect'),24);
         }
         if ($this->countrycode != 'BE') {
-            throw new Exception(_('Code Pays incorrect'),21);
+            throw new Exception(_('Code Pays incorrect'),25);
         }
         
         if ( ! preg_match('/^[0-9]+/',$this->phone)) {
-            throw new Exception(_('Numéro de téléphone incorrect'),22);
+            throw new Exception(_('Numéro de téléphone incorrect'),26);
         }
         if ( ! preg_match('/^[0-9]+/',$this->vatnumber)) {
-            throw new Exception(_('Numéro de TVA incorrect'),23);
+            throw new Exception(_('Numéro de TVA incorrect'),27);
         }
     }
 }

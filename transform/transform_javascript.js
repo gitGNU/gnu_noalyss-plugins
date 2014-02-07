@@ -34,7 +34,7 @@ function modify_intervat_assujetti(p_dossier, p_ac, p_plugin_code, c_id)
                         var answer = req.responseText;
                         var position = fixed_position(451, 217);
                         add_div({'id': 'modify_intervat_assujetti_div',
-                            'cssclass': 'inner_box', 'drag': 1, 'style': position});
+                            'cssclass': 'inner_box', 'drag': 1, 'style': 'min-width:25%;'+position});
 
                         $('modify_intervat_assujetti_div').innerHTML = answer;
                         answer.evalScripts();

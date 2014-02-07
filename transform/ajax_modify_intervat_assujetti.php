@@ -71,7 +71,7 @@ $c_amount_vat=new INum('c_amount_vat',$client->c_amount_vat);
                 <?php echo _('Commentaire'); ?>
             </td>
             <td id="modify_intervat_assujetti_div_comment">
-                <?php echo $client->c_comment; ?>
+                <span class="notice"> <?php echo $client->c_comment; ?></span>
             </td>
         </tr>
     </table>

@@ -18,7 +18,6 @@
  */
 
 // Copyright Author Dany De Bontridder danydb@aevalys.eu
-var_dump($_POST);
 /**
  * save data into db and display them before creating the XML
  */
@@ -41,27 +40,28 @@ if ($inputtype == null)
 {
     throw new Exception(_('Vous devez choisir par fichier ou par calcul'), 4);
 }
-if ($start_date == null || $end_date == null)
+if ($year == null)
 {
-    throw new Exception(_('La date donnée est invalide'), 9);
-}
-if (isDate($start_date) == null || isDate($end_date) == null)
-{
-    throw new Exception(_('La date donnée est invalide'), 9);
+    throw new Exception(_("Vous devez donner la période"), 6);
 }
 
 // if inputtype is by computing (=2) then year must existe as exercice 
 // and tva_id must not be empty
 if ($inputtype == 2)
 {
+    if ($start_date == null || isDate($start_date) == null)
+    {
+        throw new Exception(_('La date donnée est invalide'), 9);
+    }
+    if ($end_date == null || isDate($end_date) == null)
+    {
+        throw new Exception(_('La date donnée est invalide'), 9.1);
+    }
     if ($atva == null)
     {
         throw new Exception(_('Vous devez choisir au moins un taux TVA'), 5);
     }
-    if ($year == null)
-    {
-        throw new Exception(_("Vous devez donner l'année"), 6);
-    }
+
     if ($compute_date == null || isNumber($compute_date) == 0)
     {
         throw new Exception(_("Date de calcul incorrect"), 7);
@@ -74,7 +74,7 @@ if ($inputtype == 2)
     {
         if (isNumber($tva) == 0)
         {
-            throw new Exception(_("ID Tva incorrect: [$tva]"), 9);
+            throw new Exception(_("ID Tva incorrect: [$tva]"), 5.1);
         }
     }
 }
@@ -156,7 +156,6 @@ if ($inputtype == 1)
 //******************************************************************************
 if ($inputtype == 2)
 {
-    var_dump($atva);
     $ltva = "(" . implode(',', $atva) . ")";
     //------ Operation date ----------------
     if ($compute_date == 1)
@@ -273,6 +272,23 @@ $declarant->display();
     $ret = $a_listing->seek(' where d_id = $1', array($declarant->data->d_id));
     require 'template/listing_client_display.php';
     ?>
+    <?php
+    if ($inputtype == 1) :
+        ?>
+<h3><?php echo _('Rejeté')?></h3>
+    <ol>
+        <?php
+        for ($i = 0; $i < count($rejected); $i++):
+            ?>        
+            <li>
+                <?php echo $rejected[$i]; ?>
+            </li>
+        <?php endfor; ?>
+    </ol>
+    <?php
+endif;
+?>
+
 <form method="POST">
     <?php echo HtmlInput::hidden('r_id', $request->r_id); ?>
     <?php

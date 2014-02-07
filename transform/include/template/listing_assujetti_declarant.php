@@ -1,5 +1,4 @@
 <?php
-
 /*
  *   This file is part of NOALYSS.
  *
@@ -16,53 +15,71 @@
  *   You should have received a copy of the GNU General Public License
  *   along with NOALYSS; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 // Copyright Author Dany De Bontridder danydb@aevalys.eu
-
 ?>
 <table>
     <tr>
         <td>
-            <?php echo _('Nom') . "</td><td>" . $h_name->input(); ?>
+<?php echo _('Nom') . "</td><td>" . $h_name->input(); ?>
         </td>
     <tr>
     <tr>
         <td>
-            <?php echo _('Rue') . "</td><td>" . $h_street->input(); ?>
+<?php echo _('Rue') . "</td><td>" . $h_street->input(); ?>
         </td>
     <tr>
     <tr>
         <td>
-            <?php echo _('Code postal') . "</td><td>" . $h_postcode->input(); ?>
+<?php echo _('Code postal') . "</td><td>" . $h_postcode->input(); ?>
         </td>
     <tr>
     <tr>
         <td>
-            <?php echo _('Ville') . "</td><td>" . $h_city->input(); ?>
+<?php echo _('Ville') . "</td><td>" . $h_city->input(); ?>
         </td>
     <tr>
     <tr>
         <td>
-            <?php echo _('Code Pays') . "</td><td>" . $h_countrycode->input(); ?>
+<?php echo _('Code Pays') . "</td><td>" . $h_countrycode->input(); ?>
+            <span class="notice"><?php if ($error == 25)
+{
+    echo $errmsg;
+} ?></span>
         </td>
     <tr>
     <tr>
         <td>
-            <?php echo _('email') . "</td><td>" . $h_email->input(); ?>
+<?php echo _('email') . "</td><td>" . $h_email->input(); ?>
+            <span class="notice"><?php if ($error == 24)
+{
+    echo $errmsg;
+} ?></span>
+
         </td>
     <tr>
     <tr>
         <td>
-            <?php echo _('Téléphone') . "</td><td>" . $h_phone->input(); ?>
+<?php echo _('Téléphone') . "</td><td>" . $h_phone->input(); ?>
+            <span class="notice"><?php if ($error == 26)
+{
+    echo $errmsg;
+} ?></span>
+
         </td>
     <tr>
     <tr>
         <td>
-            <?php echo _('N° TVA') . "</td><td>" . $h_vatnumber->input(); ?>
+<?php echo _('N° TVA') . "</td><td>" . $h_vatnumber->input(); ?>
+            <span class="notice"><?php if ($error == 27)
+{
+    echo $errmsg;
+} ?></span>
+
         </td>
     <tr>
-    
+
 
 </table>
 

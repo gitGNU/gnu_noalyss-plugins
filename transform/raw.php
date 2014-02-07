@@ -43,6 +43,7 @@ switch ($act)
         $xml = new Transform_Intervat;
 
         $xml->append_root();
+        $xml->append_representative($representative);
         $xml->append_client_listing($declarant);
         $file = "listing_assujetti" . date('d.m.y.hi') . ".xml";
         $ref = $_ENV['TMP'] . "/" . $file;

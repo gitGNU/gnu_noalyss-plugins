@@ -1,5 +1,4 @@
 <?php
-
 /*
  *   This file is part of NOALYSS.
  *
@@ -16,26 +15,33 @@
  *   You should have received a copy of the GNU General Public License
  *   along with NOALYSS; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
+ */
 
 // Copyright Author Dany De Bontridder danydb@aevalys.eu
 
-
-$request_id=HtmlInput::default_value_post('r_id',null);
+global $cn;
+$request_id = HtmlInput::default_value_post('r_id', null);
 
 if ($request_id == null)
 {
     throw new Exception(_('Accès directe incorrecte'), 15);
 }
-
-
+$invalide = $cn->get_value("select count(*) 
+        from transform.intervat_client 
+        join transform.intervat_declarant using (d_id) 
+        where c_comment <>'' and r_id=$1", array($request_id));
 ?>
 <h2> <?php echo _('Etape 3/3') ?></h2>
+<?php if ($invalide != 0): ?>
+    <p class="error">
+    <?php printf(_('Attention : il y a %d enregistrements incorrects '), $invalide); ?>
+    </p>
+    <?php endif; ?>
 <form method="get" action="extension.raw.php">
-    
-    <?php
-    echo HtmlInput::post_to_hidden(array('r_id','ac','gDossier','plugin_code'));
-    echo HtmlInput::hidden('act','listing_assujetti');
-    echo HtmlInput::submit('get','Fichier XML');
-    ?>
+
+<?php
+echo HtmlInput::post_to_hidden(array('r_id', 'ac', 'gDossier', 'plugin_code'));
+echo HtmlInput::hidden('act', 'listing_assujetti');
+echo HtmlInput::submit('get', 'Fichier XML');
+?>
 </form>

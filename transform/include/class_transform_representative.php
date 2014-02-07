@@ -119,7 +119,7 @@ class Transform_Representative
         $this->issued = HtmlInput::default_value_post("p_issued", null);
     }
 
-    function input()
+    function input($error=0,$errmsg="")
     {
         $h_type = new ISelect('p_type');
         $h_type->value = array(
@@ -153,6 +153,7 @@ class Transform_Representative
     function insert()
     {
         $this->verify();
+        $this->issued="BE";
         $this->data->rp_listing_id = $this->id;
         $this->data->rp_issued = $this->issued;
         $this->data->rp_type = $this->type;
@@ -162,7 +163,7 @@ class Transform_Representative
         $this->data->rp_countrycode = $this->countrycode;
         $this->data->rp_email = $this->email;
         $this->data->rp_phone = $this->phone;
-
+        $this->data->rp_city=$this->city;
         $this->data->insert();
     }
 
@@ -186,6 +187,7 @@ class Transform_Representative
         $this->countrycode = $this->data->rp_countrycode;
         $this->email = $this->data->rp_email;
         $this->phone = $this->data->rp_phone;
+        $this->city=$this->data->rp_city;
     }
     function verify()
     {

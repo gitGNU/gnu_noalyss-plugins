@@ -130,8 +130,8 @@ class Transform_Intervat
         $commentaire="";
 
         $decl = $this->domdoc->createElementNS($this->ns, "ns2:ClientListing");
-        $ai = $decl->setAttribute('VATAmountSum', $vat_amount_sum);
-        $ai = $decl->setAttribute('TurnOverSum', $turnoversum);
+        $ai = $decl->setAttribute('VATAmountSum', sprintf('%8.2f',$vat_amount_sum));
+        $ai = $decl->setAttribute('TurnOverSum', sprintf("%8.2f",$turnoversum));
         $ai = $decl->setAttribute('ClientsNbr', $clientnb);
         $ai = $decl->setAttribute('SequenceNumber', $seqnb);
 
@@ -219,8 +219,8 @@ class Transform_Intervat
             $de_vat_number = $this->domdoc->createTextNode($client['c_vatnumber']);
             $company->appendChild($de_vat_number);
             $dom_client->appendChild($company);
-            $dom_client->appendChild($this->domdoc->createElementNS($this->ns,"ns2:TurnOver", $client['c_amount_novat']));
-            $dom_client->appendChild($this->domdoc->createElementNS($this->ns,"ns2:VATAmount", $client['c_amount_vat']));
+            $dom_client->appendChild($this->domdoc->createElementNS($this->ns,"ns2:TurnOver", sprintf("%8.2f",$client['c_amount_novat'])));
+            $dom_client->appendChild($this->domdoc->createElementNS($this->ns,"ns2:VATAmount", sprintf("%8.2f",$client['c_amount_vat'])));
             $p_dom->appendChild($dom_client);
         }
         

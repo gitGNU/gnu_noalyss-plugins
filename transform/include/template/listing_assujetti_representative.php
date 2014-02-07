@@ -43,16 +43,19 @@
     <tr>
         <td>
             <?php echo _('Code Pays') . "</td><td>" . $h_countrycode->input(); ?>
+            <span class="notice"><?php if ($error==21) {echo $errmsg;}?></span>
         </td>
     <tr>
     <tr>
         <td>
             <?php echo _('email') . "</td><td>" . $h_email->input(); ?>
+            <span class="notice"><?php if ($error==20) {echo $errmsg;}?></span>
         </td>
     <tr>
     <tr>
         <td>
             <?php echo _('Téléphone') . "</td><td>" . $h_phone->input(); ?>
+            <span class="notice"><?php if ($error==22) {echo $errmsg;}?></span>
         </td>
     <tr>
     <tr>

@@ -30,6 +30,7 @@ else
     $client = new Transform_Client($id);
     if ($act == 0)
     {
+        global $g_failed,$g_succeed;
         $action = "UPD";
         $client->c_amount_novat = HtmlInput::default_value_get('c_amount_novat', $client->c_amount_novat);
         $client->c_name = HtmlInput::default_value_get('c_name', $client->c_name);
@@ -54,14 +55,14 @@ else
             <?php echo h($client->c_amount_vat) ?>
             </td>
             <td>
-            <?php echo h($client->c_comment) ?>
+            <?php echo $g_succeed.h($client->c_comment) ?>
             </td>
             <td>
                 <a class="line" href="javascript:void(0)" onclick="<?php echo $js; ?>"><?php echo _('Modifier') ?></a>
             </td>
             <?php
             else:
-                echo $client->c_comment;
+                echo $g_failed.$client->c_comment;
         endif;
     } else
     {

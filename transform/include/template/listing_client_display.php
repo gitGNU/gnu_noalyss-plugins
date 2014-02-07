@@ -24,9 +24,10 @@
  * parameters are $ret (return of seek) and $a_listing  (Intervat_Client_SQL )
  @see intervat_listing_assujetti_step_2.inc.php
  */
+global $g_succeed,$g_failed;
 $nb=Database::num_row($ret);
 ?>
-<table>
+<table class="result">
     <tr>
         <th>
             <?php echo _('Nom'); ?>
@@ -52,8 +53,9 @@ $nb=Database::num_row($ret);
         $data=$a_listing->next($ret,$i);
         $js=sprintf('modify_intervat_assujetti(\'%s\',\'%s\',\'%s\',\'%s\')',
                 $_REQUEST['gDossier'],$_REQUEST['ac'],$_REQUEST['plugin_code'],$data->c_id);
+        $class=($i%2==0)?'odd':'even';
 ?>
-    <tr id="tr_<?php echo $data->c_id?>">
+    <tr id="tr_<?php echo $data->c_id?>" class="<?php echo $class; ?>">
         <td>
             <?php 
             echo h($data->c_name);
@@ -76,7 +78,8 @@ $nb=Database::num_row($ret);
         </td>
         <td>
             <?php 
-            echo h($data->c_comment);
+            $code= ($data->c_comment=="")?$g_succeed:$g_failed;
+            echo $code.h($data->c_comment);
             ?>
         </td>
         <td>

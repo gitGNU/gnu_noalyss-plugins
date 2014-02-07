@@ -19,10 +19,11 @@
 
 // Copyright Author Dany De Bontridder danydb@aevalys.eu
 ?>
+<div style="margin-left:10%;width: 80%;margin-right: 10%">
 <h1>Listing Assujetti Intervat </h1>
 <?php
 $step = HtmlInput::default_value_request('st_transf', 0);
-
+$error=0;$errmsg="";
 if ($step == 0)
 {
     require 'intervat_listing_assujetti_step_1.inc.php';
@@ -34,6 +35,8 @@ if ($step == 1)
         require 'intervat_listing_assujetti_step_2.inc.php';
     } catch (Exception $e)
     {
+        $error=$e->getCode();
+        $errmsg=$e->getMessage();
         echo '<p class="notice">' . $e->getMessage() . '</p>';
         if ($e->getCode() != 3)
         {
@@ -53,3 +56,4 @@ if ($step == 2)
     }
 }
 ?>
+</div>
