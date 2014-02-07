@@ -28,16 +28,19 @@
     <tr>
         <td>
             <?php echo _('Rue') . "</td><td>" . $h_street->input(); ?>
+             <span class="notice"><?php if ($error==31) {echo $errmsg;}?></span>
         </td>
     <tr>
     <tr>
         <td>
             <?php echo _('Code postal') . "</td><td>" . $h_postcode->input(); ?>
+             <span class="notice"><?php if ($error==32) {echo $errmsg;}?></span>
         </td>
     <tr>
     <tr>
         <td>
             <?php echo _('Ville') . "</td><td>" . $h_city->input(); ?>
+             <span class="notice"><?php if ($error==33) {echo $errmsg;}?></span>
         </td>
     <tr>
     <tr>

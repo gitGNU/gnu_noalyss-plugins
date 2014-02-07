@@ -45,31 +45,36 @@ $inputtype = HtmlInput::default_value_post('p_inputtype', -1);
 <h2> <?php echo _('Etape 1/3') ?></h2>
 <form method="post" enctype="multipart/form-data" onsubmit="return check_form()">
     <div style="width:45%;padding: 15px;float:left">
-    
-    <h3><?php echo _('Mandataire'); ?></h3>
-    <?php
-    $representative->input($error, $errmsg);
-    ?>
+
+        <h3><?php echo _('Mandataire'); ?></h3>
+        <span class="notice">
+            <?php
+            echo _("Ne remplissez pas s'il n'y a pas de mandataire");
+            ?>
+        </span>
+        <?php
+        $representative->input($error, $errmsg);
+        ?>
     </div>
     <div style="width:45%;padding: 15px;float:left">
-    <h3><?php echo _('Déclarant'); ?></h3>
-    <?php
-    $declarant->input($error, $errmsg);
-    ?>
+        <h3><?php echo _('Déclarant'); ?></h3>
+        <?php
+        $declarant->input($error, $errmsg);
+        ?>
     </div>
     <div style="clear:both;"></div>
     <p>
         <?php echo _('Période'), $h_year->input(); ?>
         <span class="notice"><?php
-        if ($error == 6)
-        {
-            echo $errmsg;
-        }
-        ?></span>
+            if ($error == 6)
+            {
+                echo $errmsg;
+            }
+            ?></span>
     </p>
 
     <p>
-        <?php $checked=($inputtype==2)?' checked ':""; ?>
+        <?php $checked = ($inputtype == 1) ? ' checked ' : ""; ?>
         <input type="radio" name="p_inputtype" id="file_radio"  <?php echo $checked; ?>  value="1" onclick="show_file();">
         <?php
         echo _('Par fichier');
@@ -83,8 +88,7 @@ $inputtype = HtmlInput::default_value_post('p_inputtype', -1);
         </span>
     </p>
     <p>
-        <?php
-        $checked=($inputtype==2)?' checked ':""; ?>
+        <?php $checked = ($inputtype == 2) ? ' checked ' : ""; ?>
         <input type="radio" name="p_inputtype" <?php echo $checked; ?> id="calc_radio" value="2" onclick="show_calc()">
         <?php
         echo _('Par calcul');
@@ -92,23 +96,29 @@ $inputtype = HtmlInput::default_value_post('p_inputtype', -1);
         ?>
     <div id="sp_calcul" style="display:<?php echo $display; ?>">
         <p style="margin-left:30px">
-        <?php printf(_('Entre les date %s et %s'), $start_date->input(), $end_date->input()); ?>
-            <span class="notice"><?php if ($error==9|| $error ==9.1) {echo $errmsg;}?></span>
+            <?php printf(_('Entre les date %s et %s'), $start_date->input(), $end_date->input()); ?>
+            <span class="notice"><?php if ($error == 9 || $error == 9.1)
+            {
+                echo $errmsg;
+            } ?></span>
         </p>
         <?php
         $atva = $cn->get_array('select tva_id,tva_rate,tva_comment from tva_rate order by 2');
         $count_atva = count($atva);
         ?>
-        <span class="notice"><?php if ($error==5|| $error ==5.1) {echo $errmsg;}?></span>
+        <span class="notice"><?php if ($error == 5 || $error == 5.1)
+        {
+            echo $errmsg;
+        } ?></span>
         <ul style="list-style: none">
-            <?php
-            for ($i = 0; $i < $count_atva; $i++):
-                ?>
-                <li>
-                    <?php
-                    $h_tva->value = $atva[$i]['tva_id'];
-                    echo $h_tva->input() . h($atva[$i]['tva_rate']) . " " . h($atva[$i]['tva_comment']);
+                <?php
+                for ($i = 0; $i < $count_atva; $i++):
                     ?>
+                <li>
+                <?php
+                $h_tva->value = $atva[$i]['tva_id'];
+                echo $h_tva->input() . h($atva[$i]['tva_rate']) . " " . h($atva[$i]['tva_comment']);
+                ?>
                 </li>
                 <?php
             endfor;
@@ -116,16 +126,16 @@ $inputtype = HtmlInput::default_value_post('p_inputtype', -1);
         </ul>
 
         <span style="margin-left:30px">
-<?php echo _('Opération de vente'), $h_tva_compute_date->input(); ?>
+    <?php echo _('Opération de vente'), $h_tva_compute_date->input(); ?>
         </span>
     </div>
 </p>    
 <p>
-    <?php
-    echo HtmlInput::request_to_hidden(array('gDossier', 'ac', 'plugin_code', 'sa'));
-    echo HtmlInput::hidden('st_transf', 1);
-    echo HtmlInput::submit('send_list', 'Valider');
-    ?>
+<?php
+echo HtmlInput::request_to_hidden(array('gDossier', 'ac', 'plugin_code', 'sa'));
+echo HtmlInput::hidden('st_transf', 1);
+echo HtmlInput::submit('send_list', 'Valider');
+?>
 </p>
 </form>    
 <script>

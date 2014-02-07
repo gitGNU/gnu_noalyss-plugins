@@ -112,7 +112,7 @@ if ($inputtype == 1)
     if (strlen($_FILES['client_assujetti']['tmp_name'][0]) != 0)
     {
         $new_name = tempnam($_ENV['TMP'], 'client_assujetti');
-        if (!move_uploaded_file($_FILES['file_upload']['tmp_name'][$i], $new_name))
+        if (!move_uploaded_file($_FILES['client_assujetti']['tmp_name'], $new_name))
         {
             throw new Exception(_('Impossible de sauver ce fichier'), 2);
         }
@@ -125,7 +125,7 @@ if ($inputtype == 1)
             while ($data = fgetcsv($file, 0, ";"))
             {
                 $i++;
-                if (count($data) != 4 || $i == 1)
+                if (count($data) != 4 )
                 {
                     $rejected[] = _('Ligne non importée') . join(' - ', $data);
                     continue;
@@ -249,6 +249,8 @@ from
             $o_data[$i]->set_comment();
             $o_data[$i]->insert();
         }
+        $correct=new Transform_Client;
+
         $cn->commit();
     } catch (Exception $ex)
     {
@@ -256,6 +258,7 @@ from
         throw new Exception(_('Ne peut pas ajouter ') . h($o_data[$i]->c_name) . '-' . h($o_data[$i]->c_vatnumber), 3);
     }
 }
+
 ?>
 <h2> <?php echo _('Etape 2/3') ?></h2>
 <h3><?php echo _('Mandataire'); ?></h3>

@@ -191,6 +191,7 @@ class Transform_Representative
     }
     function verify()
     {
+        if ( trim($this->name) == "") return;
         /* -- email must be valide */
         if (!preg_match( '/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3})$/',$this->email))
         {
@@ -202,6 +203,15 @@ class Transform_Representative
         
         if ( ! preg_match('/^[0-9]+/',$this->phone)) {
             throw new Exception(_('Numéro de téléphone incorrect'),22);
+        }
+        if (trim($this->street) == "" ) {
+            throw new Exception(_('Obligatoire'),31 );
+        }
+        if (trim($this->postcode) == "" ) {
+            throw new Exception(_('Obligatoire'),32 );
+        }
+        if (trim($this->city) == "" ) {
+            throw new Exception(_('Obligatoire'),33 );
         }
     }
 
