@@ -54,25 +54,39 @@ class Transform_Client extends Intervat_Client_SQL
     function compute_value($p_declarant)
     {
         global $cn;
-        $this->correct_data($p_declarant);
-        $this->array = $cn->get_array('select * from transform.intervat_client where d_id=$1', array($p_declarant));
+        $this->array = $cn->get_array("select * from transform.intervat_client 
+                where 
+                d_id=$1 and
+                coalesce(c_comment,'') = ''"
+                , array($p_declarant));
         $this->nb = count($this->array);
         
-        $this->vat_amount_sum = $cn->get_value('select sum(c_amount_vat::numeric) from 
-            transform.intervat_client where d_id=$1',array($p_declarant));
+        $this->vat_amount_sum = $cn->get_value("
+            select sum(c_amount_vat::numeric) from 
+            transform.intervat_client where d_id=$1 and
+                coalesce(c_comment,'') = ''",array($p_declarant));
         
-        $this->turnoversum = $cn->get_value('select sum(c_amount_novat::numeric) from 
-            transform.intervat_client where d_id=$1',array($p_declarant));
+        $this->turnoversum = $cn->get_value("select sum(c_amount_novat::numeric) from 
+            transform.intervat_client where d_id=$1 and
+                coalesce(c_comment,'') = ''",array($p_declarant));
     }
-    private function correct_data($p_declarant)
+    private function correct_comment()
     {
-        global $cn;
-        $cn->exec_sql("update transform.intervat_client set c_amount_vat=replace(c_amount_vat,',','.'),
-            c_amount_novat=replace(c_amount_novat,',','.') where d_id=$1",array($p_declarant));
+        $this->c_vatnumber=str_replace('BE','',$this->c_vatnumber);
+        $this->c_vatnumber=str_replace(',','',$this->c_vatnumber);
+        $this->c_vatnumber=str_replace('.','',$this->c_vatnumber);
+        $this->c_vatnumber=str_replace('-','',$this->c_vatnumber);
+    }
+    private function correct_amount()
+    {
+        $this->c_amount_novat=  str_replace(',', '.', $this->c_amount_novat);
+        $this->c_amount_vat=  str_replace(',', '.', $this->c_amount_vat);
     }
     function set_comment()
     {
         $this->c_comment="";
+        $this->correct_comment();
+        $this->correct_amount();
         if ( ! preg_match('/^[0-9]{10}/', $this->c_vatnumber))
         {
             $this->c_comment=_('Numéro de tva incorrect');
