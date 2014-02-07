@@ -27,6 +27,9 @@
 global $g_succeed,$g_failed;
 $nb=Database::num_row($ret);
 ?>
+<p class="notice">
+    <?php echo _('les enregistrements incorrects ne seront inclus pas dans le fichier XML')?>
+    </p>
 <table class="result">
     <tr>
         <th>
