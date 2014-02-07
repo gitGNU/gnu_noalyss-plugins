@@ -35,13 +35,22 @@ $invalide = $cn->get_value("select count(*)
 <?php if ($invalide != 0): ?>
     <p class="error">
     <?php printf(_('Attention : il y a %d enregistrements incorrects '), $invalide); ?>
+    <?php echo _('Ils ne seront inclus pas dans le fichier XML')?>
     </p>
     <?php endif; ?>
 <form method="get" action="extension.raw.php">
 
 <?php
 echo HtmlInput::post_to_hidden(array('r_id', 'ac', 'gDossier', 'plugin_code'));
-echo HtmlInput::hidden('act', 'listing_assujetti');
+echo HtmlInput::hidden('act', 'listing_assujetti_xml');
 echo HtmlInput::submit('get', 'Fichier XML');
+?>
+</form>
+<form method="get" action="extension.raw.php">
+
+<?php
+echo HtmlInput::post_to_hidden(array('r_id', 'ac', 'gDossier', 'plugin_code'));
+echo HtmlInput::hidden('act', 'listing_assujetti_csv');
+echo HtmlInput::submit('get', 'Fichier CSV');
 ?>
 </form>
