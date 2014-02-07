@@ -81,6 +81,8 @@ class Transform_Client extends Intervat_Client_SQL
     {
         $this->c_amount_novat=  str_replace(',', '.', $this->c_amount_novat);
         $this->c_amount_vat=  str_replace(',', '.', $this->c_amount_vat);
+        $this->c_amount_novat=  str_replace('+', '', $this->c_amount_novat);
+        $this->c_amount_vat=  str_replace('+', '', $this->c_amount_vat);
     }
     function set_comment()
     {
