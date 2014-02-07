@@ -122,16 +122,27 @@ class RAPAV_Formulaire extends Formulaire_Sql
 	static function verify_definition(&$p_array)
 	{
 		global $cn;
-		for ($i=0;$i<count($p_array['p_code']);$i++)
+                $count_code=count($p_array['p_code']);
+		for ($i=0;$i<$count_code;$i++)
 		{
 			$c=$cn->get_value('select count(*) from rapport_advanced.formulaire_param
 				where p_code=$1 and p_id <> $2 and f_id=$3',
 					array($p_array['p_code'][$i],$p_array['p_id'][$i],$p_array['f_id']));
 
 			if ( $c > 0 ) {
-				$p_array['p_code'][$i]='C'.$i.microtime();
+				$p_array['p_code'][$i]='C'.$i.microtime(false);
 			}
 		}
+                
+                for ($i=0;$i<$count_code;$i++)
+                {
+                    for ($e=0;$e<$count_code;$e++) {
+                        if ($p_array['p_code'][$i] == $p_array['p_code'][$e] && $i != $e)
+                        {
+                            $p_array['p_code'][$e]='C'.$i.microtime(false);
+                        }
+                    }
+                }
 	}
 
 	/**
@@ -166,6 +177,7 @@ class RAPAV_Formulaire extends Formulaire_Sql
 			else
 				$form_param->update();
 		}
+                
 		// delete checked rows
 		if ( isset ($p_array["del_row"]))
 		{
@@ -176,6 +188,17 @@ class RAPAV_Formulaire extends Formulaire_Sql
 				}
 			}
 		}
+                // Reorder
+                //
+                $order_param=new formulaire_param_sql();
+                $ret=$order_param->seek(' where f_id=$1 order by p_order',array($p_array['f_id']));
+                $nb_rows=Database::num_row($ret);
+                for ($i=0;$i < $nb_rows;$i++)
+                {
+                    $param=$order_param->next($ret,$i);
+                    $param->p_order=($i+1)*10;
+                    $param->update();
+                }
 		self::load_file($rapav);
 	}
 

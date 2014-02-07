@@ -209,7 +209,9 @@ class RAPAV_Formula_Attribute extends RAPAV_Listing_Formula
     function display()
     {
         global $cn;
-        $desc = $cn->get_value('select ad_text from attr_def where ad_id=$1', array($this->data->getp('attribut_card')));
+        $desc = $cn->get_value('select ad_text from attr_def 
+                 where ad_id=$1', array($this->data->getp('attribut_card')));
+        
         return "Utilisant l'attribut " . h($desc);
     }
 
@@ -239,13 +241,18 @@ class RAPAV_Formula_Attribute extends RAPAV_Listing_Formula
     function input()
     {
         global $cn;
+        $this->cat = $cn->get_value('select fd_id 
+                    from rapport_advanced.listing 
+                    where
+                    l_id=$1
+                    ', array($this->data->getp('listing_id')));
         $select = new ISelect('p_attribute');
 
         $select->value = $cn->make_array('select a.ad_id,a.ad_text 
                                         from
                                         attr_def as a join jnt_fic_attr as j on (a.ad_id=j.ad_id)
                                         where
-                                        fd_id=' . $this->data->getp('listing_id') . ' order by 2');
+                                        fd_id=' .$this->cat . ' order by a.ad_text ');
 
         $select->selected = $this->data->getp('attribut_card');
         return "Attribut à afficher pour chaque fiche " . $select->input();
@@ -485,6 +492,7 @@ class RAPAV_Formula_Compute extends RAPAV_Listing_Formula
                                 and lf.f_id = $3
                                 ', array($this->detail->lc_id, $search, $this->fiche->f_id));
             $formula = str_replace($piece, $value, $formula);
+           
         }
         /** Protect against division by zero */
         if (strpos("1" . $formula, "/0.0000") != 0)
@@ -637,6 +645,8 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
             // Saldo
             case 1:
             case 2:
+                 $card_saldo = ($this->data->lp_card_saldo == 0) ? "jrn1" : "jrn2";
+                 $card_saldo = ($this->data->lp_card_saldo == 0) ? "jrn1" : "jrn2";
                 // Compute D-C
                 $sql = "
                         
@@ -800,6 +810,7 @@ class RAPAV_Formula_Account extends RAPAV_Listing_Formula
         echo '</p>';
 
         $ck = new ICheckBox('card_saldo');
+        $ck->value=1;
         $ck->set_check($this->data->lp_card_saldo);
         echo '<p>';
         echo 'Prendre le total de la fiche ' . $ck->input();

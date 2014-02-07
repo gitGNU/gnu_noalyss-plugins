@@ -1,0 +1,115 @@
+RAPAV;4
+"Test Formule";"Test sur toutes les formules possibles"
+155;C1;"Formule + Formule2";3;110;15;1
+157;PCTVA1OP;"Poste comptable 6 et TVA 1date opération ";3;150;15;1
+158;PCTVA1PAY;"Poste comptable 6 et TVA 1date Paiements";3;160;15;1
+170;T412;"Journaux Achat";6;180;15;1
+161;T42;"Total  Code TVA + Poste Comptable";2;220;15;1
+164;PCTVA2ECH;"Poste Comptable 6 et TVA 1 date Echeance";3;260;15;1
+175;T422;"Journaux Achat";6;270;15;1
+176;PCTVA22OP;"Poste comptable 6 et TVA 1date opération ";3;280;15;1
+177;PCTVA22PAY;"Poste comptable 6 et TVA 1date Paiements";3;300;15;1
+183;PCTVA32ECH;"Poste Comptable 6 et TVA 41 date Echeance";3;390;15;1
+156;T4;"Poste comptable et TVA";1;120;15;1
+172;PCTVA12PAY;"Poste comptable 6 et TVA 1date Paiements";3;200;15;1
+173;PCTVA12ECH;"Poste Comptable 6 et TVA 1 date Echeance";3;210;15;1
+174;T421;" tous les journaux";3;230;15;1
+171;PCTVA12OP;"Poste comptable 6 et TVA 1date opération ";3;190;15;1
+162;PCTVA2OP;"Poste comptable 6 et TVA 1date opération ";3;240;15;1
+165;T43;" Poste Comptable";2;310;15;1
+179;T431;"Tous les journaux";6;320;15;1
+168;PCTVA3ECH;"Poste Comptable 6 et TVA 41 date Echeance";3;350;15;1
+153;F70ECH;"Somme 70% date échéance";3;90;15;1
+154;T3;Compute;1;100;15;1
+169;T411;"Tous les journaux";6;140;15;1
+163;PCTVA2PAY;"Poste comptable 6 et TVA 1date Paiements";3;250;15;1
+178;PCTVA22ECH;"Poste Comptable 6 et TVA 1 date Echeance";3;290;15;1
+159;PCTVA1ECH;"Poste Comptable 6 et TVA 1 date Echeance";3;170;15;1
+160;T41;"Total Code TVA";2;130;15;1
+167;PCTVA3PAY;"Poste comptable 6 et TVA 41date Paiements";3;340;15;1
+152;F70PAY;"Somme 70% date paiement";3;80;15;1
+180;T432;"Journaux Achat";6;360;15;1
+181;PCTVA32OP;"Poste comptable 6 et TVA 41date opération ";3;370;15;1
+182;PCTVA32PAY;"Poste comptable 6 et TVA 41date Paiements";3;380;15;1
+151;F70JRN;"Somme 70% Journaux";3;70;15;1
+150;F70OP;"Somme 70% date opération";3;60;15;1
+145;FORMULE;Formule;3;20;15;1
+146;FORMULE2;"Opérateur ternaire sur la formule";3;30;15;1
+147;COMPUTE;"Opérateur ternaire sur la formule via compute";3;40;15;1
+149;T2;Formule;1;50;15;1
+166;PCTVA3OP;"Poste comptable 6 et TVA 41date opération ";3;330;15;1
+188;T5;"Poste Comptable  6 & 41 date opération";1;400;15;1
+189;T51;"Date opération";2;410;15;1
+190;PDC51;"Solde débit - crédit";3;420;15;1
+191;PCD51;"Solde Crédit - débit";3;430;15;1
+192;PD51;Débit;3;440;15;1
+193;PC51;Crédit;3;450;15;1
+194;T52;"Poste Comptable  6 & 41 Date Echéance";2;460;15;1
+195;PDC52;"Solde débit - crédit";3;470;15;1
+196;PCD52;"Solde Crédit - débit";3;480;15;1
+197;PD52;Débit;3;490;15;1
+198;PC52;Crédit;3;500;15;1
+199;T53;"Poste Comptable  6 & 41 Date Paiement";2;510;15;1
+200;PCD53;"Solde débit - crédit";3;520;15;1
+202;PDC53;"Solde Crédit - débit";3;530;15;1
+203;PD53;Débit;3;540;15;1
+204;PC53;Crédit;3;550;15;1
+211;T54;"Poste comptable 6 et 41 limité à un journal";2;560;15;1
+218;OR1;"Solde Débit - Crédit solde du compte 6% utilisé avec 4% rapprochée avec une opération 55% dans la période donnée";3;570;15;1
+213;PCD54;"Solde Crédit - débit";3;580;15;1
+214;PD54;"Débit  la date de paiement";3;590;15;1
+215;PC54;"Crédit date d'échéance";3;600;15;1
+217;T6;"Opération rapprochées";1;610;15;1
+212;PDC54;"Solde débit - crédit";3;620;15;1
+222;OR5;"test order";3;630;15;1
+219;OR2;"Solde crédit - débit solde du compte 6% utilisé avec 4% rapprochée avec une opération 55% dans la période donnée";3;640;15;1
+220;OR3;"Débit opération compte 6% utilisé avec 4% rapprochée avec une opération 55% dans la période donnée";3;650;15;1
+221;OR4;"Crédit opération compte 6% utilisé avec 4% rapprochée avec une opération 55% dans la période donnée limité au journal Achat";3;660;15;1
+148;T1;"Test sur opérateur ternaire";1;10;15;1
+RAPAV_DETAIL
+134;147;;;"([FORMULE] > 50000)?1:0";;;;3;;;;
+136;145;;;[7%]*2.5;;;;1;;;;0
+137;146;;;([70%]>12)?0:-12;;;;1;;;;0
+138;150;;;[70%];;;;1;;;;0
+140;152;;;[70%];;;;1;;;;2
+139;151;;;[70%];;;;1;;;;1
+141;153;;;[70%];;;;1;;;;2
+142;155;;;[FORMULE]+[C1];;;;3;;;;
+143;157;6%;1;;;ACH;1;2;;;;0
+144;158;6%;1;;;ACH;1;2;;;;1
+145;159;6%;1;;;ACH;2;2;;;;2
+146;171;6%;1;;;ACH;1;2;;;;0
+148;173;6%;1;;;ACH;1;2;;;;2
+147;172;6%;1;;;ACH;1;2;;;;1
+149;174;7%;1;;;VEN;0;2;;;;0
+150;162;7%;1;;;VEN;1;2;;;;0
+178;213;6%;;;;;;4;41%;2;;0
+151;163;6%;1;;;ACH;0;2;;;;1
+152;164;6%;1;;;ACH;0;2;;;;2
+155;176;6%;1;;;ACH;0;2;;;;0
+157;177;6%;1;;;ACH;0;2;;;;1
+179;214;61%;;;;;;4;41%;3;;1
+156;178;6%;1;;;ACH;0;2;;;;2
+158;166;6%;1;;;ACH;2;2;;;;0
+159;167;6%;1;;;ACH;2;2;;;;1
+160;168;6%;1;;;ACH;2;2;;;;2
+161;181;6%;1;;;ACH;2;2;;;;0
+162;182;6%;1;;;ACH;2;2;;;;1
+163;183;6%;1;;;ACH;2;2;;;;2
+164;190;61%;;;;;;4;41%;1;;0
+165;191;61%;;;;;;4;41%;2;;0
+166;192;61%;;;;;;4;41%;3;;0
+168;193;61%;;;;;;4;41%;4;;0
+169;195;61%;;;;;;4;41%;1;;2
+170;196;61%;;;;;;4;41%;2;;2
+171;197;61%;;;;;;4;41%;3;;2
+172;198;61%;;;;;;4;41%;4;;2
+173;200;61%;;;;;;4;41%;1;;1
+174;202;61%;;;;;;4;41%;2;;1
+175;203;61%;;;;;;4;41%;3;;1
+176;204;61%;;;;;;4;41%;4;;1
+177;212;6%;;;;;;4;41%;1;;0
+180;215;61%;;;;;;4;41%;4;;2
+181;219;61%;;;;;;5;41%;2;55%;
+182;220;61%;;;;;;5;41%;3;55%;
+183;221;6%;;;;;;4;41%;4;;0
