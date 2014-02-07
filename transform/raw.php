@@ -23,7 +23,7 @@ $act = HtmlInput::default_value_get('act', null);
 
 switch ($act)
 {
-    case 'listing_assujetti':
+    case 'listing_assujetti_xml':
         $request_id = HtmlInput::default_value_get('r_id', null);
 
         if ($request_id == null)
@@ -43,7 +43,9 @@ switch ($act)
         $xml = new Transform_Intervat;
 
         $xml->append_root();
-        $xml->append_representative($representative);
+        if ( $representative->name != "") {
+            $xml->append_representative($representative);
+        }
         $xml->append_client_listing($declarant);
         $file = "listing_assujetti" . date('d.m.y.hi') . ".xml";
         $ref = $_ENV['TMP'] . "/" . $file;
