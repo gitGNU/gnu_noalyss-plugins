@@ -52,5 +52,5 @@ alter table transform.request add         r_type text ;
 ALTER TABLE transform.request ADD COLUMN r_start_date date;
 ALTER TABLE transform.request ADD COLUMN r_end_date date;
 alter table transform.intervat_client add column c_comment text;
-
+alter table transform.intervat_representative alter rp_countrycode drop not null;
 
