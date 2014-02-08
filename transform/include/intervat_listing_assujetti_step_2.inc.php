@@ -158,7 +158,7 @@ if ($inputtype == 2)
 {
     $ltva = "(" . implode(',', $atva) . ")";
     //------ Operation date ----------------
-    if ($compute_date == 1)
+    if ($compute_date == 2)
     {
         $sql = "
       with  c as 
@@ -187,7 +187,7 @@ from
     join f_tvanum on (qs_client=f_tvanum.f_id);
 
     ";
-    } elseif ($compute_date == 2) //------ Payment date ----------------
+    } elseif ($compute_date == 1) //------ Payment date ----------------
     {
         $sql = "
         with  c as 
@@ -197,7 +197,7 @@ from
         from 
             quant_sold join jrnx on (jrnx.j_id=quant_sold.j_id) 
         where 
-        qs_vat_code $ltva
+        qs_vat_code in $ltva
         and j_grpt in (select jr_grpt_id 
                         from jrn 
                         where 
