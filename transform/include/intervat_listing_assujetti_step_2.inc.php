@@ -149,6 +149,7 @@ if ($inputtype == 1)
             $cn->rollback();
             throw new Exception(_('Ne peut pas ajouter ') . h($o_data[$i]->c_name) . '-' . h($o_data[$i]->c_vatnumber), 3);
         }
+        $input_msg=_('Par fichier');
     }
 }
 //******************************************************************************
@@ -187,8 +188,10 @@ from
     join f_tvanum on (qs_client=f_tvanum.f_id);
 
     ";
+        $input_msg=_('Par calcul : date opération');
     } elseif ($compute_date == 1) //------ Payment date ----------------
     {
+        $input_msg=_('Par calcul : date paiement');
         $sql = "
         with  c as 
         (select qs_client,
@@ -258,7 +261,7 @@ from
         throw new Exception(_('Ne peut pas ajouter ') . h($o_data[$i]->c_name) . '-' . h($o_data[$i]->c_vatnumber), 3);
     }
 }
-
+$input_msg .= " ".sprintf(_('période %s entre [%s]  et [%s]'),$year,$start_date,$end_date);
 ?>
 <h2> <?php echo _('Etape 2/3') ?></h2>
 <h3><?php echo _('Mandataire'); ?></h3>
@@ -269,6 +272,9 @@ $representative->display();
 <?php
 $declarant->display();
 ?>
+<h3>
+    <?php echo $input_msg;?>
+</h3>
 <p>
     <?php
     $a_listing = new Intervat_Client_SQL;
