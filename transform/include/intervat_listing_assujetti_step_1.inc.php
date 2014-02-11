@@ -43,7 +43,7 @@ $end_date->id = "p_end_date_id";
 $inputtype = HtmlInput::default_value_post('p_inputtype', -1);
 ?>
 <h2> <?php echo _('Etape 1/3') ?></h2>
-<form method="post" enctype="multipart/form-data" onsubmit="return check_form()">
+<form class="print" method="post" enctype="multipart/form-data" onsubmit="return check_form()">
     <div style="width:45%;padding: 15px;float:left">
 
         <h3><?php echo _('Mandataire'); ?></h3>
