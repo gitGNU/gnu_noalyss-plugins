@@ -74,7 +74,6 @@ if ($id !=-1)
     echo '</p>';
     echo '</form>';
     $response = ob_get_clean();
-    ob_end_clean();
  } else {
      $response='invalide id';
  }

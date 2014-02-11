@@ -15,7 +15,6 @@ for ($i = 0; $i < count($a_result); $i++)
 echo '</ol>';
 echo HtmlInput::button_close('include_follow_save_result');
 $response = ob_get_clean();
-ob_end_clean();
 $html = escape_xml($response);
 header('Content-type: text/xml; charset=UTF-8');
 echo <<<EOF
