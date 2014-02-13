@@ -27,8 +27,8 @@
 $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&sa=util'.'&ac='.$_REQUEST['ac'];
 
 $menu=array(
-	    array($url.'&sb=generate','Génére écriture',' Génération écriture comptable ',1),
-	    array($url.'&sb=histo','Historique','Historique des opérations',3)
+	    array($url.'&sb=generate',_('Génére écriture'),_('Génération écriture comptable'),1),
+	    array($url.'&sb=histo',_('Historique'),_('Historique des opérations'),3)
 	    );
 
 

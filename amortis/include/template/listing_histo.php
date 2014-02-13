@@ -1,5 +1,5 @@
 <div class="content" style="width:80%;margin-left:10%">
-<!-- <h2 class="info">Historique</h2> -->
+   <!-- <h2 class="info"><?php echo_("Historique")?></h2> -->
 <form method="POST">
 <?php
 echo HtmlInput::hidden('sa',$_REQUEST['sa']);
@@ -7,7 +7,7 @@ echo HtmlInput::hidden('sb',$_REQUEST['sb']);
 echo HtmlInput::hidden('ac',$_REQUEST['ac']);
 echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
 echo dossier::hidden();
-echo 'Filtre : '.HtmlInput::filter_table('amortissement_tb','1,2,3,5,6',1);
+echo _('Filtre')." : ".HtmlInput::filter_table('amortissement_tb','1,2,3,5,6',1);
 ?>
 <table id="amortissement_tb" class="result">
 <tr>
@@ -47,6 +47,6 @@ endfor;
 ?>
 
 </table>
-<?php echo HtmlInput::submit('remove','Effacer la sélection','onclick="confirm(\'Confirmez Effacement ?\')"')?>
+<?php echo HtmlInput::submit('remove',_('Effacer la sélection'),'onclick="confirm(\'Confirmez Effacement ?\')"')?>
 </form>
 </div>

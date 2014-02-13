@@ -32,15 +32,15 @@
 
 <table>
 <tr>
-<td>Année</td>
+   <td><?php echo_("Année")?></td>
 <td><?php echo $year->input();?></td>
 </tr>
 <tr>
-<td>Journal dans lequel l'écriture sera passée</td>
+<td><?php echo _("Journal dans lequel l'écriture sera passée")?></td>
 <td><?php echo $sel_ledger->input()?></td>
 </tr>
 <tr>
-<td>Date de l'opération</td>
+<td><?php echo _("Date de l'opération")?></td>
 <td><?php echo $p_date->input()?></td>
 </tr>
 <?php if ( isset ($f_periode)) : ?>
@@ -54,18 +54,18 @@
 </tr>
 <?php endif; ?>
 <tr>
-<td>Pièce</td>
+<td><?php echo_("Pièce")?></td>
 <td><?php echo $pj->input()?></td>
 </tr>
 </table>
 
-Cochez ce qu'il faut amortir
+ <?php echo_("Cochez ce qu'il faut amortir")?>
 <table class="result">
 <tr>
-	<th>Selection</th>
-	<th>Quick Code</th>
-	<th>Nom</th>
-	<th>Description</th>
+   <th><?php echo_("Selection")?></th>
+   <th><?php echo_("Quick Code")?></th>
+   <th><?php echo_("Nom")?></th>
+   <th><?php echo_("Description")?></th>
 </tr>
 <?php 
 /*
@@ -95,7 +95,7 @@ $view_history= sprintf('<A class="detail" style="text-decoration:underline" HREF
 endfor;
 ?>
 </table>
-<?php echo HtmlInput::submit('generate',"Générer l'écriture");?>
+<?php echo HtmlInput::submit('generate',_("Générer l'écriture"));?>
 </form>
-<?php echo HtmlInput::button('check_all','Sélectionner tout',' onclick="select_checkbox(\'gen_amort\')"');?>
-<?php echo HtmlInput::button('check_none','Tout Désélectionner ',' onclick="unselect_checkbox(\'gen_amort\')"');?>
+<?php echo HtmlInput::button('check_all',_('Sélectionner tout'),' onclick="select_checkbox(\'gen_amort\')"');?>
+<?php echo HtmlInput::button('check_none',_('Tout Désélectionner'),' onclick="unselect_checkbox(\'gen_amort\')"');?>

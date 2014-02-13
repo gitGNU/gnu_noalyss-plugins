@@ -118,7 +118,7 @@ array
     global $cn;
     $msg='';
     if ( isNumber($p_array['p_year']) == 0 || $p_array['p_year'] < 1900 || $p_array['p_year']>2100) $msg="Année invalide\n";
-    if ( isDate($p_array['p_date']) == null) $msg.="Date invalide ";
+    if ( isDate($p_array['p_date']) == null) $msg.=_("Date invalide ");
     if ( $msg != '')
       {
 		echo alert($msg);
@@ -154,14 +154,14 @@ array
 	    $val=($val=='')?0:$val;
 	    $mat=array('poste'.$idx => $n->account_deb,
 		       'amount'.$idx=> $val,
-		       'ld'.$idx =>'Dotation à '.$fiche->strAttribut(ATTR_DEF_QUICKCODE),
+		       'ld'.$idx =>_('Dotation à ').$fiche->strAttribut(ATTR_DEF_QUICKCODE),
 		       'ck'.$idx=>1,
 		       'qc_'.$idx=>'');
 	    $array+=$mat;
 	    $idx++;
 	    $mat=array('poste'.$idx => $n->account_cred,
 		       'amount'.$idx=> $val,
-		       'ld'.$idx =>'Amortissement '.$fiche->strAttribut(ATTR_DEF_QUICKCODE),
+		       'ld'.$idx =>_('Amortissement ').$fiche->strAttribut(ATTR_DEF_QUICKCODE),
 		       'qc_'.$idx=>'');
 	    $array+=$mat;
 	    $idx++;
@@ -211,7 +211,7 @@ array
 	if ( isset($p_array['p_ck'.$i]))
 	  echo HtmlInput::hidden('p_ck'.$i,'1');
       }
-    echo HtmlInput::submit('correct','Corriger');
+    echo HtmlInput::submit('correct',_('Corriger'));
     echo '</form>';
     echo '</div>';
     return true;

@@ -49,9 +49,9 @@ if ( $cn->exist_schema('amortissement') ==false )
   }
 
 $menu=array(
-        array($url.'&sa=card','Biens amortissables','Liste des biens amortissables',1),
-        array($url.'&sa=report','Rapport','rapport et  tableaux sur les biens amortissables',2),
-        array($url.'&sa=util','Utilitaire','Génération écriture comptable',3)
+	    array($url.'&sa=card',_('Biens amortissables'),_('Liste des biens amortissables'),1),
+	    array($url.'&sa=report',_('Rapport'),_('rapport et  tableaux sur les biens amortissables'),2),
+	    array($url.'&sa=util',_('Utilitaire'),_('Génération écriture comptable'),3)
       );
 
 

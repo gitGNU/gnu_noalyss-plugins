@@ -41,7 +41,7 @@ if ( $list !='')
 				$p_card->name);
     $p_card->set_function('fill_data');
     $p_card->set_dblclick("fill_ipopcard(this);");
-    $msg="Fiche";
+    $msg=_("Fiche");
     if ( isset($_GET['p_card']))
       {
 	/* search the card */
@@ -52,7 +52,7 @@ if ( $list !='')
       }
     echo '<span style="text-align:left;display:block;font-size:2em" id="p_card_label"  >'.$msg.'</span>';
     echo "Fiche ".$p_card->input().$p_card->search();
-    echo HtmlInput::submit('search','Accepter');
+    echo HtmlInput::submit('search',_('Accepter'));
     echo '</form>';
 
     echo '<FORM METHOD="GET" ACTION="extension.raw.php">';
@@ -60,7 +60,7 @@ if ( $list !='')
     echo HtmlInput::hidden('sb',$_REQUEST['sb']);
     echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
     echo dossier::hidden();
-    echo HtmlInput::submit('pdf_all','Toutes les fiches en PDF');
+    echo HtmlInput::submit('pdf_all',_('Toutes les fiches en PDF'));
     echo '</form>';
 
     if ( isset($_GET['search']))

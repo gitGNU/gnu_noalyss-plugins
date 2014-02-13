@@ -177,9 +177,9 @@ class Am_Card
     if ( isNumber($_POST['p_year']) == null || $_POST['p_year']<1900||$_POST['p_year'] > 3000 ) $error_msg.=_('Année invalide')."\n";
     if ( isNumber($_POST['p_number']) == null || $_POST['p_number']==0)$error_msg.=_ ('Nombre annuités invalide')."\n";
     if ( isNumber($_POST['p_amount']) == null || $_POST['p_amount']==0) $error_msg.=_ ('Montant invalide')."\n";
-    if ( $_POST['p_visible'] != 'Y' && $_POST['p_visible'] != 'N') $error_msg.="Visible Y ou N\n";
-    if ( $cn->get_value('select count(*) from tmp_pcmn where pcm_val=$1',array($_POST['p_deb'])) == 0) $error_msg.=" Poste de charge incorrect"."\n";
-    if ( $cn->get_value('select count(*) from tmp_pcmn where pcm_val=$1',array($_POST['p_cred'])) == 0) $error_msg.=" Poste à créditer incorrect"."\n";
+    if ( $_POST['p_visible'] != 'Y' && $_POST['p_visible'] != 'N') $error_msg.=_("Visible Y ou N")."\n";
+    if ( $cn->get_value('select count(*) from tmp_pcmn where pcm_val=$1',array($_POST['p_deb'])) == 0) $error_msg.=" "._("Poste de charge incorrect")."\n";
+    if ( $cn->get_value('select count(*) from tmp_pcmn where pcm_val=$1',array($_POST['p_cred'])) == 0) $error_msg.=" "._("Poste à créditer incorrect")."\n";
     return $error_msg;
   }
   /**
@@ -242,7 +242,7 @@ class Am_Card
 
     if ( $amort->a_id =='') 
       {
-	echo '<h2 class="error">Non trouvé</h2>';
+	echo '<h2 class="error">'._('Non trouvé').'</h2>';
 	exit();
       }
     $amort->load();

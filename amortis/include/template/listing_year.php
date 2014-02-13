@@ -5,16 +5,16 @@ TABLE {PAGE: landscape;}
 </style>
 <table class="result">
 <tr>
-  <th>Code</th>
-  <th>Description</th>
-  <th>Date d'acquisition</th>
-  <th>Année d'achat</th>
-  <th style="text-align:right">Montant à l'achat</th>
-  <th style="text-align:right">Nombre amortissement</th>
-  <th style="text-align:right">Montant à amortir</th>
-  <th style="text-align:right">Amortissement</th>
-  <th style="text-align:right">Pourcentage</th>
-  <th style="text-align:right">Reste à amortir</th>
+  <th><?php echo_("Code")?></th>
+  <th><?php echo_("Description")?></th>
+  <th><?php echo_("Date d'acquisition")?></th>
+  <th><?php echo_("Année d'achat")?></th>
+  <th style="text-align:right"><?php echo_("Montant à l'achat")?></th>
+  <th style="text-align:right"><?php echo_("Nombre amortissement")?></th>
+  <th style="text-align:right"><?php echo_("Montant à amortir")?></th>
+  <th style="text-align:right"><?php echo_("Amortissement")?></th>
+  <th style="text-align:right"><?php echo_("Pourcentage")?></th>
+  <th style="text-align:right"><?php echo_("Reste à amortir")?></th>
 </tr>
 <?php 
 $tot_amort=0;$tot_net=0;bcscale(2);
@@ -58,7 +58,7 @@ endfor;
 <table class="result" style="width:50%;margin-left:25%">
 <tr>
 <?php 
-echo td("Acquisition de l'année");
+  echo td(_("Acquisition de l'année"));
    $tot=$cn->get_value(" select coalesce(sum(a_amount),0) from amortissement.amortissement where a_start=$1",
 			array($year));
 echo td(nbm($tot),"align=\"right\"");
@@ -66,13 +66,13 @@ echo td(nbm($tot),"align=\"right\"");
 </tr>
 <tr>
 <?php 
-echo td("Amortissement ");
+echo td(_("Amortissement"));
 echo td(nbm($tot_amort),"align=\"right\"");
 ?>
 </tr>
 <tr>
 <?php 
-echo td("Valeur net ");
+echo td(_("Valeur net "));
 echo td(nbm($tot_net),"align=\"right\"");
 
 ?>

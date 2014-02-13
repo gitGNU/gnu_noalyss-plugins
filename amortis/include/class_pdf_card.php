@@ -71,36 +71,36 @@ class Pdf_Card extends PDF
             $this->Ln(12);
 
             $this->SetFont('DejaVu','',7);
-            $this->Cell(50,7,'Montant');
+            $this->Cell(50,7,_('Montant'));
             $this->Cell(50,7,nbm($row['a_amount']));
 	    $this->ln(4);
 
-            $this->Cell(50,7,"Année d'achat");
+            $this->Cell(50,7,_("Année d'achat"));
             $this->Cell(50,7,$row['a_start']);
 	    $this->ln(4);
 
-            $this->Cell(50,7,"Poste charge");
+            $this->Cell(50,7,_("Poste charge"));
             $this->Cell(50,7,$row['account_deb']);
 	    $deb=$this->cn->get_value("select pcm_lib from tmp_pcmn where pcm_val=$1",
 				      array($row['account_deb']));
             $this->Cell(120,7,$deb);
 	    $this->ln(4);
 
-            $this->Cell(50,7,"Poste contrepartie");
+            $this->Cell(50,7,_("Poste contrepartie"));
             $this->Cell(50,7,$row['account_cred']);
 	    $cred=$this->cn->get_value("select pcm_lib from tmp_pcmn where pcm_val=$1",
 				      array($row['account_cred']));
             $this->Cell(120,7,$cred);
 	    $this->ln(4);
 
-            $this->Cell(50,7,"Nbre annuités");
+            $this->Cell(50,7,_("Nbre annuités"));
             $this->Cell(50,7,$row['a_nb_year']);
 	    $this->ln(12);
 
 	    /*
 	     * Now we print for each year 
 	     */
-	    $col=array('Année','Montant','Am. actés','Pièce','n° interne','%');
+	    $col=array(_('Année'),_('Montant'),_('Am. actés'),_('Pièce'),_('n° interne'),'%');
 	    foreach ($col as $scol)
 	      {
 		$this->Cell(25,7,$scol,1);
@@ -130,7 +130,7 @@ class Pdf_Card extends PDF
 	      }// for all year
 	    if ($i < count($array)) $this->AddPage();
         } // for ... all card
-	$this->Output('toutes_les_fiches.pdf','I');
+	$this->Output(_("toutes_les_fiches.pdf"),'I');
     }
 }
 ?>

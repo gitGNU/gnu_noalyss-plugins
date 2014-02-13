@@ -73,7 +73,7 @@ if (isset($_POST['save']))
 		}
 		echo '<div class="content" style="width:80%;margin-left:10%">';
 
-		$p_mesg = "Opération sauvée : " . $ledger->internal;
+		$p_mesg = _("Opération sauvée")." : " . $ledger->internal;
 		echo sprintf('<A class="detail" style="display:inline;text-decoration:underline" HREF="javascript:modifyOperation(%d,%d)">%s</A>', $jr_id, dossier::id(), $p_mesg);
 
 		echo '</div>';

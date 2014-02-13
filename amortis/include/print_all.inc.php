@@ -37,6 +37,6 @@ echo HtmlInput::print_window();
 <?php echo HtmlInput::hidden('material','1');?>
 <?php echo HtmlInput::hidden('ac',$_REQUEST['ac']);?>
 <?php echo HtmlInput::extension()?>
-<?php echo HtmlInput::submit('csv','Export CSV');?>
+  <?php echo HtmlInput::submit('csv',_('Export CSV'));?>
 </form>
 </div>

@@ -48,7 +48,15 @@ if ( isset ($_REQUEST['list_year']))
   header('Pragma: public');
   header('Content-type: application/csv');
   header('Content-Disposition: attachment;filename="'.$name.'.csv"',FALSE);
-  print "\"Code\";\"Description\";\"Date acquisition\";\"Année Achat\";\"Montant Achat\";\"Nombre annuités\";\"Montant à amortir\";\"Amortissement\";\"Reste\"\r\n";
+  $header=array(_('Code'),_('Description'),_('Date acquisition'),_('Année achat'),_('Montant Achats'),_('Nombre annuités'),_('Montant à amortir'),_('Amortissement'));
+  $sep="";
+  foreach ($header as $h) 
+    {
+      print $sep.'"'.$h.'"';
+      $sep=';';
+    }
+  print "\r\n";
+  //  print "\"Code\";\"Description\";\"Date acquisition\";\"Année Achat\";\"Montant Achat\";\"Nombre annuités\";\"Montant à amortir\";\"Amortissement\";\"Reste\"\r\n";
   $year=$_REQUEST['list_year'];
   $sql="select * from amortissement.amortissement where a_id
          in (select a_id from amortissement.amortissement_detail where ad_year=$1)";
@@ -89,7 +97,16 @@ if ( isset($_GET['material']))
     header('Content-Disposition: attachment;filename="'.$name.'.csv"',FALSE);
     
     $ret=$cn->get_array("select * from amortissement.amortissement order by a_start,a_date");
-    printf ("\"Visible\";\"qcode\";\"Nom\";\"Date acquisition\";\"Année Achat\";\"Nbre annuité\";\"Poste Charge\";\"Poste amortis\";\"Montant achat\";\"Montant amorti\";\"Montant a amortir\"\r\n");
+    $header=array(_("Visible"),_("qcode"),_("Nom"),_("Date acquisition"),_('Année Achat'),_("Nbre annuité"),_("Poste Charge"),_("Poste amortis"),_("Montant achat"),_("Montant amorti"),_("Montant a amortir"));
+    $sep="";
+    foreach ($header as $h) 
+      {
+	print $sep.'"'.$h.'"';
+	$sep=';';
+      }
+  print "\r\n";
+    //    printf ("\"Visible\";\"qcode\";\"Nom\";\"Date acquisition\";\"Année Achat\";\"Nbre annuité\";\"Poste Charge\";\"Poste amortis\";\"Montant achat\";\"Montant amorti\";\"Montant a amortir\"\r\n");
+
     for ($i=0;$i<count($ret);$i++)
       {
 	printf('"%s";',$ret[$i]['a_visible']);

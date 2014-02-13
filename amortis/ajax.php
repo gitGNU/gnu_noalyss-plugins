@@ -29,7 +29,7 @@
 extract ($_REQUEST);
 
 $ctl=$t;
-$html='opération non trouvée';
+$html=_('opération non trouvée');
 $extra='';
 $close=HtmlInput::anchor_close($t);
 $html=$close.$html;

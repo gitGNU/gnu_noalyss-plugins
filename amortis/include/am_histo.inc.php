@@ -31,11 +31,11 @@ $header=new Sort_Table();
 $r=HtmlInput::array_to_string(array('ac','gDossier','sa','sb','plugin_code'),$_REQUEST);
 $url=basename($_SERVER['PHP_SELF']).$r;
 $header->add('Quick_code',$url,'order by 1 asc','order by 1 desc','qca','qcd');
-$header->add('Nom',$url,'order by vw_name asc','order by vw_name desc','na','nd');
-$header->add('Montant',$url,'order by h_amount asc','order by h_amount desc','aa','ad');
-$header->add('Année',$url,'order by h_year asc','order by h_year desc','ya','yd');
-$header->add('Pièce',$url,'order by h_pj asc','order by h_pj desc','pja','pjd');
-$header->add('N° interne',$url,'order by jr_internal asc','order by jr_internal desc','nia','nid');
+$header->add(_('Nom'),$url,'order by vw_name asc','order by vw_name desc','na','nd');
+$header->add(_('Montant'),$url,'order by h_amount asc','order by h_amount desc','aa','ad');
+$header->add(_('Année'),$url,'order by h_year asc','order by h_year desc','ya','yd');
+$header->add(_('Pièce'),$url,'order by h_pj asc','order by h_pj desc','pja','pjd');
+$header->add(_('N° interne'),$url,'order by jr_internal asc','order by jr_internal desc','nia','nid');
 
 $ord=(isset($_REQUEST['ord']))?$_REQUEST['ord']:'na';
 

@@ -1,51 +1,51 @@
-<h2 class="info">Détail de matériel</h2>
+<h2 class="info"><?php echo_("Détail de matériel")?></h2>
 <span style="text-align:center;display:block;font-size:2em" id="p_card_label"  ><?php echo  $card->strAttribut(ATTR_DEF_NAME)?></span>
 <table>
 <tr>
-	<td>Fiche</td>
+   <td><?php echo_("Fiche")?></td>
 	<td><?php echo $card->strAttribut(ATTR_DEF_QUICKCODE)?></td>
 </tr>
 
 <tr>
-	<td>Date d'acquisition</td>
+   <td><?php echo_("Date d'acquisition")?></td>
 	<td><?php echo $p_date?></td>
 </tr>
 
 <tr>
-	<td>Montant à amortir</td>
+   <td><?php echo_("Montant à amortir")?></td>
 	<td><?php echo $p_amount?></td>
 </tr>
 
 <tr>
-	<td>Année comptable d'achat</td>
+   <td><?php echo_("Année comptable d'achat")?></td>
 	<td> <?php echo $p_year;?></td>
 </tr>
 <tr>
-	<td>Poste de charge dotations amortissement (débit)</td>
+	<td><?php echo_("Poste de charge dotations amortissement (débit)")?></td>
 	<td><?php echo $p_deb?></td>
 	<td><?php echo $deb_span?></td>
 </tr>
 <tr>
-	<td>Poste amortissement en contrepartie</td>
+	<td><?php echo_("Poste amortissement en contrepartie")?></td>
 	<td><?php echo $p_cred?></td>
 	<td><?php echo $cred_span?></td>
 </tr>
 <tr>
-	<td>Nombre d'années amortissement (non modifiable)</td>
+	<td><?php echo_("Nombre d'années amortissement (non modifiable)")?></td>
 	<td><?php echo $p_number?></td>
 </tr>
 </table>
 
-<fieldset><legend>Annuités</legend>
+<fieldset><legend><?php echo_("Annuités")?></legend>
 <table class="result">
-<th>Année</th>
-<th>Montant</th>
-<th style="text-align:right" >Amortissement acté</th>
-<th style="text-align:center">Pièce </th>
-<th>n°  interne</th>
+   <th><?php echo_("Année")?></th>
+   <th><?php echo_("Montant")?></th>
+   <th style="text-align:right" ><?php echo_("Amortissement acté")?></th>
+   <th style="text-align:center"><?php echo_("Pièce")?> </th>
+   <th><?php echo_("n° interne")?></th>
 
 
-<th>Pourcent</th>
+   <th><?php echo_("Pourcent")?></th>
 
 <?php 
 bcscale(2);
@@ -92,19 +92,19 @@ for ($i=0;$i<count($array);$i++):
 endfor;
 ?>
 </table>
-<span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%">Total = <?php echo nbm($annuite)?></span>
-<span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%">Amorti = <?php echo nbm($done)?></span>
-<span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%">Reste = <?php echo nbm($p_amount-$done)?></span>
+<span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%"><?php echo_("Total")?> = <?php echo nbm($annuite)?></span>
+	  <span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%"><?php echo_("Amorti")?> = <?php echo nbm($done)?></span>
+	  <span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%"><?php echo_("Reste")?> = <?php echo nbm($p_amount-$done)?></span>
 
 <?php 
 if ( $annuite !=  $p_amount)
  {
- 	echo '<h2 class="error">Différence entre le montant à amortir et le montant amorti =';
+   echo '<h2 class="error">'._("Différence entre le montant à amortir et le montant amorti =");
 	echo nbm($annuite - $p_amount);
 	echo '<h2>';
  }
  ?>
 </fieldset>
-<?php echo "Date ".date ('d.m.Y');?>
+<?php echo _("Date ").date ('d.m.Y');?>
 <?php echo HtmlInput::print_window()?>
 
