@@ -52,7 +52,7 @@ if ( isset ($_POST['upload']))
 	$io->result();
 	echo '<div style="margin-left:20%">';
 	echo '<form method="POST">';
-	echo "<p class=\"notice\">Les opérations qui ne sont pas marquées comme correctes ne seront pas transfèrées </p>";
+	echo "<p class=\"notice\">"._("Les opérations qui ne sont pas marquées comme correctes ne seront pas transfèrées")." </p>";
 	echo HtmlInput::hidden("impid",$io->impid);
 	$l=new ISelect("p_jrn");
 	$l->value=$cn->make_array("select jrn_def_id, jrn_def_name ||'  ['||jrn_def_type||']' from jrn_def
@@ -61,7 +61,7 @@ if ( isset ($_POST['upload']))
 		order by jrn_def_name");
 	echo "Vers le journal ".$l->input();
 	echo '<p>';
-	echo HtmlInput::submit("transfer","Transfert des opérations");
+	echo HtmlInput::submit("transfer",_("Transfert des opérations"));
 	echo '</p>';
 	echo "</FORM>";
 	echo '</div>';

@@ -1,43 +1,43 @@
-<h2 class="info"><?php echo_("Modification de matériel")?></h2>
+<h2 class="info"><?php echo _("Modification de matériel")?></h2>
 <form onsubmit="save_modify(this);return false">
 <?php echo $p_card?>
 <?php echo $a_id?>
 <span style="text-align:center;display:block;font-size:2em" id="p_card_label"  ><?php echo  $card->strAttribut(ATTR_DEF_NAME)?></span>
 <table>
 <tr>
-   <td><?php echo_("Fiche")?></td>
+   <td><?php echo _("Fiche")?></td>
 	<td><?php echo HtmlInput::card_detail($card->strAttribut(ATTR_DEF_QUICKCODE))?></td>
 </tr>
 
 <tr>
-   <td><?php echo_("Date Acquisition")?></td>
+   <td><?php echo _("Date Acquisition")?></td>
 	<td><?php echo $p_date->input()?></td>
 </tr>
 <tr>
-   <td><?php echo_("Montant à amortir")?></td>
+   <td><?php echo _("Montant à amortir")?></td>
 	<td><?php echo $p_amount->input()?></td>
 </tr>
 
 <tr>
-   <td><?php echo_("Année comptable d'achat")?></td>
+   <td><?php echo _("Année comptable d'achat")?></td>
 	<td> <?php echo $p_year->input();?></td>
 </tr>
 <tr>
-	<td><?php echo_("Poste de charge dotations amortissement (débit)")?></td>
+	<td><?php echo _("Poste de charge dotations amortissement (débit)")?></td>
 	<td><?php echo $p_deb->input()?></td>
 	<td><?php echo $deb_span->input()?></td>
 </tr>
 <tr>
-	<td><?php echo_("Poste amortissement en contrepartie")?></td>
+	<td><?php echo _("Poste amortissement en contrepartie")?></td>
 	<td><?php echo $p_cred->input();?></td>
 	<td><?php echo $cred_span->input();?></td>
 </tr>
 <tr>
-	<td><?php echo_("Nombre d'années amortissement (non modifiable)")?></td>
+	<td><?php echo _("Nombre d'années amortissement (non modifiable)")?></td>
 	<td><?php echo $p_number->input()?></td>
 </tr>
 <tr>
-	<td><?php echo_("Visible")?> <span class="notice"><?php echo_("Y pour oui ou N pour non")?></span></td>
+	<td><?php echo _("Visible")?> <span class="notice"><?php echo _("Y pour oui ou N pour non")?></span></td>
 	<td><?php echo $p_visible->input();?></td>
 </tr>
 <tr>
@@ -49,17 +49,17 @@
 	<td></td>
 </tr>
 </table>
-	<span class="notice"> <?php echo_("En changeant le montant à amortir, l'année ou le nombre d'années, les annuités seront recalculées et l'historique effacé")?></span>
-   <fieldset><legend><?php echo_("Annuités")?></legend>
+	<span class="notice"> <?php echo _("En changeant le montant à amortir, l'année ou le nombre d'années, les annuités seront recalculées et l'historique effacé")?></span>
+   <fieldset><legend><?php echo _("Annuités")?></legend>
 <table class="result">
-   <th><?php echo_("Année")?></th>
-   <th><?php echo_("Montant")?></th>
-   <th><?php echo_("Amortissement acté")?></th>
-   <th><?php echo_("Pièce")?> </th>
-   <th><?php echo_("n° interne")?></th>
+   <th><?php echo _("Année")?></th>
+   <th><?php echo _("Montant")?></th>
+   <th><?php echo _("Amortissement acté")?></th>
+   <th><?php echo _("Pièce")?> </th>
+   <th><?php echo _("n° interne")?></th>
 
 
-   <th><?php echo_("Pourcent")?></th>
+   <th><?php echo _("Pourcent")?></th>
 
 <?php 
 bcscale(2);
@@ -118,9 +118,9 @@ for ($i=0;$i<count($array);$i++):
 endfor;
 ?>
 </table>
-<span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%"><?php echo_("Total")?> = <?php echo nbm($annuite)?></span>
-	  <span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%"><?php echo_("Amorti")?> = <?php echo nbm($done)?></span>
-	  <span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%"><?php echo_("Reste")?> = <?php echo nbm($p_amount->value-$done)?></span>
+<span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%"><?php echo _("Total")?> = <?php echo nbm($annuite)?></span>
+	  <span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%"><?php echo _("Amorti")?> = <?php echo nbm($done)?></span>
+	  <span style="font-size:120%;font-weight:bold;font-family:arial;font-style:italic;margin-right:10%"><?php echo _("Reste")?> = <?php echo nbm($p_amount->value-$done)?></span>
 
 <?php 
 if ( $annuite !=  $p_amount->value)

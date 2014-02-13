@@ -32,7 +32,7 @@
 
 <table>
 <tr>
-   <td><?php echo_("Année")?></td>
+   <td><?php echo _("Année")?></td>
 <td><?php echo $year->input();?></td>
 </tr>
 <tr>
@@ -54,18 +54,18 @@
 </tr>
 <?php endif; ?>
 <tr>
-<td><?php echo_("Pièce")?></td>
+<td><?php echo _("Pièce")?></td>
 <td><?php echo $pj->input()?></td>
 </tr>
 </table>
 
- <?php echo_("Cochez ce qu'il faut amortir")?>
+ <?php echo _("Cochez ce qu'il faut amortir")?>
 <table class="result">
 <tr>
-   <th><?php echo_("Selection")?></th>
-   <th><?php echo_("Quick Code")?></th>
-   <th><?php echo_("Nom")?></th>
-   <th><?php echo_("Description")?></th>
+   <th><?php echo _("Selection")?></th>
+   <th><?php echo _("Quick Code")?></th>
+   <th><?php echo _("Nom")?></th>
+   <th><?php echo _("Description")?></th>
 </tr>
 <?php 
 /*

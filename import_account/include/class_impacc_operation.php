@@ -35,7 +35,7 @@ class Impacc_Operation
 	{
 		if (trim($_FILES['csv_operation']['name']) == '')
 		{
-			alert('Pas de fichier donné');
+		  alert(_('Pas de fichier donné'));
 			return -1;
 		}
 		$this->filename = tempnam($_ENV['TMP'], 'upload_');
@@ -58,7 +58,7 @@ class Impacc_Operation
 			if (count($row) != 11)
 			{
 				$str_row = implode($row, ";");
-				echo "Attention " . h($str_row) . " ne contient pas 11 colonnes";
+				printf (_("Attention %s ne contient pas 11 colonnes"),h($str_row));
 				continue;
 			}
 			$r = new impacc_Operation_tmp_Sql();
@@ -77,7 +77,7 @@ class Impacc_Operation
 			$r->insert();
 			$this->row_count++;
 		}
-		echo "Nombre de lignes enregistrées : " . $this->row_count;
+		echo _("Nombre de lignes enregistrées")." : " . $this->row_count;
 		$import = new impacc_import_sql($this->impid);
 		$import->setp("nbrow", $this->row_count);
 		$import->update();
@@ -110,19 +110,19 @@ class Impacc_Operation
 				if ($db > 0)
 				{
 					$operation->setp("code", "N");
-					$operation->setp("message", " Opération déjà transférée : doublon ");
+					$operation->setp("message", _("Opération déjà transférée : doublon "));
 					$operation->update();
 					continue;
 				}
 				if (trim($dol) == "" || isNumber($dol) == 0)
 				{
 					$operation->setp("code", 'N');
-					$msg.=" le numéro de ligne pour dolibarr est invalide";
+					$msg.=" "._("le numéro de ligne pour dolibarr est invalide");
 				}
 				if (isDate($operation->getp("date")) == null)
 				{
 					$operation->setp("code", 'N');
-					$msg.=" La date est invalide, format n'est pas JJ.MM.AAAA";
+					$msg.=" "._("La date est invalide, format n'est pas JJ.MM.AAAA");
 				}
 				$fiche = new Fiche($cn);
 				$fiche->get_by_qcode(trim($operation->getp("qcode")));
@@ -130,7 +130,7 @@ class Impacc_Operation
 				if ($fiche->id == 0)
 				{
 					$operation->setp("code", 'N');
-					$msg.=" Cette fiche n'existe pas";
+					$msg.=" "._("Cette fiche n'existe pas");
 				}
 				else
 				{
@@ -143,10 +143,10 @@ class Impacc_Operation
 				if (trim($poste) == '' || $cn->get_value("select count(*) from tmp_pcmn where pcm_val=$1", array($poste)) == 0)
 				{
 					$operation->setp("code", 'N');
-					$msg.=" Cette fiche n'a pas de poste comptable valide";
+					$msg.=" "._("Cette fiche n'a pas de poste comptable valide");
 				}
 				$operation->setp("poste", $poste);
-				$a = array("rate" => " Taux de TVA", "amount_total" => "Montant total", "number_unit" => 'Nombre d\'unité', "amount_vat" => "Montant TVA");
+				$a = array("rate" => _("Taux de TVA"), "amount_total" => _("Montant total"), "number_unit" => _("Nombre d'unité"), "amount_vat" => _("Montant TVA"));
 
 				foreach ($a as $key => $value)
 				{
@@ -156,7 +156,7 @@ class Impacc_Operation
 					if (trim($v) != "" && isNumber($v) == 0)
 					{
 						$operation->setp("code", 'N');
-						$msg.=" $value n'est pas un nombre";
+						$msg.=_(" $value n'est pas un nombre");
 						continue;
 					}
 
@@ -169,12 +169,12 @@ class Impacc_Operation
 					if (count($tva_id) > 1)
 					{
 						$operation->setp("code", 'N');
-						$msg.=" Plusieurs code TVA correspondent à ce taux";
+						$msg.=" "._("Plusieurs code TVA correspondent à ce taux");
 					}
 					elseif (empty($tva_id))
 					{
 						$operation->setp("code", 'N');
-						$msg.=" Aucun code TVA ne correspond à ce taux";
+						$msg.=" "._("Aucun code TVA ne correspond à ce taux");
 					}
 					else
 					{
@@ -188,12 +188,12 @@ class Impacc_Operation
 				if ($nb_customer == 0)
 				{
 					$operation->setp("code", 'N');
-					$msg.=" Aucun client ou fournisseur";
+					$msg.=_("Aucun client ou fournisseur");
 				}
 				if ($nb_good == 0)
 				{
 					$operation->setp("code", 'N');
-					$msg.=" Aucune marchandise ou service";
+					$msg.=" "._("Aucune marchandise ou service");
 				}
 
 				// check if in a opened period
@@ -243,20 +243,20 @@ class Impacc_Operation
 			o_message
 			from impacc.operation_tmp where i_id=" . $this->impid . " order by o_id";
 		echo Html_Table::sql2table($cn, array(
-			array('name' => 'n° ligne',
-				'style' => 'style="text-align:right"'),
-			array('name' => 'Date',
-				'style' => 'text-align:right'),
-			array('name' => 'QuickCode'),
-			array('name' => 'Libellé'),
-			array('name' => 'n° pj'),
-			array('name' => 'Montant / unité', 'style' => 'style="text-align:right"'),
-			array('name' => 'Montant Total TVA', 'style' => 'style="text-align:right"'),
-			array('name' => 'Nbre unités', 'style' => 'style="text-align:right"'),
-			array('name' => 'taux TVA', 'style' => 'style="text-align:right"'),
-			array('name' => 'Montant total TVAC', 'style' => 'style="text-align:right"'),
-			array('name' => 'Transfert', 'style' => 'style="text-align:right"', 'raw' => 1),
-			array('name' => 'Message')
+						      array('name' => _('n° ligne'),
+							    'style' => 'style="text-align:right"'),
+						      array('name' => _('Date'),
+							    'style' => 'text-align:right'),
+						      array('name' => _('QuickCode')),
+						      array('name' =>_('Libellé')),
+						      array('name' => _('n° Pièce')),
+						      array('name' => _('Montant / unité'), 'style' => 'style="text-align:right"'),
+						      array('name' => _('Montant Total TVA'), 'style' => 'style="text-align:right"'),
+						      array('name' => _('Nbre unités'), 'style' => 'style="text-align:right"'),
+						      array('name' => _('taux TVA'), 'style' => 'style="text-align:right"'),
+						      array('name' => _('Montant total TVAC'), 'style' => 'style="text-align:right"'),
+						      array('name' => _('Transfert'), 'style' => 'style="text-align:right"', 'raw' => 1),
+						      array('name' => _('Message'))
 				)
 				, $sql, 'style="width:100%" class="result"'
 		);
@@ -281,7 +281,7 @@ class Impacc_Operation
 				$oth_side = 'c';
 				break;
 			default:
-				die('Erreur ce type journal n\' est pas encore supporté');
+			  die(_("Erreur ce type journal n' est pas encore supporté"));
 		}
 		/**
 		 * Loop in table operation_tmp, get all the record to transfer
@@ -480,13 +480,13 @@ class Impacc_Operation
 		from impacc.operation_tmp as otmp join impacc.operation_transfer as ot on (ot.o_id = otmp.o_id) join jrnx on (jrnx.j_id = ot.j_id)
 		and i_id=$1  ) order by jr_date ";
 		$arow=$cn->get_array($sql,array($this->impid));
-		echo h2("Opérations sauvées",'info');
+		echo h2(_("Opérations sauvées"),'info');
 		echo '<table class="result">';
 		echo '<tr>';
-		echo th("Date");
-		echo th("Libellé");
-		echo th("Pièce");
-		echo th("N° opération");
+		echo th(_("Date"));
+		echo th(_("Libellé"));
+		echo th(_("Pièce"));
+		echo th(_("N° opération"));
 		echo '</tr>';
 		for ($i=0;$i<count($arow);$i++)
 		{

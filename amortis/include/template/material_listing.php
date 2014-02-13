@@ -3,16 +3,16 @@ Filtre <?php echo HtmlInput::infobulle(400)?> <?php echo HtmlInput::filter_table
 
 <table id="list_amortissement" class="sortable" style="width:80%;margin-left:10%">
 <tr>
-   <th><?php echo_("Quickcode")?></th>
+   <th><?php echo _("Quickcode")?></th>
 <th class=" sorttable_sorted">
 	Nom
 <span id="sorttable_sortfwdind">&nbsp;&nbsp;&#x25BE;</span>
 </th>
-<th><?php echo_("Date acquisition")?></th>
-<th><?php echo_("Année achat")?></th>
-<th style="text-align:right"><?php echo_("Montant Initial")?></th>
-<th style="text-align:right"><?php echo_("Montant Amorti")?></th>
-<th style="text-align:right"><?php echo_("Montant à amortir")?></th>
+<th><?php echo _("Date acquisition")?></th>
+<th><?php echo _("Année achat")?></th>
+<th style="text-align:right"><?php echo _("Montant Initial")?></th>
+<th style="text-align:right"><?php echo _("Montant Amorti")?></th>
+<th style="text-align:right"><?php echo _("Montant à amortir")?></th>
 
 </tr>
 

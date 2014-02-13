@@ -5,16 +5,16 @@ TABLE {PAGE: landscape;}
 </style>
 <table class="result">
 <tr>
-  <th><?php echo_("Code")?></th>
-  <th><?php echo_("Description")?></th>
-  <th><?php echo_("Date d'acquisition")?></th>
-  <th><?php echo_("Année d'achat")?></th>
-  <th style="text-align:right"><?php echo_("Montant à l'achat")?></th>
-  <th style="text-align:right"><?php echo_("Nombre amortissement")?></th>
-  <th style="text-align:right"><?php echo_("Montant à amortir")?></th>
-  <th style="text-align:right"><?php echo_("Amortissement")?></th>
-  <th style="text-align:right"><?php echo_("Pourcentage")?></th>
-  <th style="text-align:right"><?php echo_("Reste à amortir")?></th>
+  <th><?php echo _("Code")?></th>
+  <th><?php echo _("Description")?></th>
+  <th><?php echo _("Date d'acquisition")?></th>
+  <th><?php echo _("Année d'achat")?></th>
+  <th style="text-align:right"><?php echo _("Montant à l'achat")?></th>
+  <th style="text-align:right"><?php echo _("Nombre amortissement")?></th>
+  <th style="text-align:right"><?php echo _("Montant à amortir")?></th>
+  <th style="text-align:right"><?php echo _("Amortissement")?></th>
+  <th style="text-align:right"><?php echo _("Pourcentage")?></th>
+  <th style="text-align:right"><?php echo _("Reste à amortir")?></th>
 </tr>
 <?php 
 $tot_amort=0;$tot_net=0;bcscale(2);

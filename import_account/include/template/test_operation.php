@@ -5,27 +5,28 @@ echo _('Importation de données');
 ?>
 </h2>
 
-<p>Pour importer des données, c'est-à-dire transformer des fichiers CSV (Valeur séparé par des virgules) en des fiches. Vous devez choisir, un fichier et donner une catégorie de fiche existante. Ensuite, il suffit d'indiquer quelles colonnes correspondent à quelle attribut. 
+<p>
+ <?php echo _("Pour importer des données, c'est-à-dire transformer des fichiers CSV (Valeur séparé par des virgules) en des fiches. Vous devez choisir, un fichier et donner une catégorie de fiche existante. Ensuite, il suffit d'indiquer quelles colonnes correspondent à quelle attribut")?>
 </p>
 
 <form method="POST" >
 <?php echo $hidden?>
 <table>
 <tr>
-<td>Délimiteur </td>
+   <td><?php echo _("Délimiteur")?> </td>
 <td> <?php echo $_POST['rdelimiter']?></td>
 </tr>
 <tr>
-<td>Fichier à charger</td><td> <?php echo $_FILES['csv_file']['name']?></td>
+   <td><?php echo _("Fichier à charger")?></td><td> <?php echo $_FILES['csv_file']['name']?></td>
 </tr>
 <tr>
-<td>Catégorie de fiche</td><td> <?php echo $file_cat;?></td>
+   <td><?php echo _("Catégorie de fiche")?></td><td> <?php echo $file_cat;?></td>
 </tr>
 <tr>
-<td>Encodage </td><td> <?php echo $encoding?></td>
+   <td><?php echo _("Encodage")?> </td><td> <?php echo $encoding?></td>
 </tr>
 <tr>
-<td>Texte entouré par</td><td> <?php echo $_POST['rsurround'];?></td>
+   <td><?php echo _("Texte entouré par")?></td><td> <?php echo $_POST['rsurround'];?></td>
 </tr>
 </table>
 <?php 
@@ -35,7 +36,7 @@ foreach (array('rfichedef','rdelimiter','encodage') as $e)
 }
 echo HtmlInput::hidden('filename',$filename);
 
- echo HtmlInput::submit('record_import','Valider');
+echo HtmlInput::submit('record_import',_('Valider'));
 ?>
 <input type="hidden" name="rsurround" value='<?php echo $_POST['rsurround']?>'>
 
@@ -77,7 +78,7 @@ $header=new ISelect('head_col[]');
 
 $sql=sprintf('select ad_id,ad_text from jnt_fic_attr join attr_def using(ad_id) where fd_id=%d order by ad_text ',$_POST['rfichedef']);
 $header->value=$cn->make_array($sql);
-$header->value[]=array('value'=>-1,'label'=>'-- Non Utilisé --');
+$header->value[]=array('value'=>-1,'label'=>'--'._('Non Utilisé').' --');
 $header->selected=-1;
 echo th('Numéro de ligne');
 for ($i=0;$i<$max;$i++)

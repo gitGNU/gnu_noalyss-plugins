@@ -1,5 +1,5 @@
 <div class="content" style="width:80%;margin-left:10%">
-   <!-- <h2 class="info"><?php echo_("Historique")?></h2> -->
+   <!-- <h2 class="info"><?php echo _("Historique")?></h2> -->
 <form method="POST">
 <?php
 echo HtmlInput::hidden('sa',$_REQUEST['sa']);

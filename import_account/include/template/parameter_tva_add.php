@@ -27,7 +27,7 @@
  */
 ?>
 <div id="dtvaadd" class="inner_box" style="display:none">
-	<h2 class="info">Ajout d'un taux de tva</h2>
+   <h2 class="info"><?php echo _("Ajout d'un taux de tva")?></h2>
 	<form method="POST">
 
 		<table>
@@ -49,10 +49,10 @@
 				</td>
 			</tr>
 		</table>
-		<?php echo  HtmlInput::submit("ftvaadd", "Ajout");?>
+   <?php echo  HtmlInput::submit("ftvaadd", _("Ajout"));?>
 		<?php 
 		$bt = new IButton("but_tva_close");
-		$bt->label = "Fermer";
+$bt->label = _("Fermer");
 		$bt->javascript = " $('dtvaadd').hide()";
 		echo $bt->input();
 		?>

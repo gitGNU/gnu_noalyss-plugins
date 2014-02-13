@@ -33,7 +33,7 @@ class Sql_Impacc
 			return $this->$idx;
 		}
 		else
-			throw new Exception(__FILE__ . ":" . __LINE__ . $p_string . 'Erreur attribut inexistant '.$p_string);
+		  throw new Exception(__FILE__ . ":" . __LINE__ . $p_string . _('Erreur attribut inexistant')." ".$p_string);
 	}
 
 	public function setp($p_string, $p_value)
@@ -44,7 +44,7 @@ class Sql_Impacc
 			$this->$idx = $p_value;
 		}
 		else
-			throw new Exception(__FILE__ . ":" . __LINE__ . $p_string . 'Erreur attribut inexistant '.$p_string);
+		  throw new Exception(__FILE__ . ":" . __LINE__ . $p_string . _('Erreur attribut inexistant')." ".$p_string);
 	}
 
 	public function insert()

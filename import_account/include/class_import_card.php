@@ -142,22 +142,22 @@ class Import_Card
 
 		if ($valid_col == 0)
 		{
-			alert("Aucune colonne n'est définie");
+		  alert(_("Aucune colonne n'est définie"));
 			return -1;
 		}
 		if ($valid_name == 0)
 		{
-			alert("Les fiches doivent avoir au minimum un nom");
+		  alert(_("Les fiches doivent avoir au minimum un nom"));
 			return -1;
 		}
 		if ($duplicate != 0)
 		{
-			alert('Vous avez défini plusieurs fois la même colonne');
+		  alert(_('Vous avez défini plusieurs fois la même colonne'));
 			return -1;
 		}
 		if ($valid_qcode == 0)
 		{
-			alert("Vous devez donner la colonne quick_code");
+		  alert(_("Vous devez donner la colonne quick_code"));
 			return 1;
 		}
 		/*
@@ -239,7 +239,7 @@ class Import_Card
 		$name = $cn->get_value('select fd_label from fiche_def where fd_id=$1', array($rfichedef));
 		$cn->get_value('select comptaproc.fiche_attribut_synchro($1)', array($rfichedef));
 		echo '<span class="notice">';
-		echo $row_count . ' fiches sont insérées dans la catégorie ' . $name;
+		echo $row_count . " "._('fiches sont insérées dans la catégorie').' ' . $name;
 		echo '</span>';
 		return 0;
 	}
