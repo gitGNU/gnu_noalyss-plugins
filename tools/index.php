@@ -40,7 +40,8 @@ $url='?'.dossier::get()."&plugin_code=".$_REQUEST['plugin_code']."&ac=".$_REQUES
 $array=array (
          array($url.'&sa=op',_('Opération'),_('Changer poste comptable ou fiche'),1),
          array($url.'&sa=pj',_('Pièce'),_('Rénuméroter des pièces justificative'),2),
-         array($url.'&sa=exe',_('Exercice'),_('Ajouter des années comptables'),3)
+         array($url.'&sa=exe',_('Exercice'),_('Ajouter des années comptables'),3),
+         array($url.'&sa=exp',_('Export'),_('Exporter les opérations'),4)
        );
 
 $sa=(isset($_REQUEST['sa']))?$_REQUEST['sa']:"";
@@ -56,6 +57,9 @@ switch($sa)
   case 'exe':
 	  $def=3;
 	  break;
+  case 'exp':
+      $def=4;
+      break;
   }
 
 $cn=new Database(dossier::id());
@@ -85,5 +89,11 @@ if ($def==2)
   {
 	  require_once 'include/tools_exercice.inc.php';
 	  exit();
+  }
+  /** export */
+  if ($def == 4 )
+  {
+      require_once 'include/export_operation.inc.php';
+      exit();
   }
 ?>
