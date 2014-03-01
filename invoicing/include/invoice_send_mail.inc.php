@@ -33,13 +33,18 @@ require_once 'class_sendmail.php';
 $from = HtmlInput::default_value_get('email_from', 'null');
 $subject = HtmlInput::default_value_get('email_subject', 'null');
 $message = HtmlInput::default_value_get('email_message', 'null');
-$copy = HtmlInput::default_value_get('email_copy', 'null');
+$copy = HtmlInput::default_value_get('email_copy', '-1');
 $pdf = HtmlInput::default_value_get('pdf', 'null');
 if ($from == "null") {
     die (_("Désolé mais il faut donner l'email de celui qui envoie"));
 }
 if ($subject == "null") {
     die (_("Le sujet est obligatoire"));
+}
+
+if ( $message=="null")
+{
+    $message=$subject;
 }
 $feedback = array();
 $dirname = tempnam($_ENV['TMP'], 'invoice');
@@ -97,23 +102,28 @@ foreach ($_GET['sel_sale'] as $key => $value)
         $sendmail->set_from($from);
         $to = $dest_mail;
 
-        if ($copy != 'null')
+        if ($copy != '-1')
         {
             $dest_mail= $dest_mail . ',' . $from;
         }
         $sendmail->mailto($dest_mail);
         $sendmail->set_subject($subject);
+        
+        if (strlen(trim($message))==0) {
+            $message=$subject;
+        }
+        
         $sendmail->set_message($message);
         $ofile = new FileToSend($filetosend);
         $sendmail->add_file($ofile);
-        $sendmail->compose();
         try
         {
+            $sendmail->compose();
             $sendmail->send();
             $feedback[] = _('Envoi facture ') . $invoice['jr_pj_name'] . _(' destinataire ') . $dest_qcode . " " . $dest_name . " " . $dest_mail;
         } catch (Exception $e)
         {
-            $feedback[] = _('Envoi echoué') . " $dest_qcode $dest_name $dest_mail";
+            $feedback[] = _('Envoi echoué') ." ".$e->getMessage(). " $dest_qcode $dest_name $dest_mail ";
         }
     } else if ($invoice['jr_pj_name'] == "" || $invoice['jr_pj'] == "")
     {

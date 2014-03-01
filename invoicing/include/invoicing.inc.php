@@ -121,7 +121,7 @@ $document_to_send->value=array(
                     <textarea style="vertical-align: top;width:23%;height:10%" name="email_message" class="input_text">               </textarea>
                 </p>
                 <p>
-                    <input type="checkbox" name="copy"> <?php echo _("Envoyer copie à l'expéditeur"); ?>
+                    <input type="checkbox" name="email_copy"> <?php echo _("Envoyer copie à l'expéditeur"); ?>
                    
                 </p>
             </div>
