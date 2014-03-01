@@ -14,17 +14,10 @@ function reconcilie(target,dossier_id,p_id,plugin_code)
     {
 	removeDiv(target);
     }
-    var sx=0;
+    var sx=calcy(120);
     var height=0;
-    if ( window.scrollY)
-    {
-        sx=window.scrollY+height;
-    }
-     else
-     {
-            sx=document.body.scrollTop+height;
-     }
-    var str_style="top:"+sx+";margin-left:10%;";
+    
+    var str_style="top:"+sx+"px;margin-left:10%;";
 
     var div={id:target, cssclass:'inner_box',style:str_style,html:loading(),drag:1};
 

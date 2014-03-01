@@ -1,4 +1,4 @@
-<h2 class="info">Modification de matériel</h2>
+<h2 class="title">Modification de matériel</h2>
 <form onsubmit="save_modify(this);return false">
 <?php echo $p_card?>
 <?php echo $a_id?>
@@ -125,17 +125,15 @@ endfor;
 <?php 
 if ( $annuite !=  $p_amount->value)
  {
- 	echo '<h2 class="error">Différence entre le montant à amortir et le montant amorti =';
-	echo nbm($annuite - $p_amount->value);
-	echo '<h2>';
+ 	printf ('<h2 class="error">'._("Différence entre le montant à amortir et le montant amorti = %d'".'</h2>'),nbm($annuite - $p_amount->value));
  }
  ?>
 </fieldset>
 <?php 
-   echo HtmlInput::submit('sauver','Sauver',"onclick=\"return confirm('Vous confirmez ?')\" ");
+   echo HtmlInput::submit('sauver',_('Sauver'),"onclick=\"return confirm('Vous confirmez ?')\" ");
    $rm=sprintf("remove_mat(%d,'%s',%d)",dossier::id(),$_REQUEST['plugin_code'],$value_a_id);
-   echo HtmlInput::button('remove','Effacer',"onclick=\"$rm\" ");
-   echo HtmlInput::button('close','Fermer',"onclick=\"removeDiv('bxmat');refresh_window()\" ");
+   echo HtmlInput::button('remove',_('Effacer'),"onclick=\"$rm\" ");
+   echo HtmlInput::button('close',_('Fermer'),"onclick=\"removeDiv('bxmat');refresh_window()\" ");
 
 ?>
 </FORM>

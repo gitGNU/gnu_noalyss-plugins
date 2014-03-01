@@ -2,7 +2,7 @@
 <?php echo HtmlInput::anchor_close($ctl)?>
 
 <?php
-echo h2info('Détail opération');
+echo h2('Détail opération','class="title"');
 	if ($bi->id=='')
 	{
 		echo h2('Opération effacée','class="notice"');

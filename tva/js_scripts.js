@@ -125,7 +125,7 @@ function success_showaddparam(req) {
 			sx=document.body.scrollTop+120;
 		}
 
-		var div_style="top:"+sx+";width:60%;heigth:80%";
+		var div_style="top:"+sx+"px;";
 		removeDiv("paramadd_id");
 		add_div({
 			"id":'paramadd_id',

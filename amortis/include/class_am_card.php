@@ -53,7 +53,7 @@ class Am_Card
   public function add_card()
   {
     $add=new IButton('add_card');
-    $add->label="Ajout d'un bien à amortir";
+    $add->label=_("Ajout d'un bien à amortir");
     $add->javascript=sprintf("add_material(%d,'%s','bxmat')",
 			     dossier::id(),
 			     $_REQUEST['plugin_code']

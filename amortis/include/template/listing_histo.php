@@ -22,7 +22,8 @@ echo 'Filtre : '.HtmlInput::filter_table('amortissement_tb','1,2,3,5,6',1);
 <?php
 
 for ($i=0;$i<count($array);$i++) :
-	echo '<tr>';
+        $class=($i%2==0)?"odd":"even";
+	echo '<tr class="'.$class.'">';
 	echo td($array[$i]['quick_code']);
 	echo td($array[$i]['vw_name']);
 	echo td(nbm($array[$i]['h_amount']), 'align="right"');
