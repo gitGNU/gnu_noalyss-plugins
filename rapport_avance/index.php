@@ -57,7 +57,6 @@ $url = '?' . dossier::get() . "&plugin_code=" . $_REQUEST['plugin_code'] . "&ac=
 $array = array(
 	array($url . '&sa=li', _('Liste'), _('Création, modification, Paramètre de listes, mailing list'), 0),
 	array($url . '&sa=fo', _('Formulaire'), _('Création, modification, Paramètre'), 1),
-// 	array($url . '&sa=de', _('Génération Déclaration '), _('Génération Déclaration '), 2),
  	array($url . '&sa=de', _('Génération'), _('Génération Déclaration / listing'), 2),
 	array($url . '&sa=hi', _('Historique'), _('Historique des déclarations faites'), 3)
 );
@@ -82,7 +81,7 @@ switch ($sa)
 
 $cn = new Database(dossier::id());
 // show menu
-echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=rapport_avances" target="_blank">Aide</a>' .
+echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=rapav:home" target="_blank">Aide</a>' .
  '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>' .
  '</div>';
 
