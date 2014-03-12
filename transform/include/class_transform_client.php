@@ -76,6 +76,7 @@ class Transform_Client extends Intervat_Client_SQL
         $this->c_vatnumber=str_replace(',','',$this->c_vatnumber);
         $this->c_vatnumber=str_replace('.','',$this->c_vatnumber);
         $this->c_vatnumber=str_replace('-','',$this->c_vatnumber);
+        $this->c_vatnumber=str_replace(' ','',$this->c_vatnumber);
     }
     private function correct_amount()
     {
