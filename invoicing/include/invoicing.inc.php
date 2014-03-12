@@ -68,6 +68,8 @@ $document_to_send->value=array(
     array('value'=>'2','Envoi de la facture sans conversion en PDF')
 )
 ?>
+<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=facturation" target="_blank">Aide</a>
+ </div>
 <form method="GET" id="sel_sale_frm" onsubmit="return verify_invoicing()">
     Ajouter dans le form les valeurs de la recherches
     <?php
