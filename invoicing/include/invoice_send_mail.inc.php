@@ -41,7 +41,7 @@ $pdf = HtmlInput::default_value_post('pdf', 'null');
 
 //-- Follow up
 $ag_timestamp = HtmlInput::default_value_post('ag_timestamp', date('d.m.Y'));
-$ag_title = HtmlInput::default_value_post('ag_title', _('Ajouté depuis plugin'));
+$ag_title = HtmlInput::default_value_post('ag_title', $message);
 $ag_remind_date=HtmlInput::default_value_post('ag_remind_date','');
 $ag_dest=HtmlInput::default_value_post('ag_dest',1);
 
@@ -49,7 +49,7 @@ if (isDate($ag_timestamp) == null)
     $ag_timestamp = date('d.m.Y');
 
 if (trim($ag_title) == "")
-    $ag_title = _("Ajouté depuis plugin");
+    $ag_title = $message;
 
 if (isDate($ag_remind_date) == null) {
     $ag_remind_date=null;
