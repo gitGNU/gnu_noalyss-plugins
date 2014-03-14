@@ -48,11 +48,17 @@ require_once 'class_acc_ledger_sold_generate.php';
         $op_sale = $operation->get_quant();
         $generate = new Acc_Ledger_Sold_Generate($cn, $op_sale->det->jr_def_id);
         $array = $generate->convert_to_array($op_sale);
+        $document=HtmlInput::default_value_get("document",-1);
+        if ($document <> -1 ){
         ?>
         <li>
             <?php echo $generate->create_document($array, $_GET['document']); ?>
         </li>
         <?php
+        } else {
+            echo _('Aucun modèle');
+            exit();
+        }
     }
     ?>
 </ol>
