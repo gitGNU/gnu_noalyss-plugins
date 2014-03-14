@@ -58,7 +58,7 @@ if (isset($_POST['save']))
 
     $ref_csv = HtmlInput::array_to_string(array('gDossier', 'plugin_code', 'd_id'), $_REQUEST, 'extension.raw.php?');
     $ref_csv.="&amp;act=export_decla_csv";
-    echo HtmlInput::button_anchor("Export CSV", $ref_csv, 'export_id',"",'small_button');
+    echo HtmlInput::button_anchor("Export CSV", $ref_csv, 'export_id', "", 'small_button');
     if ($decl->d_filename != '' && $decl->d_step == 0)
         echo $decl->anchor_document();
     exit();
@@ -87,42 +87,58 @@ if (isset($_GET['compute']))
 /**
  * Generate all the document
  */
-if ( isset($_GET['generate_document']) )
+if (isset($_GET['generate_document']))
 {
-    $listing=new RAPAV_Listing_Compute();
+    echo '<h1>' . _('Etape') . " 3 /3  </h1>";
+    $listing = new RAPAV_Listing_Compute();
     $listing->load($_GET['lc_id']);
-    $listing->generate($_GET['numerotation']);
-    
-    if ( GENERATE_PDF == 'YES') 
-        $listing->create_pdf();
-    
+    if ($listing->has_template() == true)
+    {
+        $listing->generate($_GET['numerotation']);
+
+        if (GENERATE_PDF == 'YES')
+            $listing->create_pdf();
+    }
+
     $listing->display(false);
-    $listing->propose_send_mail();
+    if ($listing->has_template())
+    {
+        $listing->propose_send_mail();
+    }
     $listing->propose_include_follow();
-    $listing->propose_download_all();
+    if ($listing->has_template())
+    {
+        $listing->propose_download_all();
+    }
     exit();
 }
 /**
  * Save listing now you can export them to csv and generate file if any
  */
-if ( isset($_POST['save_listing']))
+if (isset($_POST['save_listing']))
 {
-    $listing=new RAPAV_Listing_Compute();
+    echo '<h1>' . _('Etape') . " 2/3 </h1>";
+    echo h2(_("Exporter en CSV ou passer à l'étape suivante"));
+    $listing = new RAPAV_Listing_Compute();
     $listing->load($_POST['lc_id']);
-    if ( isset ($_POST['selected_card']) )
+    if (isset($_POST['selected_card']))
     {
         $listing->keep($_POST['lc_id']);
         $listing->save_selected($_POST['selected_card']);
     }
-    
-   
+
+
     $listing->display(false);
     /**
      * Propose generate and export CSV
      */
     $listing->propose_CSV();
-    if ($listing->has_template() == true) {
+    if ($listing->has_template() == true)
+    {
         $listing->propose_generate();
+    } else
+    {
+        $listing->propose_next();
     }
     exit();
 }
@@ -137,13 +153,15 @@ if (isset($_GET['compute_listing']))
         alert('Date invalide');
     } else
     {
+        echo '<h1>' . _('Etape') . " 1/3 </h1>";
+        echo h2(_('Sélectionner les lignes que vous vous voulez conserver'));
         $listing->data->setp('description', $_GET['p_description']);
         $p_listing = new Rapav_Listing($_GET['p_listing']);
         $listing->filter_operation($_GET['p_operation_paid']);
         $listing->compute($p_listing, $_GET['p_start'], $_GET['p_end']);
-        echo '<form class="print" id="'.'select_card_frm'.'" method="POST">';
-        echo HtmlInput::hidden('lc_id',$listing->lc_id);
-        $listing->display(true,'select_card_frm');
+        echo '<form class="print" id="' . 'select_card_frm' . '" method="POST">';
+        echo HtmlInput::hidden('lc_id', $listing->lc_id);
+        $listing->display(true, 'select_card_frm');
         echo HtmlInput::submit('save_listing', 'Sauver la sélection');
         echo '</form>';
         exit();
@@ -207,7 +225,7 @@ $operation_paid->value = array(
 
 <div id="id_rapport_div" style="display: none">
     <form id="declaration_form_id" method="GET" onsubmit="return validate()">
-        <?php echo $hidden ?>
+                    <?php echo $hidden ?>
         <input type="hidden" name="form" value="rapport">
         <table style="min-width: 40%">
             <tr>
@@ -215,7 +233,7 @@ $operation_paid->value = array(
                     Déclaration
                 </td>
                 <td>
-                    <?php echo $select->input() ?>
+<?php echo $select->input() ?>
                 </td>
             </tr>
             <tr>
@@ -242,17 +260,17 @@ $operation_paid->value = array(
                     Etape de
                 </td>
                 <td>
-                    <?php echo $istep->input() ?>
+<?php echo $istep->input() ?>
                 </td>
             </tr>
         </table>
         </p>
-        <?php echo HtmlInput::submit('compute', 'Générer') ?>
+<?php echo HtmlInput::submit('compute', 'Générer') ?>
     </form>
 </div>
 <div id="id_listing_div" style="display: none">
     <form method="GET" onsubmit="return validate_listing()">
-        <?php echo $hidden ?>
+                    <?php echo $hidden ?>
         <input type="hidden" name="form" value="rapport">
 
         <table style="min-width: 40%">
@@ -261,7 +279,7 @@ $operation_paid->value = array(
                     Déclaration
                 </td>
                 <td>
-                    <?php echo $select_listing->input() ?>
+<?php echo $select_listing->input() ?>
                 </td>
             </tr>
             <tr>
@@ -288,12 +306,12 @@ $operation_paid->value = array(
                     Opérations
                 </td>
                 <td>
-                    <?php echo $operation_paid->input(); ?>
+<?php echo $operation_paid->input(); ?>
                 </td>
             </tr>
         </table>
         </p>
-        <?php echo HtmlInput::submit('compute_listing', 'Générer') ?>
+<?php echo HtmlInput::submit('compute_listing', 'Générer') ?>
     </form>
 </div>
 <script charset="UTF8" lang="javascript">

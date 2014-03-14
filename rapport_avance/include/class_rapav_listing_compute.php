@@ -364,6 +364,18 @@ class RAPAV_Listing_Compute
         
     }
     /**
+     * @brief display a button to go to next screen
+     */
+    function propose_next()
+    {
+        echo '<form method="GET" action="do.php" class="noprint" style="display:inline">';
+        echo HtmlInput::array_to_hidden(array('ac','gDossier','plugin_code','sa'), $_REQUEST);
+        echo HtmlInput::hidden('lc_id',$this->data->lc_id);
+        echo HtmlInput::submit("generate_document", "Suivant","","smallbutton");
+        echo '</form>';
+        
+    }
+    /**
      * @brief export to CSV
      */
     function to_csv()
