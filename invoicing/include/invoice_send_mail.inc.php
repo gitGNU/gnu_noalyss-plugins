@@ -26,25 +26,48 @@
  * @param email_message text 
  * @param email_copy copy to sender
  * @param pdf convert to pdf
-   @endnote
+  @endnote
  */
 require_once 'class_sendmail.php';
+require_once 'class_follow_up.php';
+global $cn;
 
-$from = HtmlInput::default_value_get('email_from', 'null');
-$subject = HtmlInput::default_value_get('email_subject', 'null');
-$message = HtmlInput::default_value_get('email_message', 'null');
-$copy = HtmlInput::default_value_get('email_copy', '-1');
-$pdf = HtmlInput::default_value_get('pdf', 'null');
-if ($from == "null") {
-    die (_("Désolé mais il faut donner l'email de celui qui envoie"));
-}
-if ($subject == "null") {
-    die (_("Le sujet est obligatoire"));
+//----- Mail
+$from = HtmlInput::default_value_post('email_from', 'null');
+$subject = HtmlInput::default_value_post('email_subject', 'null');
+$message = HtmlInput::default_value_post('email_message', 'null');
+$copy = HtmlInput::default_value_post('email_copy', '-1');
+$pdf = HtmlInput::default_value_post('pdf', 'null');
+
+//-- Follow up
+$ag_timestamp = HtmlInput::default_value_post('ag_timestamp', date('d.m.Y'));
+$ag_title = HtmlInput::default_value_post('ag_title', _('Ajouté depuis plugin'));
+$ag_remind_date=HtmlInput::default_value_post('ag_remind_date','');
+$ag_dest=HtmlInput::default_value_post('ag_dest',1);
+
+if (isDate($ag_timestamp) == null)
+    $ag_timestamp = date('d.m.Y');
+
+if (trim($ag_title) == "")
+    $ag_title = _("Ajouté depuis plugin");
+
+if (isDate($ag_remind_date) == null) {
+    $ag_remind_date=null;
 }
 
-if ( $message=="null")
+
+if ($from == "null")
 {
-    $message=$subject;
+    die(_("Désolé mais il faut donner l'email de celui qui envoie"));
+}
+if ($subject == "null")
+{
+    die(_("Le sujet est obligatoire"));
+}
+
+if ($message == "null")
+{
+    $message = $subject;
 }
 $feedback = array();
 $dirname = tempnam($_ENV['TMP'], 'invoice');
@@ -104,15 +127,16 @@ foreach ($_GET['sel_sale'] as $key => $value)
 
         if ($copy != '-1')
         {
-            $dest_mail= $dest_mail . ',' . $from;
+            $dest_mail = $dest_mail . ',' . $from;
         }
         $sendmail->mailto($dest_mail);
         $sendmail->set_subject($subject);
-        
-        if (strlen(trim($message))==0) {
-            $message=$subject;
+
+        if (strlen(trim($message)) == 0)
+        {
+            $message = $subject;
         }
-        
+
         $sendmail->set_message($message);
         $ofile = new FileToSend($filetosend);
         $sendmail->add_file($ofile);
@@ -121,26 +145,45 @@ foreach ($_GET['sel_sale'] as $key => $value)
             $sendmail->compose();
             $sendmail->send();
             $feedback[] = _('Envoi facture ') . $invoice['jr_pj_name'] . _(' destinataire ') . $dest_qcode . " " . $dest_name . " " . $dest_mail;
+            /**
+             * Save into follow up
+             */
+            $action = new Follow_Up($cn);
+            $a_follow['ag_dest'] = $ag_dest;
+            $ag_comment =  _("Envoi facture") . " " . $invoice['jr_pj_name']." "._(' à ').$dest_mail.PHP_EOL.$message;
+            $a_follow['ag_comment']=$ag_comment;
+            $a_follow['ag_title']=$ag_title;
+            $a_follow['ag_timestamp']=$ag_timestamp;
+            $a_follow['ag_remind_date']=$ag_remind_date;
+            $a_follow['dt_id']=HtmlInput::default_value_post('dt_id',-1);
+            $action->fromArray($a_follow);
+
+            $action->f_id_dest = $invoice['qs_client'];
+            $action->qcode_dest = $dest_qcode;
+            $_POST['nb_item'] = 0;
+            $action->save();
+// return $fiche->strAttribut(ATTR_DEF_QUICKCODE) . ' inclus dans Suivi';
         } catch (Exception $e)
         {
-            $feedback[] = _('Envoi echoué') ." ".$e->getMessage(). " $dest_qcode $dest_name $dest_mail ";
+            $feedback[] = _('Envoi echoué') . " " . $e->getMessage() . " $dest_qcode $dest_name $dest_mail ";
         }
     } else if ($invoice['jr_pj_name'] == "" || $invoice['jr_pj'] == "")
     {
         $feedback[] = _('Aucune pièce à envoyer') . " $dest_qcode $dest_name $dest_mail";
-    } else if ($dest_mail == "" || $dest_mail == NOTFOUND )
+    } else if ($dest_mail == "" || $dest_mail == NOTFOUND)
     {
         $feedback[] = _('Aucune adresse email trouvée') . " $dest_qcode $dest_name $dest_mail";
     }
 }
+$cn->commit();
 ?>
 <ol>
-        <?php foreach ($feedback as $line): ?>
+    <?php foreach ($feedback as $line): ?>
 
         <li>
-        <?php echo $line; ?>
+            <?php echo $line; ?>
         </li>
-<?php endforeach; ?>
+    <?php endforeach; ?>
 </ol>
 
 
