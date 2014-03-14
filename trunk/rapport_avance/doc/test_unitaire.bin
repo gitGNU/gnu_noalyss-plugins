@@ -1,0 +1,25 @@
+RAPAV;4
+"Test unitaire";"Test des différentes fonctionnalité"
+135;F1;Formule;3;10;12;1
+136;F2;"Formule N-1";3;20;12;3
+137;F3;"Formule journal OD uniquement";3;30;12;1
+138;PC1;"Poste comptable code tva tous les journaux";3;40;12;1
+139;PC2;"Poste comptable &code tva  tous les journaux N-1";3;50;12;3
+140;PC3;"Poste comptable code tva  Achat";3;60;12;1
+141;P1;"Poste comptable tous les journaux (6% & 4111)";3;70;12;1
+142;P2;"Poste comptable tous les journaux (6% & 4111) N-1";3;80;12;3
+143;P3;"Poste comptable tous les journaux (6% & 4111) uniqt Achat 2";3;90;12;1
+144;Date-paiement;"Formule Date - paiement";3;100;12;1
+145;date-echeance;"Formule Date échéance";3;110;12;1
+RAPAV_DETAIL
+112;135;;;[44%];;;;1;;;;0
+113;136;;;[44%];;;;1;;;;0
+114;137;;;[44%];;;;1;;;;0
+115;138;%;1;;;ACH;1;2;;;;0
+116;139;%;1;;;ACH;1;2;;;;0
+117;140;%;1;;;ACH;1;2;;;;0
+118;141;6%;;;;;;4;4111;1;;0
+119;142;6%;;;;;;4;4111;1;;0
+120;143;6%;;;;;;4;4111;1;;0
+121;144;;;[70%];;;;1;;;;1
+122;145;;;[70%];;;;1;;;;2

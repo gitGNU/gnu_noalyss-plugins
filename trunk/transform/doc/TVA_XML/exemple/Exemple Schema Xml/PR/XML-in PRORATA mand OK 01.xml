@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>     
+	<ns2:ProRataRateAdjustmentConsignment xmlns="http://www.minfin.fgov.be/InputCommon" xmlns:ns2="http://www.minfin.fgov.be/ProRataRateAdjustmentConsignment" ProRataRateAdjustmentsNbr="1">
+		<ns2:Representative>
+			<RepresentativeID identificationType="NVAT" issuedBy="BE">0602602602</RepresentativeID>
+			<Name>POLLARD MYRIAM</Name>
+			<Street>R DE FLEMALLE GRANDE 18</Street>
+			<PostCode>4400</PostCode>
+			<City>FLEMALLE</City>
+			<CountryCode>BE</CountryCode>
+			<EmailAddress>scsdferfzefc@dsfsdf.be</EmailAddress>
+			<Phone>0212487645648</Phone>
+		</ns2:Representative>
+		<ns2:RepresentativeReference>00000000000000</ns2:RepresentativeReference>
+		<ns2:ProRataRateAdjustment SequenceNumber="1">
+			<ns2:Applicant>
+				<VATNumber>0448826918</VATNumber>
+				<Name>CARREFOUR BELGIUM</Name>
+				<Street>AV. DES OLYMPIADES 20</Street>
+				<PostCode>1140</PostCode>
+				<City>EVERE</City>
+				<CountryCode>BE</CountryCode>
+				<EmailAddress>requerant.vatrefund@gmail.com</EmailAddress>
+			</ns2:Applicant>
+			<ns2:Period>2010</ns2:Period>
+			<ns2:AdjustedValue>63</ns2:AdjustedValue>
+			<ns2:Comment>Ceci est mon commentaire...</ns2:Comment>
+		</ns2:ProRataRateAdjustment>
+	</ns2:ProRataRateAdjustmentConsignment>    
