@@ -47,15 +47,11 @@
                 <?php echo $category->input(); ?>
             </td>
         </tr>
-        <tr>
-            <td>
-                <label>Commentaire</label>
-            </td>
-            <td>
-                <?php echo $desc->input(); ?>
-            </td>
-        </tr>
     </table>
+    <p>
+                <label style="vertical-align: top">Commentaire</label>
+    </p>
+                <?php echo $desc->input(); ?>
     <p>
         <?php
         echo HtmlInput::array_to_hidden(array('gDossier', 'plugin_code', 'ac', 'lc_id'), $_REQUEST);
