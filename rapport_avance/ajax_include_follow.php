@@ -34,7 +34,7 @@ $category->readOnly = false;
 
 //-- description
 $desc = new ITextArea();
-$desc->style = ' class="itextarea" style="width:80%;margin-left:0px"';
+$desc->style = ' class="itextarea" style="width:90%;margin-left:5%"';
 $desc->name = "ag_comment";
 
 require_once 'include/template/include_follow.php';
