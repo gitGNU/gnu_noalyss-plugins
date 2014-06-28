@@ -254,9 +254,7 @@ class Acc_Ledger_Sold_Generate extends Acc_Ledger_Sold
             //document
             if ($row['jr_pj_name'] != "")
             {
-                $image = '<IMG SRC="image/insert_table.gif" title="' . $row['jr_pj_name'] . '" border="0">';
-                $r.="<TD>" . sprintf('<A class="detail" HREF="show_pj.php?jrn=%s&jr_grpt_id=%s&%s">%s</A>', $row['jrn_def_id'], $row['jr_grpt_id'], $str_dossier, $image)
-                        . "</TD>";
+                $r.='<td>'.HtmlInput::show_receipt_document($row['jr_id']).'</td>';
             } else
                 $r.="<TD></TD>";
 
