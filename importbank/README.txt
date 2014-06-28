@@ -1,1 +1,1 @@
-Skeleton of a plugin. It contains the structure and example.
+Import banque voyez le wiki pour installer
