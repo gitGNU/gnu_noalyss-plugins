@@ -81,9 +81,8 @@ class Coprop_Appel_Fond
                 $afd->key_tantieme=$key->cr_tantieme;
                 $afd->lot_tantieme=$a_lot[$i]['crd_amount'];
 
-                $fract=  bcdiv($a_lot[$i]['crd_amount'],$key->cr_tantieme);
-
-                $afd->afd_amount=  bcmul($fract,$p_amount);
+                $temp=  bcmul($a_lot[$i]['crd_amount'],$p_amount);
+                $afd->afd_amount=  bcdiv($temp,$key->cr_tantieme);
 
                 if ( $afd->afd_amount != 0 )$afd->insert();
 
