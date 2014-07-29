@@ -51,10 +51,16 @@
                     <?php echo $tantieme->input()?>
                 </td>
 	</tr>
+        <tr>
+            <td>
+                Description
+            </td>
+                <td>
+                    <?php echo $note->input()?>
+                </td>
+	</tr>
 
 </table>
-Description
-<?php echo $note->input()?>
 <h2>Détail des lots</h2>
 <table class="result">
 	<tr>
