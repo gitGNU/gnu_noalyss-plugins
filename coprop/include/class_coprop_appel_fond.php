@@ -162,8 +162,8 @@ class Coprop_Appel_Fond
     function display_ledger()
 	{
 		global $cn;
-		$ledger = new Acc_Ledger($cn,0);
 		$this->load();
+		$ledger = new Acc_Ledger($cn,$this->af_ledger);
 		$adetail = $cn->get_array("
 			select sum(afd_amount) as amount,S.coprop_id
 				from coprop.appel_fond_detail as A
