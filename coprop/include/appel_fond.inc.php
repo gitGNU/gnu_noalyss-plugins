@@ -207,7 +207,7 @@ $f_categorie_appel_label = $categorie_appel_label->input("w_categorie_appel_labe
 $f_categorie_appel_bt = $categorie_appel->search();
 
 $key = new ISelect("key");
-$key->value = $cn->make_array("select cr_id,cr_name from coprop.clef_repartition");
+$key->value = $cn->make_array("select cr_id,cr_name from coprop.clef_repartition order by cr_name");
 $key->selected = HtmlInput::default_value('key', -1, $_GET);
 
 $f_add_button = new IButton('add_card');
