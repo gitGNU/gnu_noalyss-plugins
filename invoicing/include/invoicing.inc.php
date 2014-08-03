@@ -71,7 +71,7 @@ $document_to_send->value=array(
 <div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=facturation" target="_blank">Aide</a>
  </div>
 <form method="GET" id="sel_sale_frm" onsubmit="return verify_invoicing()">
-    Ajouter dans le form les valeurs de la recherches
+    <span class="notice"> Utiliser le bouton "Filtrer" pour chercher les factures voulues</span>
     <?php
     echo HtmlInput::request_to_hidden(array('gDossier', 'ac', 'plugin_code'));
     echo HtmlInput::request_to_hidden(array('date_start', 'date_end'));
