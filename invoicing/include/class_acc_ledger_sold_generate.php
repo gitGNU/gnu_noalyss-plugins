@@ -114,15 +114,16 @@ class Acc_Ledger_Sold_Generate extends Acc_Ledger_Sold
         $r.='<th>' . $table->get_header(3) . '</th>';
         $r.='<th>' . $table->get_header(4) . '</th>';
         $r.='<th>' . $table->get_header(6) . '</th>';
-        $r.=th('Notes', ' style="width:15%"');
         $r.='<th>' . $table->get_header(5) . '</th>';
+        $r.="<th>" . _('Document') . "</th>";
+        $r.=th('Notes', ' style="width:15%"');
         // if $p_paid is not equal to 0 then we have a paid column
         if ($p_paid != 0)
         {
             $r.="<th> " . _('Payé') . "</th>";
         }
         $r.="<th>" . _('Concerne') . "</th>";
-        $r.="<th>" . _('Document') . "</th>";
+        
         $r.="</tr>";
         // Total Amount
         $tot = 0.0;
@@ -179,7 +180,7 @@ class Acc_Ledger_Sold_Generate extends Acc_Ledger_Sold
             $tmp_jr_comment = h($row['jr_comment']);
             $r.=$tmp_jr_comment;
             $r.="</TD>";
-            $r.=td(h($row['n_text']), ' style="font-size:0.87em%"');
+            
             // Amount
             // If the ledger is financial :
             // the credit must be negative and written in red
@@ -224,7 +225,19 @@ class Acc_Ledger_Sold_Generate extends Acc_Ledger_Sold
                 else
                     $amount_unpaid = bcadd($amount_unpaid, $t_amount);
             }
-
+            //document
+            if ($row['jr_pj_name'] != "")
+            {
+                $r.='<td>'.HtmlInput::show_receipt_document($row['jr_id']).'</td>';
+            } else
+            {
+                $r.="<TD></TD>";
+            }
+            
+            // NOTE
+            $r.=td(h($row['n_text']), ' style="font-size:0.87em%"');
+            
+            
             // Rapprochement
             $rec = new Acc_Reconciliation($this->db);
             $rec->set_jr_id($row['jr_id']);
@@ -251,12 +264,8 @@ class Acc_Ledger_Sold_Generate extends Acc_Ledger_Sold
             {
                 
             } // else
-            //document
-            if ($row['jr_pj_name'] != "")
-            {
-                $r.='<td>'.HtmlInput::show_receipt_document($row['jr_id']).'</td>';
-            } else
-                $r.="<TD></TD>";
+            
+            
 
             // end row
             $r.="</tr>";
