@@ -115,7 +115,7 @@ class Acc_Ledger_Sold_Generate extends Acc_Ledger_Sold
         $r.='<th>' . $table->get_header(4) . '</th>';
         $r.='<th>' . $table->get_header(6) . '</th>';
         $r.='<th>' . $table->get_header(5) . '</th>';
-        $r.="<th>" . _('Document') . "</th>";
+        $r.="<th>" . _('D') . "</th>";
         $r.=th('Notes', ' style="width:15%"');
         // if $p_paid is not equal to 0 then we have a paid column
         if ($p_paid != 0)
@@ -274,18 +274,23 @@ class Acc_Ledger_Sold_Generate extends Acc_Ledger_Sold
         $amount_unpaid = round($amount_unpaid, 4);
         $tot = round($tot, 4);
         $r.="<TR>";
-        $r.='<TD COLSPAN="5">Total</TD>';
+        $r.="<tfoot>";
+        $r.='<TD >Total</TD>';
+        $r.=td("").td("").td("").td("").td("").td("").td("");
         $r.='<TD ALIGN="RIGHT">' . nbm($tot) . "</TD>";
+        $r.="<tfoot>";
         $r.="</tr>";
         if ($p_paid != 0)
         {
             $r.="<TR>";
+            $r.="<tfoot>";
             $r.='<TD COLSPAN="5">Pay&eacute;</TD>';
             $r.='<TD ALIGN="RIGHT">' . nbm($amount_paid) . "</TD>";
             $r.="</tr>";
             $r.="<TR>";
             $r.='<TD COLSPAN="5">Non pay&eacute;</TD>';
             $r.='<TD ALIGN="RIGHT">' . nbm($amount_unpaid) . "</TD>";
+            $r.="<tfoot>";
             $r.="</tr>";
         }
         $r.="</table>";
