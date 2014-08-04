@@ -46,7 +46,8 @@ $aformat_date=array(
 		    array ('value'=>3,'label'=>'DD-MM-YYYY'),
 		    array ('value'=>4,'label'=>'DD.MM.YY'),
 		    array ('value'=>5,'label'=>'DD/MM/YY'),
-		    array ('value'=>6,'label'=>'DD-MM-YY')
+		    array ('value'=>6,'label'=>'DD-MM-YY'),
+		    array ('value'=>7,'label'=>'YYYY-MM-DD')
 		    );
 $aheader=array(
 	       array('value'=>-1,'label'=>'-- Non utilisé --'),
