@@ -60,7 +60,7 @@ while( ($row=fgetcsv($fbank,0,$sp)) !== false)
 			$third=utf8_encode($array_row[$i]);
 			break;
 		 case 5:
-			$extra=utf8_encode(preg_replace('/[^[: print:]]/','',$array_row[$i]));
+			$extra=utf8_encode(preg_replace('/[^[:print:]]/','',$array_row[$i]));
 			break;
 
 		 }
