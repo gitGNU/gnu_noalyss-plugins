@@ -38,7 +38,7 @@ class Pdf_Card extends PDF
         //Page number
         $this->Cell(0,8,'Date '.$this->date." - Page ".$this->PageNo().'/{nb}',0,0,'C');
         $this->Ln(3);
-        // Created by PhpCompta
+        // Created by NOALYSS
         $this->Cell(0,8,'Created by Phpcompta, a professional opensource accounting software http://www.phpcompta.eu',0,0,'C',false,'http://www.phpcompta.eu');
     }
     function Cell ($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=false, $link='')
