@@ -1,4 +1,5 @@
 content[400]="Filtrer sur quick-code, nom, date d'acquisition ou Année d'achat";
+/* This file is part of NOALYSS and is under GPL see licence.txt */
 /**
  *javascript
  */
