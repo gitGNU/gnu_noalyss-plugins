@@ -1,4 +1,7 @@
 <?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
+
 extract($_GET);
 if ( ! isset($act)) {
     die(_('act invalide'));

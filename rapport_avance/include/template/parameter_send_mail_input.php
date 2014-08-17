@@ -1,3 +1,7 @@
+<?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
+?>
 <form onsubmit="send_email(); return false;" id="parameter_send_email_input_frm">
 <?php
     echo HtmlInput::array_to_hidden(array('gDossier','plugin_code','ac','lc_id'), $_REQUEST);

@@ -1,3 +1,7 @@
+<?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
+?>
 <h2>Etape 2 / 4: introduire le fichier</h2>
 
 <form method="POST"   enctype="multipart/form-data" >

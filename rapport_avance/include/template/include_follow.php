@@ -1,3 +1,7 @@
+<?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
+?>
 <?php echo HtmlInput::title_box("Suivi", "include_follow_result"); ?>
 <form method="GET" onsubmit="js_include_follow_save();
         return false;" id="include_follow_save_frm">

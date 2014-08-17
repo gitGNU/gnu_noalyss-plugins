@@ -1,4 +1,6 @@
 <?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
 
 // require_once '.php';
 require_once 'include/class_formulaire_param_detail.php';

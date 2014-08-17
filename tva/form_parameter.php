@@ -1,4 +1,7 @@
 <?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
+
 global $tab;
 function show($p_code,$p_desc) {
 	global $cn,$tab;

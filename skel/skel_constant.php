@@ -1,4 +1,6 @@
 <?php 
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
 /**
  *@file
  *Contains all the needed variable for the plugin

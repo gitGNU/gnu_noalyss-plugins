@@ -1,4 +1,6 @@
 <?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
 
 require_once 'include/class_rapav_listing_formula.php';
 $id=HtmlInput::default_value_get('id',-1);

@@ -1,3 +1,7 @@
+<?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
+?>
 <h2 class="info"> Journal cible = <?php echo $jrn_name?> Compte de ce journal <?php echo $jrn_account?></h2>
 <form method="get">
 

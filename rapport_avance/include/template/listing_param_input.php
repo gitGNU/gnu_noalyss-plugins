@@ -1,3 +1,7 @@
+<?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
+?>
 <div>
     <form id="common_frm">
     <?php echo HtmlInput::hidden("listing_id", $p_id); ?>

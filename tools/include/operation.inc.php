@@ -1,4 +1,6 @@
 <?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
 
 $ledger=new Acc_Ledger($cn,0);
 $search_box=$ledger->search_form('ALL',1);

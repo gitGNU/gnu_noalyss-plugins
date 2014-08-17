@@ -1,3 +1,4 @@
+/* This file is part of NOALYSS and is under GPL see licence.txt */
 
 
 content[200] = "Le code doit être unique pour ce formulaire";

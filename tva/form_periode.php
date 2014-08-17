@@ -1,3 +1,7 @@
+<?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
+?>
 <fieldset>
 <legend>
    <?php echo _('Entrez la période de la déclaration')?>

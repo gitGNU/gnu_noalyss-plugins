@@ -1,4 +1,7 @@
 <?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
+
 require_once 'include/class_rapav_listing_compute.php';
 
 ob_start();

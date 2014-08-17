@@ -1,3 +1,4 @@
+/* This file is part of NOALYSS and is under GPL see licence.txt */
 function show_declaration(p_type,p_id) {
     try {
 	$('detail').innerHTML='<image src="image/loading.gif" border="0" alt="Chargement...">';

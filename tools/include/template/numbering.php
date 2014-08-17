@@ -1,4 +1,6 @@
 <?php 
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
 echo  HtmlInput::button('receipt_bt','Renuméroter les pièces','onclick="$(\'div_receipt\').show();"');
 ?>
 <div id="div_receipt" class="inner_box" style="top:230;margin:5;overflow:visible;display:none;">

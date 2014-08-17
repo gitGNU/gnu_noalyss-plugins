@@ -1,4 +1,6 @@
 <?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
 require_once('skel_constant.php');
 require_once('class_database.php');
 require_once('class_ext_tva.php');

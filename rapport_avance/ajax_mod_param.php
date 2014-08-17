@@ -1,4 +1,7 @@
 <?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
+
 /**
  * @file
  * @brief Montre le résultat et permet de changer les paramètrages d'un formulaire

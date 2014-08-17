@@ -1,3 +1,7 @@
+<?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
+?>
 <FORM METHOD="GET" onsubmit="return validate();">
 <?php echo $hidden?>
 <table>

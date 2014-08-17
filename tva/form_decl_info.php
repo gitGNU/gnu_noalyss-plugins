@@ -1,3 +1,7 @@
+<?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
+?>
 <h1>Cadre I : renseignements généraux</h1>
 
 <table>

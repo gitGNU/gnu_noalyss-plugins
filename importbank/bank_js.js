@@ -1,3 +1,4 @@
+/* This file is part of NOALYSS and is under GPL see licence.txt */
 function reconcilie(target,dossier_id,p_id,plugin_code)
 {
     var qs="gDossier="+dossier_id+'&plugin_code='+plugin_code+'&act=show&id='+p_id+'&ctl='+target;

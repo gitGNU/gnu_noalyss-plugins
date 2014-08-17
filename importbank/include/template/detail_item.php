@@ -1,3 +1,7 @@
+<?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
+?>
 <div id="<?php echo $ctl?>">
 <?php echo HtmlInput::anchor_close($ctl)?>
 

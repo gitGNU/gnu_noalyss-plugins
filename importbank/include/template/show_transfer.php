@@ -1,4 +1,8 @@
 <?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
+?>
+<?php
 $cn->start();
 $row_count=0;$max=0;
 switch ($sep_field->selected)

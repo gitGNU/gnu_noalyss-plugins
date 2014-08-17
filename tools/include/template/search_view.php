@@ -1,4 +1,6 @@
 <?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
 
 $ret=$cn->exec_sql($sql);
 $nb_row=$cn->size();

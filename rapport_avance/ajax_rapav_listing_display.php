@@ -1,4 +1,7 @@
 <?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
+
 /**
  * @file
  * @brief display a declaration from history but you can't modify it

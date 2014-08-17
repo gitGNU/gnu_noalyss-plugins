@@ -1,4 +1,8 @@
 <?php
+//This file is part of NOALYSS and is under GPL 
+//see licence.txt
+?>
+<?php
 /**
  * @file
  * @brief  Ajoute une ligne dans la definition
