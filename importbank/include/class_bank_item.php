@@ -55,7 +55,7 @@ class Bank_Item
 	$w->set_callback('filter_card');
 	$w->set_function('fill_data');
 	$w->set_attribute('inp','fiche');
-
+        $w->autocomplete=0;
 	$wConcerned=new IConcerned();
 	$wConcerned->name="e_concerned".$id;
 	$wConcerned->amount_id=abs($bi->amount);
