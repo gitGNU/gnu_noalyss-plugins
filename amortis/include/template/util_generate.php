@@ -82,11 +82,10 @@ for ( $i =0;$i<count($array);$i++):
 <tr>
 <?php 
 if ( isset($_POST['p_ck'.$i])) $ck->selected=true;else $ck->selected=false;
-$view_history= sprintf('<A class="detail" style="text-decoration:underline" HREF="javascript:view_history_card(\'%s\',\'%s\')" >%s</A>',
-                        $fiche->id, dossier::id(), $fiche->get_quick_code());
+ $view=detail_material($array[$i]->f_id,$fiche->get_quick_code());
 ?>
 	<td><?php echo $ck->input()?></td>
-	<td><?php echo $view_history?></td>
+	<td><?php echo $view?></td>
 	<td><?php echo $fiche->strAttribut(ATTR_DEF_NAME)?></td>
 	<td>	<?php echo $fiche->strAttribut(9)?></td>
 	<td></td>
