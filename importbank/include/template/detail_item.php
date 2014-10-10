@@ -2,6 +2,7 @@
 //This file is part of NOALYSS and is under GPL 
 //see licence.txt
 ?>
+
 <div id="<?php echo $ctl?>">
 <?php echo HtmlInput::anchor_close($ctl)?>
 
@@ -19,22 +20,28 @@ echo "<span style=\"float:right\" class=\"notice\">$msg</span>";
 echo HtmlInput::request_to_hidden(array('id','ctl','gDossier','plugin_code','act'));
 echo HtmlInput::hidden('p_jrn',$bi->jrn_def_id);
 ?>
-
+    <div style="position:float;float:left; ">
 <table>
 <TR>
 <TD>Date</TD><td><?php echo $date->input()?></td></tr>
 <tr>
 	<TD>Journal
 	</TD>
-	<td><span class="notice"><?php echo $jrn?></span>
+	<td><span class="highlight"><?php echo $jrn?></span>
 	</td>
 </tr>
 <tr>
 	<TD>Contrepartie
 	</TD>
-	<td><?php echo $w->input()?><?php echo $w->search()?><span id="e_third"><?php echo h($name)?></span>
+	<td><?php echo $w->input()?><?php echo $w->search()?>
 	</td>
 </tr>
+<tr>
+    <td></td>
+    <td class="highlight">
+        <span id="e_third"><?php echo h($name)?></span>
+    </td>
+</tr>   
 
 <tr><td>n° opération </td><td><?php echo h($bi->ref_operation)?></td></tr>
 <tr><TD>
@@ -90,5 +97,12 @@ echo HtmlInput::hidden('p_jrn',$bi->jrn_def_id);
 </table>
 <?php echo HtmlInput::submit('save','Sauve');?>
 <?php echo HtmlInput::button_close($ctl)?>
+    </div>
 </form>
+    <div id="div_suggest_<?php echo $ctl;?>" style="position:float;float:left;">
+        <h2><?php echo "Suggestion";?></h2>
+        <div id="choice_suggest<?php echo $ctl;?>" class="autocomplete_fixed" style="position: static;" >
+            
+        </div>
+    </div>
 </div>
