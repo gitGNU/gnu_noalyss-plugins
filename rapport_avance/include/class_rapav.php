@@ -135,7 +135,7 @@ class RAPAV
 
         // remove the valid
         preg_match_all("/\[([A-Z]*[0-9]*)*([0-9]*[A-Z]*)\]/i", $formula, $e);
-        $formula = preg_replace("/\[([A-Z]*[0-9]*)*([0-9]*[A-Z]*)%*\]/i", '', $formula);
+        $formula = preg_replace("/\[([A-Z]*[0-9]*)*([0-9]*[A-Z]*)%*s*d*c*\]/i", '', $formula);
         $formula = preg_replace('/([0-9]+.{0,1}[0.9]*)*(\+|-|\*|\/)*/', '', $formula);
         $formula = preg_replace('/(\(|\))/', '', $formula);
         $formula = preg_replace('/\s/', '', $formula);
