@@ -214,10 +214,10 @@ $operation_paid->value = array(
     <table style="border-collapse: separate;width: 40%">
         <tr >
             <td id="rapport_td_id" class="mtitle" style="border-radius:0;border-bottom: 2;border-top:0;border-left:0;border-right:0">
-                <A class="mtitle" HREF="javascript:void(0)" onclick="select_rapport();"> Rapport</A>
+                <A class="mtitle" HREF="javascript:void(0)" onclick="select_rapport();"> Formulaire</A>
             </td>
             <td id="listing_td_id" class="mtitle" style="border-radius:0;border-bottom: 2;border-top:0;border-left:0;border-right:0">
-                <A class="mtitle" HREF="javascript:void(0)"onclick="select_listing();"> Listing / Documents</A>
+                <A class="mtitle" HREF="javascript:void(0)"onclick="select_listing();"> Listing /Mailing</A>
             </td>
         </tr>
     </table>
@@ -230,7 +230,7 @@ $operation_paid->value = array(
         <table style="min-width: 40%">
             <tr>
                 <td>
-                    Déclaration
+                    Formulaire
                 </td>
                 <td>
 <?php echo $select->input() ?>
@@ -276,7 +276,7 @@ $operation_paid->value = array(
         <table style="min-width: 40%">
             <tr>
                 <td>
-                    Déclaration
+                    Listing
                 </td>
                 <td>
 <?php echo $select_listing->input() ?>
