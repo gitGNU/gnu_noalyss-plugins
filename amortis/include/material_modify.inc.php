@@ -37,9 +37,9 @@ $a=$cn->get_value("select a_id from amortissement.amortissement where f_id=$1",
 if ( $cn->count() == 0 )
   {
     echo HtmlInput::anchor_close($t);
-    echo '<h2 class="title">Détail de matériel</h2>';
-    echo "<h2 class=\"error\"> Bien à amortir effacé </h2>";
-    echo HtmlInput::button('close','Fermer',"onclick=\"removeDiv('bxmat');refresh_window()\" ");
+    echo '<h2 class="title">'._('Détail de matériel').'</h2>';
+    echo "<h2 class=\"error\"> "._("Bien à amortir effacé")." </h2>";
+    echo HtmlInput::button('close',_('Fermer'),"onclick=\"removeDiv('bxmat');refresh_window()\" ");
   }
 else
   {

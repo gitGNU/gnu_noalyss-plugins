@@ -50,7 +50,7 @@ $oPeriode->p_id=$periode;
 
 if ($oPeriode->is_closed() == 1)
 {
-    alert('On ne peut pas modifier dans une période fermée');
+    alert(_('On ne peut pas modifier dans une période fermée'));
     exit();
 }
 

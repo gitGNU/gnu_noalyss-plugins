@@ -147,7 +147,7 @@ class RAPAV
         // if something remains it should be a mistake
         if ($formula != '')
         {
-            $errcode = " Erreur dans la formule " . $formula;
+            $errcode = _(" Erreur dans la formule ") . $formula;
             return 1;
         }
         return 0;

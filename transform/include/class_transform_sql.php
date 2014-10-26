@@ -25,12 +25,12 @@
  * @brief Manage the tables of  transform schema
  *
  */
-require_once('class_phpcompta_sql.php');
+require_once('class_noalyss_sql.php');
 
 /**
  * @brief Manage the table transform.request
  */
-class Transform_Request_SQL extends Phpcompta_SQL
+class Transform_Request_SQL extends Noalyss_SQL
 {
 
     //------ Attributes-----
@@ -87,7 +87,7 @@ class Transform_Request_SQL extends Phpcompta_SQL
 /**
  * @brief Manage the table transform.intervat_representative
  */
-class Intervat_Representative_SQL extends Phpcompta_SQL
+class Intervat_Representative_SQL extends Noalyss_SQL
 {
 
     //------ Attributes-----
@@ -164,7 +164,7 @@ class Intervat_Representative_SQL extends Phpcompta_SQL
 /**
  * @brief Manage the table transform.intervat_declarant
  */
-class Intervat_Declarant_SQL extends Phpcompta_SQL
+class Intervat_Declarant_SQL extends Noalyss_SQL
 {
 
     //------ Attributes-----
@@ -237,7 +237,7 @@ class Intervat_Declarant_SQL extends Phpcompta_SQL
 /**
  * @brief Manage the table transform.intervat_client
  */
-class Intervat_Client_SQL extends Phpcompta_SQL
+class Intervat_Client_SQL extends Noalyss_SQL
 {
 
     //------ Attributes-----

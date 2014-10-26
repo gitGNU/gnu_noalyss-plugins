@@ -62,7 +62,7 @@ function display_material(dossier_id,f_id,plugin_code,target)
      {
             sx=document.body.scrollTop+120;
      }
-    var str_style="top:"+sx+"px;width:60%;height:auto";
+    var str_style="top:"+sx+"px;width:70%;height:auto";
 
     var div={id:target, cssclass:'inner_box',style:str_style,html:loading(),drag:1};
 

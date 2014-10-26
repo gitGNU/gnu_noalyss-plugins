@@ -28,7 +28,7 @@
 global $version_plugin;
 $version_plugin = SVNINFO;
 Extension::check_version(5506);
-require_once 'class_phpcompta_sql.php';
+require_once 'class_noalyss_sql.php';
 require_once 'rapav_constant.php';
 require_once 'class_impress.php';
 if ($cn->exist_schema('rapport_advanced') == false )

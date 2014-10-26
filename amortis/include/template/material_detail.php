@@ -1,3 +1,23 @@
+<?php
+/*
+ * Copyright 2010 De Bontridder Dany <dany@alchimerys.be>
+ *   This file is part of NOALYSS.
+ *
+ *   NOALYSS is free software; you can redistribute it and/or modify
+ *   it under the terms of the GNU General Public License as published by
+ *   the Free Software Foundation; either version 2 of the License, or
+ *   (at your option) any later version.
+ *
+ *   NOALYSS is distributed in the hope that it will be useful,
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *   GNU General Public License for more details.
+ *
+ *   You should have received a copy of the GNU General Public License
+ *   along with NOALYSS; if not, write to the Free Software
+ *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+*/
+?>
 <h2 class="title">Modification de matériel</h2>
 <form onsubmit="save_modify(this);return false">
 <?php echo $p_card?>
@@ -103,11 +123,18 @@ for ($i=0;$i<count($array);$i++):
 	echo td($pj->input());
 
 	if ( $x[0]['jr_internal'] != '' ) {
-	$jr_id=$cn->get_value('select jr_id from jrn where jr_internal=$1',array($x[0]['jr_internal']));
-	echo td(HtmlInput::detail_op($jr_id,$x[0]['jr_internal']));
+            $jr_id=$cn->get_value('select jr_id from jrn where jr_internal=$1',array($x[0]['jr_internal']));
+            /**
+             * @todo : ajout bouton enleve -> ajax
+             */
+            echo td(HtmlInput::detail_op($jr_id,$x[0]['jr_internal']));
+            
+            
 	} else {
-	echo td();
-	}
+	 $concerne=new IConcerned('op_concerne['.$array[$i]->ad_id.']');
+         $concerne->amount_id=$array[$i]->ad_amount;
+         echo '<td>'.$concerne->input().'</td>';
+        }
 	}
 	echo td($pct->input() );
 	?>

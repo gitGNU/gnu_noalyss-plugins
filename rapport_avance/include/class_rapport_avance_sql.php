@@ -26,9 +26,9 @@
  * @brief handle the data: database level
  *
  */
-require_once 'class_phpcompta_sql.php';
+require_once 'class_noalyss_sql.php';
 
-class formulaire_param_sql extends Phpcompta_SQL
+class formulaire_param_sql extends Noalyss_SQL
 {
 
     function __construct($p_id = -1)
@@ -68,7 +68,7 @@ class formulaire_param_sql extends Phpcompta_SQL
 
 }
 
-class formulaire_sql extends Phpcompta_SQL
+class formulaire_sql extends Noalyss_SQL
 {
 
     function __construct($p_id = -1)
@@ -108,7 +108,7 @@ class formulaire_sql extends Phpcompta_SQL
 
 }
 
-class Formulaire_Param_Detail_SQL extends Phpcompta_SQL
+class Formulaire_Param_Detail_SQL extends Noalyss_SQL
 {
 
     function __construct($p_id = -1)
@@ -162,7 +162,7 @@ class Formulaire_Param_Detail_SQL extends Phpcompta_SQL
 
 }
 
-class RAPAV_Declaration_SQL extends Phpcompta_SQL
+class RAPAV_Declaration_SQL extends Noalyss_SQL
 {
 
     function __construct($p_id = -1)
@@ -216,7 +216,7 @@ class RAPAV_Declaration_SQL extends Phpcompta_SQL
 
 }
 
-class RAPAV_Declaration_Row_SQL extends Phpcompta_SQL
+class RAPAV_Declaration_Row_SQL extends Noalyss_SQL
 {
 
     function __construct($p_id = -1)
@@ -259,7 +259,7 @@ class RAPAV_Declaration_Row_SQL extends Phpcompta_SQL
 
 }
 
-class RAPAV_Declaration_Row_Detail_SQL extends Phpcompta_SQL
+class RAPAV_Declaration_Row_Detail_SQL extends Noalyss_SQL
 {
 
     function __construct($p_id = -1)
@@ -291,7 +291,7 @@ class RAPAV_Declaration_Row_Detail_SQL extends Phpcompta_SQL
 
 }
 
-class RAPAV_Listing_SQL extends Phpcompta_SQL
+class RAPAV_Listing_SQL extends Noalyss_SQL
 {
     var $l_id;
     var $l_description;
@@ -336,7 +336,7 @@ class RAPAV_Listing_SQL extends Phpcompta_SQL
 
 }
 
-class RAPAV_Listing_Param_SQL extends Phpcompta_SQL
+class RAPAV_Listing_Param_SQL extends Noalyss_SQL
 {
     /*
      *  operation_pcm_val,with_tmp_val,tmp_val,date_paid,jrn_def_id,type_sum_account,type_detail,tt_id,jrn_def_type,fp_signed,fp_formula,tva_id,lp_with_card,lp_card_saldo,ad_id,l_order,l_card,lp_comment,lp_code,l_id,lp_id
@@ -410,7 +410,7 @@ class RAPAV_Listing_Param_SQL extends Phpcompta_SQL
 /**
  * @brief Manage the table rapport_advanced.listing_compute
  */
-class RAPAV_Listing_Compute_SQL extends Phpcompta_SQL
+class RAPAV_Listing_Compute_SQL extends Noalyss_SQL
 {
 
     //------ Attributes-----
@@ -474,7 +474,7 @@ class RAPAV_Listing_Compute_SQL extends Phpcompta_SQL
 /**
  * @brief Manage the table rapport_advanced.listing_compute_fiche
  */
-class RAPAV_Listing_Compute_Fiche_SQL extends Phpcompta_SQL
+class RAPAV_Listing_Compute_Fiche_SQL extends Noalyss_SQL
 {
 
     //------ Attributes-----
@@ -556,12 +556,12 @@ class RAPAV_Listing_Compute_Fiche_SQL extends Phpcompta_SQL
 
   @endcode
  */
-require_once('class_phpcompta_sql.php');
+require_once('class_noalyss_sql.php');
 
 /**
  * @brief Manage the table rapport_advanced.listing_compute_detail
  */
-class RAPAV_Listing_Compute_Detail_SQL extends Phpcompta_SQL
+class RAPAV_Listing_Compute_Detail_SQL extends Noalyss_SQL
 {
 
     //------ Attributes-----
@@ -632,7 +632,7 @@ class RAPAV_Listing_Compute_Detail_SQL extends Phpcompta_SQL
 /**
  * @brief Manage the table rapport_advanced.listing_compute_historique
  */
-class RAPAV_Listing_Compute_Historique_SQL extends Phpcompta_SQL
+class RAPAV_Listing_Compute_Historique_SQL extends Noalyss_SQL
 {
 
     //------ Attributes-----
