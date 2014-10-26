@@ -18,7 +18,7 @@
 */
 /* $Revision$ */
 
-// Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
+// Copyright (c) 2002 Author Dany De Bontridder dany@alchimerys.be
 
 /*!\file
  * \brief select the mat. to amortize, the ledger and the year

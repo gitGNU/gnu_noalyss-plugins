@@ -18,7 +18,7 @@
  *   02111-1307 USA /
 /* $Revision$ */
 
-// Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
+// Copyright (c) 2002 Author Dany De Bontridder dany@alchimerys.be
 
 /*!\file
  * \brief save the modification for a material

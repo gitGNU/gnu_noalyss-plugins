@@ -16,7 +16,7 @@
  *   along with NOALYSS; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
-// Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
+// Copyright (c) 2002 Author Dany De Bontridder dany@alchimerys.be
 require_once 'class_acc_ledger_sold_generate.php';
 $ledger = new Acc_Ledger_Sold_Generate($cn, -1);
 $_GET['ledger_type'] = 'VEN';

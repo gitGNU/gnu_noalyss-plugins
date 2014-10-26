@@ -18,7 +18,7 @@
  */
 /* $Revision$ */
 
-// Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
+// Copyright (c) 2002 Author Dany De Bontridder dany@alchimerys.be
 require_once('class_iselect.php');
 require_once 'class_sort_table.php';
 

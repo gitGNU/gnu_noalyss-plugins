@@ -19,7 +19,7 @@
  */
 /* $Revision$ */
 
-// Copyright Author Dany De Bontridder ddebontridder@yahoo.fr
+// Copyright (c) 2002 Author Dany De Bontridder dany@alchimerys.be
 
 /**\file
  * \brief this class manages the installation and the patch of the plugin
