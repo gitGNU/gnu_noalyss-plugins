@@ -1,0 +1,36 @@
+
+# /
+
+# /doc/modop/
+/doc/modop/.Doxyfile.swp
+
+# /doc/tva/
+/doc/tva/.Doxyfile.swp
+
+# /import_account/doc/
+/import_account/doc/.~lock.import-donnee-fiche.ods#
+/import_account/doc/.~lock.import-donnee-dolibarr test.ods#
+/import_account/doc/.~lock.import-donnee-dolibarr.ods#
+/import_account/doc/.~lock.import-donnee-dolibarr test.csv#
+/import_account/doc/.~lock.import_doli.odt#
+
+# /import_doli/doc/
+/import_doli/doc/.~lock.import-donnee-fiche.ods#
+/import_doli/doc/.~lock.import-donnee-dolibarr test.ods#
+/import_doli/doc/.~lock.import-donnee-dolibarr.ods#
+/import_doli/doc/.~lock.import-donnee-dolibarr test.csv#
+/import_doli/doc/.~lock.import_doli.odt#
+/import_doli/doc/.~lock.fiche.csv#
+
+# /rapport_avance/
+/rapport_avance/.a.kate-swp
+
+# /rapport_avance/doc/
+/rapport_avance/doc/.~lock.rapav.odt#
+/rapport_avance/doc/.~lock.rapav-listing-code.odt#
+/rapport_avance/doc/.~lock.test-listing.odt#
+
+# /rapport_avance/sql/
+/rapport_avance/sql/.2-listing_compute.sql.kate-swp
+/rapport_avance/sql/.2-listing_compute_detail.sql.kate-swp
+/rapport_avance/sql/.2-listing_compute_fiche.sql.kate-swp
