@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<ns2:ClientListingConsignment xmlns:ns2="http://www.minfin.fgov.be/ClientListingConsignment" xmlns="http://www.minfin.fgov.be/InputCommon" ClientListingsNbr="1">
+  <ns2:ClientListing VATAmountSum="12877.2000" TurnOverSum="61320.0000" ClientsNbr="2" SequenceNumber="1">
+    <ns2:Declarant>
+      <VATNumber>0477815466</VATNumber>
+      <Name>Alchimerys sprl</Name>
+      <Street>Allée des moutons</Street>
+      <PostCode>1020</PostCode>
+      <City>Laeken</City>
+      <CountryCode>BE</CountryCode>
+      <EmailAddress>dany@alchimerys.be</EmailAddress>
+      <Phone>024694830</Phone>
+    </ns2:Declarant>
+    <ns2:Period>2009</ns2:Period>
+    <ns2:Client SequenceNumber="1">
+      <ns2:CompanyVATNumber issuedBy="BE">0884986032</ns2:CompanyVATNumber>
+      <ns2:TurnOver>120.0000</ns2:TurnOver>
+      <ns2:VATAmount>25.2000</ns2:VATAmount>
+    </ns2:Client>
+    <ns2:Client SequenceNumber="2">
+      <ns2:CompanyVATNumber issuedBy="BE">0466378968</ns2:CompanyVATNumber>
+      <ns2:TurnOver>61200.0000</ns2:TurnOver>
+      <ns2:VATAmount>12852.0000</ns2:VATAmount>
+    </ns2:Client>
+    <ns2:Comment></ns2:Comment>
+  </ns2:ClientListing>
+</ns2:ClientListingConsignment>
