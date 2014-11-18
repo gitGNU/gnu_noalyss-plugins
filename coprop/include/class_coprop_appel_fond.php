@@ -132,14 +132,14 @@ class Coprop_Appel_Fond
         bcscale(4);
         try
         {
-            // req bud_pct <= 1 && bud_pct > 0
-            if ($p_array['bud_pct'] > 1 || $p_array['bud_pct']<0 ) throw new Exception ('Pourcentage incorrect');
+            // req bud_pct <= 100 && bud_pct > 0
+            if ($p_array['bud_pct'] > 100 || $p_array['bud_pct']<0 ) throw new Exception ('Pourcentage incorrect');
             // req date valide
             if ( isDate($p_array['p_date'])==null) throw new Exception('La date est invalide');
 
             $this->type="budget";
             $this->b_id=$p_array['b_id'];
-            $this->af_percent=$p_array['bud_pct'];
+            $this->af_percent=$p_array['bud_pct']/100;
             $this->af_ledger=$p_array['p_jrn'];
             $this->af_date=$p_array['p_date'];
             $fiche=new Fiche($cn);

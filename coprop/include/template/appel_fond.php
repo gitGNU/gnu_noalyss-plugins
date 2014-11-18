@@ -66,7 +66,7 @@ appel de fond par <?php echo $appel_fond_type->input()?>
 			Pourcentage du budget
 		</td>
 		<td>
-			<?php echo $budget_pct->input()?>
+			<?php echo $budget_pct->input()?>%
 		</td>
 	</tr>
 </table>
