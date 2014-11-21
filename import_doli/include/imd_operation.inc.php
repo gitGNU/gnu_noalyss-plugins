@@ -33,7 +33,7 @@ if ( ! isset ($_POST['upload']) && ! isset ($_POST['check']) && ! isset($_POST['
 {
 	require_once 'template/upload_operation.php';
 
-	exit();
+	return;
 }
 // step 2 save file into impdol.operation
 if ( isset ($_POST['upload']))
