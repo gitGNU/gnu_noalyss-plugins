@@ -74,7 +74,7 @@ try {
 
   echo Ext_List_Assujetti::choose_periode();
   echo '</div>';
-  exit();
+  return;
   }
 require_once('form_periode.php');
 echo '<form class="print" method="post">';

@@ -82,7 +82,7 @@ try {
   echo '<div class="content" style="width:80%;margin-left:10%">';
   echo Ext_Tva::choose_periode();
   echo '</div>';
-  exit();
+  return;
   }
 require_once('form_periode.php');
 echo '<form class="print" method="post">';

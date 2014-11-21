@@ -94,7 +94,7 @@ try {
 
   echo Ext_List_Intra::choose_periode();
   echo '</div>';
-  exit();
+  return;
   }
 
 require_once('form_periode.php');
