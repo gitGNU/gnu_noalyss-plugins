@@ -42,7 +42,7 @@ class Transform_Request_SQL extends Noalyss_SQL
 
     /* example private $variable=array("easy_name"=>column_name,"email"=>"column_name_email","val3"=>0); */
 
-    function __construct($p_id = -1)
+    function __construct($p_id = null)
     {
 
 
@@ -106,7 +106,7 @@ class Intervat_Representative_SQL extends Noalyss_SQL
 
     /* example private $variable=array("easy_name"=>column_name,"email"=>"column_name_email","val3"=>0); */
 
-    function __construct($p_id = -1)
+    function __construct($p_id = null)
     {
 
 
@@ -182,7 +182,7 @@ class Intervat_Declarant_SQL extends Noalyss_SQL
 
     /* example private $variable=array("easy_name"=>column_name,"email"=>"column_name_email","val3"=>0); */
 
-    function __construct($p_id = -1)
+    function __construct($p_id = null)
     {
 
 
@@ -251,7 +251,7 @@ class Intervat_Client_SQL extends Noalyss_SQL
 
     /* example private $variable=array("easy_name"=>column_name,"email"=>"column_name_email","val3"=>0); */
 
-    function __construct($p_id = -1)
+    function __construct($p_id = null)
     {
 
 
