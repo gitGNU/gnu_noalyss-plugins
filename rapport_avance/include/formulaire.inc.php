@@ -48,7 +48,7 @@ if ( isset($_POST['form_def_sub']))
 			//throw $exc;
 		}
 		require_once 'formulaire_definition_show.inc.php';
-		exit();
+		return;
 	}
 }
 if (isset ($_POST['add_form']))

@@ -25,7 +25,7 @@
             echo '<p>';
             $new->button_add_param();
             echo '</p>';
-            exit();
+            return;
         } else
             $new->delete($_POST);
     }

@@ -61,7 +61,7 @@ if (isset($_POST['save']))
     echo HtmlInput::button_anchor("Export CSV", $ref_csv, 'export_id', "", 'small_button');
     if ($decl->d_filename != '' && $decl->d_step == 0)
         echo $decl->anchor_document();
-    exit();
+    return;
 }
 /*
  * compute and propose to modify and save
@@ -81,7 +81,7 @@ if (isset($_GET['compute']))
         $decl->display();
         echo HtmlInput::submit('save', 'Sauver');
         echo '</form>';
-        exit();
+        return;
     }
 }
 /**
@@ -110,7 +110,7 @@ if (isset($_GET['generate_document']))
     {
         $listing->propose_download_all();
     }
-    exit();
+    return;
 }
 /**
  * Save listing now you can export them to csv and generate file if any
@@ -140,7 +140,7 @@ if (isset($_POST['save_listing']))
     {
         $listing->propose_next();
     }
-    exit();
+    return;
 }
 /*
  * compute listing
@@ -164,7 +164,7 @@ if (isset($_GET['compute_listing']))
         $listing->display(true, 'select_card_frm');
         echo HtmlInput::submit('save_listing', 'Sauver la sélection');
         echo '</form>';
-        exit();
+        return;
     }
 }
 /*
