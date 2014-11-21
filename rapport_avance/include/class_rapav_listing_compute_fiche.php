@@ -639,7 +639,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         
         $action->fromArray($p_array);
         
-        $action->f_id_dest=$this->f_id;
+        $action->f_id=$this->f_id;
         $fiche = new Fiche($cn, $this->f_id);
         $action->qcode_dest=$fiche->strAttribut(ATTR_DEF_QUICKCODE);
         $_POST['nb_item']=0;
