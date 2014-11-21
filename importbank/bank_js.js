@@ -16,9 +16,8 @@ function reconcilie(target,dossier_id,p_id,plugin_code)
 	removeDiv(target);
     }
     var sx=calcy(120);
-    var height=0;
     
-    var str_style="top:"+sx+"px;margin-left:10%;";
+    var str_style="top:"+sx+"px;";
 
     var div={id:target, cssclass:'inner_box',style:str_style,html:loading(),drag:1};
 
