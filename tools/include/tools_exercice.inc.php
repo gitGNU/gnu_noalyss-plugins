@@ -36,7 +36,7 @@ if (isset ($_POST['save']))
 		$exercice->fromPost();
 		$exercice->save();
 		printf (_("%s Vous avez ajouté %d mois depuis le %d/%d pour l'exercice %d "),$g_succeed,$_POST['nb_month'],$_POST['from_month'],$_POST['year'],$_POST['p_exercice']);
-		exit();
+		return;
 	}
 	catch (Exception $e)
 	{
