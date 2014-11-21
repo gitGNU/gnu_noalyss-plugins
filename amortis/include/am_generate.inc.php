@@ -45,7 +45,7 @@ if (isset($_POST['generate']))
 			echo $am->input($_POST);
 			echo '</div>';
 		}
-		exit();
+		return;
 	}
 	catch (Exception $e)
 	{
@@ -78,7 +78,7 @@ if (isset($_POST['save']))
 
 		echo '</div>';
 		$cn->commit();
-		exit();
+		return;
 	}
 	catch (Exception $e)
 	{
