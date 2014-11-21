@@ -41,7 +41,7 @@ class  Tva_Parameter
       return $this->$idx;
     }
     else
-      exit (__FILE__.":".__LINE__.$p_string.' Erreur attribut inexistant');
+      throw new Exception("Attribut inexistant $p_string");
   }
   public function set_parameter($p_string,$p_value) {
     if ( array_key_exists($p_string,self::$variable) ) {
@@ -49,7 +49,7 @@ class  Tva_Parameter
       $this->$idx=$p_value;
     }
     else
-      exit (__FILE__.":".__LINE__.$p_string.' Erreur attribut inexistant');
+     throw new Exception("Attribut inexistant $p_string");
 
 
   }
