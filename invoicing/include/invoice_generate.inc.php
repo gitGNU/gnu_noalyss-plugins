@@ -57,7 +57,7 @@ require_once 'class_acc_ledger_sold_generate.php';
         <?php
         } else {
             echo _('Aucun modèle');
-            exit();
+            return;
         }
     }
     ?>

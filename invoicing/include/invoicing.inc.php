@@ -44,7 +44,7 @@ if ($request <> -2)
                 require('invoice_send_mail_route.inc.php');
                 break;
         }
-        exit();
+        return;
     }
 }
 echo $ledger->display_search_form();
