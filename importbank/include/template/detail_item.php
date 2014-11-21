@@ -5,7 +5,6 @@
 
 <div id="<?php echo $ctl?>">
 <?php echo HtmlInput::anchor_close($ctl)?>
-
 <?php
 echo h2('Détail opération','class="title"');
 	if ($bi->id=='')
