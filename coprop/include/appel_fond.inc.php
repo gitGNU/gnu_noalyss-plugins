@@ -56,7 +56,7 @@ if (isset($calc))
 		$appel_fond->display_ledger();
 
 
-		exit();
+		return;
 	}
 	catch (Exception $e)
 	{
@@ -88,7 +88,7 @@ if (isset($_POST['correct']))
 	echo "<script>checkTotalDirect();</script>";
 	echo '</div>';
 
-	exit();
+	return;
 }
 // save
 if (isset($_POST['confirm']))
@@ -106,13 +106,13 @@ if (isset($_POST['confirm']))
 		$appel_fond->id = $_POST['af_id'];
 		$appel_fond->jr_internal=$ledger->internal;
 		$appel_fond->confirm();
-		exit();
+		return;
 	}
 	catch (Exception $e)
 	{
 		alert($e->getMessage());
 
-		exit();
+		return;
 	}
 }
 // Montre écran confirmation
@@ -131,7 +131,7 @@ if (isset($_GET['save']))
 		echo HtmlInput::submit('confirm', 'Confirmer');
 		echo HtmlInput::submit('correct', 'Corriger');
 		echo '</form>';
-		exit();
+		return;
 	}
 	catch (Exception $e)
 	{
@@ -156,7 +156,7 @@ if (isset($_GET['save']))
 		_('Difference') . ' = <span id="totalDiff"></span></div> ';
 		echo "<script>checkTotalDirect();</script>";
 		echo '</div>';
-		exit();
+		return;
 	}
 }
 
