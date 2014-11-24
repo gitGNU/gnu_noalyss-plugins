@@ -81,9 +81,8 @@ class Coprop_Appel_Fond
                 $afd->key_tantieme=$key->cr_tantieme;
                 $afd->lot_tantieme=$a_lot[$i]['crd_amount'];
 
-                $fract=  bcdiv($a_lot[$i]['crd_amount'],$key->cr_tantieme);
-
-                $afd->afd_amount=  bcmul($fract,$p_amount);
+                $temp=  bcmul($a_lot[$i]['crd_amount'],$p_amount);
+                $afd->afd_amount=  bcdiv($temp,$key->cr_tantieme);
 
                 if ( $afd->afd_amount != 0 )$afd->insert();
 
@@ -133,14 +132,14 @@ class Coprop_Appel_Fond
         bcscale(4);
         try
         {
-            // req bud_pct <= 1 && bud_pct > 0
-            if ($p_array['bud_pct'] > 1 || $p_array['bud_pct']<0 ) throw new Exception ('Pourcentage incorrect');
+            // req bud_pct <= 100 && bud_pct > 0
+            if ($p_array['bud_pct'] > 100 || $p_array['bud_pct']<0 ) throw new Exception ('Pourcentage incorrect');
             // req date valide
             if ( isDate($p_array['p_date'])==null) throw new Exception('La date est invalide');
 
             $this->type="budget";
             $this->b_id=$p_array['b_id'];
-            $this->af_percent=$p_array['bud_pct'];
+            $this->af_percent=$p_array['bud_pct']/100;
             $this->af_ledger=$p_array['p_jrn'];
             $this->af_date=$p_array['p_date'];
             $fiche=new Fiche($cn);
