@@ -65,6 +65,8 @@ class Bank_Item
 	$wConcerned->label=_('op. concernée');
 	$wConcerned->table=0;
 	$wConcerned->value=$bi->tp_rec;
+        $wConcerned->tiers=$w->name;
+        
 	$name='';$status='';
 	if ( $bi->f_id != null)
 	  {
