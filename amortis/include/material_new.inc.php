@@ -30,9 +30,16 @@ require_once('class_am_card.php');
  */
 $ac=new Am_Card();
 $ac->from_array($_REQUEST);
-$ac->add();
-
-/*
- * show the div to modify it
- */
-$ac->input();
+$err=$ac->verify_post() ;
+if ( $err == "")  {
+    
+    $ac->add();
+    /*
+     * show the div to modify it
+     */
+    $ac->input();
+} else {
+    include 'material_add.inc.php';
+    $err=str_replace("\n", "<br>", $err);
+    echo '<span class="error">'.$err.'</div>';
+}

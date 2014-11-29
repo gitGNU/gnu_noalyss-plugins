@@ -249,4 +249,36 @@ end;
   $this->cn->exec_sql("insert into amortissement.version values (1)");
   $this->cn->commit();
   }
+  /**
+   * Upgrade schema amortissement
+   * @param type $p_dest
+   */
+  function upgrade($p_dest)
+  {
+      $this->cn->start();
+      try {
+      if ( $p_dest == 2 ) {
+          
+          $add_column = "alter table amortissement.amortissement add card_deb bigint";
+          $add_fk="alter table amortissement.amortissement add constraint  card_deb_fk foreign key (card_deb) references public.fiche(f_id) on update cascade on delete set null";
+          $add_comment =" comment on column amortissement.amortissement.card_deb is 'Charge d''amortissement' ";
+          $this->cn->exec_sql($add_column);
+          $this->cn->exec_sql($add_fk);
+          $this->cn->exec_sql($add_comment);
+          
+          $add_column = "alter table amortissement.amortissement add card_cred bigint";
+          $add_fk="alter table amortissement.amortissement add constraint  card_cred_fk foreign key (card_cred) references public.fiche(f_id) on update cascade on delete set null";
+          $add_comment =" comment on column amortissement.amortissement.card_cred is 'Poste amorti' ";
+          
+          $this->cn->exec_sql($add_column);
+          $this->cn->exec_sql($add_fk);
+          $this->cn->exec_sql($add_comment);
+
+          $this->cn->exec_sql(' insert into amortissement.version values(2)');
+          $this->cn->commit();
+      }
+      } catch (Exception $e) {
+          $this->cn->rollback;
+      }
+  }
 }

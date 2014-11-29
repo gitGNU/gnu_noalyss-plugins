@@ -80,13 +80,16 @@ switch($op)
     break;
 
   }
-
-$html=escape_xml($html);
-
-header('Content-type: text/xml; charset=UTF-8');
-echo '<?xml version="1.0" encoding="UTF-8"?>';
-echo '<data>';
-echo '<ctl>'.$ctl.'</ctl>';
-echo '<code>'.$html.'</code>';
-echo '<extra>'.$extra.'</extra>';
-echo '</data>';
+$xml=escape_xml($html);
+if (headers_sent()) {
+    echo $html;
+} else 
+{
+    header('Content-type: text/xml; charset=UTF-8');
+    echo '<?xml version="1.0" encoding="UTF-8"?>';
+    echo '<data>';
+    echo '<ctl>'.$ctl.'</ctl>';
+    echo '<code>'.$xml.'</code>';
+    echo '<extra>'.$extra.'</extra>';
+    echo '</data>';
+}

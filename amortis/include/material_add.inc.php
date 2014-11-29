@@ -38,6 +38,9 @@ if ( $list == '')
   }
 else 
   {
+    $p_date->value=HtmlInput::default_value_post('p_date',"");
+    $p_year->value=HtmlInput::default_value_post('p_year',"");
+    $p_number->value=HtmlInput::default_value_post('p_number',"");
 
     $p_card->set_attribute('typecard',$list);
     $p_card->set_attribute('label','p_card_label');
@@ -45,20 +48,48 @@ else
 			       $p_card->name);
     $p_card->set_function('fill_data');
     $p_card->set_dblclick("fill_ipopcard(this);");
+    $p_card->value=HtmlInput::default_value_post('p_card','');
     
     $p_deb=new IPoste('p_deb');
     $p_deb->set_attribute('jrn',0);
     $p_deb->set_attribute('account','p_deb');
     $p_deb->set_attribute('label','p_deb_label');
     $deb_span=new ISpan('p_deb_label');
+    $p_deb->value=HtmlInput::default_value_post('p_deb','');
     
     $p_cred=new IPoste('p_cred');
     $p_cred->set_attribute('jrn',0);
     $p_cred->set_attribute('account','p_cred');
     $p_cred->set_attribute('label','p_cred_label');
+    $p_cred->value=HtmlInput::default_value_post('p_cred','');
+    
     $cred_span=new ISpan('p_cred_label');
     
     $p_amount=new INum('p_amount');
+    $p_amount->value=HtmlInput::default_value_post('p_amount','');
     
+    $p_card_deb=new ICard('p_card_deb');
+    $p_card_deb->typecard = "all";
+    $p_card_deb->value=HtmlInput::default_value_post('p_card_deb','');
+    
+    $p_card_cred=new ICard('p_card_cred');
+    $p_card_cred->set_attribute('typecard'," select fd_id from fiche_def where frd_id=".FICHE_TYPE_MATERIAL);
+    $p_card_cred->value=HtmlInput::default_value_post('p_card_cred','');
+    
+    $select_type=new ISelect('type');
+    $select_type->id='select_type_id';
+    $select_type->value=array(array('label'=>'--Faites un choix --','value'=>-1),
+        array('label'=>'Poste comptable','value'=>'0'),
+        array('label'=>'Fiche','value'=>'1')
+        );
+    
+    $select_type->selected=HtmlInput::default_value_post('type','-1');
+    
+    $select_type->javascript=' onchange = "show_selected_material(this);"';
     require_once ('template/material_add.php');
   }
+  ?>
+<script>
+show_selected_material($('select_type_id'));
+
+</script>

@@ -43,15 +43,36 @@
 	<td> <?php echo $p_year->input();?></td>
 </tr>
 <tr>
+    <td>
+        Poste comptable ou fiche
+    </td>
+    <td>
+    <?php echo $select_type->input(); ?>
+    </td>
+</tr>
+<tr id="deb_use_account_tr_id">
 	<td>Poste de charge dotations amortissement (débit)</td>
-	<td><?php echo $p_deb->input()?></td>
+	<td><?php echo $p_deb->input(); ?></td>
 	<td><?php echo $deb_span->input()?></td>
 </tr>
-<tr>
+<tr id="cred_use_account_tr_id">
 	<td>Poste amortissement en contrepartie</td>
 	<td><?php echo $p_cred->input();?></td>
 	<td><?php echo $cred_span->input();?></td>
 </tr>
+<tr id="deb_use_card_tr_id">
+	<td>Fiche de charge pour amortissement (déb) </td>
+	<td><?php echo $p_card_deb->input()?><?php echo $p_card_deb->search()?></td>
+</tr>
+<tr id="cred_use_card_tr_id">
+	<td>Fiche amortissement en contrepartie</td>
+	<td><?php echo $p_card_cred->input();?><?php echo $p_card_cred->search()?></td>
+</tr>
+<tr>
+	<td>Nombre d'années amortissement</td>
+	<td><?php echo $p_number->input()?></td>
+</tr>
+
 <tr>
 	<td>Nombre d'années amortissement (non modifiable)</td>
 	<td><?php echo $p_number->input()?></td>
@@ -164,3 +185,7 @@ if ( $annuite !=  $p_amount->value)
 
 ?>
 </FORM>
+<script>
+show_selected_material($('select_type_id'));
+
+</script>

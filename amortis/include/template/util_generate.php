@@ -72,17 +72,18 @@ Cochez ce qu'il faut amortir
  * get all the material
  */
 $am=new Amortissement_Sql($cn);
-$array=$am->seek ("where a_visible='Y' ");
-for ( $i =0;$i<count($array);$i++):
-	echo HtmlInput::hidden('a_id[]',$array[$i]->a_id);
+$ret=$am->seek ("where a_visible='Y' ");
+for ( $i =0;$i<Database::num_row($ret);$i++):
+        $array=$am->next($ret,$i);
+	echo HtmlInput::hidden('a_id[]',$array->a_id);
 	$ck=new ICheckBox('p_ck'.$i);
-	$fiche=new Fiche($cn,$array[$i]->f_id);
+	$fiche=new Fiche($cn,$array->f_id);
 
 ?>
 <tr>
 <?php 
 if ( isset($_POST['p_ck'.$i])) $ck->selected=true;else $ck->selected=false;
- $view=detail_material($array[$i]->f_id,$fiche->get_quick_code());
+ $view=detail_material($array->f_id,$fiche->get_quick_code());
 ?>
 	<td><?php echo $ck->input()?></td>
 	<td><?php echo $view?></td>

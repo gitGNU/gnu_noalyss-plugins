@@ -51,8 +51,9 @@ switch($sb)
     $def=3;
     break;
   }
-
-echo ShowItem($menu,'H','mtitle ','mtitle ',$def,' style="width:40%;margin-left:10%;border-collapse: separate;border-spacing:  5px;"');
+echo '<div class="menu2">';
+echo ShowItem($menu,'H','mtitle ','mtitle ',$def,' class="mtitle" ');
+echo '</div>';
 
 /* List + add and modify card */
 if ($def==1)

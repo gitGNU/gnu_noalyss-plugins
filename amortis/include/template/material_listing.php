@@ -38,20 +38,20 @@ Filtre <?php echo HtmlInput::infobulle(400)?> <?php echo HtmlInput::filter_table
 
 <?php 
 bcscale(2);
-for ($i =0 ;$i < count($ret);$i++) :
-
+for ($i =0 ;$i < Database::num_row($ret);$i++) :
   echo '<tr>';
-	$fiche=new Fiche($cn,$ret[$i]->f_id);
+        $row=$amort->next($ret,$i);
+	$fiche=new Fiche($cn,$row->f_id);
 
-        $detail=detail_material($ret[$i]->f_id,$fiche->strAttribut(ATTR_DEF_QUICKCODE));
+        $detail=detail_material($row->f_id,$fiche->strAttribut(ATTR_DEF_QUICKCODE));
         echo td($detail);
 	echo td($fiche->strAttribut(ATTR_DEF_NAME));
 	// <td sorttable_customkey="<?php echo $row_bank['b_date']
-	echo '<td sorttable_customkey="'.$ret[$i]->a_date.'">'.format_date($ret[$i]->a_date).'</td>';
-	echo td($ret[$i]->a_start);
-        echo td(nbm($ret[$i]->a_amount),' sorttable_customkey="'.$ret[$i]->a_amount.'"   "style="text-align:right"');
-        $amortized=$cn->get_value("select sum(h_amount) from amortissement.amortissement_histo where a_id=$1",array($ret[$i]->a_id));
-        $remain=bcsub($ret[$i]->a_amount,$amortized);
+	echo '<td sorttable_customkey="'.$row->a_date.'">'.format_date($row->a_date).'</td>';
+	echo td($row->a_start);
+        echo td(nbm($row->a_amount),' sorttable_customkey="'.$row->a_amount.'"   "style="text-align:right"');
+        $amortized=$cn->get_value("select sum(h_amount) from amortissement.amortissement_histo where a_id=$1",array($row->a_id));
+        $remain=bcsub($row->a_amount,$amortized);
          echo td(nbm($amortized),'sorttable_customkey="'.$amortized.'" style="text-align:right"');
          echo td(nbm($remain),'sorttable_customkey="'.$remain.'"  style="text-align:right"');
 

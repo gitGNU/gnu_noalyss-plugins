@@ -29,7 +29,7 @@ function add_material(dossier_id,plugin_code,target)
      {
             sx=document.body.scrollTop+120;
      }
-    var str_style="top:"+sx+"px;width:60%;height:70%";
+    var str_style="top:"+sx+"px;width:80%;height:70%";
 
     var div={id:target, cssclass:'inner_box',style:str_style,html:loading(),drag:1};
 
@@ -103,6 +103,7 @@ function success_save_new_material(req)
 {
     fill_box(req);
     $('bxmat').style.height='auto';
+    $('bxmat').width='80%';
 }
 function save_modify(obj)
 {
@@ -157,4 +158,14 @@ function list_csv(obj)
 				);
 
 
+}
+
+function show_selected_material(obj)
+{
+    if ( obj.value==0) { $('cred_use_account_tr_id').show();$('deb_use_account_tr_id').show();
+        $('cred_use_card_tr_id').hide();$('deb_use_card_tr_id').hide() }
+    if ( obj.value==1) { $('cred_use_account_tr_id').hide();$('deb_use_account_tr_id').hide() 
+    $('cred_use_card_tr_id').show();$('deb_use_card_tr_id').show()}
+    if ( obj.value==-1) { $('cred_use_account_tr_id').hide();$('deb_use_account_tr_id').hide() ;
+    $('cred_use_card_tr_id').hide();$('deb_use_card_tr_id').hide()}
 }

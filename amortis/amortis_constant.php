@@ -20,4 +20,5 @@ function detail_material($f_id,$p_label)
 		dossier::id(),$f_id,$_REQUEST['plugin_code'],$p_label);
   return $href;
 }
+$amortissement_version=2;
 ?>

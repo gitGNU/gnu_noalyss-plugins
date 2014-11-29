@@ -55,15 +55,11 @@ if (isset($_POST['generate']))
 
 if (isset($_POST['save']))
 {
-	$ledger = new Acc_Ledger($cn, $_POST['p_jrn']);
 	try
 	{
 		$cn->start();
-		$ledger->save($_POST);
 
-		$jr_id = $cn->get_value("select jr_id from jrn where jr_internal=$1", array($ledger->internal));
-
-		$m = $am->save($_POST, $ledger->internal);
+		$m = $am->save($_POST);
 		/*
 		 * if $m is not empty, some mat. were already encoded
 		 */
@@ -71,13 +67,19 @@ if (isset($_POST['save']))
 		{
 			throw new Exception($m);
 		}
+		$cn->commit();
 		echo '<div class="content" style="width:80%;margin-left:10%">';
 
-		$p_mesg = "Opération sauvée : " . $ledger->internal;
-		echo sprintf('<A class="detail" style="display:inline;text-decoration:underline" HREF="javascript:modifyOperation(%d,%d)">%s</A>', $jr_id, dossier::id(), $p_mesg);
-
+		echo  h2("Opération sauvée") ;
+                echo '<ol>';
+                for ($i=0;$i < count($am->saved_operation['desc']);$i++)
+                {
+                    echo '<li>';
+                    echo sprintf('<A class="detail" style="display:inline;text-decoration:underline" HREF="javascript:modifyOperation(%d,%d)">%s</A>', $am->saved_operation['jr_id'][$i], dossier::id(), $am->saved_operation['internal'][$i]." ".$am->saved_operation['desc'][$i]);
+                    echo '</li>';
+                }
+                echo '</ol>';
 		echo '</div>';
-		$cn->commit();
 		return;
 	}
 	catch (Exception $e)

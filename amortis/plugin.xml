@@ -44,5 +44,8 @@
         <noalyss_version>
             6723
         </noalyss_version>
+        <schema>
+            amortissement
+        </schema>
     </plugin>
 </plugins>    

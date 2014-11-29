@@ -66,9 +66,7 @@ class Am_Card
   public function from_array($p_array)
   {
     global $cn;
-    /**
-     *@todo you should first verify that all data are correct
-     */
+
     $this->amortissement=new Amortissement_Sql($cn);
     $fiche=new Fiche($cn);
     $fiche->get_by_qcode($p_array['p_card']);
@@ -81,10 +79,26 @@ class Am_Card
     $this->amortissement->a_nb_year=$p_array['p_number'];
     $this->amortissement->a_date=$p_array['p_date'];
     $this->amortissement->a_visible=(isset($p_array['p_visible']))?$p_array['p_visible']:'Y';
+    
+    if ( $p_array['type'] == 1 ) {
+        $fiche_deb=new Fiche($cn);
+        $fiche_deb->get_by_qcode($p_array['p_card_deb'],false);
+        $this->amortissement->card_deb=($fiche_deb->id != 0 ) ? $fiche_deb->id:null;
+
+        $fiche_cred=new Fiche($cn);
+        $fiche_cred->get_by_qcode($p_array['p_card_cred'],false);
+        $this->amortissement->card_cred=($fiche_cred->id != 0 ) ? $fiche_cred->id:null;
+        $this->amortissement->account_deb=null;
+        $this->amortissement->account_cred=null;
+    } else {
+         $this->amortissement->account_deb=$p_array['p_deb'];
+         $this->amortissement->account_cred=$p_array['p_cred'];
+         $this->amortissement->card_cred=null;
+         $this->amortissement->card_deb=null;
+    }
     /*
      * if details then load them
      */
-
     if ( isset($p_array['ad_id']))
       {
 	for ($i=0;$i<count($p_array['ad_id']);$i++)
@@ -165,6 +179,35 @@ class Am_Card
 
     $p_amount=new INum('p_amount');
     $p_amount->value= $this->amortissement->a_amount;
+    $select_type=new ISelect('type');
+    $select_type->id='select_type_id';
+    $select_type->value=array(array('label'=>'--Faites un choix --','value'=>-1),
+        array('label'=>'Poste comptable','value'=>'0'),
+        array('label'=>'Fiche','value'=>'1')
+        );
+    
+    $select_type->selected=HtmlInput::default_value_post('type','-1');
+    $select_type->javascript=' onchange = "show_selected_material(this);"';
+    $select_type->selected=-1;
+    if ( $this->amortissement->card_deb != '') $select_type->selected=1;
+    if ( $this->amortissement->account_deb != '') $select_type->selected=0;
+  
+    $fiche_deb=new Fiche($cn);
+    
+    $p_card_deb=new ICard('p_card_deb');
+    $p_card_deb->typecard='all';
+    $p_card_cred=new ICard('p_card_cred');
+    $p_card_cred->typecard='all';
+    if ( $this->amortissement->card_deb != '' ) 
+    {
+        $fiche_deb=new Fiche($cn,$this->amortissement->card_deb);
+        $p_card_deb->value=$fiche_deb->get_quick_code();
+    }
+    if ( $this->amortissement->card_cred != '' ) 
+    {
+        $fiche_cred=new Fiche($cn,$this->amortissement->card_cred);
+        $p_card_cred->value=$fiche_cred->get_quick_code();
+    }
     require_once('template/material_detail.php');
   }
   /**
@@ -177,20 +220,42 @@ class Am_Card
     if ( isNumber($_POST['p_year']) == null || $_POST['p_year']<1900||$_POST['p_year'] > 3000 ) $error_msg.=_('Année invalide')."\n";
     if ( isNumber($_POST['p_number']) == null || $_POST['p_number']==0)$error_msg.=_ ('Nombre annuités invalide')."\n";
     if ( isNumber($_POST['p_amount']) == null || $_POST['p_amount']==0) $error_msg.=_ ('Montant invalide')."\n";
-    if ( $_POST['p_visible'] != 'Y' && $_POST['p_visible'] != 'N') $error_msg.="Visible Y ou N\n";
-    if ( $cn->get_value('select count(*) from tmp_pcmn where pcm_val=$1',array($_POST['p_deb'])) == 0) $error_msg.=" Poste de charge incorrect"."\n";
-    if ( $cn->get_value('select count(*) from tmp_pcmn where pcm_val=$1',array($_POST['p_cred'])) == 0) $error_msg.=" Poste à créditer incorrect"."\n";
+    $visible=HtmlInput::default_value_post('p_visible','Y');
+    if ( $visible != 'Y' && $visible != 'N') $error_msg.=_("Visible Y ou N\n");
+    $_POST['p_visible']=$visible;
+    switch ( $_POST['type'] )
+    {
+        case -1:
+            $error_msg .= _('Choississez poste comptable ou fiche');
+            break;
+        case 0:
+           if ( $cn->get_value('select count(*) from tmp_pcmn where pcm_val=$1',array($_POST['p_deb'])) == 0) $error_msg.=" Poste de charge incorrect"."\n";
+           if ( $cn->get_value('select count(*) from tmp_pcmn where pcm_val=$1',array($_POST['p_cred'])) == 0) $error_msg.=" Poste à créditer incorrect"."\n";
+            break;
+        case 1:
+           if ( $cn->get_value('select j_poste from vw_poste_qcode where j_qcode=trim(upper($1))',array($_POST['p_card_deb'])) == "") $error_msg.=" Fiche de charge incorrect"."\n";
+           if ( $cn->get_value('select j_poste from vw_poste_qcode where j_qcode=trim(upper($1))',array($_POST['p_card_cred'])) == "") $error_msg.=" Fiche contrepartie incorrect"."\n";
+            break;
+    }
+    $p_new=HtmlInput::default_value_post('p_new',-1);
+    if ( $p_new != -1 ) {
+        $f_id=$cn->get_value('select f_id from vw_poste_qcode where j_qcode=trim(upper($1))',array($p_card));
+        if ( $f_id != "") {
+            if ( $cn->get_value('select count(*) from amortissement.amortissement where f_id = $1',array($f_id)) > 0 )            $error_msg.=_('Matériel déjà dans la liste');
+        }
+    }
     return $error_msg;
   }
+  
   /**
-     -   *  we save into the two tables 
-     * amortissement and amortissement_detail
-     *@see from_array
-     */
+   *  we save into the two tables 
+   * amortissement and amortissement_detail
+   *@see from_array
+   */
   public function update()
   {
     global $cn;
-
+    
     try 
       {
 	$this->amortissement->update();
@@ -258,6 +323,25 @@ class Am_Card
     $a=new Amortissement_Detail_Sql($cn);
     $p_date=$amort->a_date;
     $array=$a->seek(' where a_id=$1 order by ad_year asc',array($amort->a_id));
+    
+    $fiche_deb=new Fiche($cn);
+    
+    $p_card_deb=new ICard('p_card_deb');
+    $p_card_deb->setReadOnly(true);
+    $p_card_cred=new ICard('p_card_cred');
+    $p_card_cred->typecard='all';
+    $p_card_cred->setReadOnly(true);
+    if ( $amort->card_deb != '' ) 
+    {
+        $fiche_deb=new Fiche($cn,$amort->card_deb);
+        $p_card_deb->value=$fiche_deb->get_quick_code();
+    }
+    if ( $amort->card_cred != '' ) 
+    {
+        $fiche_cred=new Fiche($cn,$amort->card_cred);
+        $p_card_cred->value=$fiche_cred->get_quick_code();
+    }
+    
     require_once('template/material_display.php');
   }
 }

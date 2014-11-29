@@ -47,7 +47,12 @@ if ( $cn->exist_schema('amortissement') ==false )
     $plugin=new Install_Plugin($cn);
     $plugin->install();
   }
-
+if ( $cn->get_value('select max(val) from amortissement.version') < $amortissement_version )
+{
+        require_once('include/class_install_plugin.php');
+	$iplugn = new Install_Plugin($cn);
+	$iplugn->upgrade($amortissement_version);
+}
 $menu=array(
         array($url.'&sa=card','Biens amortissables','Liste des biens amortissables',1),
         array($url.'&sa=report','Rapport','rapport et  tableaux sur les biens amortissables',2),
@@ -74,7 +79,9 @@ switch($sa)
 echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=amortissement" target="_blank">Aide</a>'.
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
 '</div>';
-echo ShowItem($menu,'H','mtitle ','mtitle ',$def,' style="width:80%;margin-left:10%;border-collapse: separate;border-spacing:  5px;"');
+echo '<div class="topmenu">';
+echo ShowItem($menu,'H','mtitle ','mtitle ',$def,'class="mtitle"');
+echo '</div>';
 
 /* List + add and modify card */
 if ($def==1)
