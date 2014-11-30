@@ -453,6 +453,11 @@ function download_receipt(Database &$cn)
     mkdir($dirname);
     $cn->start();
     $feedback=array();
+    $jr_id  = HtmlInput::default_value_post('jr_id',array());
+    if (empty ($jr_id ) ) {
+        echo '<div class="notice">'._('Aucune opération sélectionnée').'</div>';
+        return;
+    }
 //--- take all the invoice
     foreach ( $_POST['jr_id'] as $value)
     {
