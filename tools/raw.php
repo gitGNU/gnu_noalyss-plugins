@@ -100,4 +100,30 @@ if ($act == 'export_operation')
         printf ("\r\n");
     }
 }
+/**
+ * Download receipt
+ */
+if ($act=='download_receipt')
+{
+    extract ($_REQUEST);
+
+    $zip_file=HtmlInput::default_value_request('file', 'null');
+    if ($zip_file=='null')
+    {
+        die('No file asked');
+    }
+
+    $zip_file=$_ENV['TMP']."/".$zip_file;
+
+    header('Pragma: public');
+    header('Content-type: application/zip');
+    header('Content-Disposition: attachment; filename="'.$file.'"');
+    $h_file=fopen($zip_file, "r");
+    if ($h_file!=true)
+    {
+        die('cannot open file');
+    }
+    $buffer=fread($h_file, filesize($zip_file));
+    echo $buffer;
+}
 ?>

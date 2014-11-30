@@ -28,6 +28,9 @@ if ( isset($_POST['chg_receipt']) )
   {
     change_receipt($cn);
   }
+if ( isset ($_POST['download_receipt'])) {
+    download_receipt($cn);
+}
 if (isset($_GET['search']))
   {
     $err=0;
@@ -43,5 +46,6 @@ if (isset($_GET['search']))
       }
     if ( $err != 0 ) return;
     display_numb_receipt();
+    display_download_receipt();
     display_result_receipt($cn);
   }

@@ -385,6 +385,10 @@ function display_result_receipt(&$cn)
 
   require_once('template/result_receipt.php');
 }
+function display_download_receipt()
+{
+    echo HtmlInput::submit('download_receipt','Télécharger');
+}
 /**
  *@brief display the prefix + from number
  *@note use the variable from $_GET
@@ -409,27 +413,89 @@ function display_numb_receipt()
  */
 function change_receipt(&$cn)
 {
-  $msg= check_jrid();
-  if( $msg != "")
+    $msg=check_jrid();
+    if ($msg!="")
     {
-      echo " <p class=\"error\">$msg</p>"; return;
+        echo " <p class=\"error\">$msg</p>";
+        return;
     }
-  $cn->prepare('update_receipt','update jrn set jr_pj_number=$1 where jr_id =$2');
-  $start=$_POST['number'];
-  $nb=1;
-  if ( trim($start) == "" || $_POST['istep']==2 ) $nb=0;
+    $cn->prepare('update_receipt', 'update jrn set jr_pj_number=$1 where jr_id =$2');
+    $start=$_POST['number'];
+    $nb=1;
+    if (trim($start)==""||$_POST['istep']==2)
+        $nb=0;
 
-  $cn->start();
-  foreach ($_POST['jr_id'] as $id)
+    $cn->start();
+    foreach ($_POST['jr_id'] as $id)
     {
-      if ( $nb == 1)
-	$pj=trim($_POST['prefix']).sprintf("%d",$start);
-      else
-	$pj=trim($_POST['prefix']);
-      if ( trim($pj) == '') $pj=null;
+        if ($nb==1)
+            $pj=trim($_POST['prefix']).sprintf("%d", $start);
+        else
+            $pj=trim($_POST['prefix']);
+        if (trim($pj)=='')
+            $pj=null;
 
-      $result_update=$cn->execute('update_receipt',array($pj,$id));
-      if ( $nb == 1)      $start++;
+        $result_update=$cn->execute('update_receipt', array($pj, $id));
+        if ($nb==1)
+            $start++;
     }
-  $cn->commit();
+    $cn->commit();
+}
+
+/**
+ * Download all receipt
+ * @param type $cn
+ */
+function download_receipt(Database &$cn)
+{
+    $dirname=tempnam($_ENV['TMP'], 'receipt');
+    unlink($dirname);
+    mkdir($dirname);
+    $cn->start();
+    $feedback=array();
+//--- take all the invoice
+    foreach ( $_POST['jr_id'] as $value)
+    {
+        $a_invoice=$cn->get_array("select jr_pj_name,jr_pj from jrn where jr_id = $1", array($value));
+        $invoice=$a_invoice[0];
+        if ($invoice['jr_pj_name']!=""&&$invoice['jr_pj']!="")
+        {
+            $file=$dirname.'/'.$invoice['jr_pj_name'];
+            $cn->lo_export($invoice['jr_pj'], $file);
+            $feedback[]=_('Ajout pièce ').$invoice['jr_pj_name'];
+        }
+    }
+// -- zip file
+    $date=date('ymd.Hi');
+    $zip_file=$_ENV['TMP']."/"."receipt-".$date.".zip";
+
+// --- create the zip
+    $zip=new Zip_Extended();
+    $res=$zip->open($zip_file, ZipArchive::CREATE);
+    if ($res!=true)
+    {
+        die("Cannot create zip file");
+    }
+    $zip->add_recurse_folder($dirname."/");
+    $zip->close();
+//-- send the zip
+    $link=http_build_query(array('gDossier'=>Dossier::id(), 'ac'=>$_REQUEST['ac'], 'plugin_code'=>$_REQUEST['plugin_code'],'act'=>'download_receipt', 'file'=>basename($zip_file)));
+    ?>
+    <p>
+    <h2>
+        <?php echo _('Pièce'); ?>
+    </h2>
+    <ol>
+        <?php foreach ($feedback as $row): ?>
+
+                <li>
+                  <?php echo $row ?>
+                </li>
+    <?php endforeach; ?>
+    </ol>
+    </p>
+    <p>
+    <a class="button" style="display:inline;" href="extension.raw.php?<?php echo $link; ?>"> <?php echo _('Télécharger le fichier') ?></a>
+    </p>
+    <?php
 }
