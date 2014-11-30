@@ -34,7 +34,7 @@ if ($zip_file=='null')
 $zip_file=$_ENV['TMP']."/".$zip_file;
 
 header('Content-type: application/zip');
-header('Content-Disposition: attachment; filename="' . $file);
+header('Content-Disposition: attachment; filename="' . $file.'"');
 $h_file=fopen($zip_file,"r");
 if ($h_file != true) {
     die ('cannot open file');
