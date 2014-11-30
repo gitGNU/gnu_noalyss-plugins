@@ -62,7 +62,8 @@ require_once 'class_acc_ledger_sold_generate.php';
     }
     ?>
 </ol>
-<form method="get">
+<ul class="aligned-block">
+    <li><form method="get">
     <?php
     echo HtmlInput::get_to_hidden(array('gDossier', 'ac', 'plugin_code', 'sel_sale'));
     echo HtmlInput::hidden('action','1');
@@ -70,3 +71,15 @@ require_once 'class_acc_ledger_sold_generate.php';
 
     <?php echo HtmlInput::submit('tl',_('Télécharger toutes les factures')); ?>
 </form>
+    </li>
+    <li>
+<form method="get">
+    <?php
+    echo HtmlInput::get_to_hidden(array('gDossier', 'ac', 'plugin_code'));
+    echo HtmlInput::hidden('action','-2');
+    ?>
+
+    <?php echo HtmlInput::submit('tl',_('Retour')); ?>
+</form>
+    </li>
+</ul>
