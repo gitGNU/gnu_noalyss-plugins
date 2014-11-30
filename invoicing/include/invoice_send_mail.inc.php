@@ -162,6 +162,8 @@ foreach ($_GET['sel_sale'] as $key => $value)
             $action->qcode_dest = $dest_qcode;
             $_POST['nb_item'] = 0;
             $action->save();
+            $action->operation = $value;
+            $action->insert_operation();
 // return $fiche->strAttribut(ATTR_DEF_QUICKCODE) . ' inclus dans Suivi';
         } catch (Exception $e)
         {
