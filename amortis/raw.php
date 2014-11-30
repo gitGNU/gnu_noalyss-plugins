@@ -42,17 +42,18 @@ if ( isset($_REQUEST['pdf_all']))
 /*
  * Export the list per year in CSV
  */
-if ( isset ($_REQUEST['list_year']))
+if ( isset ($_REQUEST['csv_list_year']))
 {
-  $name="amortis-export-".$_REQUEST['list_year'];
+  $name="amortis-export-".$_REQUEST['csv_list_year'];
   header('Pragma: public');
   header('Content-type: application/csv');
   header('Content-Disposition: attachment;filename="'.$name.'.csv"',FALSE);
   print "\"Code\";\"Description\";\"Date acquisition\";\"Année Achat\";\"Montant Achat\";\"Nombre annuités\";\"Montant à amortir\";\"Amortissement\";\"Reste\"\r\n";
-  $year=$_REQUEST['list_year'];
+  $year=$_REQUEST['csv_list_year'];
   $sql="select * from amortissement.amortissement where a_id
          in (select a_id from amortissement.amortissement_detail where ad_year=$1)";
   $array=$cn->get_array($sql,array($year));
+  bcscale(2);
   for ($i=0;$i<count($array);$i++)
     {
       $fiche=new fiche($cn,$array[$i]['f_id']);
@@ -78,10 +79,28 @@ if ( isset ($_REQUEST['list_year']))
 	     
     }
 }
+
+/* export all cards in PDF */
+if ( isset($_REQUEST['pdf_list_year']))
+  {
+    require_once('include/class_amortissement_table_pdf.php');
+    global $cn;
+    $year=$_REQUEST['pdf_list_year'];
+    $a=new Amortissement_Table_PDF($cn);
+    $a->SetTitle('Amortissement '.$year);
+    $a->SetAuthor('NOALYSS');
+    $a->SetCreator('NOALYSS');
+    $a->year=$year;
+    $a->setDossierInfo(dossier::id());
+    $a->AliasNbPages('{nb}');
+    $a->AddPage();
+    $a->export();
+    exit();
+  }
 /*
  * Export to CSV all the listing
  */
-if ( isset($_GET['material']))
+if ( isset($_GET['csv_material']))
   {
     $name="listing-material";
     header('Pragma: public');
@@ -111,4 +130,6 @@ if ( isset($_GET['material']))
 	printf("\r\n");
       }
   }
+
+
 ?>

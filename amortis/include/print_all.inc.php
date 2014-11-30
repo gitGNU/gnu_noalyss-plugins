@@ -34,9 +34,16 @@ echo HtmlInput::print_window();
 ?>
 <form method="GET" action="extension.raw.php" style="display:inline">
 <?php echo dossier::hidden()?>
-<?php echo HtmlInput::hidden('material','1');?>
+<?php echo HtmlInput::hidden('csv_material','1');?>
 <?php echo HtmlInput::hidden('ac',$_REQUEST['ac']);?>
 <?php echo HtmlInput::extension()?>
 <?php echo HtmlInput::submit('csv','Export CSV');?>
+</form>
+<form method="GET" action="extension.raw.php" style="display:inline">
+<?php echo dossier::hidden()?>
+<?php echo HtmlInput::hidden('pdf_material','1');?>
+<?php echo HtmlInput::hidden('ac',$_REQUEST['ac']);?>
+<?php echo HtmlInput::extension()?>
+<?php echo HtmlInput::submit('PDF','Export PDF');?>
 </form>
 </div>

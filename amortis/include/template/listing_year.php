@@ -39,7 +39,8 @@ TABLE {PAGE: landscape;}
 <?php 
 $tot_amort=0;$tot_net=0;bcscale(2);
 for ($i=0;$i < count($array) ; $i++):
-	echo '<tr>';
+        $class=($i % 2 == 0 )?' even ':' odd ';
+	echo '<tr class="'.$class.'">';
 	$fiche=new Fiche($cn,$array[$i]['f_id']);
 	echo td($fiche->strAttribut(ATTR_DEF_QUICKCODE));
 	echo td($fiche->strAttribut(ATTR_DEF_NAME));
@@ -97,12 +98,27 @@ echo td(nbm($tot_net),"align=\"right\"");
 
 ?>
 </tr>
+</table>
+<ul class="aligned-block">
+    <li>
 <?php echo date('d.m.Y')?>
+    </li>
+    <li>
 <form method="GET" action="extension.raw.php">
 <?php echo dossier::hidden()?>
-<?php echo HtmlInput::hidden('list_year',$year);?>
+<?php echo HtmlInput::hidden('csv_list_year',$year);?>
 <?php echo HtmlInput::hidden('ac',$_REQUEST['ac']);?>
 <?php echo HtmlInput::extension()?>
 <?php echo HtmlInput::submit('csv','Export CSV');?>
 </form>
-
+    </li>
+    <li>
+<form method="GET" action="extension.raw.php">
+<?php echo dossier::hidden()?>
+<?php echo HtmlInput::hidden('pdf_list_year',$year);?>
+<?php echo HtmlInput::hidden('ac',$_REQUEST['ac']);?>
+<?php echo HtmlInput::extension()?>
+<?php echo HtmlInput::submit('csv','Export PDF');?>
+</form>
+</li>
+</ul>
