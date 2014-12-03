@@ -331,7 +331,7 @@ class Acc_Ledger_Sold_Generate extends Acc_Ledger_Sold
             $array[$idx.$i.'_label']=$sold->det->array[$i]['j_text'];
             $array[$idx.$i.'_price']=bcdiv($sold->det->array[$i]['qs_price'],$sold->det->array[$i]['qs_quantite']);
             $array[$idx.$i.'_tva_id']=$sold->det->array[$i]['qs_vat_code'];
-            $array[$idx.$i.'_tva_amount']=$sold->det->array[$i]['qs_vat'];
+            $array[$idx.$i.'_tva_amount']=bcsub($sold->det->array[$i]['qs_vat'],$sold->det->array[$i]['qs_vat_sided']);
             $array['e_quant'.$i]=$sold->det->array[$i]['qs_quantite'];
         }
         return $array;
