@@ -285,7 +285,7 @@ as
     join public.vw_fiche_attr using (f_id)
                 ";
          $this->cn->exec_sql($sql_create_view);
-         $add_comment=" comment on view amortissement.v_amortissement_card is 'View of material with card'";
+         $add_comment=" comment on view amortissement.v_amortissement_summary is 'View of material with card'";
          $this->cn->exec_sql($add_comment);
           $this->cn->exec_sql(' insert into amortissement.version values(2)');
           $this->cn->commit();
