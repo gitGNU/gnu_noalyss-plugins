@@ -34,21 +34,9 @@ class Amortissement_Table_PDF extends PDFLand
         parent::header();
         $this->setFont('DejaVu', 'B', 14);
         $this->Cell(200, 10, _('Amortissement ').$this->year, 1, 2, 'C');
-        $this->ln();
-    }
-
-    function export()
-    {
-        $sql=" select * from amortissement.amortissement where a_id
-        in (select a_id from amortissement.amortissement_detail where ad_year=$1)";
-        $array=$this->cn->get_array($sql, array($this->year));
-        $this->SetFont('DejaVu', 'BI', 7);
-        $tot_amort=0;
-        $tot_net=0;
-        bcscale(2);
-
         $col_size=array('code'=>20, 'desc'=>80, 'date.purch'=>20, 'year.purch'=>20, 'amount.purch'=>30, '#amort'=>10, 'amount.amort'=>30, '%'=>20, 'amount.remain'=>20);
         $this->Ln();
+        $this->SetFont('DejaVu', 'BI', 7);
         $this->Cell($col_size['code'], 8, _('Code'));
         $this->Cell($col_size['desc'], 8, _('Description'));
         $this->Cell($col_size['date.purch'], 8, _('Date achat'));
@@ -59,6 +47,22 @@ class Amortissement_Table_PDF extends PDFLand
         $this->Cell($col_size['%'], 8, _('%'), 0, 0, 'R');
         $this->Cell($col_size['amount.remain'], 8, _('Dot'), 0, 0, 'R');
         $this->Cell($col_size['amount.remain'], 8, _('Reste'), 0, 0, 'R');
+        $this->Ln();
+        
+    }
+
+    function export()
+    {
+        $sql=" select * from amortissement.amortissement where a_id
+        in (select a_id from amortissement.amortissement_detail where ad_year=$1)";
+        $array=$this->cn->get_array($sql, array($this->year));
+        $tot_amort=0;
+        $tot_net=0;
+        $col_size=array('code'=>20, 'desc'=>80, 'date.purch'=>20, 'year.purch'=>20, 'amount.purch'=>30, '#amort'=>10, 'amount.amort'=>30, '%'=>20, 'amount.remain'=>20);
+
+        bcscale(2);
+
+        
         $this->Ln();
         $this->SetFont('DejaVu', '', 7);
         for ($i=0; $i<count($array); $i++)
@@ -95,6 +99,7 @@ class Amortissement_Table_PDF extends PDFLand
             $this->Cell($col_size['amount.remain'], 8, nb($toamortize), 0, 0, 'R', $fill);
             $this->Ln();
         }
+        $this->Ln(10);
         $tot=$this->cn->get_value(" select coalesce(sum(a_amount),0) from amortissement.amortissement where a_start=$1", array($this->year));
         $this->setX(40);
         $this->Cell(60, 8, "Acquisition de l'année", 1, 0, 'R');
