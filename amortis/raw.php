@@ -107,25 +107,24 @@ if ( isset($_GET['csv_material']))
     header('Content-type: application/csv');
     header('Content-Disposition: attachment;filename="'.$name.'.csv"',FALSE);
     
-    $ret=$cn->get_array("select * from amortissement.amortissement order by a_start,a_date");
-    printf ("\"Visible\";\"qcode\";\"Nom\";\"Date acquisition\";\"Année Achat\";\"Nbre annuité\";\"Poste Charge\";\"Poste amortis\";\"Montant achat\";\"Montant amorti\";\"Montant a amortir\"\r\n");
+    $ret=$cn->get_array("select * from amortissement.v_amortissement_summary order by a_start,a_date");
+    printf ("\"Visible\";\"qcode\";\"Nom\";\"Description\";\"Date acquisition\";\"Année Achat\";\"Nbre annuité\";\"Poste Charge\";\"Poste amortis\";\"Fiche de charge\"; \"Fiche amortissement acté\";\"Montant achat\";\"Montant amorti\";\"Montant a amortir\"\r\n");
     for ($i=0;$i<count($ret);$i++)
       {
 	printf('"%s";',$ret[$i]['a_visible']);
-	$qcode=$cn->get_value('select ad_value from fiche_detail where ad_id=23 and f_id=$1',array($ret[$i]['f_id']));
-	printf('"%s";',$qcode);
-	$qcode=$cn->get_value('select ad_value from fiche_detail where ad_id=1 and f_id=$1',array($ret[$i]['f_id']));
-	printf('"%s";',$qcode);
+	printf('"%s";',$ret [$i]['quick_code']);
+	printf('"%s";',$ret [$i]['vw_name']);
+	printf('"%s";',$ret [$i]['vw_description']);
 	printf('"%s";',format_date($ret[$i]['a_date']));
 	printf('"%s";',$ret[$i]['a_start']);
 	printf('%s;',nb($ret[$i]['a_nb_year']));
 	printf('"%s";',$ret[$i]['account_deb']);
 	printf('"%s";',$ret[$i]['account_cred']);
+	printf('"%s";',$ret[$i]['card_cred_qcode']);
+	printf('"%s";',$ret[$i]['card_deb_qcode']);
 	printf('%s;',nb($ret[$i]['a_amount']));
-	$tot_amorti=$cn->get_value("select coalesce(sum(h_amount),0) from amortissement.amortissement_histo where a_id=$1",
-				   array($ret[$i]['a_id']));
-	printf("%s;",nb($tot_amorti));
-	$remain=bcsub($ret[$i]['a_amount'],$tot_amorti);
+	printf("%s;",nb($ret[$i]['amort_done']));
+	$remain=bcsub($ret[$i]['a_amount'],$ret[$i]['amort_done']);
 	printf("%s",nb($remain));
 	printf("\r\n");
       }
