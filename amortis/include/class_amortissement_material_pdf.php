@@ -63,10 +63,10 @@ class Amortissement_Material_PDF extends PDF
             $this->Cell($this->col_size['name'], 8, $ret[$i]['vw_name'], 0, 0, 'L', $fill);
             $this->Cell($this->col_size['date.purch'], 8, format_date($ret[$i]['a_date']), 0, 0, 'L', $fill);
             $this->Cell($this->col_size['year.purch'], 8, $ret[$i]['a_start'], 0, 0, 'C', $fill);
-            $this->Cell($this->col_size['#amort'], 8, nb($ret[$i]['a_nb_year']), 0, 0, 'R', $fill);
+            $this->Cell($this->col_size['#amort'], 8, round($ret[$i]['a_nb_year']), 0, 0, 'R', $fill);
             $this->Cell($this->col_size['amount.purch'], 8, nb($ret[$i]['a_amount']), 0, 0, 'R', $fill);
-            $this->Cell($this->col_size['amount.amort'], 8, nb($ret[$i]['remain']), 0, 0, 'R', $fill);
-            $delta=bcsub($ret[$i]['a_amount'],$ret[$i]['remain']);
+            $this->Cell($this->col_size['amount.amort'], 8, nb($ret[$i]['amort_done']), 0, 0, 'R', $fill);
+            $delta=bcsub($ret[$i]['a_amount'],$ret[$i]['amort_done']);
             $this->Cell($this->col_size['amount.delta'], 8, nb($delta), 0, 0, 'R', $fill);
 	
         $this->Ln();
