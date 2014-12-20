@@ -273,7 +273,20 @@ end;
           $this->cn->exec_sql($add_column);
           $this->cn->exec_sql($add_fk);
           $this->cn->exec_sql($add_comment);
-
+        $sql_create_view="
+           create or replace  view amortissement.v_amortissement_summary
+            as
+        select f_id,vw_name,vw_description,quick_code,
+           a_id,account_deb,account_cred,a_amount,a_nb_year,a_start,a_date,a_visible,
+        card_cred,(select j_qcode from vw_poste_qcode where f_id=card_cred) as card_cred_qcode,
+        card_deb,(select j_qcode from vw_poste_qcode where f_id=card_deb) as card_deb_qcode,
+        ( select coalesce(sum(h_amount),0) from amortissement.amortissement_histo where amortissement_histo.a_id=amortissement.a_id) as remain
+         from amortissement.amortissement  
+    join public.vw_fiche_attr using (f_id)
+                ";
+         $this->cn->exec_sql($sql_create_view);
+         $add_comment=" comment on view amortissement.v_amortissement_card is 'View of material with card'";
+         $this->cn->exec_sql($add_comment);
           $this->cn->exec_sql(' insert into amortissement.version values(2)');
           $this->cn->commit();
       }

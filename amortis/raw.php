@@ -130,6 +130,25 @@ if ( isset($_GET['csv_material']))
 	printf("\r\n");
       }
   }
+/*
+ * Export to PDF all the listing
+ */
+if ( isset($_GET['pdf_material']))
+  {
+    require_once('include/class_amortissement_material_pdf.php');
+    global $cn;
+    $a=new Amortissement_Material_PDF($cn);
+    $a->SetTitle('Amortissement ');
+    $a->SetAuthor('NOALYSS');
+    $a->SetCreator('NOALYSS');
+    $a->setDossierInfo(dossier::id());
+    $a->AliasNbPages('{nb}');
+    $a->AddPage();
+    $a->export();
+    exit();
+    
+   
+  }
 
 
 ?>
