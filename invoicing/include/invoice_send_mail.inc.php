@@ -49,7 +49,7 @@ if (isDate($ag_timestamp) == null)
     $ag_timestamp = date('d.m.Y');
 
 if (trim($ag_title) == "")
-    $ag_title = $message;
+    $ag_title = $subject;
 
 if (isDate($ag_remind_date) == null) {
     $ag_remind_date=null;
