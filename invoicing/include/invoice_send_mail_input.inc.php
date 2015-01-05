@@ -73,12 +73,12 @@ echo HtmlInput::hidden('sa', 'send');
 
     <p>
         <?php echo _('Sujet') ?> : 
-        <input type="text" id="email_subject" name="email_subject" class="input_text" style="width: 60em;">
+        <input type="text" id="email_subject" name="email_subject" class="input_text" style="width: 60em;width:60rem">
         <span class="notice" id="email_subject_span"></span>
     </p>
     <p>
         <?php echo _('Message') ?> : 
-        <textarea style="vertical-align: top;width:70em;height:20rem;" name="email_message" class="input_text">               </textarea>
+        <textarea style="vertical-align: top;width:70em;height:20em;height:20rem;" name="email_message" class="input_text">               </textarea>
     </p>
     <p>
         <input type="checkbox" name="email_copy"> <?php echo _("Envoyer copie à l'expéditeur"); ?>
