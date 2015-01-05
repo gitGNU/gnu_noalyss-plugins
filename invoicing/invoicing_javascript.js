@@ -1,5 +1,5 @@
 /* This file is part of NOALYSS and is under GPL see licence.txt */
-
+content[1000]='Si le titre n\'est pas donnée, le sujet sera utilisé comme titre du document';
 /**
  *javascript
  */

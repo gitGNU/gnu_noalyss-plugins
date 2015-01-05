@@ -22,6 +22,7 @@
 global $g_user;
 
 $titre = new IText('ag_title');
+$titre->css_size='60em';
 
 // Profile in charged of the action
 $ag_dest = new ISelect();
@@ -119,6 +120,7 @@ echo HtmlInput::hidden('sa', 'send');
         <tr>
             <td>
                 <label><?php echo _('Titre'); ?> : </label>
+                <?php echo HtmlInput::infobulle(1000); ?>
             </td>
             <td>
                 <?php echo $titre->input(); ?>
