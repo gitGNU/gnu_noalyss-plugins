@@ -6,7 +6,7 @@
 <?php echo $hidden?>
 <table>
 	<TR>
-	<TD>Choississez le journal</TD>
+	<TD>Choisissez le journal</TD>
 	<td><?php echo $iledger->input()?></td>
 	</TR>
 	<tr>

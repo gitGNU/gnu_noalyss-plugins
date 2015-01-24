@@ -8,7 +8,7 @@ ob_start();
 $compute = new RAPAV_Listing_Compute();
 $compute->load($_GET['lc_id']);
 $a_result = $compute->include_follow($_GET);
-echo HtmlInput::title_box('Résultat', 'include_follow_save_result');
+echo HtmlInput::title_box(_('Résultat'), 'include_follow_save_result');
 echo '<ol>';
 for ($i = 0; $i < count($a_result); $i++)
 {

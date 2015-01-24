@@ -47,7 +47,7 @@ libxml_use_internal_errors(true);
 
 //$file = "valide-exemple-listing.xml";
 $file = "listing_assujetti07.02.14.0759.xml";
-$schema = "xsd/NewLK-in_v0_7.xsd";
+$schema = "xsd/NewLK-in_v0_9.xsd";
 
 // Instanciation d’un DOMDocument
 $dom = new DOMDocument("1.0");

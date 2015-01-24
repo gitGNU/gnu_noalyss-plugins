@@ -226,7 +226,7 @@ class Am_Card
     switch ( $_POST['type'] )
     {
         case -1:
-            $error_msg .= _('Choississez poste comptable ou fiche');
+            $error_msg .= _('Choisissez poste comptable ou fiche');
             break;
         case 0:
            if ( $cn->get_value('select count(*) from tmp_pcmn where pcm_val=$1',array($_POST['p_deb'])) == 0) $error_msg.=" Poste de charge incorrect"."\n";

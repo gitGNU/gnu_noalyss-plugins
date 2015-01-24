@@ -41,7 +41,7 @@ if (isset($calc))
 		switch ($aft)
 		{
 			case -1:
-				throw new Exception("Choississez le type de calcul");
+				throw new Exception("Choisissez le type de calcul");
 				break;
 			case 1:
 				$appel_fond = new Coprop_Appel_Fond();

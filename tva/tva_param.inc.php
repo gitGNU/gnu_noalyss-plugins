@@ -66,7 +66,7 @@ if ( isset ($_POST['pi_id'])){
 $tvap=new Tva_Parameter($cn);
 require_once('class_itva_popup.php');
 $a=new IPopup('popup_tva');
-$a->set_title('Choississez la tva qui convient');
+$a->set_title('Choisissez la tva qui convient');
 echo $a->input();
 require_once('class_iposte.php');
 echo IPoste::ipopup('ipop_account');
