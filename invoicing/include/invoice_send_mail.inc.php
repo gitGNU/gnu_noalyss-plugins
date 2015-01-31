@@ -150,8 +150,8 @@ foreach ($_GET['sel_sale'] as $key => $value)
              */
             $action = new Follow_Up($cn);
             $a_follow['ag_dest'] = $ag_dest;
-            $ag_comment =  _("Envoi facture") . " " . $invoice['jr_pj_name']." "._(' à ').$dest_mail.PHP_EOL.$message;
-            $a_follow['ag_comment']=_('envoi par email')._('sujet'). " ".$subject."\n"._('date ').date("d/m/Y H:i")."\n".$ag_comment;
+            $ag_comment =  _("Envoi facture") ." ". _('date ').date("d/m/Y H:i")." " . $invoice['jr_pj_name']." "._(' à ').$dest_mail."\n"._('sujet'). " ".$subject."\n".$message;
+            $a_follow['ag_comment']=$ag_comment;
             $a_follow['ag_title']=$ag_title;
             $a_follow['ag_timestamp']=$ag_timestamp;
             $a_follow['ag_remind_date']=$ag_remind_date;
