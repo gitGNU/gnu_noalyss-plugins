@@ -135,6 +135,7 @@ echo _('Numéro garantie')." ".$garantie->input();
 
     </div>
     <div style="" id="failure_description_div">
+        <?php echo _('Description panne')?>
         <textarea name="description" class="itextarea"><?php echo $this->repair_card->description_failure?></textarea>
     </div>
 
