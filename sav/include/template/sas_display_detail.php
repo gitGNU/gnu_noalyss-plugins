@@ -81,15 +81,15 @@ if ( $this->repair_card->card_status=='D' ):
         <ul id="customer_detail_ul" style="<?php echo $style_customer_detail_ul ?>">
             <li> Code : <?php echo HtmlInput::card_detail($fiche_customer->strAttribut(ATTR_DEF_QUICKCODE),"",' style="display:inline;text-decoration:underline"')?></li>
             <li> <?php echo _('Nom') ?> : <span id="cust_name_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_NAME,0) ?></span></li>
-            <li> Prénom : <span id="cust_firstname_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_FIRST_NAME,0) ?></span></li>
-            <li> Adresse: <span id="cust_address_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_ADRESS,0) ?></span></li>
-            <li> Code postal: <span id="cust_cp_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_CP,0) ?></span></li>
-            <li> Ville: <span id="cust_town_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_CITY,0) ?></span></li>
-            <li> Pays: <span id="cust_country_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_PAYS,0) ?></span></li>
-            <li> GSM: <span id="cust_mobile_id"><?php echo $fiche_customer->strAttribut(27,0) ?></span></li>
-            <li> Téléphone: <span id="cust_mobile_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_TEL,0) ?></span></li>
-            <li> Email: <span id="cust_email_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_EMAIL,0) ?></span></li>
-            <li> TVA: <span id="cust_vat_id"><?php echo $fiche_customer->strAttribut(13,0) ?></span></li>
+            <li> <?php echo _('Prénom') ?> : <span id="cust_firstname_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_FIRST_NAME,0) ?></span></li>
+            <li> <?php echo _('Adresse') ?>: <span id="cust_address_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_ADRESS,0) ?></span></li>
+            <li> <?php echo _('Code postal') ?>: <span id="cust_cp_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_CP,0) ?></span></li>
+            <li> <?php echo _('Ville') ?>: <span id="cust_town_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_CITY,0) ?></span></li>
+            <li> <?php echo _('Pays') ?>: <span id="cust_country_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_PAYS,0) ?></span></li>
+            <li> <?php echo _('GSM') ?>: <span id="cust_mobile_id"><?php echo $fiche_customer->strAttribut(27,0) ?></span></li>
+            <li> <?php echo _('Téléphone') ?>: <span id="cust_mobile_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_TEL,0) ?></span></li>
+            <li> <?php echo _('Email') ?>: <span id="cust_email_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_EMAIL,0) ?></span></li>
+            <li> <?php echo _('TVA') ?>: <span id="cust_vat_id"><?php echo $fiche_customer->strAttribut(13,0) ?></span></li>
         </ul>
     </div>
 <?php endif; ?>        
