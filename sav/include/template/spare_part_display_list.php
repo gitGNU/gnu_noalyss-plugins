@@ -1,0 +1,95 @@
+<?php
+/*
+ * * Copyright (C) 2015 Dany De Bontridder <dany@alchimerys.be>
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+ * 
+ */
+global $g_sav_parameter;
+
+/**
+ * @brief show a table containing the spare part from a Repair_Card
+ * @param $p_repair_card Service_After_Sale
+ */
+?>
+<table id="spare_part_table_list_id">
+    <tr>
+        <th>
+            Code
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Quantité
+        </th>
+    </tr>
+    <?php for ($i=0;$i < $count_spare;$i++) : ?>
+    <tr>
+        <td>
+            <?php 
+            
+                $fiche=new Fiche($cn, $a_spare[$i]['f_id']);
+                $qcode=$fiche->get_quick_code();
+                echo HtmlInput::card_detail($qcode, "",' style="text-decoration:underline;display:inline"', true);
+            ?>        
+        </td>
+        <td>
+            <?php 
+            
+                $name=$fiche->getName();
+                echo h($name);
+            ?>        
+        </td>
+        <td>
+            <?php
+                echo $a_spare[$i]['quantity'];
+            ?>
+        </td>
+      
+        <td>
+            bouton supprimer
+        </td>
+    </tr>
+    <?php endfor; ?>
+    <tr id="add_spare_tr_id">
+     <td>
+            <?php 
+            $input_fiche_materiel=new ICard('spare_part_id');
+            $input_fiche_materiel->set_dblclick('fill_ipopcard(this)');
+            $input_fiche_materiel->set_function('fill_data');
+            $sql=' select fd_id from fiche_def where fd_id in ('.$g_sav_parameter->get_spare_part().')';
+            $filter=$cn->make_list($sql);
+            $input_fiche_materiel->set_attribute('typecard', $filter);
+            $input_fiche_materiel->extra=$filter;
+            echo $input_fiche_materiel->input()." ".$input_fiche_materiel->search();
+            ?>        
+        </td>
+        <td>
+            <?php
+            $quant=new INum('spare_part_quant');
+            echo $quant->input();
+            ?>
+        </td>
+      
+        <td>
+            <?php
+               echo HtmlInput::button_action(_('Ajout'), 
+                       sprintf('spare_part_add(\'%s\',\'%s\',\'%s\',\'%s\')',Dossier::id(),$_REQUEST['ac'],$_REQUEST['plugin_code'],$p_repair_card->id));
+            ?>
+            
+        </td>
+    </tr>
+</table>    
