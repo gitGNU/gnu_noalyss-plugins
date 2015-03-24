@@ -146,13 +146,13 @@ echo _('Numéro garantie')." ".$garantie->input();
 if ( $this->repair_card->id != -1 ) :
 ?>
     <div id="spare_id">
-        <h2 class="legend">')<?php echo ('Pièces de rechange')?></h2>
+        <h2 class="legend">')<?php echo _('Pièces de rechange')?></h2>
         <?php
             $spare->display_list($this->repair_card);
         ?>
     </div>
     <div id="workhour_div">
-        <h2 class="legend"><?php echo ("Main d'oeuvre")?></h2>
+        <h2 class="legend"><?php echo _("Main d'oeuvre")?></h2>
         <?php
             $workhour->display_list($this->repair_card);
         ?>
