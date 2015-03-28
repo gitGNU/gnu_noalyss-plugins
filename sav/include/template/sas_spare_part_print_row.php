@@ -36,7 +36,7 @@
         </td>
         <td>
             <?php
-                echo $this->spare_part->quantity;
+                echo nb($this->spare_part->quantity);
             ?>
         </td>
       
