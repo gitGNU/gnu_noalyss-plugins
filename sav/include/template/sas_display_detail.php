@@ -153,7 +153,7 @@ if ( $this->repair_card->id != -1 ) :
 ?>
     <div id="spare_id" style="<?php echo $style_date_id;?>">
         <h2 class="legend"><?php echo _('Pièces de rechange')?></h2>
-        <form>
+        <form method="get">
         <?php
             $spare->display_list($this->repair_card->id);
         ?>
