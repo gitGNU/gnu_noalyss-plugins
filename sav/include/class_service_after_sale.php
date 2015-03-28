@@ -158,11 +158,13 @@ class Service_After_Sale
     }
     function set_date_start($p_date)
     {
+        if ( $p_date=="") return;
         if (isDate($p_date) == null )            throw new Exception(_('Date invalide'),DATEINVALIDE);
         $this->repair_card->date_start=$p_date;
     }
     function set_date_end($p_date)
     {
+        if ( $p_date=="") return;
         if (isDate($p_date) == null )            throw new Exception(_('Date invalide'),DATEINVALIDE);
         $this->repair_card->date_end=$p_date;
     }

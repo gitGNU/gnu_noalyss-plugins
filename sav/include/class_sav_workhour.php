@@ -16,7 +16,7 @@
  *   along with PhpCompta; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-// Copyright (2014) Author Dany De Bontridder <dany@alchimerys.be>
+// Copyright (2015) Author Dany De Bontridder <dany@alchimerys.be>
 
 
 /**

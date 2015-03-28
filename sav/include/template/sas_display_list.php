@@ -58,7 +58,7 @@ $gDossier=HtmlInput::default_value_request("gDossier", "0");
                 <td>
                     <?php
                     $url="do.php?".http_build_query(array('ac'=>$ac,'plugin_code'=>$plugin_code,"gDossier"=>$gDossier,'sb'=>'detail','sa'=>'enc','repair_card_id'=>$row['id']));
-                    echo HtmlInput::button_anchor(_('Détail'), $url,'','','smallbutton');
+                    echo HtmlInput::anchor(_('Détail'), $url,'','','smallbutton');
                     ?>
                 </td>
             </tr>

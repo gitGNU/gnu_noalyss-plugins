@@ -22,25 +22,21 @@ if ( ! defined ('ALLOWED') ) die('Appel direct ne sont pas permis');
 
 /**
  * @file
- * @brief add a spare_part to a repair_card
- * @param p_repair_card :integer 
+ * @brief 
+ * @param type $name Descriptionara
  */
-
 require_once 'include/class_sav_spare_part.php';
 
-$qcode=HtmlInput::default_value_get('qcode', "");
-$quant=HtmlInput::default_value_get('quant',-1);
-$repair=HtmlInput::default_value_get('repair',-1);
+$spare_part=HtmlInput::default_value_get('spare_part_id', -1);
 
-if ( $quant == -1 || isNumber($quant )== 0 ||trim($qcode)=="" ||$repair==-1||isNumber($repair)==0)
+if ( $spare_part == -1 || isNumber($spare_part)==0)
     throw new Exception("Invalid parameter");
 
-$spare=new Sav_Spare_Part();
+$spare=new Sav_Spare_Part($spare_part);
 $erreur="";
 try
 {
-    $spare->repair_card_add($repair,$qcode, $quant);
-    $row=escape_xml($spare->print_row());
+    $spare->remove();
 }
 catch (Exception $exc)
 {
@@ -50,10 +46,7 @@ if (! headers_sent() )    header('Content-type: text/xml; charset=UTF-8');
 echo <<<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <data> 
-<id>{$spare->get_id()}</id>
-<name>{$spare->get_name()}</name>
-<quant>{$quant}</quant>
-<qcode>{$spare->get_qcode()}</qcode>
-<html>{$row}</html>
+<code>ok</code>
 </data>
 EOF;
+?>

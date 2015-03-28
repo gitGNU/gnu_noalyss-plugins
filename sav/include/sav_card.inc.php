@@ -31,7 +31,7 @@ switch ($action) {
         $card=HtmlInput::default_value_request("repair_card_id", -1);
         /* We can save it here if needed*/
         $save=HtmlInput::default_value_post('save_repair_card','none');
-        $service=new Service_After_Sale($card);
+        $service=new Service_After_Sale();
         if ($save != 'none') 
         {
             // save from post
@@ -53,11 +53,13 @@ switch ($action) {
                 /*
                  * Update card
                  */
+                $service->set_card_id($card);
                 $service->set_status(HtmlInput::default_value_post('status_repair','E'));
                 $service->set_date_start(HtmlInput::default_value_post('date_start', date('d.m.Y')));
                 $service->set_date_end(HtmlInput::default_value_post('date_end', date('d.m.Y')));
                 $service->set_garantie(HtmlInput::default_value_post('garantie',''));
                 $service->set_description(HtmlInput::default_value_post('description',-1));
+                $service->save();
                 echo "UPDATE";
             }
             

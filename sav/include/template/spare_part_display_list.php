@@ -23,6 +23,9 @@ global $g_sav_parameter;
  * @brief show a table containing the spare part from a Repair_Card
  * @param $p_repair_card Service_After_Sale
  */
+$gDossier=Dossier::id();
+$ac=HtmlInput::default_value_request("ac", -1);
+$plugin_code=HtmlInput::default_value_request("plugin_code", -1);
 ?>
 <table id="spare_part_table_list_id">
     <tr>
@@ -37,32 +40,10 @@ global $g_sav_parameter;
         </th>
     </tr>
     <?php for ($i=0;$i < $count_spare;$i++) : ?>
-    <tr>
-        <td>
-            <?php 
-            
-                $fiche=new Fiche($cn, $a_spare[$i]['f_id']);
-                $qcode=$fiche->get_quick_code();
-                echo HtmlInput::card_detail($qcode, "",' style="text-decoration:underline;display:inline"', true);
-            ?>        
-        </td>
-        <td>
-            <?php 
-            
-                $name=$fiche->getName();
-                echo h($name);
-            ?>        
-        </td>
-        <td>
-            <?php
-                echo $a_spare[$i]['quantity'];
-            ?>
-        </td>
-      
-        <td>
-            bouton supprimer
-        </td>
-    </tr>
+    <?php
+        $spare=new Sav_Spare_Part($a_spare[$i]['id']);
+       echo $spare->print_row();
+    ?>
     <?php endfor; ?>
     <tr id="add_spare_tr_id">
      <td>
@@ -87,7 +68,7 @@ global $g_sav_parameter;
         <td>
             <?php
                echo HtmlInput::button_action(_('Ajout'), 
-                       sprintf('spare_part_add(\'%s\',\'%s\',\'%s\',\'%s\')',Dossier::id(),$_REQUEST['ac'],$_REQUEST['plugin_code'],$p_repair_card->id));
+                       sprintf('spare_part_add(\'%s\',\'%s\',\'%s\',\'%s\')',$gDossier,$ac,$plugin_code,$p_repair_card->id));
             ?>
             
         </td>
