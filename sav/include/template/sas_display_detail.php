@@ -32,7 +32,7 @@ global $g_sav_parameter;
 $style_customer_detail_ul="list-style: none;padding-left: 20px;margin:0px";
 $style_customer_date_ul="list-style: none;padding-left: 0px;margin:0px";
 ?>
-    <h2 class="title"><?php echo _('Fiche réparation')." ".$this->repair_card->repair_number ?></h2>
+    <h2 class="title"><?php echo _('Fiche réparation')." ".$this->repair_card->id ?></h2>
 
 <div class="content" id="sas_display_detail_id">
 <form id="sas_display_detail_form" method="POST">
@@ -98,7 +98,7 @@ $garantie=new IText('garantie', $this->repair_card->garantie);
 echo _('Numéro garantie')." ".$garantie->input();
 ?>
     <div style="width:15%;display:table-cell">
-        Numéro de fiche  : <?php echo h($this->repair_card->repair_number)?>
+        Numéro de fiche  : <?php echo h($this->repair_card->id)?>
         <ul id="date_div_id" style="<?php echo $style_customer_date_ul ?>">
             <li> <?php echo _('Date réception')." ".$date_received->input();?> </li>
             <?php if ( $this->repair_card->card_status != 'D' ): ?> <li> <?php echo _('Date Début')." ".$date_start->input();?></li> <?php endif;?>
@@ -138,6 +138,9 @@ echo _('Numéro garantie')." ".$garantie->input();
         <?php echo _('Description panne')?>
         <textarea name="description" class="itextarea"><?php echo $this->repair_card->description_failure?></textarea>
     </div>
+    <input type='submit' name="save_repair_card" class='button' value="<?php echo _('Sauver')?>">
+    <input type='button' class='button' value="<?php echo _('Annuler')?>" onclick='go_back()'>
+    </form>
 
     <hr>
 <?php 
@@ -148,20 +151,17 @@ if ( $this->repair_card->id != -1 ) :
     <div id="spare_id">
         <h2 class="legend"><?php echo _('Pièces de rechange')?></h2>
         <?php
-            $spare->display_list($this->repair_card);
+            $spare->display_list($this->repair_card->id);
         ?>
     </div>
     <div id="workhour_div">
         <h2 class="legend"><?php echo _("Main d'oeuvre")?></h2>
         <?php
-           // $workhour->display_list($this->repair_card);
+           $workhour->display_list($this->repair_card->id);
         ?>
         
     </div>
 <?php endif;    ?>
-    <input type='submit' name="save_repair_card" class='button' value="<?php echo _('Sauver')?>">
-    <input type='button' class='button' value="<?php echo _('Annuler')?>" onclick='go_back()'>
-    </form>
 </div>
 <script>
     function go_back() {

@@ -127,3 +127,80 @@ function spare_part_remove(p_dossier, p_access, p_plugin_code, p_spare_part_id)
         alert("spare_part" + e.message);
     }
 }
+/**
+ * Add a spare part to a RepairCard
+ * @param {type} p_dossier
+ * @param {type} p_access
+ * @param {type} p_plugin_code
+ * @param {type} p_repair_card
+ * @returns {undefined}
+ */
+function workhour_add(p_dossier, p_access, p_plugin_code, p_repair_card)
+{
+    try {
+        waiting_box();
+        var hour = $('workhour_quant').value;
+        var description = $('workhour_description').value;
+        var queryString = {plugin_code: p_plugin_code, gDossier: p_dossier, ac: p_access, act: 'workhour_add', repair: p_repair_card, hour: hour, description: description};
+        var action = new Ajax.Request(
+                "ajax.php",
+                {
+                    method: 'get',
+                    parameters: queryString,
+                    onSuccess: function (req)
+                    {
+                        var answer = req.responseXML;
+                        console.log(answer);
+                        var html = answer.getElementsByTagName('html');
+                        if (html.length === 0)
+                        {
+                            var rec = req.responseText;
+                            alert('erreur :' + rec);
+                        }
+                        
+                        var nodeXml = html[0];
+                        var code_html = getNodeText(nodeXml);
+                        code_html = unescape_xml(code_html);
+                        
+                        var xml_spare_id=answer.getElementsByTagName('id')[0];
+                        var spare_id=getNodeText(xml_spare_id);
+                        
+                        var table_len=$('workhour_table_id').rows.length-1;
+                        var new_row=$('workhour_table_id').insertRow(table_len);
+                        new_row.id='workhour'+spare_id;
+                        new_row.innerHTML=code_html;
+                        remove_waiting_box();
+                    }
+                });
+    } catch (e) {
+        alert("spare_part" + e.message);
+    }
+}
+/**
+ * Remove workhour from a repair card
+ * @param {type} p_dossier
+ * @param {type} p_access
+ * @param {type} p_plugin_code
+ * @param {type} p_workhour_id
+ * @returns {undefined}
+ */
+function workhour_remove(p_dossier, p_access, p_plugin_code, p_workhour_id)
+{
+    try {
+        waiting_box();
+        var queryString = {plugin_code: p_plugin_code, gDossier: p_dossier, ac: p_access, act: 'workhour_remove', workhour_id: p_workhour_id};
+        var action = new Ajax.Request(
+                "ajax.php",
+                {
+                    method: 'get',
+                    parameters: queryString,
+                    onSuccess: function (req)
+                    {
+                        $('workhour' + p_workhour_id).hide();
+                        remove_waiting_box();
+                    }
+                });
+    } catch (e) {
+        alert("workhour " + e.message);
+    }
+}

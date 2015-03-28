@@ -54,6 +54,7 @@ echo <<<EOF
 <name>{$spare->get_name()}</name>
 <quant>{$quant}</quant>
 <qcode>{$spare->get_qcode()}</qcode>
+<error>{$erreur}</error>
 <html>{$row}</html>
 </data>
 EOF;

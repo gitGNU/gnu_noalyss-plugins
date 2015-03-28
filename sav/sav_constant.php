@@ -20,4 +20,10 @@ define ("DATEINVALIDE",1003);
 global $cn,$g_sav_parameter;
 $cn=new Database (dossier::id());
 $g_sav_parameter=new Service_After_Sale_Parameter($cn);
+
+global $gDossier,$ac,$plugin_code;
+$gDossier=Dossier::id();
+$ac=HtmlInput::default_value_request("ac", -1);
+$plugin_code=HtmlInput::default_value_request("plugin_code", -1);
+
 ?>

@@ -16,15 +16,32 @@
  *   along with PhpCompta; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-// Copyright (2015) Author Dany De Bontridder <dany@alchimerys.be>
+// Copyright (2014) Author Dany De Bontridder <dany@alchimerys.be>
 
-require_once 'sav_constant.php';
-$file=HtmlInput::default_value_get('act',null);
+if ( ! defined ('ALLOWED') ) die('Appel direct ne sont pas permis');
 
-if ($file==null) die(_('No action'));
-
-if ( ! in_array($file, array('spare_part_add','spare_part_remove','workhour_remove','workhour_add'))) 
-        {
-            die (_('Appel invalide')); 
-        }
-require_once 'ajax_'.$file.'.php';   
+/**
+ * @file
+ * @brief included from Sav_Workhour -> print_row, display a row
+ * @param type $name Descriptionara
+ */
+?>
+<tr id="workhour<?php echo $this->workhour_sql->id; ?>">
+      <td>
+            <?php 
+                echo h($description);
+            ?>        
+        </td>
+        <td>
+            <?php
+                echo nb($hours);
+            ?>
+        </td>
+      
+        <td>
+            <?php
+               
+              echo HtmlInput::anchor(_('Supprimer'), "",'onclick="'.$js.'"');
+              ?>
+        </td>
+    </tr>

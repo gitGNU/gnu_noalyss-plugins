@@ -68,7 +68,7 @@ $plugin_code=HtmlInput::default_value_request("plugin_code", -1);
         <td>
             <?php
                echo HtmlInput::button_action(_('Ajout'), 
-                       sprintf('spare_part_add(\'%s\',\'%s\',\'%s\',\'%s\')',$gDossier,$ac,$plugin_code,$p_repair_card->id));
+                       sprintf('spare_part_add(\'%s\',\'%s\',\'%s\',\'%s\')',$gDossier,$ac,$plugin_code,$p_repair_card));
             ?>
             
         </td>

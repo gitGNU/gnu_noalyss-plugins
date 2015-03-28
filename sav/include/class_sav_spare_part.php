@@ -33,7 +33,7 @@ class Sav_Spare_Part
     {
         $this->spare_part=new Sav_Spare_Part_SQL($p_id);
     }
-    function display_list(Sav_Repair_Card_Sql $p_repair_card)
+    function display_list($p_repair_card)
     {
         global $cn;
         bcscale(2);
@@ -42,17 +42,14 @@ class Sav_Spare_Part
                 where 
                 sp1.repair_card_id=$1
                 ';
-        $a_spare=$cn->get_array($sql,array($p_repair_card->id));
+        $a_spare=$cn->get_array($sql,array($p_repair_card));
         $count_spare=count($a_spare);
         require 'template/spare_part_display_list.php';
     }
     function print_row()
     {
-        global $cn;
-        $gDossier=Dossier::id();
-        $ac=HtmlInput::default_value_request("ac", -1);
-        $plugin_code=HtmlInput::default_value_request("plugin_code", -1);
-        
+        global $cn,$gDossier,$ac,$plugin_code;
+
         // Material
         $qcode=$this->get_qcode();
         $name=$this->get_name();

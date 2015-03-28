@@ -18,7 +18,8 @@
 */
 // Copyright (2015) Author Dany De Bontridder <dany@alchimerys.be>
 
-
+require_once 'class_sav_workhour_sql.php';
+require_once 'class_sav_repair_card_sql.php';
 /**
  * @file
  * @brief 
@@ -26,6 +27,92 @@
  */
 class Sav_WorkHour
 {
+    private $workhour_sql;
     
+    function __construct($p_id=-1)
+    {
+        $this->workhour_sql=new Sav_Workhour_SQL($p_id);
+    }
+    function set_repair_card($p_id)
+    {
+        $this->workhour_sql->repair_card_id=$p_id;
+    }
+    function set_description ($p_description)
+    {
+        $this->workhour_sql->work_description=$p_description;
+    }
+    function set_id($p_id)
+    {
+        $this->workhour_sql->id=$p_id;
+    }
+    function set_workhour($p_amount)
+    {
+        $this->workhour_sql->total_workhour=$p_amount;
+    }
+    function get_repair_card()
+    {
+        return $this->workhour_sql->repair_card_id;
+    }
+    function get_description ()
+    {
+        $this->workhour_sql->work_description ;
+    }
+    function get_id()
+    {
+        return $this->workhour_sql->id;
+    }
+    function get_workhour()
+    {
+        return $this->workhour_sql->total_workhour;
+    }
+    function print_row()
+    {
+        global $cn,$gDossier,$ac,$plugin_code;
+        
+        // Workhour
+        $hours=$this->get_workhour();
+        $description=$this->get_description();
+        $description=(trim($description) == '') ? _("Main d'oeuvre"):$description;
+        
+        
+        // Javascript
+        $js=sprintf('workhour_remove(\'%s\',\'%s\',\'%s\',\'%s\')',
+                       $gDossier,$ac,$plugin_code,$this->workhour_sql->id);
+        
+        // template
+        ob_start();
+        require 'template/sas_workhour_print_row.php';
+        $result=ob_get_clean();
+        return $result;
+    }
+    function display_list($p_repair_id)
+    {
+        global $cn;
+        bcscale(2);
+        $sql='select id
+                from service_after_sale.sav_workhour as sp1
+                where 
+                sp1.repair_card_id=$1
+                ';
+        $a_workhour=$cn->get_array($sql,array($p_repair_id));
+        $count_workhour=count($a_workhour);
+        require 'template/workhour_display_list.php';
+    }
+    function add($p_repair,$p_hour,$p_description)
+    {
+       global $cn;
+        $repair=new Sav_Repair_Card_SQL($p_repair);
+        if ( $repair->id == -1 ) throw new Exception('Inexistent repair card',NOMATERIAL);
+       
+        $this->workhour_sql->id=-1;
+        $this->workhour_sql->repair_card_id=$p_repair;
+        $this->workhour_sql->total_workhour=$p_hour;
+        $this->workhour_sql->work_description=$p_description;
+        $this->workhour_sql->save(); 
+    }
+    function remove()
+    {
+        $this->workhour_sql->delete();
+    }
 }
 ?>
