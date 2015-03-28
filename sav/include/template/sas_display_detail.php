@@ -31,10 +31,11 @@
 global $g_sav_parameter;
 $style_customer_detail_ul="list-style: none;padding-left: 20px;margin:0px";
 $style_customer_date_ul="list-style: none;padding-left: 0px;margin:0px";
+$style_date_id='width:50%;float:left';
 ?>
     <h2 class="title"><?php echo _('Fiche réparation')." ".$this->repair_card->id ?></h2>
 
-<div class="content" id="sas_display_detail_id">
+<div class="content" style="position: absolute" id="sas_display_detail_id">
 <form id="sas_display_detail_form" method="POST">
 <?php
 /* Hidden value */
@@ -77,7 +78,7 @@ if ( $this->repair_card->card_status=='D' ):
         </tr>
     </table>
 <?php else : ?>
-    <div style="width:80%;display: table-cell">
+    <div style="width:50%;float: left">
         <ul id="customer_detail_ul" style="<?php echo $style_customer_detail_ul ?>">
             <li> Code : <?php echo HtmlInput::card_detail($fiche_customer->strAttribut(ATTR_DEF_QUICKCODE),"",' style="display:inline;text-decoration:underline"')?></li>
             <li> <?php echo _('Nom') ?> : <span id="cust_name_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_NAME,0) ?></span></li>
@@ -92,12 +93,7 @@ if ( $this->repair_card->card_status=='D' ):
             <li> <?php echo _('TVA') ?>: <span id="cust_vat_id"><?php echo $fiche_customer->strAttribut(13,0) ?></span></li>
         </ul>
     </div>
-<?php endif; ?>        
-<?php
-$garantie=new IText('garantie', $this->repair_card->garantie);
-echo _('Numéro garantie')." ".$garantie->input();
-?>
-    <div style="width:15%;display:table-cell">
+        <div style="<?php echo $style_date_id;?>">
         Numéro de fiche  : <?php echo h($this->repair_card->id)?>
         <ul id="date_div_id" style="<?php echo $style_customer_date_ul ?>">
             <li> <?php echo _('Date réception')." ".$date_received->input();?> </li>
@@ -105,6 +101,13 @@ echo _('Numéro garantie')." ".$garantie->input();
             <?php if ( $this->repair_card->card_status != 'D' ): ?> <li> <?php echo _('Date Fin')." ".$date_end->input();?></li><?php endif;?>
         <?php echo _('Etat')." ".$status->input()?>
     </div>
+    <div style="float:top;clear: both"></div>
+<?php endif; ?>        
+<?php
+$garantie=new IText('garantie', $this->repair_card->garantie);
+echo _('Numéro garantie')." ".$garantie->input();
+?>
+
     <div id="material_id">
         <?php
         if  ( $this->repair_card->card_status == 'D') :
@@ -148,17 +151,21 @@ echo _('Numéro garantie')." ".$garantie->input();
 // if $p_repair_card_id != -1 it means it is an update
 if ( $this->repair_card->id != -1 ) :
 ?>
-    <div id="spare_id">
+    <div id="spare_id" style="<?php echo $style_date_id;?>">
         <h2 class="legend"><?php echo _('Pièces de rechange')?></h2>
+        <form>
         <?php
             $spare->display_list($this->repair_card->id);
         ?>
+        </form>
     </div>
-    <div id="workhour_div">
+    <div id="workhour_div" style="<?php echo $style_date_id;?>">
         <h2 class="legend"><?php echo _("Main d'oeuvre")?></h2>
+        <form>
         <?php
            $workhour->display_list($this->repair_card->id);
         ?>
+        </form>
         
     </div>
 <?php endif;    ?>

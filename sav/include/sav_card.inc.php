@@ -19,7 +19,7 @@
 
 $action=HtmlInput::default_value_request("sb", "list");
 require_once 'class_service_after_sale.php';
-var_dump($_POST);
+
 switch ($action) {
     case "list" :
         $service=new Service_After_Sale();
@@ -60,7 +60,6 @@ switch ($action) {
                 $service->set_garantie(HtmlInput::default_value_post('garantie',''));
                 $service->set_description(HtmlInput::default_value_post('description',-1));
                 $service->save();
-                echo "UPDATE";
             }
             
             
