@@ -44,7 +44,6 @@ class Sav_Repair_Card_SQL extends Noalyss_SQL
     var $f_id_customer;
     var $f_id_personnel_received;
     var $f_id_personnel_done;
-    var $f_id_spare_part;
     var $f_id_good;
     var $date_reception;
     var $date_start;
@@ -82,7 +81,6 @@ class Sav_Repair_Card_SQL extends Noalyss_SQL
             , "f_id_customer"=>"f_id_customer"
             , "f_id_personnel_received"=>"f_id_personnel_received"
             , "f_id_personnel_done"=>"f_id_personnel_done"
-            , "f_id_spare_part"=>"f_id_spare_part"
             , "date_reception"=>"date_reception"
             , "date_start"=>"date_start"
             , "date_end"=>"date_end"
@@ -100,7 +98,6 @@ class Sav_Repair_Card_SQL extends Noalyss_SQL
             , "f_id_customer"=>"numeric"
             , "f_id_personnel_received"=>"numeric"
             , "f_id_personnel_done"=>"numeric"
-            ,'f_id_spare_part'=>"numeric"
             , "date_reception"=>"date"
             , "date_start"=>"date"
             , "date_end"=>"date"
