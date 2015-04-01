@@ -55,7 +55,7 @@ class Sav_WorkHour
     }
     function get_description ()
     {
-        $this->workhour_sql->work_description ;
+        return $this->workhour_sql->work_description ;
     }
     function get_id()
     {
