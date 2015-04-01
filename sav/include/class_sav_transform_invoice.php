@@ -26,6 +26,8 @@ require_once 'class_service_after_sale.php';
 
 class Sav_Transform_Invoice {
     //put your code here
+    private $sav;
+    
     function __construct(Service_After_Sale $sav) {
         $this->sav=$sav;
     }
@@ -35,7 +37,7 @@ class Sav_Transform_Invoice {
     }
     private function date_sale()
     {
-        echo HtmlInput::hidden('e_date', date('d.M.y'));
+        echo HtmlInput::hidden('e_date', date('d.m.Y'));
     }
     private function customer()
     {
@@ -90,6 +92,14 @@ class Sav_Transform_Invoice {
         return $i;
                 
     }
+    public function display_comment()
+    {
+        $material  = $this->sav->get_material_qcode();
+        $material .= " ";
+        $material  .= $this->sav->get_material_name();
+        echo HtmlInput::hidden('e_comm',$material);
+        
+    }
     public function form()
     {
         global $g_sav_parameter;
@@ -101,6 +111,6 @@ class Sav_Transform_Invoice {
         echo HtmlInput::hidden('correct',1);
         $max_spare_part=$this->display_spare_part(0);
         $this->display_workhour($max_spare_part);
-        
+        $this->display_comment();
     }
 }

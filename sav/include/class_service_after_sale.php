@@ -330,5 +330,26 @@ class Service_After_Sale
         
         return $fiche->get_quick_code();
    }
+    function get_material_qcode()
+   {
+        global $cn;
+        $fiche = new Fiche($cn);
+            
+        /* retrieve f_id thanks quick_code */
+        $fiche->id=$this->repair_card->f_id_good;
+        
+        return $fiche->get_quick_code();
+   }
+    function get_material_name()
+   {
+        global $cn;
+        $fiche = new Fiche($cn);
+            
+        /* retrieve f_id thanks quick_code */
+        $fiche->id=$this->repair_card->f_id_good;
+        
+        return $fiche->getName();
+   }
+
 
 }
