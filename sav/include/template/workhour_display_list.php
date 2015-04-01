@@ -64,3 +64,4 @@ global $cn,$ac,$plugin_code,$gDossier;
             ?>
             
         </td>
+</table>        

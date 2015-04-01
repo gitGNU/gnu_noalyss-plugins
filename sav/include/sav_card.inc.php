@@ -24,7 +24,7 @@ switch ($action) {
     case "list" :
         $service=new Service_After_Sale();
         $service->button_add();
-        $service->display_list();
+        $service->display_list(" where card_status='E' ");
         $service->button_add();
         return;
     case "detail" :
@@ -67,6 +67,6 @@ switch ($action) {
         $service->set_card_id($card);
         $service->display_detail();
         return;
-        
+      
     
 }

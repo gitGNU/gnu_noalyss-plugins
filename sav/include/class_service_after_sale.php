@@ -49,10 +49,10 @@ class Service_After_Sale
           and tech_creation_date < now + interval "4 hours"'); */
     }
 
-    public function display_list()
+    public function display_list($p_where)
     {
         global $cn;
-        $this->delete_draft();
+        
         $listing=$cn->get_array("SELECT id, 
              f_id_customer, 
              fd1.ad_value as name,
@@ -64,13 +64,15 @@ class Service_After_Sale
              jr_id, 
              tech_creation_date, 
              repair_number,
-             garantie
+             garantie,
+             card_status
              FROM service_after_sale.sav_repair_card as src
              join fiche_detail as fd1 on (fd1.f_id=src.f_id_customer and fd1.ad_id=1)
              join fiche_detail as fd2 on (fd2.f_id=src.f_id_customer and fd2.ad_id=23)
-             where
-             card_status='E'
-             order by date_reception desc
+             
+             $p_where
+             
+            order by date_reception desc,id desc
         ");
         include 'template/sas_display_list.php';
     }
@@ -82,7 +84,10 @@ class Service_After_Sale
         $button=HtmlInput::button_anchor(_("Ajout"), $url, "", "", "smallbutton");
         echo $button;
     }
-
+    public function button_search()
+    {
+        
+    }
     public function display_detail()
     {
         global $cn;
