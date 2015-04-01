@@ -106,5 +106,17 @@ class Service_After_Sale_Parameter
             
         $this->spare=$p_spare;
     }
-}
+    function get_workhour_qcode()
+    {
+        return 1;
+    }
+    function set_workhour_qcode($p_string)
+    {
+        $this->workhour_qcode=$p_string;
+    }
+    function get_ledger()
+    {
+        return 1;
+    }
+}   
 ?>

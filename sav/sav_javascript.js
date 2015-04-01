@@ -32,8 +32,8 @@ function fill_customer(p_ctl, p_dossier, p_plugin_code, p_ac)
 
         );
     } catch (e) {
-        alert(e.message);
-        alert(p_ctl);
+        remove_waiting_box();
+        error_message(e.message);
     }
 }
 /**
@@ -102,7 +102,8 @@ function spare_part_add(p_dossier, p_access, p_plugin_code, p_repair_card)
                     }
                 });
     } catch (e) {
-        alert("spare_part" + e.message);
+        remove_waiting_box();
+        error_message("spare_part" + e.message);
     }
 }
 /**
@@ -130,7 +131,8 @@ function spare_part_remove(p_dossier, p_access, p_plugin_code, p_spare_part_id)
                     }
                 });
     } catch (e) {
-        alert("spare_part" + e.message);
+        remove_waiting_box();
+        error_message("spare_part" + e.message);
     }
 }
 /**
@@ -187,7 +189,8 @@ function workhour_add(p_dossier, p_access, p_plugin_code, p_repair_card)
                     }
                 });
     } catch (e) {
-        alert("spare_part" + e.message);
+        remove_waiting_box();
+        error_message("spare_part" + e.message);
     }
 }
 /**
@@ -215,6 +218,25 @@ function workhour_remove(p_dossier, p_access, p_plugin_code, p_workhour_id)
                     }
                 });
     } catch (e) {
-        alert("workhour " + e.message);
+        remove_waiting_box();
+        error_message("workhour " + e.message);
+    }
+}
+
+function sav_prepare_invoice(p_dossier,p_plugin_code,p_ac,p_repair_id)
+{
+    
+    try {
+        waiting_box();
+        var update=new Ajax.Updater($('invoice_div_id'),'ajax.php',
+        {
+            method:'get',
+            parameters:{ gDossier:p_dossier,ac:p_ac,plugin_code:p_plugin_code,repair_id:p_repair_id,act:'prepare_invoice'}
+        });
+        remove_waiting_box();
+    } catch (e)
+    {
+        remove_waiting_box();
+        error_message(e.message)
     }
 }

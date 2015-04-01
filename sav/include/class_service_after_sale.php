@@ -306,6 +306,29 @@ class Service_After_Sale
     {
         return $this->repair_card->id;
     }
-                
+    /**
+     * Return button
+     * @global type $gDossier
+     * @global type $plugin_code
+     * @global type $ac
+     * @return \IButton
+     */
+   function button_prepare_invoice()
+   {
+       global $gDossier,$plugin_code,$ac;
+       $button=new IButton('prepare_invoice', _('Préparer facture'), 'prepare_button_id');
+       $button->javascript=sprintf("sav_prepare_invoice('%s','%s','%s','%s')",$gDossier,$plugin_code,$ac,$this->repair_card->id);
+       return $button->input();
+   }
+   function get_customer_qcode()
+   {
+        global $cn;
+        $fiche = new Fiche($cn);
+            
+        /* retrieve f_id thanks quick_code */
+        $fiche->id=$this->repair_card->f_id_customer;
+        
+        return $fiche->get_quick_code();
+   }
 
 }
