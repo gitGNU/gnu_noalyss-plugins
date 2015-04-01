@@ -39,7 +39,7 @@ $gDossier=HtmlInput::default_value_request("gDossier", "0");
                     <?php echo $row['str_date_reception']; ?>
                 </td>
                 <td>
-                    <?php echo $row['repair_number']; ?>
+                    <?php echo $row['id']; ?>
                 </td>
                 <td>
                     <?php echo $row['name']; ?>
@@ -54,7 +54,11 @@ $gDossier=HtmlInput::default_value_request("gDossier", "0");
                     <?php echo $row['garantie']; ?>
                 </td>
                 <td>
-                    FACTURE
+                    <?php 
+                        $idx=$row['card_status'];
+                        $lib=Sav_Repair_Card_SQL::$card_status_value_simple[$idx];
+                        echo $lib;
+                        ?>
                 </td>
                 <td>
                     <?php
