@@ -87,12 +87,18 @@ function spare_part_add(p_dossier, p_access, p_plugin_code, p_repair_card)
                         
                         var xml_spare_id=answer.getElementsByTagName('id')[0];
                         var spare_id=getNodeText(xml_spare_id);
-                        
-                        var table_len=$('spare_part_table_list_id').rows.length-1;
-                        var new_row=$('spare_part_table_list_id').insertRow(table_len);
-                        new_row.id='spare_part'+spare_id;
-                        new_row.innerHTML=code_html;
-                        remove_waiting_box();
+                        var xml_error=getNodeText(answer.getElementsByTagName('error')[0]);
+                        if ( xml_error == 1001 ) { 
+                            remove_waiting_box();
+                            alert('Invalide');
+                        }
+                        else {
+                            var table_len=$('spare_part_table_list_id').rows.length-1;
+                            var new_row=$('spare_part_table_list_id').insertRow(table_len);
+                            new_row.id='spare_part'+spare_id;
+                            new_row.innerHTML=code_html;
+                            remove_waiting_box();
+                        }
                     }
                 });
     } catch (e) {
@@ -164,12 +170,20 @@ function workhour_add(p_dossier, p_access, p_plugin_code, p_repair_card)
                         
                         var xml_spare_id=answer.getElementsByTagName('id')[0];
                         var spare_id=getNodeText(xml_spare_id);
-                        
-                        var table_len=$('workhour_table_id').rows.length-1;
-                        var new_row=$('workhour_table_id').insertRow(table_len);
-                        new_row.id='workhour'+spare_id;
-                        new_row.innerHTML=code_html;
-                        remove_waiting_box();
+                        var xml_error=getNodeText(answer.getElementsByTagName('error')[0]);
+                        if ( xml_error == 1001 ) { 
+                            remove_waiting_box();
+                            alert('Invalide');
+                        }
+                        else {
+                            var table_len=$('workhour_table_id').rows.length-1;
+                            var new_row=$('workhour_table_id').insertRow(table_len);
+                            new_row.id='workhour'+spare_id;
+                            new_row.innerHTML=code_html;
+                            remove_waiting_box();
+                            $('workhour_quant').value='';
+                            $('workhour_description').value='';
+                        }
                     }
                 });
     } catch (e) {
