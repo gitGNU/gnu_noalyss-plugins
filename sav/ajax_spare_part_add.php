@@ -32,13 +32,15 @@ $qcode=HtmlInput::default_value_get('qcode', "");
 $quant=HtmlInput::default_value_get('quant',-1);
 $repair=HtmlInput::default_value_get('repair',-1);
 
-if ( $quant == -1 || isNumber($quant )== 0 ||trim($qcode)=="" ||$repair==-1||isNumber($repair)==0)
-    throw new Exception("Invalid parameter");
 
-$spare=new Sav_Spare_Part();
+
 $erreur="";
+$row="";
 try
 {
+    $spare=new Sav_Spare_Part();
+    if ( $quant == -1 || isNumber($quant )== 0 ||trim($qcode)=="" ||$repair==-1||isNumber($repair)==0)
+        throw new Exception("Invalid parameter",APPEL_INVALIDE);
     $spare->repair_card_add($repair,$qcode, $quant);
     $row=escape_xml($spare->print_row());
 }

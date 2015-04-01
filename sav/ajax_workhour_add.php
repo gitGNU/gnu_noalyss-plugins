@@ -36,6 +36,7 @@ $repair=HtmlInput::default_value_get('repair',-1);
 
 $workhour=new Sav_WorkHour();
 $erreur="";
+$row="";
 try
 {
     if ( $hour == -1 || isNumber($hour)== 0 ||$repair==-1||isNumber($repair)==0)
