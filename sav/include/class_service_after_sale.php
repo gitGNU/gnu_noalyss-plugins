@@ -48,7 +48,12 @@ class Service_After_Sale
           $cn->exec('delete from service_after_sale.sav_repair_card where repair_number is null
           and tech_creation_date < now + interval "4 hours"'); */
     }
-
+    /**
+     *  Display table of Repair card
+     * @global $cn database conx
+     * @param $p_where SQL where clause (must starts with " where ")
+     * 
+     */
     public function display_list($p_where)
     {
         global $cn;
@@ -76,7 +81,9 @@ class Service_After_Sale
         ");
         include 'template/sas_display_list.php';
     }
-
+    /**
+     * Display a button add
+     */
     public function button_add()
     {
         $url="do.php".HtmlInput::request_to_string(array('ac', 'gDossier', 'sa', 'sb', 'plugin_code'));
@@ -88,6 +95,10 @@ class Service_After_Sale
     {
         
     }
+    /**
+     * Display detail of a repair card
+     * @global $cn $cn
+     */
     public function display_detail()
     {
         global $cn;
@@ -152,31 +163,63 @@ class Service_After_Sale
         
         require 'template/sas_display_detail.php';
     }
+    /**
+     * Set the status
+     * @param type $p_status
+     */
     function set_status($p_status)
     {
         $this->repair_card->card_status=$p_status;
     }
+    /**
+     * Set the reception date
+     * @param type $p_date
+     * @throws Exception
+     */
     function set_date_reception($p_date)
     {
         if (isDate($p_date) == null )            throw new Exception(_('Date invalide'),DATEINVALIDE);
         $this->repair_card->date_reception=$p_date;
     }
+    /**
+     * Set the start date
+     * @param type $p_date
+     * @return type
+     * @throws Exception
+     */
     function set_date_start($p_date)
     {
         if ( $p_date=="") return;
         if (isDate($p_date) == null )            throw new Exception(_('Date invalide'),DATEINVALIDE);
         $this->repair_card->date_start=$p_date;
     }
+    /**
+     * Set the date end 
+     * @param type $p_date
+     * @return type
+     * @throws Exception
+     */
     function set_date_end($p_date)
     {
         if ( $p_date=="") return;
         if (isDate($p_date) == null )            throw new Exception(_('Date invalide'),DATEINVALIDE);
         $this->repair_card->date_end=$p_date;
     }
+    /**
+     * set the garantie number
+     * @param type $p_string
+     */
     function set_garantie($p_string)
     {
-        $this->repair_card->garantie=h($p_string);
+        $this->repair_card->garantie=$p_string;
     }
+    /**
+     * Set the customer either by qcode or id
+     * @global $cn $cn
+     * @param $p_cust_id : id or qcode
+     * @param $p_via value are qcode or id
+     * @throws Exception
+     */
     function set_customer($p_cust_id,$p_via)
     {
         global $cn;
@@ -197,6 +240,13 @@ class Service_After_Sale
         /* retrieve f_id thanks quick_code */
         $this->repair_card->f_id_customer=$fiche->id;
     }
+    /**
+     * Set the material
+     * @global $cn $cn
+     * @param  $p_good_id Fiche::f_id of the material or its qcode
+     * @param  $p_via qcode or id
+     * @throws Exception
+     */
     function set_material($p_good_id,$p_via)
     {
         global $cn;
@@ -218,16 +268,27 @@ class Service_After_Sale
         /* retrieve f_id thanks quick_code */
         $this->repair_card->f_id_good=$fiche->id;
     }
+    /**
+     * Set the description
+     * @param type $p_string
+     */
     function set_description($p_string)
     {
-        $this->repair_card->description_failure=h($p_string);
+        $this->repair_card->description_failure=$p_string;
         
     }
+    /**
+     * Load the repair card given in parameter
+     * @param $p_integer repair_card id
+     */
     function set_card_id($p_integer)
     {
         $this->repair_card->id=$p_integer;
         $this->repair_card->load();
     }
+    /**
+     * update or insert
+     */
     function save()
     {
         if ( $this->repair_card->id == -1 ) 
@@ -237,6 +298,10 @@ class Service_After_Sale
             $this->repair_card->update();
         }
     }
+    /**
+     * return the repair_card id
+     * @return type
+     */
     function get_card_id()
     {
         return $this->repair_card->id;
