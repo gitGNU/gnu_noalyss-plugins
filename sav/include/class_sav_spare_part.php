@@ -46,6 +46,14 @@ class Sav_Spare_Part
         $count_spare=count($a_spare);
         require 'template/spare_part_display_list.php';
     }
+    /**
+     * Display a row for a table
+     * @global $cn database conx
+     * @global $gDossier dossier id
+     * @global $ac access code
+     * @global $plugin_code
+     * @return string
+     */
     function print_row()
     {
         global $cn,$gDossier,$ac,$plugin_code;
@@ -64,7 +72,14 @@ class Sav_Spare_Part
         $result=ob_get_clean();
         return $result;
     }
-   
+   /**
+    * Attach a spare_part with a Repair Card
+    * @global $cn database conx
+    * @param integer repair card id
+    * @param $qcode of the spare part 
+    * @param $p_quant quantity of spare part
+    * @throws Exception
+    */
     function repair_card_add($p_repair,$p_qcode,$p_quant)
     {
         global $cn;
@@ -84,14 +99,26 @@ class Sav_Spare_Part
         $this->spare_part->save();
         
     }
+    /**
+     * Remove a spare_card from a repair_card
+     */
     function remove()
     {
         $this->spare_part->delete();
     }
+    /**
+     * return the spare_part id
+     * @return integer
+     */
     function get_id()
     {
         return $this->spare_part->id;
     }
+    /**
+     * Return name of the spare_part
+     * @global  $cn database conx
+     * @return string
+     */
     function get_name()
     {
         global $cn;
@@ -99,6 +126,11 @@ class Sav_Spare_Part
         return $fiche->strAttribut(ATTR_DEF_NAME);
         
     }
+    /**
+     * Return quick_code of the spare_part
+     * @global $cn database conx
+     * @return string
+     */
     function get_qcode()
     {
         global $cn;
