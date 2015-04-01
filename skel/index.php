@@ -19,9 +19,11 @@
 /* $Revision$ */
 
 // Copyright (c) 2002 Author Dany De Bontridder dany@alchimerys.be
-
+/*
 /*!\file
- * \brief main file for tva
+ * \brief main file for : change
+ *   - skel with code of the plugin
+ *   - Route n : with real name
  */
 
 /*
@@ -39,12 +41,9 @@ Extension::check_version(4400);
 
 $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&ac='.$_REQUEST['ac'];
 
-$array=array (
-         array($url.'&sa=dec',_('Déclaration TVA'),_('Déclaration Trimestriel ou annuel de TVA'),1),
-         array($url.'&sa=li',_('Listing intracommunautaire'),_('Listing intracommunautaire trimestriel'),2),
-         array($url.'&sa=lc',_('Listing Assujetti'),_('Listing des clients assujettis'),3),
-         array($url.'&sa=ltva',_('Liste des déclarations TVA'),_('Historique des déclarations TVA'),4),
-         array($url.'&sa=param',_('Paramètrage '),_('Paramètre pour la TVA'),5)
+$menu=array (
+         array($url.'&sa=dec',_('Route 1'),_('Première route'),1),
+         array($url.'&sa=li',_('Route 2'),_('Seconde route'),2)
        );
 
 $sa=(isset($_REQUEST['sa']))?$_REQUEST['sa']:0;
@@ -57,20 +56,13 @@ switch($sa)
   case 'li':
     $def=2;
     break;
-  case 'lc':
-    $def=3;
-    break;
-  case 'ltva':
-    $def=4;
-    break;
-  case 'param':
-    $def=5;
-    break;
+  default :
+     $def=2;
 
   }
 
 $cn=new Database(dossier::id());
-if ( $cn->exist_schema('tva_belge') == false)
+if ( $cn->exist_schema('skeleton') == false)
   {
     require_once('include/class_install_plugin.php');
 
@@ -80,46 +72,28 @@ if ( $cn->exist_schema('tva_belge') == false)
      *@todo améliorer le message, peu cosmétique
      */
     echo_warning(_("L'extension est installée, pourriez-vous en vérifier le paramètrage ?"));
-    $def=5;
+    $def=2;
   }
 
 // show menu
-echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=aide" target="_blank">Aide</a>'.
+echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=skel" target="_blank">Aide</a>'.
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
 '</div>';
-
-echo ShowItem($menu,'H','mtitle ','mtitle ',$def,' style="width:80%;margin-left:10%;border-collapse: separate;border-spacing:  5px;"');
+echo '<div class="menu2">';
+echo ShowItem($menu,'H','mtitle ','mtitle ',$def,'class="mtitle"');
+echo '</div>';
 
 // include the right file
 if ($def==1)
   {
-    require_once('include/decl_tva.inc.php');
+    require_once('include/route1.inc.php');
     exit();
   }
 
-/* Listing of all */
-if ($def==4)
-  {
-    require_once('include/list_tva.inc.php');
-    exit();
-  }
 /* listing intracomm */
 if ($def==2)
   {
-    require_once('include/list_intra.inc.php');
-    exit();
-  }
-/* listing assujetti */
-if ($def==3)
-  {
-    require_once('include/list_assujetti.inc.php');
-    exit();
-  }
-
-/* setting */
-if ( $def==5)
-  {
-    require_once('include/tva_param.inc.php');
+    require_once('include/route2.inc.php');
     exit();
   }
 ?>

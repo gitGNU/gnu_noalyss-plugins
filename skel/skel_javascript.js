@@ -107,25 +107,20 @@ function success_save_new_material(req)
 function save_modify(obj)
 {
      var querystring="?"+$(obj).serialize()+'&op=save_modify&t=bxmat';
-
+     waiting_box();
     // Create a ajax request to get all the person
-    var action = new Ajax.Request ('ajax.php',
+    var action = new Ajax.Updater($('source_id'),'ajax.php',
 				   {
 				       method: 'post',
 				       parameters: querystring,
-				       onFailure: error_ajax,
-				       onSuccess: success_save_modify
 				   }
                                   );
 
+    remove_waiting_box();
     return false;   
    
 }
-function success_save_modify(req)
-{
-    fill_box(req);
 
-}
 function remove_mat(g_dossier,plugin_code,a_id)
 {
     if ( ! confirm('Vous confirmez EFFACEMENT')) { return false;}
