@@ -57,6 +57,7 @@ class Sav_Repair_Card_SQL extends Noalyss_SQL
     var $repair_number;
     /* example private $variable=array("easy_name"=>column_name,"email"=>"column_name_email","val3"=>0); */
     static $card_status_value;
+    static $card_status_value_simple;
 
     function __construct($p_id=-1)
     {
@@ -66,6 +67,11 @@ class Sav_Repair_Card_SQL extends Noalyss_SQL
             array("value"=>'D','label'=>_('Brouillon')),
             array("value"=>'C','label'=>_('Fermé')),
             array("value"=>'E','label'=>_('En-cours'))
+            );
+        Sav_Repair_Card_SQL::$card_status_value_simple=array(
+            'D'=>_('Brouillon'),
+            'C'=>_('Fermé'),
+            'E'=>_('En-cours')
             );
 
         $this->table="service_after_sale.sav_repair_card";
