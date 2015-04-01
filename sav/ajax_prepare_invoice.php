@@ -36,7 +36,7 @@ $transform=new Sav_Transform_Invoice($sav);
 if ( $sav->get_card_id() == -1 )    throw new Exception(_('Carte réparation inexistante'),APPEL_INVALIDE);
 
 ?>        
-<form method="POST" action="do.php">
+<form method="POST" action="do.php" target="_blank">
     <?php
         echo Dossier::hidden();
         echo $transform->form();
