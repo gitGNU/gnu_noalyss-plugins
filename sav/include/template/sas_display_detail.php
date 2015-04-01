@@ -33,10 +33,9 @@ $style_customer_detail_ul="list-style: none;padding-left: 20px;margin:0px";
 $style_customer_date_ul="list-style: none;padding-left: 0px;margin:0px";
 $style_date_id='width:50%;float:left';
 ?>
-    <h2 class="title"><?php echo _('Fiche réparation')." ".$this->repair_card->id ?></h2>
 
 <div class="content" style="position: absolute" id="sas_display_detail_id">
-<form id="sas_display_detail_form" method="POST">
+<form id="sas_display_detail_form" class="print" method="POST">
 <?php
 /* Hidden value */
 echo HtmlInput::request_to_hidden(array('gDossier','sa','sb','ac','plugin_code'));
@@ -79,27 +78,75 @@ if ( $this->repair_card->card_status=='D' ):
     </table>
 <?php else : ?>
     <div style="width:50%;float: left">
-        <ul id="customer_detail_ul" style="<?php echo $style_customer_detail_ul ?>">
-            <li> Code : <?php echo HtmlInput::card_detail($fiche_customer->strAttribut(ATTR_DEF_QUICKCODE),"",' style="display:inline;text-decoration:underline"')?></li>
-            <li> <?php echo _('Nom') ?> : <span id="cust_name_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_NAME,0) ?></span></li>
-            <li> <?php echo _('Prénom') ?> : <span id="cust_firstname_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_FIRST_NAME,0) ?></span></li>
-            <li> <?php echo _('Adresse') ?>: <span id="cust_address_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_ADRESS,0) ?></span></li>
-            <li> <?php echo _('Code postal') ?>: <span id="cust_cp_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_CP,0) ?></span></li>
-            <li> <?php echo _('Ville') ?>: <span id="cust_town_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_CITY,0) ?></span></li>
-            <li> <?php echo _('Pays') ?>: <span id="cust_country_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_PAYS,0) ?></span></li>
-            <li> <?php echo _('GSM') ?>: <span id="cust_mobile_id"><?php echo $fiche_customer->strAttribut(27,0) ?></span></li>
-            <li> <?php echo _('Téléphone') ?>: <span id="cust_mobile_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_TEL,0) ?></span></li>
-            <li> <?php echo _('Email') ?>: <span id="cust_email_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_EMAIL,0) ?></span></li>
-            <li> <?php echo _('TVA') ?>: <span id="cust_vat_id"><?php echo $fiche_customer->strAttribut(13,0) ?></span></li>
-        </ul>
+        <table>
+                <tr> 
+                    <td>Code </td>
+                    <td><?php echo HtmlInput::card_detail($fiche_customer->strAttribut(ATTR_DEF_QUICKCODE), "", ' style="display:inline;text-decoration:underline"') ?></td>
+                </tr>
+                <tr> 
+                    <td><?php echo _('Nom') ?> : </td>
+                    <td id="cust_name_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_NAME, 0) ?></td>
+                </tr>
+                <tr> 
+                    <td><?php echo _('Prénom') ?> : </td>
+                    <td id="cust_firstname_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_FIRST_NAME, 0) ?></td>
+                </tr>
+                <tr> 
+                    <td><?php echo _('Adresse') ?>: </td>
+                    <td id="cust_address_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_ADRESS, 0) ?></td>
+                </tr>
+                <tr> 
+                    <td><?php echo _('Code postal') ?>: </td>
+                    <td id="cust_cp_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_CP, 0) ?></td>
+                </tr>
+                <tr> 
+                    <td><?php echo _('Ville') ?>: </td>
+                    <td id="cust_town_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_CITY, 0) ?></td>
+                </tr>
+                <tr> 
+                    <td><?php echo _('Pays') ?>: </td>
+                    <td id="cust_country_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_PAYS, 0) ?></td>
+                </tr>
+                <tr> 
+                    <td><?php echo _('GSM') ?>: </td>
+                    <td id="cust_mobile_id"><?php echo $fiche_customer->strAttribut(27, 0) ?></td>
+                </tr>
+                <tr>
+                    <td><?php echo _('Téléphone') ?>: </td>
+                    <td id="cust_mobile_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_TEL, 0) ?></td>
+                </tr>
+                <tr>
+                    <td><?php echo _('Email') ?>: </td>
+                    <td id="cust_email_id"><?php echo $fiche_customer->strAttribut(ATTR_DEF_EMAIL, 0) ?></td>
+                </tr>
+                <tr> 
+                    <td><?php echo _('TVA') ?>: </td>
+                    <td id="cust_vat_id"><?php echo $fiche_customer->strAttribut(13, 0) ?></td>
+                </tr>
+            </table>
     </div>
         <div style="<?php echo $style_date_id;?>">
-        Numéro de fiche  : <?php echo h($this->repair_card->id)?>
-        <ul id="date_div_id" style="<?php echo $style_customer_date_ul ?>">
-            <li> <?php echo _('Date réception')." ".$date_received->input();?> </li>
-            <?php if ( $this->repair_card->card_status != 'D' ): ?> <li> <?php echo _('Date Début')." ".$date_start->input();?></li> <?php endif;?>
-            <?php if ( $this->repair_card->card_status != 'D' ): ?> <li> <?php echo _('Date Fin')." ".$date_end->input();?></li><?php endif;?>
-        <?php echo _('Etat')." ".$status->input()?>
+            <table id="date_table_id">
+                <tr class="highlight">
+                    <td>
+                        Numéro de fiche  : 
+                    </td>
+                    <td>
+                        <?php echo h($this->repair_card->id)?>
+                    </td>
+                </tr> 
+        <tr>
+            <td> <?php echo _('Date réception')."</td><td> ".$date_received->input();?> </td>
+        </tr>
+            <?php if ( $this->repair_card->card_status != 'D' ): ?> <tr><td> <?php echo _('Date Début')."</td><td>".$date_start->input();?></td></tr> <?php endif;?>
+            <?php if ( $this->repair_card->card_status != 'D' ): ?> <tr><td> <?php echo _('Date Fin')."</td><td>".$date_end->input();?></td></tr><?php endif;?>
+            <tr>
+                <td>
+                    <?php echo _('Etat')."</td><td> ".$status->input()?>
+                </td>
+            
+        </tr>
+            </table>
     </div>
     <div style="float:top;clear: both"></div>
 <?php endif; ?>        
@@ -153,15 +200,16 @@ if ( $this->repair_card->id != -1 ) :
 ?>
     <div id="spare_id" style="<?php echo $style_date_id;?>">
         <h2 class="legend"><?php echo _('Pièces de rechange')?></h2>
-        <form method="get">
+        <form method="get" class="print">
         <?php
             $spare->display_list($this->repair_card->id);
+            
         ?>
         </form>
     </div>
     <div id="workhour_div" style="<?php echo $style_date_id;?>">
         <h2 class="legend"><?php echo _("Main d'oeuvre")?></h2>
-        <form>
+        <form class="print">
         <?php
            $workhour->display_list($this->repair_card->id);
         ?>

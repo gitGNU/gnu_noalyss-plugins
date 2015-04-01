@@ -41,7 +41,7 @@ Extension::check_version(6800);
 $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&ac='.$_REQUEST['ac'];
 
 $menu=array (
-         array($url.'&sa=enc',_('Encodage de fiche'),_('Encodage de fiche'),1),
+         array($url.'&sa=enc',_('En-cours'),_('Encodage de fiche'),1),
          array($url.'&sa=histo',_('Historique'),_('Toutes les fiches'),3),
          array($url.'&sa=param',_('Paramètre SAV'),_('Paramétrage du module SAV'),2)
        );
@@ -56,7 +56,7 @@ switch($sa)
   case 'param':
     $def=2;
     break;
-  case 'list':
+  case 'histo':
     $def=3;
     break;
   }
@@ -78,8 +78,9 @@ if ( $cn->exist_schema('service_after_sale') == false)
 echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=sav" target="_blank">Aide</a>'.
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
 '</div>';
-
-echo ShowItem($menu,'H','mtitle ','mtitle ',$def,' style="width:80%;margin-left:10%;border-collapse: separate;border-spacing:  5px;"');
+echo '<div class="menu2">';
+echo ShowItem($menu,'H','mtitle ','mtitle ',$def,'class="mtitle"');
+echo '</div>';
 
 // include the right file
 if ($def==1)
@@ -92,3 +93,7 @@ if ($def==2)
     require_once('include/sav_param.inc.php');
     exit();
   }
+if ( $def == 3 )
+{
+    require_once 'include/sav_histo.php';
+}
