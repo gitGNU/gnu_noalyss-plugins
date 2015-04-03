@@ -216,6 +216,8 @@ if ( $this->repair_card->id != -1 ) :
         </form>
         
     </div>
+        <div style="float:top;clear: both"></div>
+
     <div id="invoice_div_id">
         <?php echo $this->button_prepare_invoice();?>
     </div>
