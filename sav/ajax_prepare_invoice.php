@@ -41,5 +41,5 @@ if ( $sav->get_card_id() == -1 )    throw new Exception(_('Carte réparation ine
         echo Dossier::hidden();
         echo $transform->form();
     ?>
-    <input type="submit" class="input_text" value="<?php echo _('Facture') ?>">
+    <input type="submit" class="button" value="<?php echo _('Facture') ?>">
 </form>
