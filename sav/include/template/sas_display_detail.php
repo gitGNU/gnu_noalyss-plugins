@@ -49,7 +49,7 @@ if ( $this->repair_card->card_status=='D' ):
     $input_fiche_customer->set_dblclick('fill_ipopcard(this)');
 
     $input_fiche_customer->set_function('fill_data');
-    //$input_fiche_customer->javascript=sprintf(' onchange="fill_customer(\'%s\',\'%s\',\'%s\',\'%s\');" ', $input_fiche_customer->name, $gDossier, $plugin_code, $ac);
+
     $sql=' select fd_id from fiche_def where frd_id = '.FICHE_TYPE_CLIENT;
     $filter=$cn->make_list($sql);
     $input_fiche_customer->set_attribute('typecard', $filter);
@@ -129,7 +129,7 @@ if ( $this->repair_card->card_status=='D' ):
             <table id="date_table_id">
                 <tr class="highlight">
                     <td>
-                        Numéro de fiche  : 
+                        Numéro de fiche 
                     </td>
                     <td>
                         <?php echo h($this->repair_card->id)?>
