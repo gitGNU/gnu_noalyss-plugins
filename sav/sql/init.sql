@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.1.15
 -- Dumped by pg_dump version 9.1.15
--- Started on 2015-04-01 13:16:22 CEST
+-- Started on 2015-04-03 12:08:04 CEST
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -23,7 +23,7 @@ CREATE SCHEMA service_after_sale;
 ALTER SCHEMA service_after_sale OWNER TO dany;
 
 --
--- TOC entry 2951 (class 0 OID 0)
+-- TOC entry 2969 (class 0 OID 0)
 -- Dependencies: 14
 -- Name: SCHEMA service_after_sale; Type: COMMENT; Schema: -; Owner: dany
 --
@@ -55,7 +55,7 @@ CREATE TABLE sav_workhour (
 ALTER TABLE service_after_sale.sav_workhour OWNER TO dany;
 
 --
--- TOC entry 2952 (class 0 OID 0)
+-- TOC entry 2970 (class 0 OID 0)
 -- Dependencies: 492
 -- Name: TABLE sav_workhour; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -64,7 +64,7 @@ COMMENT ON TABLE sav_workhour IS 'Workhours';
 
 
 --
--- TOC entry 2953 (class 0 OID 0)
+-- TOC entry 2971 (class 0 OID 0)
 -- Dependencies: 492
 -- Name: COLUMN sav_workhour.total_workhour; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -73,7 +73,7 @@ COMMENT ON COLUMN sav_workhour.total_workhour IS 'amount of workhour';
 
 
 --
--- TOC entry 2954 (class 0 OID 0)
+-- TOC entry 2972 (class 0 OID 0)
 -- Dependencies: 492
 -- Name: COLUMN sav_workhour.repair_card_id; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -82,7 +82,7 @@ COMMENT ON COLUMN sav_workhour.repair_card_id IS 'FK to sav_repair_card';
 
 
 --
--- TOC entry 2955 (class 0 OID 0)
+-- TOC entry 2973 (class 0 OID 0)
 -- Dependencies: 492
 -- Name: COLUMN sav_workhour.work_description; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -91,7 +91,7 @@ COMMENT ON COLUMN sav_workhour.work_description IS 'Description of the work (opt
 
 
 --
--- TOC entry 2956 (class 0 OID 0)
+-- TOC entry 2974 (class 0 OID 0)
 -- Dependencies: 492
 -- Name: COLUMN sav_workhour.f_id_workhour; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -101,7 +101,7 @@ COMMENT ON COLUMN sav_workhour.f_id_workhour IS 'Card for workhour';
 
 --
 -- TOC entry 491 (class 1259 OID 5482450)
--- Dependencies: 492 14
+-- Dependencies: 14 492
 -- Name: intervention_id_seq; Type: SEQUENCE; Schema: service_after_sale; Owner: dany
 --
 
@@ -116,7 +116,7 @@ CREATE SEQUENCE intervention_id_seq
 ALTER TABLE service_after_sale.intervention_id_seq OWNER TO dany;
 
 --
--- TOC entry 2957 (class 0 OID 0)
+-- TOC entry 2975 (class 0 OID 0)
 -- Dependencies: 491
 -- Name: intervention_id_seq; Type: SEQUENCE OWNED BY; Schema: service_after_sale; Owner: dany
 --
@@ -141,7 +141,7 @@ CREATE TABLE sav_parameter (
 ALTER TABLE service_after_sale.sav_parameter OWNER TO dany;
 
 --
--- TOC entry 2958 (class 0 OID 0)
+-- TOC entry 2976 (class 0 OID 0)
 -- Dependencies: 496
 -- Name: TABLE sav_parameter; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -166,7 +166,7 @@ CREATE SEQUENCE parameter_id_seq
 ALTER TABLE service_after_sale.parameter_id_seq OWNER TO dany;
 
 --
--- TOC entry 2959 (class 0 OID 0)
+-- TOC entry 2977 (class 0 OID 0)
 -- Dependencies: 495
 -- Name: parameter_id_seq; Type: SEQUENCE OWNED BY; Schema: service_after_sale; Owner: dany
 --
@@ -192,7 +192,7 @@ ALTER TABLE service_after_sale.repair_card_number_seq OWNER TO dany;
 
 --
 -- TOC entry 499 (class 1259 OID 5483324)
--- Dependencies: 2817 14
+-- Dependencies: 2822 14
 -- Name: sav_repair_card; Type: TABLE; Schema: service_after_sale; Owner: dany; Tablespace: 
 --
 
@@ -217,7 +217,7 @@ CREATE TABLE sav_repair_card (
 ALTER TABLE service_after_sale.sav_repair_card OWNER TO dany;
 
 --
--- TOC entry 2960 (class 0 OID 0)
+-- TOC entry 2978 (class 0 OID 0)
 -- Dependencies: 499
 -- Name: TABLE sav_repair_card; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -226,7 +226,7 @@ COMMENT ON TABLE sav_repair_card IS 'Main table : contains the repair card';
 
 
 --
--- TOC entry 2961 (class 0 OID 0)
+-- TOC entry 2979 (class 0 OID 0)
 -- Dependencies: 499
 -- Name: COLUMN sav_repair_card.f_id_customer; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -235,7 +235,7 @@ COMMENT ON COLUMN sav_repair_card.f_id_customer IS 'Customer card';
 
 
 --
--- TOC entry 2962 (class 0 OID 0)
+-- TOC entry 2980 (class 0 OID 0)
 -- Dependencies: 499
 -- Name: COLUMN sav_repair_card.f_id_personnel_received; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -244,7 +244,7 @@ COMMENT ON COLUMN sav_repair_card.f_id_personnel_received IS 'Not used : card fo
 
 
 --
--- TOC entry 2963 (class 0 OID 0)
+-- TOC entry 2981 (class 0 OID 0)
 -- Dependencies: 499
 -- Name: COLUMN sav_repair_card.f_id_personnel_done; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -253,7 +253,7 @@ COMMENT ON COLUMN sav_repair_card.f_id_personnel_done IS 'Not used card for crow
 
 
 --
--- TOC entry 2964 (class 0 OID 0)
+-- TOC entry 2982 (class 0 OID 0)
 -- Dependencies: 499
 -- Name: COLUMN sav_repair_card.date_reception; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -262,7 +262,7 @@ COMMENT ON COLUMN sav_repair_card.date_reception IS 'Reception of the good';
 
 
 --
--- TOC entry 2965 (class 0 OID 0)
+-- TOC entry 2983 (class 0 OID 0)
 -- Dependencies: 499
 -- Name: COLUMN sav_repair_card.date_start; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -271,7 +271,7 @@ COMMENT ON COLUMN sav_repair_card.date_start IS 'Start of the work';
 
 
 --
--- TOC entry 2966 (class 0 OID 0)
+-- TOC entry 2984 (class 0 OID 0)
 -- Dependencies: 499
 -- Name: COLUMN sav_repair_card.date_end; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -280,7 +280,7 @@ COMMENT ON COLUMN sav_repair_card.date_end IS 'Date end of the repair';
 
 
 --
--- TOC entry 2967 (class 0 OID 0)
+-- TOC entry 2985 (class 0 OID 0)
 -- Dependencies: 499
 -- Name: COLUMN sav_repair_card.garantie; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -289,7 +289,7 @@ COMMENT ON COLUMN sav_repair_card.garantie IS 'Warranty number - code';
 
 
 --
--- TOC entry 2968 (class 0 OID 0)
+-- TOC entry 2986 (class 0 OID 0)
 -- Dependencies: 499
 -- Name: COLUMN sav_repair_card.description_failure; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -298,7 +298,7 @@ COMMENT ON COLUMN sav_repair_card.description_failure IS 'Description of the iss
 
 
 --
--- TOC entry 2969 (class 0 OID 0)
+-- TOC entry 2987 (class 0 OID 0)
 -- Dependencies: 499
 -- Name: COLUMN sav_repair_card.jr_id; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -307,7 +307,7 @@ COMMENT ON COLUMN sav_repair_card.jr_id IS 'Link to the invoice';
 
 
 --
--- TOC entry 2970 (class 0 OID 0)
+-- TOC entry 2988 (class 0 OID 0)
 -- Dependencies: 499
 -- Name: COLUMN sav_repair_card.tech_creation_date; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -316,7 +316,7 @@ COMMENT ON COLUMN sav_repair_card.tech_creation_date IS 'Not used';
 
 
 --
--- TOC entry 2971 (class 0 OID 0)
+-- TOC entry 2989 (class 0 OID 0)
 -- Dependencies: 499
 -- Name: COLUMN sav_repair_card.repair_number; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -326,7 +326,7 @@ COMMENT ON COLUMN sav_repair_card.repair_number IS 'Not used
 
 
 --
--- TOC entry 2972 (class 0 OID 0)
+-- TOC entry 2990 (class 0 OID 0)
 -- Dependencies: 499
 -- Name: COLUMN sav_repair_card.card_status; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -335,7 +335,7 @@ COMMENT ON COLUMN sav_repair_card.card_status IS 'Status is En-cours Draft Close
 
 
 --
--- TOC entry 2973 (class 0 OID 0)
+-- TOC entry 2991 (class 0 OID 0)
 -- Dependencies: 499
 -- Name: COLUMN sav_repair_card.f_id_good; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -360,7 +360,7 @@ CREATE SEQUENCE sav_repair_card_id_seq
 ALTER TABLE service_after_sale.sav_repair_card_id_seq OWNER TO dany;
 
 --
--- TOC entry 2974 (class 0 OID 0)
+-- TOC entry 2992 (class 0 OID 0)
 -- Dependencies: 498
 -- Name: sav_repair_card_id_seq; Type: SEQUENCE OWNED BY; Schema: service_after_sale; Owner: dany
 --
@@ -385,7 +385,7 @@ CREATE TABLE sav_spare_part (
 ALTER TABLE service_after_sale.sav_spare_part OWNER TO dany;
 
 --
--- TOC entry 2975 (class 0 OID 0)
+-- TOC entry 2993 (class 0 OID 0)
 -- Dependencies: 494
 -- Name: TABLE sav_spare_part; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -394,7 +394,7 @@ COMMENT ON TABLE sav_spare_part IS 'Spare_part';
 
 
 --
--- TOC entry 2976 (class 0 OID 0)
+-- TOC entry 2994 (class 0 OID 0)
 -- Dependencies: 494
 -- Name: COLUMN sav_spare_part.f_id_material; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -403,7 +403,7 @@ COMMENT ON COLUMN sav_spare_part.f_id_material IS 'FK to Fiche ';
 
 
 --
--- TOC entry 2977 (class 0 OID 0)
+-- TOC entry 2995 (class 0 OID 0)
 -- Dependencies: 494
 -- Name: COLUMN sav_spare_part.repair_card_id; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
@@ -412,12 +412,63 @@ COMMENT ON COLUMN sav_spare_part.repair_card_id IS 'FK to sav_repair_card';
 
 
 --
--- TOC entry 2978 (class 0 OID 0)
+-- TOC entry 2996 (class 0 OID 0)
 -- Dependencies: 494
 -- Name: COLUMN sav_spare_part.quantity; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
 
 COMMENT ON COLUMN sav_spare_part.quantity IS 'quantity of spare_part';
+
+
+--
+-- TOC entry 500 (class 1259 OID 5483413)
+-- Dependencies: 2823 14
+-- Name: sav_version; Type: TABLE; Schema: service_after_sale; Owner: dany; Tablespace: 
+--
+
+CREATE TABLE sav_version (
+    version_id bigint NOT NULL,
+    version_comment text,
+    version_date timestamp with time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE service_after_sale.sav_version OWNER TO dany;
+
+--
+-- TOC entry 2997 (class 0 OID 0)
+-- Dependencies: 500
+-- Name: TABLE sav_version; Type: COMMENT; Schema: service_after_sale; Owner: dany
+--
+
+COMMENT ON TABLE sav_version IS 'Version of the schema';
+
+
+--
+-- TOC entry 2998 (class 0 OID 0)
+-- Dependencies: 500
+-- Name: COLUMN sav_version.version_id; Type: COMMENT; Schema: service_after_sale; Owner: dany
+--
+
+COMMENT ON COLUMN sav_version.version_id IS 'PK : version id';
+
+
+--
+-- TOC entry 2999 (class 0 OID 0)
+-- Dependencies: 500
+-- Name: COLUMN sav_version.version_comment; Type: COMMENT; Schema: service_after_sale; Owner: dany
+--
+
+COMMENT ON COLUMN sav_version.version_comment IS 'Comment about version';
+
+
+--
+-- TOC entry 3000 (class 0 OID 0)
+-- Dependencies: 500
+-- Name: COLUMN sav_version.version_date; Type: COMMENT; Schema: service_after_sale; Owner: dany
+--
+
+COMMENT ON COLUMN sav_version.version_date IS 'Date of update';
 
 
 --
@@ -437,7 +488,7 @@ CREATE SEQUENCE spare_part_id_seq
 ALTER TABLE service_after_sale.spare_part_id_seq OWNER TO dany;
 
 --
--- TOC entry 2979 (class 0 OID 0)
+-- TOC entry 3001 (class 0 OID 0)
 -- Dependencies: 493
 -- Name: spare_part_id_seq; Type: SEQUENCE OWNED BY; Schema: service_after_sale; Owner: dany
 --
@@ -446,8 +497,8 @@ ALTER SEQUENCE spare_part_id_seq OWNED BY sav_spare_part.id;
 
 
 --
--- TOC entry 2815 (class 2604 OID 5482494)
--- Dependencies: 495 496 496
+-- TOC entry 2820 (class 2604 OID 5482494)
+-- Dependencies: 496 495 496
 -- Name: id; Type: DEFAULT; Schema: service_after_sale; Owner: dany
 --
 
@@ -455,7 +506,7 @@ ALTER TABLE ONLY sav_parameter ALTER COLUMN id SET DEFAULT nextval('parameter_id
 
 
 --
--- TOC entry 2816 (class 2604 OID 5483327)
+-- TOC entry 2821 (class 2604 OID 5483327)
 -- Dependencies: 498 499 499
 -- Name: id; Type: DEFAULT; Schema: service_after_sale; Owner: dany
 --
@@ -464,7 +515,7 @@ ALTER TABLE ONLY sav_repair_card ALTER COLUMN id SET DEFAULT nextval('sav_repair
 
 
 --
--- TOC entry 2814 (class 2604 OID 5482471)
+-- TOC entry 2819 (class 2604 OID 5482471)
 -- Dependencies: 494 493 494
 -- Name: id; Type: DEFAULT; Schema: service_after_sale; Owner: dany
 --
@@ -473,7 +524,7 @@ ALTER TABLE ONLY sav_spare_part ALTER COLUMN id SET DEFAULT nextval('spare_part_
 
 
 --
--- TOC entry 2813 (class 2604 OID 5482455)
+-- TOC entry 2818 (class 2604 OID 5482455)
 -- Dependencies: 491 492 492
 -- Name: id; Type: DEFAULT; Schema: service_after_sale; Owner: dany
 --
@@ -482,8 +533,132 @@ ALTER TABLE ONLY sav_workhour ALTER COLUMN id SET DEFAULT nextval('intervention_
 
 
 --
--- TOC entry 2819 (class 2606 OID 5482457)
--- Dependencies: 492 492 2948
+-- TOC entry 3002 (class 0 OID 0)
+-- Dependencies: 491
+-- Name: intervention_id_seq; Type: SEQUENCE SET; Schema: service_after_sale; Owner: dany
+--
+
+SELECT pg_catalog.setval('intervention_id_seq', 19, true);
+
+
+--
+-- TOC entry 3003 (class 0 OID 0)
+-- Dependencies: 495
+-- Name: parameter_id_seq; Type: SEQUENCE SET; Schema: service_after_sale; Owner: dany
+--
+
+SELECT pg_catalog.setval('parameter_id_seq', 1, true);
+
+
+--
+-- TOC entry 3004 (class 0 OID 0)
+-- Dependencies: 497
+-- Name: repair_card_number_seq; Type: SEQUENCE SET; Schema: service_after_sale; Owner: dany
+--
+
+SELECT pg_catalog.setval('repair_card_number_seq', 1, false);
+
+
+--
+-- TOC entry 2960 (class 0 OID 5482491)
+-- Dependencies: 496 2965
+-- Data for Name: sav_parameter; Type: TABLE DATA; Schema: service_after_sale; Owner: dany
+--
+
+COPY sav_parameter (code, value, description, id) FROM stdin;
+good	1,2	matériel retourné	1
+\.
+
+
+--
+-- TOC entry 2963 (class 0 OID 5483324)
+-- Dependencies: 499 2965
+-- Data for Name: sav_repair_card; Type: TABLE DATA; Schema: service_after_sale; Owner: dany
+--
+
+COPY sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) FROM stdin;
+10	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
+11	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
+12	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
+13	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
+14	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
+15	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
+16	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
+17	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
+18	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
+19	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
+20	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
+21	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
+22	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
+23	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
+26	\N	\N	\N	\N	\N	\N	57	57	\N	\N	\N	E	\N
+27	\N	\N	\N	\N	\N	\N	57	57	\N	\N	\N	E	\N
+28	\N	\N	\N	\N	\N	\N	100	100	\N	\N	\N	E	\N
+9	322	\N	\N	2015-03-21 00:00:00	\N	\N	test	test	\N	\N	\N	E	287
+24	279	\N	\N	2015-03-22 00:00:00	2015-01-01 00:00:00	2016-01-01 00:00:00	100	100	\N	\N	\N	C	147
+\.
+
+
+--
+-- TOC entry 3005 (class 0 OID 0)
+-- Dependencies: 498
+-- Name: sav_repair_card_id_seq; Type: SEQUENCE SET; Schema: service_after_sale; Owner: dany
+--
+
+SELECT pg_catalog.setval('sav_repair_card_id_seq', 28, true);
+
+
+--
+-- TOC entry 2958 (class 0 OID 5482468)
+-- Dependencies: 494 2965
+-- Data for Name: sav_spare_part; Type: TABLE DATA; Schema: service_after_sale; Owner: dany
+--
+
+COPY sav_spare_part (id, f_id_material, repair_card_id, quantity) FROM stdin;
+64	147	24	0.00
+72	287	9	10.00
+73	287	24	10.00
+\.
+
+
+--
+-- TOC entry 2964 (class 0 OID 5483413)
+-- Dependencies: 500 2965
+-- Data for Name: sav_version; Type: TABLE DATA; Schema: service_after_sale; Owner: dany
+--
+
+COPY sav_version (version_id, version_comment, version_date) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2956 (class 0 OID 5482452)
+-- Dependencies: 492 2965
+-- Data for Name: sav_workhour; Type: TABLE DATA; Schema: service_after_sale; Owner: dany
+--
+
+COPY sav_workhour (id, total_workhour, repair_card_id, work_description, f_id_workhour) FROM stdin;
+7	3.0000	24	desc	\N
+12	52.0000	24	es	\N
+14	20.0000	24	Test	\N
+15	20.0000	24	test	\N
+18	232.0000	24	voilà ça marche maintenant !!! '''	\N
+19	20.0000	24	test '	\N
+\.
+
+
+--
+-- TOC entry 3006 (class 0 OID 0)
+-- Dependencies: 493
+-- Name: spare_part_id_seq; Type: SEQUENCE SET; Schema: service_after_sale; Owner: dany
+--
+
+SELECT pg_catalog.setval('spare_part_id_seq', 73, true);
+
+
+--
+-- TOC entry 2825 (class 2606 OID 5482457)
+-- Dependencies: 492 492 2966
 -- Name: intervention_pkey; Type: CONSTRAINT; Schema: service_after_sale; Owner: dany; Tablespace: 
 --
 
@@ -492,8 +667,8 @@ ALTER TABLE ONLY sav_workhour
 
 
 --
--- TOC entry 2823 (class 2606 OID 5482499)
--- Dependencies: 496 496 2948
+-- TOC entry 2829 (class 2606 OID 5482499)
+-- Dependencies: 496 496 2966
 -- Name: parameter_pkey; Type: CONSTRAINT; Schema: service_after_sale; Owner: dany; Tablespace: 
 --
 
@@ -502,8 +677,8 @@ ALTER TABLE ONLY sav_parameter
 
 
 --
--- TOC entry 2825 (class 2606 OID 5483333)
--- Dependencies: 499 499 2948
+-- TOC entry 2831 (class 2606 OID 5483333)
+-- Dependencies: 499 499 2966
 -- Name: repair_card_pkey; Type: CONSTRAINT; Schema: service_after_sale; Owner: dany; Tablespace: 
 --
 
@@ -512,8 +687,18 @@ ALTER TABLE ONLY sav_repair_card
 
 
 --
--- TOC entry 2821 (class 2606 OID 5482473)
--- Dependencies: 494 494 2948
+-- TOC entry 2833 (class 2606 OID 5483421)
+-- Dependencies: 500 500 2966
+-- Name: sav_version_pkey; Type: CONSTRAINT; Schema: service_after_sale; Owner: dany; Tablespace: 
+--
+
+ALTER TABLE ONLY sav_version
+    ADD CONSTRAINT sav_version_pkey PRIMARY KEY (version_id);
+
+
+--
+-- TOC entry 2827 (class 2606 OID 5482473)
+-- Dependencies: 494 494 2966
 -- Name: spare_part_pkey; Type: CONSTRAINT; Schema: service_after_sale; Owner: dany; Tablespace: 
 --
 
@@ -522,8 +707,8 @@ ALTER TABLE ONLY sav_spare_part
 
 
 --
--- TOC entry 2831 (class 2606 OID 5483334)
--- Dependencies: 232 499 2948
+-- TOC entry 2839 (class 2606 OID 5483334)
+-- Dependencies: 499 232 2966
 -- Name: repair_card_f_id_customer_fkey; Type: FK CONSTRAINT; Schema: service_after_sale; Owner: dany
 --
 
@@ -532,8 +717,8 @@ ALTER TABLE ONLY sav_repair_card
 
 
 --
--- TOC entry 2830 (class 2606 OID 5483339)
--- Dependencies: 499 232 2948
+-- TOC entry 2838 (class 2606 OID 5483339)
+-- Dependencies: 232 499 2966
 -- Name: repair_card_f_id_personnel_done_fkey; Type: FK CONSTRAINT; Schema: service_after_sale; Owner: dany
 --
 
@@ -542,8 +727,8 @@ ALTER TABLE ONLY sav_repair_card
 
 
 --
--- TOC entry 2829 (class 2606 OID 5483344)
--- Dependencies: 232 499 2948
+-- TOC entry 2837 (class 2606 OID 5483344)
+-- Dependencies: 232 499 2966
 -- Name: repair_card_f_id_personnel_received_fkey; Type: FK CONSTRAINT; Schema: service_after_sale; Owner: dany
 --
 
@@ -552,8 +737,8 @@ ALTER TABLE ONLY sav_repair_card
 
 
 --
--- TOC entry 2828 (class 2606 OID 5483349)
--- Dependencies: 499 251 2948
+-- TOC entry 2836 (class 2606 OID 5483349)
+-- Dependencies: 499 251 2966
 -- Name: repair_card_jr_id_fkey; Type: FK CONSTRAINT; Schema: service_after_sale; Owner: dany
 --
 
@@ -562,8 +747,8 @@ ALTER TABLE ONLY sav_repair_card
 
 
 --
--- TOC entry 2827 (class 2606 OID 5483354)
--- Dependencies: 494 232 2948
+-- TOC entry 2835 (class 2606 OID 5483354)
+-- Dependencies: 494 232 2966
 -- Name: sav_spare_part_material_fk; Type: FK CONSTRAINT; Schema: service_after_sale; Owner: dany
 --
 
@@ -572,8 +757,8 @@ ALTER TABLE ONLY sav_spare_part
 
 
 --
--- TOC entry 2826 (class 2606 OID 5483359)
--- Dependencies: 2824 499 494 2948
+-- TOC entry 2834 (class 2606 OID 5483359)
+-- Dependencies: 499 494 2830 2966
 -- Name: sav_spare_part_repair; Type: FK CONSTRAINT; Schema: service_after_sale; Owner: dany
 --
 
@@ -581,7 +766,7 @@ ALTER TABLE ONLY sav_spare_part
     ADD CONSTRAINT sav_spare_part_repair FOREIGN KEY (repair_card_id) REFERENCES sav_repair_card(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2015-04-01 13:16:22 CEST
+-- Completed on 2015-04-03 12:08:05 CEST
 
 --
 -- PostgreSQL database dump complete

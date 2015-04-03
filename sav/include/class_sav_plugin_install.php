@@ -26,7 +26,7 @@
  * @brief install the  ... (SKEL plugin)
  *
  */
-class SKEL_Install
+class Sav_Plugin_Install
 {
 
     function __construct($cn)
@@ -43,7 +43,7 @@ class SKEL_Install
     function upgrade($p_version)
     {
         global $cn;
-        $cur_version = $cn->get_value('select max(version_id) from skel.version');
+        $cur_version = $cn->get_value('select max(version_id) from service_after_sale.sav_version');
         $cur_version++;
         $file = dirname(__FILE__);
         for ($e = $cur_version; $e <= $p_version; $e++)

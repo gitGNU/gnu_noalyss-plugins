@@ -63,15 +63,15 @@ switch($sa)
 
 if ( $cn->exist_schema('service_after_sale') == false)
   {
-    require_once('include/class_install_plugin.php');
+    require_once('include/class_sav_plugin_install.php');
 
-    $iplugn=new Install_Plugin($cn);
+    $iplugn=new Sav_Plugin_Install($cn);
     $iplugn->install();
     /**
      *@todo améliorer le message, peu cosmétique
      */
     echo_warning(_("L'extension est installée, pourriez-vous en vérifier le paramètrage ?"));
-    $def=5;
+    $def=2;
   }
 
 // show menu
