@@ -141,7 +141,6 @@ ob_start();
 $obj->button_modify();
 echo '</td>';
 $html.=ob_get_clean();
-ob_end_clean();
 
 //echo $html;exit();
 $html = escape_xml($html);
