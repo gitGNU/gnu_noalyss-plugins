@@ -30,13 +30,13 @@ $plugin_code=HtmlInput::default_value_request("plugin_code", -1);
 <table id="spare_part_table_list_id">
     <tr>
         <th>
-            Code
+            <?php echo _('Code')?>
         </th>
         <th>
-            Description
+            <?php echo _('Description') ?>
         </th>
         <th>
-            Quantité
+            <?php echo _('Quantité') ?>
         </th>
     </tr>
     <?php for ($i=0;$i < $count_spare;$i++) : ?>
