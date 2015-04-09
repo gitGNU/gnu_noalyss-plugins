@@ -63,7 +63,7 @@ class Sav_Transform_Invoice {
         for ($i=0;$i<$nb;$i++)
         {
             $idx=$i+$p_start;
-            $fiche_workhour=new Fiche($cn,$g_sav_parameter->get_workhour_qcode());
+            $fiche_workhour=new Fiche($cn,$g_sav_parameter->get_workhour());
             echo HtmlInput::hidden('e_march'.$idx,$fiche_workhour->get_quick_code());
             echo HtmlInput::hidden('e_march'.$idx.'_label',h($a_workhour[$i]['work_description']));
             echo HtmlInput::hidden('e_quant'.$idx,h($a_workhour[$i]['total_workhour']));
