@@ -152,7 +152,8 @@ function workhour_add(p_dossier, p_access, p_plugin_code, p_repair_card)
         waiting_box();
         var hour = $('workhour_quant').value;
         var description = $('workhour_description').value;
-        var queryString = {plugin_code: p_plugin_code, gDossier: p_dossier, ac: p_access, act: 'workhour_add', repair: p_repair_card, hour: hour, description: description};
+        var workhour_id=$('workhour_id').value;
+        var queryString = {workhour_qcode:workhour_id,plugin_code: p_plugin_code, gDossier: p_dossier, ac: p_access, act: 'workhour_add', repair: p_repair_card, hour: hour, description: description};
         var action = new Ajax.Request(
                 "ajax.php",
                 {
