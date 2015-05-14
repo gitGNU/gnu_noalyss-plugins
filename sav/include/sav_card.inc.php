@@ -68,7 +68,7 @@ switch ($action) {
             
         }        catch (Exception $e) 
         {
-            echo h2info(_('Paramètre invalide'));
+            echo h2(_('Non enregistré : données incorrectes'),'class="notice"');
         }
         $service->set_card_id($card);
         $service->display_detail();

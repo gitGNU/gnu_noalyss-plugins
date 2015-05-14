@@ -89,7 +89,10 @@ class Sav_Spare_Part
         $fiche=new Fiche($cn);
         $fiche->get_by_qcode($p_qcode, FALSE);
         $material_id=$fiche->id;
-        
+        /**
+         * @todo vérifier que la carte demandée appartient bien  à la catégorie
+         * de fiche
+         */
         if ( $material_id == 0) throw new Exception (_('Inexistant spare part'),NOSPAREPART);
         
         $this->spare_part->repair_card_id=$p_repair;
