@@ -30,6 +30,7 @@ if ( ! defined ('ALLOWED') ) die('Appel direct ne sont pas permis');
 require_once 'include/class_sav_workhour.php';
 
 $hour=HtmlInput::default_value_get('hour', -1);
+$workhour_qcode=HtmlInput::default_value_get('workhour_qcode', -1);
 $desc=HtmlInput::default_value_get('description',"");
 $repair=HtmlInput::default_value_get('repair',-1);
 
@@ -39,10 +40,10 @@ $erreur="";
 $row="";
 try
 {
-    if ( $hour == -1 || isNumber($hour)== 0 ||$repair==-1||isNumber($repair)==0)
+    if ( $hour == -1 || isNumber($hour)== 0 ||$repair==-1||isNumber($repair)==0||$workhour_qcode==-1||$workhour_qcode== "")
     throw new Exception("Invalid parameter",APPEL_INVALIDE);
 
-    $workhour->add($repair,$hour,$desc);
+    $workhour->add($repair,$workhour_qcode,$hour,$desc);
     $row=escape_xml($workhour->print_row());
 }
 catch (Exception $exc)
