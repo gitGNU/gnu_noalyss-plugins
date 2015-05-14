@@ -19,7 +19,11 @@
 
 // Copyright 2014 Author Dany De Bontridder danydb@aevalys.eu
 
-// require_once '.php';
+/**
+ * @file Transform the repair card into a invoice, show in another window (tab)
+ * the operation of sales. Display a button
+ * 
+ */
 if ( ! defined ('ALLOWED') ) die('Appel direct ne sont pas permis');
 
 $repair_id=HtmlInput::default_value_get('repair_id', '-1');
@@ -41,5 +45,5 @@ if ( $sav->get_card_id() == -1 )    throw new Exception(_('Carte réparation ine
         echo Dossier::hidden();
         echo $transform->form();
     ?>
-    <input type="submit" class="button" value="<?php echo _('Facture') ?>">
+    <input type="submit" class="button" value="<?php echo _('Encoder la facture') ?>">
 </form>
