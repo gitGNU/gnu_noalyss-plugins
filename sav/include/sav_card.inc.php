@@ -32,37 +32,43 @@ switch ($action) {
         /* We can save it here if needed*/
         $save=HtmlInput::default_value_post('save_repair_card','none');
         $service=new Service_After_Sale();
-        if ($save != 'none') 
+        try 
         {
-            // save from post
-            if ( $card == -1 ) 
+            if ($save != 'none') 
             {
-                /*
-                 * Add a new one
-                 */
-                $service->set_status('E');
-                $service->set_date_reception(HtmlInput::default_value_post('date_reception', date('d.m.Y')));
-                $service->set_garantie(HtmlInput::default_value_post('garantie',''));
-                $service->set_material(HtmlInput::default_value_post('good_id',-1),'qcode');
-                $service->set_customer(HtmlInput::default_value_post('cust_id',-1),'qcode');
-                $service->set_description(HtmlInput::default_value_post('description',-1));
-                $service->save();
-                $card=$service->get_card_id();
-            } else 
-            {
-                /*
-                 * Update card
-                 */
-                $service->set_card_id($card);
-                $service->set_status(HtmlInput::default_value_post('status_repair','E'));
-                $service->set_date_start(HtmlInput::default_value_post('date_start', date('d.m.Y')));
-                $service->set_date_end(HtmlInput::default_value_post('date_end', date('d.m.Y')));
-                $service->set_garantie(HtmlInput::default_value_post('garantie',''));
-                $service->set_description(HtmlInput::default_value_post('description',-1));
-                $service->save();
+                // save from post
+                if ( $card == -1 ) 
+                {
+                    /*
+                     * Add a new one
+                     */
+                    $service->set_status('E');
+                    $service->set_date_reception(HtmlInput::default_value_post('date_reception', date('d.m.Y')));
+                    $service->set_garantie(HtmlInput::default_value_post('garantie',''));
+                    $service->set_material(HtmlInput::default_value_post('good_id',-1),'qcode');
+                    $service->set_customer(HtmlInput::default_value_post('cust_id',-1),'qcode');
+                    $service->set_description(HtmlInput::default_value_post('description',-1));
+                    $service->save();
+                    $card=$service->get_card_id();
+                } else 
+                {
+                    /*
+                     * Update card
+                     */
+                    $service->set_card_id($card);
+                    $service->set_status(HtmlInput::default_value_post('status_repair','E'));
+                    $service->set_date_start(HtmlInput::default_value_post('date_start', date('d.m.Y')));
+                    $service->set_date_end(HtmlInput::default_value_post('date_end', date('d.m.Y')));
+                    $service->set_garantie(HtmlInput::default_value_post('garantie',''));
+                    $service->set_description(HtmlInput::default_value_post('description',-1));
+                    $service->save();
+                }
+            
             }
             
-            
+        }        catch (Exception $e) 
+        {
+            echo h2info(_('Paramètre invalide'));
         }
         $service->set_card_id($card);
         $service->display_detail();
