@@ -57,13 +57,13 @@ class Sav_Transform_Invoice {
         global $cn,$g_sav_parameter;
         $repair_card=$this->sav->get_card_id();
         $a_workhour=$cn->get_array('
-            select total_workhour,work_description from service_after_sale.sav_workhour where repair_card_id=$1
+            select f_id_workhour,total_workhour,work_description from service_after_sale.sav_workhour where repair_card_id=$1
             ',array($repair_card));
         $nb=count($a_workhour);
         for ($i=0;$i<$nb;$i++)
         {
             $idx=$i+$p_start;
-            $fiche_workhour=new Fiche($cn,$g_sav_parameter->get_workhour());
+            $fiche_workhour=new Fiche($cn,$a_workhour[$i]['f_id_workhour']);
             echo HtmlInput::hidden('e_march'.$idx,$fiche_workhour->get_quick_code());
             echo HtmlInput::hidden('e_march'.$idx.'_label',h($a_workhour[$i]['work_description']));
             echo HtmlInput::hidden('e_quant'.$idx,h($a_workhour[$i]['total_workhour']));

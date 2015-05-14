@@ -39,6 +39,7 @@ class Sav_WorkHour
     }
     function set_description ($p_description)
     {
+        if ( trim($p_description) == '') $p_description=$this->get_name();
         $this->workhour_sql->work_description=$p_description;
     }
     function set_id($p_id)
@@ -55,7 +56,7 @@ class Sav_WorkHour
     }
     function get_description ()
     {
-        return $this->workhour_sql->work_description ;
+        $this->workhour_sql->work_description  ;
     }
     function get_id()
     {
@@ -65,15 +66,36 @@ class Sav_WorkHour
     {
         return $this->workhour_sql->total_workhour;
     }
+    function get_qcode()
+    {
+        global $cn;
+        $fiche = new Fiche($cn,$this->workhour_sql->f_id_workhour);
+        return $fiche->strAttribut(ATTR_DEF_QUICKCODE);
+    }
+    function get_name()
+    {
+        global $cn;
+        $fiche = new Fiche($cn,$this->workhour_sql->f_id_workhour);
+        return $fiche->strAttribut(ATTR_DEF_NAME);
+    }
+    function get_workhour_id()
+    {
+        return $this->workhour_sql->f_id_workhour;
+    }
+    function set_workhour_id()
+    {
+        return $this->workhour_sql->f_id_workhour;
+    }
     function print_row()
     {
         global $cn,$gDossier,$ac,$plugin_code;
         
         // Workhour
         $hours=$this->get_workhour();
+        // Material
+        $qcode=$this->get_qcode();
+        $name=$this->get_name();
         $description=$this->get_description();
-        $description=(trim($description) == '') ? _("Main d'oeuvre"):$description;
-        
         
         // Javascript
         $js=sprintf('workhour_remove(\'%s\',\'%s\',\'%s\',\'%s\')',
@@ -98,16 +120,26 @@ class Sav_WorkHour
         $count_workhour=count($a_workhour);
         require 'template/workhour_display_list.php';
     }
-    function add($p_repair,$p_hour,$p_description)
+    function add($p_repair,$p_qcode,$p_hour,$p_description)
     {
        global $cn;
         $repair=new Sav_Repair_Card_SQL($p_repair);
         if ( $repair->id == -1 ) throw new Exception('Inexistent repair card',NOMATERIAL);
-       
+        
+        $fiche=new Fiche($cn);
+        $fiche->get_by_qcode($p_qcode, FALSE);
+        $workhour_id=$fiche->id;
+         /**
+         * @todo vérifier que la carte demandée appartient bien  à la catégorie
+         * de fiche
+         */
+        if ( $workhour_id == 0) throw new Exception (_('Inexistant spare part'),NOSPAREPART);
+        
         $this->workhour_sql->id=-1;
         $this->workhour_sql->repair_card_id=$p_repair;
         $this->workhour_sql->total_workhour=$p_hour;
-        $this->workhour_sql->work_description=$p_description;
+        $this->workhour_sql->work_description=(trim($p_description)=='')?$fiche->getName():strip_tags($p_description);
+        $this->workhour_sql->f_id_workhour=$workhour_id;
         $this->workhour_sql->save(); 
     }
     function remove()

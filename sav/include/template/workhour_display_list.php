@@ -18,7 +18,7 @@
  * 
  */
 
-global $cn,$ac,$plugin_code,$gDossier;
+global $cn,$ac,$plugin_code,$gDossier,$g_sav_parameter;
 
 /**
  * @brief 
@@ -26,6 +26,9 @@ global $cn,$ac,$plugin_code,$gDossier;
 ?>
 <table id="workhour_table_id">
     <tr>
+        <th>
+            <?php echo _('Code')?>
+        </th>
         <th>
             <?php echo _('Description')?>
         </th>
@@ -44,6 +47,19 @@ global $cn,$ac,$plugin_code,$gDossier;
         endfor;
     ?>
     <tr id="add_workhour_tr_id">
+        <td>
+            <?php 
+            $input_workhour=new ICard('workhour_id');
+            $input_workhour->size=7;
+            $input_workhour->set_dblclick('fill_ipopcard(this)');
+            $input_workhour->set_function('fill_data');
+            $sql=' select fd_id from fiche_def where fd_id in ('.$g_sav_parameter->get_workhour().')';
+            $filter=$cn->make_list($sql);
+            $input_workhour->set_attribute('typecard', $filter);
+            $input_workhour->extra=$filter;
+            echo $input_workhour->input()." ".$input_workhour->search();
+            ?>        
+        </td>
      <td>
             <?php 
                 $desc=new IText('workhour_description');

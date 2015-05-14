@@ -29,6 +29,11 @@ if ( ! defined ('ALLOWED') ) die('Appel direct ne sont pas permis');
 <tr id="workhour<?php echo $this->workhour_sql->id; ?>">
       <td>
             <?php 
+                echo HtmlInput::card_detail($qcode, "",' style="text-decoration:underline;display:inline"', true);
+            ?>        
+     </td>
+      <td>
+            <?php 
                 echo h($description);
             ?>        
         </td>

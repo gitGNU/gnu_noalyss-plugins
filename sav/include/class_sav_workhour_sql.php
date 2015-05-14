@@ -44,6 +44,7 @@ class Sav_Workhour_SQL extends Noalyss_SQL
     var $total_workhour;
     var $repair_card_id;
     var $work_description;
+    var $f_id_workhour;
 
     /* example private $variable=array("easy_name"=>column_name,"email"=>"column_name_email","val3"=>0); */
 
@@ -59,6 +60,7 @@ class Sav_Workhour_SQL extends Noalyss_SQL
             , "total_workhour"=>"total_workhour"
             , "repair_card_id"=>"repair_card_id"
             , "work_description"=>"work_description"
+            ,'f_id_workhour'=>'f_id_workhour'
         );
 
         $this->type=array(
@@ -66,6 +68,7 @@ class Sav_Workhour_SQL extends Noalyss_SQL
             , "total_workhour"=>"numeric"
             , "repair_card_id"=>"numeric"
             , "work_description"=>"text"
+            ,'f_id_workhour'=>'numeric'
         );
 
         $this->default=array(
