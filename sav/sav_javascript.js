@@ -98,6 +98,8 @@ function spare_part_add(p_dossier, p_access, p_plugin_code, p_repair_card)
                             new_row.id='spare_part'+spare_id;
                             new_row.innerHTML=code_html;
                             remove_waiting_box();
+                             $('spare_part_id').value="";
+                             $('spare_part_quant').value="";
                         }
                     }
                 });
@@ -117,6 +119,7 @@ function spare_part_add(p_dossier, p_access, p_plugin_code, p_repair_card)
 function spare_part_remove(p_dossier, p_access, p_plugin_code, p_spare_part_id)
 {
     try {
+        if ( ! confirm('Effacer ?') ) { return; }
         waiting_box();
         var queryString = {plugin_code: p_plugin_code, gDossier: p_dossier, ac: p_access, act: 'spare_part_remove', spare_part_id: p_spare_part_id};
         var action = new Ajax.Request(
@@ -204,6 +207,7 @@ function workhour_add(p_dossier, p_access, p_plugin_code, p_repair_card)
 function workhour_remove(p_dossier, p_access, p_plugin_code, p_workhour_id)
 {
     try {
+        if ( ! confirm('Effacer ?') ) { return; }
         waiting_box();
         var queryString = {plugin_code: p_plugin_code, gDossier: p_dossier, ac: p_access, act: 'workhour_remove', workhour_id: p_workhour_id};
         var action = new Ajax.Request(
@@ -222,7 +226,14 @@ function workhour_remove(p_dossier, p_access, p_plugin_code, p_workhour_id)
         error_message("workhour " + e.message);
     }
 }
-
+/**
+ * Create an invoice and show a button to download it
+ * @param {type} p_dossier
+ * @param {type} p_plugin_code
+ * @param {type} p_ac
+ * @param {type} p_repair_id
+ * @returns {undefined}
+ */
 function sav_prepare_invoice(p_dossier,p_plugin_code,p_ac,p_repair_id)
 {
     
