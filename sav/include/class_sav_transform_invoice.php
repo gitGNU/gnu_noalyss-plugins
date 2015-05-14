@@ -97,7 +97,7 @@ class Sav_Transform_Invoice {
         $material  = $this->sav->get_material_qcode();
         $material .= " ";
         $material  .= $this->sav->get_material_name();
-        echo HtmlInput::hidden('e_comm',$material);
+        echo HtmlInput::hidden('e_comm',"sav : ".$this->sav->get_card_id().' '.$material);
         
     }
     public function form()
