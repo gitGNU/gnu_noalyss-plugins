@@ -30,7 +30,7 @@ require_once 'class_service_after_sale_parameter.php';
 
 global $g_sav_parameter;
 $save=HtmlInput::default_value_post('save_param', '');
-if ($save != ' ')
+if ($save != '')
 {
     /**
      * Save the parameters
