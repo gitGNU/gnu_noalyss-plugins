@@ -41,17 +41,18 @@ Extension::check_version(6800);
 $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&ac='.$_REQUEST['ac'];
 
 $menu=array (
-         array($url.'&sa=enc',_('En-cours'),_('Encodage de fiche'),1),
-         array($url.'&sa=histo',_('Historique'),_('Toutes les fiches'),3),
+         array($url.'&sa=add',_('Ajout'),_('Ajout fiche réparation'),1),
+         array($url.'&sa=enc',_('En-cours'),_('en-cours fiche réparation'),4),
+         array($url.'&sa=histo',_('Historique'),_('historique fiche réparation'),3),
          array($url.'&sa=param',_('Paramètre SAV'),_('Paramétrage du module SAV'),2)
        );
 
-$sa=HtmlInput::default_value_request('sa',0);
+$sa=HtmlInput::default_value_request('sa','add');
 $def=0;
 switch($sa)
   {
   case 'enc':
-    $def=1;
+    $def=4;
     break;
   case 'param':
     $def=2;
@@ -59,6 +60,11 @@ switch($sa)
   case 'histo':
     $def=3;
     break;
+  case 'add':
+      $def=1;
+      $a[0]=array('key'=>'sb','value'=>'detail');
+      put_global($a);
+      break;
   }
 
 if ( $cn->exist_schema('service_after_sale') == false)
@@ -83,7 +89,7 @@ echo ShowItem($menu,'H','mtitle ','mtitle ',$def,'class="mtitle"');
 echo '</div>';
 
 // include the right file
-if ($def==1)
+if ($def==1 || $def == 4)
   {
     require_once('include/sav_card.inc.php');
     exit();
