@@ -55,8 +55,8 @@ COMMENT ON COLUMN service_after_sale.sav_repair_card.f_id_good IS 'Card of retur
 
 CREATE TABLE service_after_sale.sav_parameter
 (
-  code text,
-  value text,
+  code text not null,
+  value text not null,
   description text,
   id integer NOT NULL DEFAULT nextval('service_after_sale.parameter_id_seq'::regclass),
   CONSTRAINT parameter_pkey PRIMARY KEY (id )
@@ -69,6 +69,8 @@ insert into service_after_sale.sav_parameter (code,value, description) values
 ('ledger',2,'Default ledger of sales'),
 ('workhour',-1,'Workhour card id');
 
+ALTER TABLE service_after_sale.sav_parameter
+  ADD CONSTRAINT sav_parameter_code_key UNIQUE(code );
 
 COMMENT ON TABLE service_after_sale.sav_parameter   IS 'Parameter of the plugin';
 
