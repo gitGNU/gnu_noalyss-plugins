@@ -51,7 +51,6 @@ if ($save != '')
     $g_sav_parameter->save('ledger',$ledger);
     $g_sav_parameter->set_workhour($workhour);
     $g_sav_parameter->save('workhour',$workhour);
-    var_dump($_POST);
 }
 
 ?>
