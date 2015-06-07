@@ -77,6 +77,8 @@ if ( $cn->exist_schema('service_after_sale') == false)
      *@todo améliorer le message, peu cosmétique
      */
     echo_warning(_("L'extension est installée, pourriez-vous en vérifier le paramètrage ?"));
+    $g_sav_parameter=new Service_After_Sale_Parameter($cn);
+
     $def=2;
   }
 

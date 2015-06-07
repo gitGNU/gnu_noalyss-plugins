@@ -18,7 +18,7 @@
 */
 /* $Revision$ */
 
-// Copyright (c) 2002 Author Dany De Bontridder dany@alchimerys.be
+// Copyright (c) 2015 Author Dany De Bontridder dany@alchimerys.be
 
 /*!\file
  * \brief raw file for PDF ewa

@@ -21,7 +21,7 @@ CREATE TABLE service_after_sale.sav_repair_card
   jr_id integer, -- Link to the invoice
   tech_creation_date timestamp without time zone DEFAULT now(), -- Not used
   repair_number text, -- Not used
-  card_status character(1), -- Status is En-cours Draft Closed
+  card_status character(1) not null, -- Status is En-cours Draft Closed
   f_id_good bigint, -- Card of returned good
   CONSTRAINT repair_card_pkey PRIMARY KEY (id ),
   CONSTRAINT repair_card_f_id_customer_fkey FOREIGN KEY (f_id_customer)
@@ -77,8 +77,8 @@ COMMENT ON TABLE service_after_sale.sav_parameter   IS 'Parameter of the plugin'
 CREATE TABLE service_after_sale.sav_spare_part
 (
   id bigint NOT NULL DEFAULT nextval('service_after_sale.spare_part_id_seq'::regclass),
-  f_id_material integer, -- FK to Fiche
-  repair_card_id integer, -- FK to sav_repair_card
+  f_id_material integer  NOT NULL, -- FK to Fiche
+  repair_card_id integer  NOT NULL, -- FK to sav_repair_card
   quantity numeric(6,2) NOT NULL, -- quantity of spare_part
   CONSTRAINT spare_part_pkey PRIMARY KEY (id ),
   CONSTRAINT sav_spare_part_material_fk FOREIGN KEY (f_id_material)
@@ -110,10 +110,10 @@ insert into service_after_sale.sav_version(version_id,version_comment) values (1
 CREATE TABLE service_after_sale.sav_workhour
 (
   id integer NOT NULL DEFAULT nextval('service_after_sale.intervention_id_seq'::regclass),
-  total_workhour numeric(20,4), -- amount of workhour
-  repair_card_id integer, -- FK to sav_repair_card
+  total_workhour numeric(20,4)  NOT NULL, -- amount of workhour
+  repair_card_id integer  NOT NULL , -- FK to sav_repair_card
   work_description text, -- Description of the work (optionnal)
-  f_id_workhour bigint, -- Card for workhour
+  f_id_workhour bigint  NOT NULL, -- Card for workhour
   CONSTRAINT intervention_pkey PRIMARY KEY (id ),
   CONSTRAINT sav_workhour_f_id_workhour_fkey FOREIGN KEY (f_id_workhour)
       REFERENCES fiche (f_id) MATCH SIMPLE
