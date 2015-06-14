@@ -220,6 +220,7 @@ class Am_Card
     if ( isNumber($_POST['p_year']) == null || $_POST['p_year']<1900||$_POST['p_year'] > 3000 ) $error_msg.=_('Année invalide')."\n";
     if ( isNumber($_POST['p_number']) == null || $_POST['p_number']==0)$error_msg.=_ ('Nombre annuités invalide')."\n";
     if ( isNumber($_POST['p_amount']) == null || $_POST['p_amount']==0) $error_msg.=_ ('Montant invalide')."\n";
+    $p_card = HtmlInput::default_value_post('p_card', '');
     $visible=HtmlInput::default_value_post('p_visible','Y');
     if ( $visible != 'Y' && $visible != 'N') $error_msg.=_("Visible Y ou N\n");
     $_POST['p_visible']=$visible;
@@ -238,6 +239,9 @@ class Am_Card
             break;
     }
     $p_new=HtmlInput::default_value_post('p_new',-1);
+    /*
+     * Check duplicate : check that the material (p_card) is not already in the material to amortize
+     */
     if ( $p_new != -1 ) {
         $f_id=$cn->get_value('select f_id from vw_poste_qcode where j_qcode=trim(upper($1))',array($p_card));
         if ( $f_id != "") {
