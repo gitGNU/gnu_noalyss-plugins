@@ -29,15 +29,16 @@ TABLE {PAGE: landscape;}
   <th>Description</th>
   <th>Date d'acquisition</th>
   <th>Année d'achat</th>
-  <th style="text-align:right">Montant à l'achat</th>
-  <th style="text-align:right">Nombre amortissement</th>
-  <th style="text-align:right">Montant à amortir</th>
-  <th style="text-align:right">Amortissement</th>
-  <th style="text-align:right">Pourcentage</th>
-  <th style="text-align:right">Reste à amortir</th>
+  <th style="text-align:right"><?php echo _("Montant à l'achat")?></th>
+  <th style="text-align:right"><?php echo _("Nombre amortissement")?></th>
+  <th style="text-align:right"><?php echo _("Montant à amortir")?></th>
+  <th style="text-align:right"><?php echo _("Amortissement")?></th>
+  <th style="text-align:right"><?php echo _("Pourcentage")?></th>
+  <th style="text-align:right"><?php echo _("Reste à amortir")?></th>
 </tr>
 <?php 
 $tot_amort=0;$tot_net=0;bcscale(2);
+$tot_purchase=0;$tot_to_amortize=0;$tot_remain=0;
 for ($i=0;$i < count($array) ; $i++):
         $class=($i % 2 == 0 )?' even ':' odd ';
 	echo '<tr class="'.$class.'">';
@@ -62,6 +63,9 @@ for ($i=0;$i < count($array) ; $i++):
         $toamortize=bcsub($remain,$amortize);
 	$tot_amort=bcadd($tot_amort,$amortize);
 	$tot_net=bcadd($tot_net,$toamortize);
+        $tot_purchase=bcadd($tot_purchase,$array[$i]['a_amount']);
+        $tot_to_amortize=bcadd($tot_to_amortize,$amortize);
+        $tot_remain=bcadd($tot_remain,$toamortize);
 	$pct=$cn->get_value("select  ad_percentage from amortissement.amortissement_detail
 			where a_id=$1 and ad_year = $2",
 					array($array[$i]['a_id'],$year));
@@ -74,6 +78,25 @@ for ($i=0;$i < count($array) ; $i++):
 echo '</tr>';
 endfor;
 ?>
+<tr class="highlight">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td class="num">
+    <?php echo nbm($tot_purchase)?>
+</td>
+<td></td>
+<td></td>
+<td class="num">
+    <?php echo nbm($tot_to_amortize)?>
+</td>
+<td></td>
+<td class="num">
+    <?php echo nbm($tot_remain)?>
+</td>
+
+</tfoot>
 </table>
 <hr>
 <table class="result" style="width:50%;margin-left:25%">
