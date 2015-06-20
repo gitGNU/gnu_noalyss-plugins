@@ -39,7 +39,7 @@ if ( $cn->count() == 0 )
     echo HtmlInput::anchor_close($t);
     echo '<h2 class="title">'._('Détail de matériel').'</h2>';
     echo "<h2 class=\"error\"> "._("Bien à amortir effacé")." </h2>";
-    echo HtmlInput::button('close',_('Fermer'),"onclick=\"removeDiv('bxmat');refresh_window()\" ");
+    echo HtmlInput::button('close',"&#10761;","onclick=\"removeDiv('bxmat');refresh_window()\" ");
   }
 else
   {
