@@ -158,7 +158,7 @@ class Am_Card
     $p_visible->size=2;
     $p_visible->value=$this->amortissement->a_visible;
     $card=new Fiche($cn,$this->amortissement->f_id);
-
+    
     $p_card=HtmlInput::hidden('p_card',$card->strAttribut(ATTR_DEF_QUICKCODE));
 
 

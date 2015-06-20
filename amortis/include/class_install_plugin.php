@@ -290,6 +290,11 @@ as
           $this->cn->exec_sql(' insert into amortissement.version values(2)');
           $this->cn->commit();
       }
+      if ($p_dest == 3 )
+      {
+          $file=dirname(__FILE__);
+          $this->cn->execute_script($file.'/../sql/upgrade2.sql');
+      }
       } catch (Exception $e) {
           $this->cn->rollback;
       }
