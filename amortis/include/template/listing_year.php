@@ -102,7 +102,7 @@ endfor;
 <table class="result" style="width:50%;margin-left:25%">
 <tr>
 <?php 
-echo td("Acquisition de l'année");
+echo td(_("Acquisition de l'année"));
    $tot=$cn->get_value(" select coalesce(sum(a_amount),0) from amortissement.amortissement where a_start=$1",
 			array($year));
 echo td(nbm($tot),"align=\"right\"");
@@ -110,13 +110,13 @@ echo td(nbm($tot),"align=\"right\"");
 </tr>
 <tr>
 <?php 
-echo td("Amortissement ");
+echo td(_("Amortissement "));
 echo td(nbm($tot_amort),"align=\"right\"");
 ?>
 </tr>
 <tr>
 <?php 
-echo td("Valeur net ");
+echo td(_("Valeur net "));
 echo td(nbm($tot_net),"align=\"right\"");
 
 ?>
