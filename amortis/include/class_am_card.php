@@ -218,7 +218,7 @@ class Am_Card
     global $cn;
     $error_msg='';
     if ( isNumber($_POST['p_year']) == null || $_POST['p_year']<1900||$_POST['p_year'] > 3000 ) $error_msg.=_('Année invalide')."\n";
-    if ( isNumber($_POST['p_number']) == null || $_POST['p_number']==0)$error_msg.=_ ('Nombre annuités invalide')."\n";
+    if ( isNumber($_POST['p_number']) == null )$error_msg.=_ ('Nombre annuités invalide')."\n";
     if ( isNumber($_POST['p_amount']) == null || $_POST['p_amount']==0) $error_msg.=_ ('Montant invalide')."\n";
     $p_card = HtmlInput::default_value_post('p_card', '');
     $visible=HtmlInput::default_value_post('p_visible','Y');
@@ -257,30 +257,31 @@ class Am_Card
    *@see from_array
    */
   public function update()
-  {
-    global $cn;
-    
-    try 
-      {
-	$this->amortissement->update();
-	for ( $i=0;$i< count($this->amortissement_detail);$i++)
-	  {
-	    $this->amortissement_detail[$i]->update();
-	    $this->amortissement_histo[$i]->update();
+    {
+        global $cn;
 
-	  }
-	/*
-	 * remove row from amortissement_detail if ad_amount=0
-	 */
-	$cn->exec_sql('delete from amortissement.amortissement_detail where ad_amount=0');
+        try
+        {
+            $this->amortissement->update();
+            if (isset($this->amortissement_detail))
+            {
+                for ($i=0; $i<count($this->amortissement_detail); $i++)
+                {
+                    $this->amortissement_detail[$i]->update();
+                    $this->amortissement_histo[$i]->update();
+                }
+            } /*
+             * remove row from amortissement_detail if ad_amount=0
+             */
+            $cn->exec_sql('delete from amortissement.amortissement_detail where ad_amount=0');
+        }
+        catch (Exception $e)
+        {
+            echo $e->getMessage();
+        }
+    }
 
-      }
-    catch (Exception $e)
-      {
-	echo $e->getMessage();
-      }
-  }
-  /**
+    /**
    *  we save into the two tables 
    * amortissement and amortissement_detail, the table amortissement_detail
    * is filled via a trigger

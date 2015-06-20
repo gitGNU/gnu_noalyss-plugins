@@ -63,7 +63,13 @@
 	<td><?php echo $p_number?></td>
 </tr>
 </table>
-
+<?php 
+    if ( $p_number == 0 ) :
+        echo "Date ".date ('d.m.Y');
+        echo HtmlInput::print_window();
+        return;
+    endif;
+?>    
 <fieldset><legend>Annuités</legend>
 <table class="result">
 <th>Année</th>

@@ -69,11 +69,6 @@
 	<td><?php echo $p_card_cred->input();?><?php echo $p_card_cred->search()?></td>
 </tr>
 <tr>
-	<td>Nombre d'années amortissement</td>
-	<td><?php echo $p_number->input()?></td>
-</tr>
-
-<tr>
 	<td>Nombre d'années amortissement (non modifiable)</td>
 	<td><?php echo $p_number->input()?></td>
 </tr>
@@ -90,7 +85,15 @@
 	<td></td>
 </tr>
 </table>
+<?php 
+echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
+echo dossier::hidden();
+    if ( $p_number->value == 0 ) :
+       
+   else:
+?>   
 <span class="notice"> En changeant le montant à amortir, l'année ou le nombre d'années, les annuités seront recalculées et l'historique effacé</span>
+
 <fieldset><legend>Annuités</legend>
 <table class="result">
 <th>Année</th>
@@ -104,8 +107,7 @@
 
 <?php 
 bcscale(2);
-echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
-echo dossier::hidden();
+
 $annuite=0;
 $done=0;
 for ($i=0;$i<count($array);$i++):
@@ -177,6 +179,9 @@ if ( $annuite !=  $p_amount->value)
  }
  ?>
 </fieldset>
+<?php
+     endif;
+?>     
 <?php 
    echo HtmlInput::submit('sauver',_('Sauver'),"onclick=\"return confirm('Vous confirmez ?')\" ");
    $rm=sprintf("remove_mat(%d,'%s',%d)",dossier::id(),$_REQUEST['plugin_code'],$value_a_id);

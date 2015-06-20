@@ -18,7 +18,7 @@
  */
 require_once('class_pdf.php');
 
-class Amortissement_Material_PDF extends PDF
+class Amortissement_Material_PDF extends PDFLand
 {
 
     function header()
@@ -27,7 +27,7 @@ class Amortissement_Material_PDF extends PDF
         $this->setFont('DejaVu', 'B', 14);
         $this->Cell(190, 10, _('Amortissement : Liste de biens'), 1, 2, 'C');
         $this->ln();
-        $this->col_size=array('qcode'=>20, 'name'=>35,'desc'=>80, 'date.purch'=>20, 'year.purch'=>20,  '#amort'=>10,'amount.purch'=>30, 'amount.amort'=>30, '%'=>20, 'amount.remain'=>20,'amount.delta'=>20);
+        $this->col_size=array('qcode'=>40, 'name'=>85,'desc'=>120, 'date.purch'=>20, 'year.purch'=>20,  '#amort'=>10,'amount.purch'=>30, 'amount.amort'=>30, '%'=>20, 'amount.remain'=>30,'amount.delta'=>30);
 
         $this->setFont('DejaVu', 'B', 7);
         $this->Cell($this->col_size['qcode'], 8, _('QCode'));
@@ -37,7 +37,7 @@ class Amortissement_Material_PDF extends PDF
         $this->Cell($this->col_size['#amort'], 8, _('Nbre'), 0, 0, 'R');
         $this->Cell($this->col_size['amount.purch'], 8, _('Montant'), 0, 0, 'R');
         $this->Cell($this->col_size['amount.amort'], 8, _('A amortir'), 0, 0, 'R');
-        $this->Cell($this->col_size['amount.delta'], 8, _('A amortir'), 0, 0, 'R');
+        $this->Cell($this->col_size['amount.delta'], 8, _('Val. Comptable Net'), 0, 0, 'R');
         $this->Ln();
     }
 
@@ -47,6 +47,8 @@ class Amortissement_Material_PDF extends PDF
         $this->SetFont('DejaVu', '', 7);
         $ret=$cn->get_array("select * from amortissement.v_amortissement_summary where a_visible='Y' order by a_start,a_date");
         bcscale(2);
+        $tot_purchase=0;$tot_amorti=0;$tot_remain=0;
+
         for ($i=0;$i<count($ret);$i++)
         {
             if ($i%2==0)
@@ -59,6 +61,7 @@ class Amortissement_Material_PDF extends PDF
                 $this->SetFillColor(0, 0, 0);
                 $fill=0;
             }
+            
             $this->Cell($this->col_size['qcode'], 8, $ret[$i]['quick_code'], 0, 0, 'L', $fill);
             $this->Cell($this->col_size['name'], 8, $ret[$i]['vw_name'], 0, 0, 'L', $fill);
             $this->Cell($this->col_size['date.purch'], 8, format_date($ret[$i]['a_date']), 0, 0, 'L', $fill);
@@ -68,10 +71,18 @@ class Amortissement_Material_PDF extends PDF
             $this->Cell($this->col_size['amount.amort'], 8, nb($ret[$i]['amort_done']), 0, 0, 'R', $fill);
             $delta=bcsub($ret[$i]['a_amount'],$ret[$i]['amort_done']);
             $this->Cell($this->col_size['amount.delta'], 8, nb($delta), 0, 0, 'R', $fill);
+            
+            $tot_purchase=bcadd($tot_purchase,$ret[$i]['a_amount']);
+            $tot_amorti=bcadd($tot_amorti,$ret[$i]['amort_done']);
+            $tot_remain=bcadd($tot_remain,$delta);
 	
         $this->Ln();
         }
-
+        $deca=$this->col_size['qcode']+$this->col_size['name']+$this->col_size['date.purch']+$this->col_size['year.purch']+$this->col_size['#amort'];
+        $this->Cell($deca+$this->col_size['amount.purch'],8,nb($tot_purchase) ,0,0,'R',0);
+        $this->Cell($this->col_size['amount.amort'],8,nb($tot_amorti) ,0,0,'R',0);
+        $this->Cell($this->col_size['amount.delta'],8,nb($tot_remain) ,0,0,'R',0);
+        $this->ln();
         $this->Output('listing-amort.pdf', 'I');
     }
 

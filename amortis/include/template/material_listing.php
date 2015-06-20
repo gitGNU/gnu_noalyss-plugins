@@ -32,12 +32,14 @@ Filtre <?php echo HtmlInput::infobulle(400)?> <?php echo HtmlInput::filter_table
 <th>Année achat</th>
 <th style="text-align:right">Montant Initial</th>
 <th style="text-align:right">Montant Amorti</th>
-<th style="text-align:right">Montant à amortir</th>
+<th style="text-align:right">Valeur Net Comptable</th>
 
 </tr>
 
 <?php 
 bcscale(2);
+$tot_purchase=0;$tot_amorti=0;$tot_remain=0;
+        
 for ($i =0 ;$i < Database::num_row($ret);$i++) :
   echo '<tr>';
         $row=$amort->next($ret,$i);
@@ -47,17 +49,36 @@ for ($i =0 ;$i < Database::num_row($ret);$i++) :
         echo td($detail);
 	echo td($fiche->strAttribut(ATTR_DEF_NAME));
 	// <td sorttable_customkey="<?php echo $row_bank['b_date']
-	echo '<td sorttable_customkey="'.$row->a_date.'">'.format_date($row->a_date).'</td>';
+	echo '<td   sorttable_customkey="'.$row->a_date.'">'.format_date($row->a_date).'</td>';
 	echo td($row->a_start);
-        echo td(nbm($row->a_amount),' sorttable_customkey="'.$row->a_amount.'"   "style="text-align:right"');
-        $amortized=$cn->get_value("select sum(h_amount) from amortissement.amortissement_histo where a_id=$1",array($row->a_id));
+        echo td(nbm($row->a_amount),' sorttable_customkey="'.$row->a_amount.'"   style="text-align:right"');
+        $amortized=$cn->get_value("select coalesce(sum(h_amount),0) from amortissement.amortissement_histo where a_id=$1",array($row->a_id));
         $remain=bcsub($row->a_amount,$amortized);
          echo td(nbm($amortized),'sorttable_customkey="'.$amortized.'" style="text-align:right"');
          echo td(nbm($remain),'sorttable_customkey="'.$remain.'"  style="text-align:right"');
-
+         // Compute tot
+         $tot_purchase=bcadd($tot_purchase,$row->a_amount);
+         $tot_amorti=bcadd($tot_amorti,$amortized);
+         $tot_remain=bcadd($tot_remain,$remain);
   echo '</tr>';
 endfor;
 ?>
-
+<tfoot>
+<tr class="highlight">
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td style="text-align:right">
+    <?php echo nbm($tot_purchase)?>
+</td>
+<td style="text-align:right">
+    <?php echo nbm($tot_amorti)?>
+</td>
+<td style="text-align:right">
+    <?php echo nbm($tot_remain)?>
+</td>
+</tr>
+</tfoot>
 </table>
 
