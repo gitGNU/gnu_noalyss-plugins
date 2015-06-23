@@ -21,8 +21,10 @@
 
 // Copyright (c) 2002 Author Dany De Bontridder dany@alchimerys.be
 
-/**\file
+/**
+ * \file
  * \brief main file for tools
+ * 
  */
 
 global $version_plugin;
