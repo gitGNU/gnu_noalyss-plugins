@@ -46,7 +46,7 @@ $data=$cn->get_array("select d_id,d_title,
 		to_char(l_timestamp,'YYMMDDHH24MI') as fmt_order_generated,
                 2
 		from rapport_advanced.listing_compute
-order by d_start,d_title");
+order by d_generated desc,d_title");
 ?>
 <div id="declaration_list_div">
 <?php
@@ -59,7 +59,6 @@ echo '<span style="display:block">';
 	<tr>
 		<th class=" sorttable_sorted_reverse">
 			Date début <?php echo HtmlInput::infobulle(17);?>
-			<span id="sorttable_sortrevind">&nbsp;&blacktriangle;</span>
 		</th>
 		<th>
 			Date Fin
@@ -72,6 +71,7 @@ echo '<span style="display:block">';
 		</th>
 		<th>
 			Date génération
+			<span id="sorttable_sortrevind">&nbsp;&blacktriangle;</span>
 		</th>
 		<th>
 
