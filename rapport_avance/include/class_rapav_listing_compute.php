@@ -52,6 +52,13 @@ class RAPAV_Listing_Compute
         $this->data = new RAPAV_Listing_Compute_SQL();
         $this->listing=new RAPAV_Listing();
     }
+    function set_comment($p_comment)
+    {
+        $comment=strip_tags($p_comment);
+        $this->data->l_description=$p_comment;
+        $this->data->update();
+        
+    }
     function load($p_id)
     {
         $this->data->lc_id=$p_id;
@@ -182,8 +189,9 @@ class RAPAV_Listing_Compute
                 $this->data->lc_id
                 );
         echo '<span id="description_flag"></span>';
-        echo '<textarea label="Description" style="width:75%;height:4em"  class="input_text" id="description">'.h($this->data->l_description).'</textarea>';
-        echo HtmlInput::button_action(_('Modifie description'), $script , 'modify_listing_description','tinybutton');
+        echo '<textarea label="Description" style="width:75%;height:4em"  class="input_text" name="description" id="description">'.h($this->data->l_description).'</textarea>';
+        if (! $with_sel ) 
+            echo HtmlInput::button_action(_('Modifie description'), $script , 'modify_listing_description','tinybutton');
         echo '<p></p>';
         /* For each card */
         for ($i = 0;$i < $nb_fiche;$i++)

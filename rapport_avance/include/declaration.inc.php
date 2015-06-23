@@ -126,7 +126,7 @@ if (isset($_POST['save_listing']))
         $listing->keep($_POST['lc_id']);
         $listing->save_selected($_POST['selected_card']);
     }
-
+    $listing->set_comment($_POST['description']);
 
     $listing->display(false);
     /**
