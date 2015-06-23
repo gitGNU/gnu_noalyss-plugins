@@ -255,4 +255,49 @@ if ($act == 'export_download_all')
 
     unlink($filename);
 }
+if ( $act=='downloadTemplateListing')
+{
+        require_once 'include/class_rapav_listing.php';
+        $id=HtmlInput::default_value_get('id',0);
+        
+            
+        $obj=new Rapav_Listing($id);
+	$cn->start();
+	if ($id==0 || $obj->data->l_filename == "")
+	{
+		ini_set('zlib.output_compression', 'Off');
+		header("Pragma: public");
+		header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+		header("Cache-Control: must-revalidate");
+		header('Content-type: ' . 'text/plain');
+		header('Content-Disposition: attachment;filename=vide.txt', FALSE);
+		header("Accept-Ranges: bytes");
+		echo "******************";
+		echo _("Fichier effacé");
+		echo "******************";
+		exit();
+	}
+	$tmp = tempnam($_ENV['TMP'], 'document_');
+
+	$cn->lo_export($obj->data->l_lob, $tmp);
+
+	ini_set('zlib.output_compression', 'Off');
+	header("Pragma: public");
+	header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+	header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+	header("Cache-Control: must-revalidate");
+	header('Content-type: ' . $obj->data->l_mimetype);
+	header('Content-Disposition: attachment;filename="' . $obj->data->l_filename . '"', FALSE);
+	header("Accept-Ranges: bytes");
+	$file = fopen($tmp, 'r');
+	while (!feof($file))
+		echo fread($file, 8192);
+
+	fclose($file);
+
+	unlink($tmp);
+
+	$cn->commit();    
+}
 ?>

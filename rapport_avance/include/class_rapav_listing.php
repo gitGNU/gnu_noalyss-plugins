@@ -66,8 +66,10 @@ class Rapav_Listing
     }
 
     /**
-     * @brief display a form to save a new list
+     * @brief display a form to save a new list or to display
+     * detail of a list (description, name, doc template
      * 
+     * @global type $cn database connexion
      */
     function form_modify()
     {
@@ -102,7 +104,17 @@ class Rapav_Listing
                     'cin' => '',
                     'cout' => 'listing_mod_id');
                 $json = 'listing_remove_modele(' . str_replace('"', "'", json_encode($arg)) . ')';
-                $file->value = $this->data->l_filename . HtmlInput::anchor(' <span style="background-color:red">X </span>', "", ' onclick="' . $json . '"');
+                $url="extension.raw.php?".
+                        http_build_query(array (
+                        'gDossier'=>Dossier::id()
+                        ,'ac'=>$_REQUEST['plugin_code']
+                        ,'plugin_code'=>$_REQUEST['plugin_code']
+                        ,'id'=>$this->data->l_id
+                        ,'act'=>'downloadTemplateListing'));
+                $file->value = '<a href="'.$url.'" class="line">'. 
+                        $this->data->l_filename.
+                        '</a>'. 
+                        HtmlInput::anchor('X', "", ' onclick="' . $json . '"',' class="tinybutton"');
             }
         }
         require 'template/rapav_listing_form_modify.php';
