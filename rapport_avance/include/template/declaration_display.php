@@ -29,9 +29,22 @@
 ?>
 <h1><?php echo $this->d_title?></h1>
 <h2> Du <?php echo $this->d_start?> au <?php echo $this->d_end?></h2>
-<p>
-	Note : <?php echo h($this->d_description)?>
-</p>
+<?php
+$script=sprintf("modify_rapav_description('%s','%s','%s','%s')",
+                $_REQUEST['plugin_code'],
+                $_REQUEST['ac'],
+                $_REQUEST['gDossier'],
+                $this->d_id
+                );
+?>
+<span id="description_flag"></span>
+        <textarea label="Description" style="width:75%;height:4em" class="input_text" id="description">
+<?php echo $this->d_description?>
+        
+        
+        </textarea>
+  <?php      echo HtmlInput::button_action(_('Modifie description'), $script , 'modify_listing_description','tinybutton'); ?>
+  
 <?php 
 	if ( empty($array) ) { echo 'Aucune donnée'; exit();}
 

@@ -26,4 +26,3 @@ $listing->propose_download_all();
 echo HtmlInput::button_action("Retour","$('declaration_list_div').show(); $('declaration_display_div').hide();",'rt'.$_GET['d_id'],'smallbutton');
 echo '</div>';
 echo create_script('sorttable.makeSortable($("_tb"))');
-?>        

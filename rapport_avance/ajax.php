@@ -13,7 +13,8 @@ $a_action=explode(',',
         'listing_modify,listing_remove_modele,listing_display_definition,'.
         'listing_detail_add,save_param_listing,listing_detail_remove,'.
         'listing_search_code,rapav_listing_display,parameter_send_mail,send_mail,'
-        . 'include_follow,include_follow_save,modify_param_detail,listing_detail_modify');
+        . 'include_follow,include_follow_save,modify_param_detail,listing_detail_modify,modify_listing_description'
+        . ',modify_rapav_description');
 if ( in_array($act,$a_action ) == true )
 {
     include 'ajax_'.$act.'.php';

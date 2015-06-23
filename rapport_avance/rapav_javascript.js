@@ -1155,3 +1155,51 @@ function js_include_follow_save()
 
     }
 }
+/**
+ * @brief save the description of a listing
+ */
+ function modify_listing_description(plugin_code, ac, dossier, d_id)
+    {
+
+       var obj={'gDossier':dossier
+                ,'plugin_code':plugin_code
+                ,'ac':ac
+                ,'d_id':d_id
+                ,'act':'modify_listing_description'
+                ,'comment':$('description').value
+            };
+      waiting_box();
+      new Ajax.Request('ajax.php',{
+          parameters :obj,
+          method:'GET',
+           onSuccess:function ()
+          {
+              remove_waiting_box();
+              
+          }
+      })
+    }
+/**
+ * @brief save the description of a listing
+ */
+ function modify_rapav_description(plugin_code, ac, dossier, d_id)
+    {
+
+       var obj={'gDossier':dossier
+                ,'plugin_code':plugin_code
+                ,'ac':ac
+                ,'d_id':d_id
+                ,'act':'modify_rapav_description'
+                ,'comment':$('description').value
+            };
+      waiting_box();
+      new Ajax.Request('ajax.php',{
+          parameters :obj,
+          method:'GET',
+          onSuccess:function ()
+          {
+              remove_waiting_box();
+              
+          }
+      })
+    }

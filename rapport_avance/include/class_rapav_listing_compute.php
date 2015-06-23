@@ -170,11 +170,21 @@ class RAPAV_Listing_Compute
     function display($with_sel,$form_name="")
     {
         global $cn;
+        echo "<h1>{$this->data->l_name} </h1> <h2> Du  {$this->data->l_start} au {$this->data->l_end}</h2>";
         $ofiche=new RAPAV_Listing_Compute_Fiche_SQL();
         $r_fiche=$ofiche->seek (" where lc_id = $1",array($this->data->lc_id));
         $nb_fiche=Database::num_row($r_fiche);
-        echo 'Description';
-        echo '<p id="description">'.h($this->data->l_description).'</p>';
+        $comment=new ITextarea('description_listing');
+        $script=sprintf("modify_listing_description('%s','%s','%s','%s')",
+                $_REQUEST['plugin_code'],
+                $_REQUEST['ac'],
+                $_REQUEST['gDossier'],
+                $this->data->lc_id
+                );
+        echo '<span id="description_flag"></span>';
+        echo '<textarea label="Description" style="width:75%;height:4em"  class="input_text" id="description">'.h($this->data->l_description).'</textarea>';
+        echo HtmlInput::button_action(_('Modifie description'), $script , 'modify_listing_description','tinybutton');
+        echo '<p></p>';
         /* For each card */
         for ($i = 0;$i < $nb_fiche;$i++)
         {
