@@ -285,7 +285,8 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
         $array[] = array('code' => 'CEDEX', 'value' => $g_parameter->MY_CP);
         $array[] = array('code' => 'FAX', 'value' => $g_parameter->MY_FAX);
         $array[] = array('code' => 'NOTE', 'value' => $this->d_description);
-
+        $array[] = array('code' => 'TODAY', 'value' => date('d.m.Y'));
+        
         // open the files
         $ifile = fopen($p_dir . '/' . $p_filename, 'r');
 
