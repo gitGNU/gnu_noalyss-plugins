@@ -530,7 +530,7 @@ function listing_modify(json)
                             remove_waiting_box();
                             var code_html = getNodeText(html[0]);
                             code_html = unescape_xml(code_html);
-                            var position = fixed_position(451, 217);
+                            var position = fixed_position(35, 217);
                             add_div({'id': json.cout, 'cssclass': 'inner_box', 'drag': 1, 'style': position});
                             $(json.cout).innerHTML = code_html;
                         } catch (e) {
@@ -571,6 +571,7 @@ function check_listing_add(form_id)
  */
 function listing_remove_modele(json)
 {
+    if ( ! confirm('Effacer ? ') ) { return; }
     try {
         var querystring = 'plugin_code=' + json.pc + '&ac=' + json.ac + '&gDossier=' + json.gDossier + '&act=listing_remove_modele' + "&cin=" + json.cin + '&cout=' + json.cout + '&id=' + json.id;
         waiting_box();
