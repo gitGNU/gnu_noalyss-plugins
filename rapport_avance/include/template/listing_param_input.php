@@ -84,7 +84,8 @@
                         <?php echo $formula->input() ?>
                     </p>
 
-                    <?php echo HtmlInput::submit('save', 'Sauve') ?>
+                    <?php echo HtmlInput::submit('save', 'Sauve','style="   position: absolute;
+    bottom: 10px"') ?>
 
                 </form>
             </div>
@@ -99,7 +100,8 @@
                     <?php echo HtmlInput::hidden('tab', 'compute_id') ?>
                     <?php echo $compute->input() ?>
                     <p>
-                        <?php echo HtmlInput::submit('save', 'Sauve') ?>
+                        <?php echo HtmlInput::submit('save', 'Sauve','style="   position: absolute;
+    bottom: 10px"') ?>
                     </p>
 
                 </form>
@@ -113,7 +115,8 @@
                     <?php echo HtmlInput::hidden('tab', 'new_account_id') ?>
                     <?php echo $account->input() ?>
                     <p>
-                        <?php echo HtmlInput::submit('save', 'Sauve') ?>
+                        <?php echo HtmlInput::submit('save', 'Sauve','style="   position: absolute;
+    bottom: 10px"') ?>
                     </p>
 
                 </form>
@@ -128,7 +131,8 @@
                     <?php echo $attribute->input(); ?>
 
                     <p>
-                        <?php echo HtmlInput::submit('save', 'Sauve') ?>
+                        <?php echo HtmlInput::submit('save', 'Sauve','style="   position: absolute;
+    bottom: 10px"') ?>
                     </p>
 
                 </form>

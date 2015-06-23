@@ -730,14 +730,14 @@ function listing_detail_add(json)
                             remove_waiting_box();
                             var code_html = getNodeText(html[0]);
                             code_html = unescape_xml(code_html);
-                            var position = fixed_position(451, 217) + ';width:50%';
+                            var position = fixed_position(244, 217) + ';width:60%;height:490px';
                             add_div({'id': json.cin, 'cssclass': 'inner_box', 'drag': 1, 'style': position});
                             $(json.cin).innerHTML = code_html;
+                            code_html.evalScripts();
 
                         } catch (e) {
                             alert(e.message);
                         }
-                        code_html.evalScripts();
                     }
                 }
         );
