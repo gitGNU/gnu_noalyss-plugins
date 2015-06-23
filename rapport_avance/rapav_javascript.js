@@ -96,7 +96,7 @@ function add_param_detail(plugin_code, ac, dossier, p_id)
                         removeDiv('param_detail_div');
                         var nTop = calcy(90);
                         var nLeft = "200px";
-                        var str_style = "top:" + nTop + "px;left:" + nLeft + ";width:70em;height:auto";
+                        var str_style = "top:" + nTop + "px;left:" + nLeft + ";width:70em;height:30em";
                         add_div({
                             id: 'param_detail_div',
                             style: str_style,
