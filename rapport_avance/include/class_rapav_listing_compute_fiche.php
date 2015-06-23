@@ -255,6 +255,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         $array[] = array('code' => 'FAX', 'value' => $g_parameter->MY_FAX);
         $array[] = array('code' => 'NOTE', 'value' => $this->listing_compute->data->l_description);
         $array[] = array('code' => 'NUM_PIECE', 'value' => $this->number);
+        $array[] = array('code' => 'TODAY', 'value' => date('d.m.Y'));
 
         // open the files
         $ifile = fopen($p_dir . '/' . $p_filename, 'r');
