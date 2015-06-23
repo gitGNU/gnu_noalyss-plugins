@@ -292,11 +292,11 @@ class RAPAV_Account extends Formulaire_Param_Detail
         echo $sum_type->input();
         echo '</p>';
         echo '<p>';
-        echo 'du poste comptable ' . HtmlInput::infobulle(203);
+        echo _('du poste comptable') . " ". HtmlInput::infobulle(203);
         echo $account->input();
         echo '</p>';
         echo '<p>';
-        echo ' utilisé avec le poste comptable ' . HtmlInput::infobulle(203);
+        echo _(' utilisé avec le poste comptable'). " " . HtmlInput::infobulle(203);
         echo $account_second->input();
         echo '</p>';
          $this->input_date_paiement();
@@ -312,7 +312,7 @@ class RAPAV_Account extends Formulaire_Param_Detail
 
         if (trim($this->tmp_val) == "" || trim($this->with_tmp_val) == "")
         {
-            $this->errcode = " Un poste comptable est manquant";
+            $this->errcode = _(" Un poste comptable est manquant");
             return 1;
         }
         return 0;
@@ -321,7 +321,8 @@ class RAPAV_Account extends Formulaire_Param_Detail
 }
 
 /**
- * @brief poste comptable utilisé avec le poste comptable, choix entre diff crédit - debit, diff débit-crédit, crédit, débit
+ * @brief poste comptable utilisé avec le poste comptable, 
+ * choix entre diff crédit - debit, diff débit-crédit, crédit, débit
  */
 class RAPAV_Reconcile extends Formulaire_Param_Detail
 {
