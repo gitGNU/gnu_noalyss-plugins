@@ -245,6 +245,11 @@ class RAPAV_Listing_Compute
                 echo (($detail->ld_value_numeric !== null)?td(nbm($detail->ld_value_numeric),' sorttable_customkey="'.$detail->ld_value_numeric.'"'.' class="num"'):"");
                 echo (($detail->ld_value_text !== null)?td($detail->ld_value_text):"");
                 echo (($detail->ld_value_date!== null)?td($detail->ld_value_date,' sorttable_customkey="'.$detail->ld_value_date.'"'):"");
+                if (
+                       $detail->ld_value_numeric === null 
+                    && $detail->ld_value_text === null 
+                    && $detail->ld_value_date === null )
+                    echo '<td></td>';
             }
             if ( $fiche->lf_filename != "")
             {
