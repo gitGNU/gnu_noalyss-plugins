@@ -74,6 +74,7 @@ if ($errcode == 0)
 {
   echo HtmlInput::title_box($title, 'param_detail_div');
   echo '<div class="content" style="padding:10px">';
+  echo '<span class="notice" id="param_detail_info_div"></span>';
   echo $comment;
   echo '<form method="post" onsubmit="save_param_detail(\'modify_param_detail_frm\');return false;" id="modify_param_detail_frm">';
   $obj->input();
