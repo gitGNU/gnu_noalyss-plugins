@@ -58,8 +58,18 @@ if (isset($_POST['save']))
 	try
 	{
 		$cn->start();
-
-		$m = $am->save($_POST);
+                $p_group=HtmlInput::default_value_post("grouped", -1);
+                if ( $p_group == 1)
+                {
+                    $group=true;
+                } else if ($p_group == 0)
+                {
+                    $group=false;
+                }
+                if ( isset ($group))
+                    $m = $am->save($_POST,$group);
+                else
+                    throw new Exception (_('Missing parameter grouped'));
 		/*
 		 * if $m is not empty, some mat. were already encoded
 		 */
