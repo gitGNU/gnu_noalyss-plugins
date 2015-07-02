@@ -4,7 +4,7 @@
 
 -- Dumped from database version 9.1.15
 -- Dumped by pg_dump version 9.1.15
--- Started on 2015-04-03 12:08:04 CEST
+-- Started on 2015-04-04 12:34:59 CEST
 
 SET statement_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -240,7 +240,7 @@ COMMENT ON COLUMN sav_repair_card.f_id_customer IS 'Customer card';
 -- Name: COLUMN sav_repair_card.f_id_personnel_received; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
 
-COMMENT ON COLUMN sav_repair_card.f_id_personnel_received IS 'Not used : card for crowd';
+COMMENT ON COLUMN sav_repair_card.f_id_personnel_received IS 'Not used : card for crew';
 
 
 --
@@ -249,7 +249,7 @@ COMMENT ON COLUMN sav_repair_card.f_id_personnel_received IS 'Not used : card fo
 -- Name: COLUMN sav_repair_card.f_id_personnel_done; Type: COMMENT; Schema: service_after_sale; Owner: dany
 --
 
-COMMENT ON COLUMN sav_repair_card.f_id_personnel_done IS 'Not used card for crowd';
+COMMENT ON COLUMN sav_repair_card.f_id_personnel_done IS 'Not used card for crew';
 
 
 --
@@ -565,9 +565,10 @@ SELECT pg_catalog.setval('repair_card_number_seq', 1, false);
 -- Data for Name: sav_parameter; Type: TABLE DATA; Schema: service_after_sale; Owner: dany
 --
 
-COPY sav_parameter (code, value, description, id) FROM stdin;
-good	1,2	matériel retourné	1
-\.
+INSERT INTO sav_parameter (code, value, description, id) VALUES ('good', '1,2', 'matériel retourné', 1);
+INSERT INTO sav_parameter (code, value, description, id) VALUES ('spare', '1,2,3', 'Spare part', 2);
+INSERT INTO sav_parameter (code, value, description, id) VALUES ('workhour', '10', 'Workhour card id', 3);
+INSERT INTO sav_parameter (code, value, description, id) VALUES ('ledger', '2', 'Default ledger of sales', 4);
 
 
 --
@@ -576,27 +577,25 @@ good	1,2	matériel retourné	1
 -- Data for Name: sav_repair_card; Type: TABLE DATA; Schema: service_after_sale; Owner: dany
 --
 
-COPY sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) FROM stdin;
-10	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
-11	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
-12	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
-13	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
-14	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
-15	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
-16	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
-17	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
-18	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
-19	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
-20	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
-21	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
-22	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
-23	279	\N	\N	2015-03-22 00:00:00	\N	\N	aa	aaaa	\N	\N	\N	E	147
-26	\N	\N	\N	\N	\N	\N	57	57	\N	\N	\N	E	\N
-27	\N	\N	\N	\N	\N	\N	57	57	\N	\N	\N	E	\N
-28	\N	\N	\N	\N	\N	\N	100	100	\N	\N	\N	E	\N
-9	322	\N	\N	2015-03-21 00:00:00	\N	\N	test	test	\N	\N	\N	E	287
-24	279	\N	\N	2015-03-22 00:00:00	2015-01-01 00:00:00	2016-01-01 00:00:00	100	100	\N	\N	\N	C	147
-\.
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (10, 279, NULL, NULL, '2015-03-22 00:00:00', NULL, NULL, 'aa', 'aaaa', NULL, NULL, NULL, 'E', 147);
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (11, 279, NULL, NULL, '2015-03-22 00:00:00', NULL, NULL, 'aa', 'aaaa', NULL, NULL, NULL, 'E', 147);
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (12, 279, NULL, NULL, '2015-03-22 00:00:00', NULL, NULL, 'aa', 'aaaa', NULL, NULL, NULL, 'E', 147);
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (13, 279, NULL, NULL, '2015-03-22 00:00:00', NULL, NULL, 'aa', 'aaaa', NULL, NULL, NULL, 'E', 147);
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (14, 279, NULL, NULL, '2015-03-22 00:00:00', NULL, NULL, 'aa', 'aaaa', NULL, NULL, NULL, 'E', 147);
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (15, 279, NULL, NULL, '2015-03-22 00:00:00', NULL, NULL, 'aa', 'aaaa', NULL, NULL, NULL, 'E', 147);
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (16, 279, NULL, NULL, '2015-03-22 00:00:00', NULL, NULL, 'aa', 'aaaa', NULL, NULL, NULL, 'E', 147);
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (17, 279, NULL, NULL, '2015-03-22 00:00:00', NULL, NULL, 'aa', 'aaaa', NULL, NULL, NULL, 'E', 147);
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (18, 279, NULL, NULL, '2015-03-22 00:00:00', NULL, NULL, 'aa', 'aaaa', NULL, NULL, NULL, 'E', 147);
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (19, 279, NULL, NULL, '2015-03-22 00:00:00', NULL, NULL, 'aa', 'aaaa', NULL, NULL, NULL, 'E', 147);
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (20, 279, NULL, NULL, '2015-03-22 00:00:00', NULL, NULL, 'aa', 'aaaa', NULL, NULL, NULL, 'E', 147);
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (21, 279, NULL, NULL, '2015-03-22 00:00:00', NULL, NULL, 'aa', 'aaaa', NULL, NULL, NULL, 'E', 147);
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (22, 279, NULL, NULL, '2015-03-22 00:00:00', NULL, NULL, 'aa', 'aaaa', NULL, NULL, NULL, 'E', 147);
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (23, 279, NULL, NULL, '2015-03-22 00:00:00', NULL, NULL, 'aa', 'aaaa', NULL, NULL, NULL, 'E', 147);
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (26, NULL, NULL, NULL, NULL, NULL, NULL, '57', '57', NULL, NULL, NULL, 'E', NULL);
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (27, NULL, NULL, NULL, NULL, NULL, NULL, '57', '57', NULL, NULL, NULL, 'E', NULL);
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (28, NULL, NULL, NULL, NULL, NULL, NULL, '100', '100', NULL, NULL, NULL, 'E', NULL);
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (9, 322, NULL, NULL, '2015-03-21 00:00:00', NULL, NULL, 'test', 'test', NULL, NULL, NULL, 'E', 287);
+INSERT INTO sav_repair_card (id, f_id_customer, f_id_personnel_received, f_id_personnel_done, date_reception, date_start, date_end, garantie, description_failure, jr_id, tech_creation_date, repair_number, card_status, f_id_good) VALUES (24, 279, NULL, NULL, '2015-03-22 00:00:00', '2015-01-01 00:00:00', '2016-01-01 00:00:00', '100', '100', NULL, NULL, NULL, 'C', 147);
 
 
 --
@@ -614,11 +613,10 @@ SELECT pg_catalog.setval('sav_repair_card_id_seq', 28, true);
 -- Data for Name: sav_spare_part; Type: TABLE DATA; Schema: service_after_sale; Owner: dany
 --
 
-COPY sav_spare_part (id, f_id_material, repair_card_id, quantity) FROM stdin;
-64	147	24	0.00
-72	287	9	10.00
-73	287	24	10.00
-\.
+INSERT INTO sav_spare_part (id, f_id_material, repair_card_id, quantity) VALUES (64, 147, 24, 0.00);
+INSERT INTO sav_spare_part (id, f_id_material, repair_card_id, quantity) VALUES (72, 287, 9, 10.00);
+INSERT INTO sav_spare_part (id, f_id_material, repair_card_id, quantity) VALUES (73, 287, 24, 10.00);
+INSERT INTO sav_spare_part (id, f_id_material, repair_card_id, quantity) VALUES (74, 168, 23, 10.00);
 
 
 --
@@ -627,8 +625,6 @@ COPY sav_spare_part (id, f_id_material, repair_card_id, quantity) FROM stdin;
 -- Data for Name: sav_version; Type: TABLE DATA; Schema: service_after_sale; Owner: dany
 --
 
-COPY sav_version (version_id, version_comment, version_date) FROM stdin;
-\.
 
 
 --
@@ -637,14 +633,12 @@ COPY sav_version (version_id, version_comment, version_date) FROM stdin;
 -- Data for Name: sav_workhour; Type: TABLE DATA; Schema: service_after_sale; Owner: dany
 --
 
-COPY sav_workhour (id, total_workhour, repair_card_id, work_description, f_id_workhour) FROM stdin;
-7	3.0000	24	desc	\N
-12	52.0000	24	es	\N
-14	20.0000	24	Test	\N
-15	20.0000	24	test	\N
-18	232.0000	24	voilà ça marche maintenant !!! '''	\N
-19	20.0000	24	test '	\N
-\.
+INSERT INTO sav_workhour (id, total_workhour, repair_card_id, work_description, f_id_workhour) VALUES (7, 3.0000, 24, 'desc', NULL);
+INSERT INTO sav_workhour (id, total_workhour, repair_card_id, work_description, f_id_workhour) VALUES (12, 52.0000, 24, 'es', NULL);
+INSERT INTO sav_workhour (id, total_workhour, repair_card_id, work_description, f_id_workhour) VALUES (14, 20.0000, 24, 'Test', NULL);
+INSERT INTO sav_workhour (id, total_workhour, repair_card_id, work_description, f_id_workhour) VALUES (15, 20.0000, 24, 'test', NULL);
+INSERT INTO sav_workhour (id, total_workhour, repair_card_id, work_description, f_id_workhour) VALUES (18, 232.0000, 24, 'voilà ça marche maintenant !!! ''''''', NULL);
+INSERT INTO sav_workhour (id, total_workhour, repair_card_id, work_description, f_id_workhour) VALUES (19, 20.0000, 24, 'test ''', NULL);
 
 
 --
@@ -653,7 +647,7 @@ COPY sav_workhour (id, total_workhour, repair_card_id, work_description, f_id_wo
 -- Name: spare_part_id_seq; Type: SEQUENCE SET; Schema: service_after_sale; Owner: dany
 --
 
-SELECT pg_catalog.setval('spare_part_id_seq', 73, true);
+SELECT pg_catalog.setval('spare_part_id_seq', 74, true);
 
 
 --
@@ -766,7 +760,7 @@ ALTER TABLE ONLY sav_spare_part
     ADD CONSTRAINT sav_spare_part_repair FOREIGN KEY (repair_card_id) REFERENCES sav_repair_card(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
--- Completed on 2015-04-03 12:08:05 CEST
+-- Completed on 2015-04-04 12:34:59 CEST
 
 --
 -- PostgreSQL database dump complete

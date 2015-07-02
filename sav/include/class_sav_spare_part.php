@@ -84,7 +84,7 @@ class Sav_Spare_Part
     {
         global $cn;
         $repair=new Sav_Repair_Card_SQL($p_repair);
-        if ( $repair->id == -1 ) throw new Exception('Inexistent repair card',NOMATERIAL);
+        if ( $repair->id == -1 ) throw new Exception(_('Pièce inexistante'),NOMATERIAL);
        
         $fiche=new Fiche($cn);
         $fiche->get_by_qcode($p_qcode, FALSE);
@@ -93,7 +93,7 @@ class Sav_Spare_Part
          * @todo vérifier que la carte demandée appartient bien  à la catégorie
          * de fiche
          */
-        if ( $material_id == 0) throw new Exception (_('Inexistant spare part'),NOSPAREPART);
+        if ( $material_id == 0) throw new Exception (_('Pièce inexistante'),NOSPAREPART);
         
         $this->spare_part->repair_card_id=$p_repair;
         $this->spare_part->id=-1;
