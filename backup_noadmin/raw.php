@@ -21,17 +21,30 @@
 
 // Copyright (c) 2002 Author Dany De Bontridder dany@alchimerys.be
 
-/**\file
+/* * \file
  * \brief raw file for backup
  */
-$cmd = escapeshellcmd(PG_DUMP);
-putenv("PGPASSWORD=" . phpcompta_password);
-putenv("PGUSER=" . phpcompta_user);
-putenv("PGHOST=" . phpcompta_psql_host);
-putenv("PGPORT=" . phpcompta_psql_port);
-$database = domaine . "dossier" . Dossier::id();
-$args = " -Fc -Z9 --no-owner -p " . phpcompta_psql_port . " " . $database;
-header('Content-type: application/octet');
-header('Content-Disposition:attachment;filename="' . $database . '.bin"', FALSE);
+$cmd=escapeshellcmd(PG_DUMP);
+if (defined("noalyss_user"))
+{
+    putenv("PGPASSWORD=".noalyss_password);
+    putenv("PGUSER=".noalyss_user);
+    putenv("PGHOST=".noalyss_psql_host);
+    putenv("PGPORT=".noalyss_psql_port);
+    $port=noalyss_psql_port;
+}
+else if (defined("phpcompta_user"))
+{
+    putenv("PGPASSWORD=".phpcompta_password);
+    putenv("PGUSER=".phpcompta_user);
+    putenv("PGHOST=".phpcompta_psql_host);
+    putenv("PGPORT=".phpcompta_psql_port);
+    $port=phpcompta_psql_port;
+}
 
-passthru($cmd . $args, $a);
+$database=domaine."dossier".Dossier::id();
+$args=" -Fc -Z9 --no-owner -p ".$port." ".$database;
+header('Content-type: application/octet');
+header('Content-Disposition:attachment;filename="'.$database.'.bin"', FALSE);
+
+passthru($cmd.$args, $a);
