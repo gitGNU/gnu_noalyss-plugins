@@ -24,13 +24,12 @@
  * \brief display the form for the operation
  */
 require_once('class_modop_operation.php');
-require_once('class_icard.php');
-require_once('class_ipopup.php');
-require_once ('class_acc_ledger_purchase.php');
-require_once ('class_acc_ledger_sold.php');
-require_once('class_periode.php');
+require_once NOALYSS_INCLUDE.'/class_icard.php';
+require_once NOALYSS_INCLUDE.'/class_ipopup.php';
+require_once NOALYSS_INCLUDE.'/class_acc_ledger_purchase.php';
+require_once NOALYSS_INCLUDE.'/class_acc_ledger_sold.php';
+require_once NOALYSS_INCLUDE.'/class_periode.php';
 echo js_include('acc_ledger.js');
-require_once ('class_ipopup.php');
 //----------------------------------------------------------------------
 // create compute button
 $cn=new Database(dossier::id());

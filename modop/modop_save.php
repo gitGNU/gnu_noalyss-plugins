@@ -23,8 +23,8 @@
 /*!\file
  * \brief save the operation
  */
-require_once ('class_acc_ledger_purchase.php');
-require_once ('class_acc_ledger_sold.php');
+require_once NOALYSS_INCLUDE.'/class_acc_ledger_purchase.php';
+require_once NOALYSS_INCLUDE.'/class_acc_ledger_sold.php';
 require_once('class_modop_operation.php');
 /* ---------------------------------------------------------------------- */
 // Purchase

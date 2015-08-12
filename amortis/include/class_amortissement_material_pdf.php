@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-require_once('class_pdf.php');
+require_once NOALYSS_INCLUDE.'/class_pdf.php';
 
 class Amortissement_Material_PDF extends PDFLand
 {

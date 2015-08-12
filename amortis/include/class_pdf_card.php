@@ -19,7 +19,7 @@
 
  * 
 */
-require_once('class_pdf.php');
+require_once NOALYSS_INCLUDE.'/class_pdf.php';
 
 
 class Pdf_Card extends PDF

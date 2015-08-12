@@ -24,7 +24,7 @@
  * @brief 
  * @param type $name Descriptionara
  */
-require_once('class_pdf.php');
+require_once NOALYSS_INCLUDE.'/class_pdf.php';
 
 class Amortissement_Table_PDF extends PDFLand
 {

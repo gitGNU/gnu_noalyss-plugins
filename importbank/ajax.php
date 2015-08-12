@@ -17,7 +17,7 @@
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-require_once('class_database.php');
+require_once NOALYSS_INCLUDE.'/class_database.php';
 require_once('include/class_bank_item.php');
 require_once('bank_constant.php');
 

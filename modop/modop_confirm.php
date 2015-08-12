@@ -23,9 +23,9 @@
 /*!\file
  * \brief confirm operation before save it but verify first
  */
-require_once ('class_acc_ledger_purchase.php');
-require_once ('class_acc_ledger_sold.php');
-require_once ('class_modop_operation.php');
+require_once NOALYSS_INCLUDE.'/class_acc_ledger_purchase.php';
+require_once NOALYSS_INCLUDE.'/class_acc_ledger_sold.php';
+require_once 'class_modop_operation.php';
 
 $act=new Modop_Operation($cn,'');
 $act->suspend_strict();

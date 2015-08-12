@@ -25,8 +25,8 @@
  * \brief Manage import
  */
 require_once('class_format_bank_sql.php');
-require_once('class_acc_ledger_fin.php');
-require_once('class_periode.php');
+require_once NOALYSS_INCLUDE.'/class_acc_ledger_fin.php';
+require_once NOALYSS_INCLUDE.'/class_periode.php';
 require_once('class_temp_bank_sql.php');
 
 class Import_Bank
