@@ -20,7 +20,7 @@
 
 // Copyright (c) 2002 Author Dany De Bontridder dany@alchimerys.be
 global $version_plugin;
-$version_plugin=SVNINFO;
+$version_plugin=1;
 Extension::check_version(5300);
 /*!\file
  * \brief main entry
@@ -76,7 +76,7 @@ switch($sa)
     $def=3;
     break;
   }
-echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=amortissement" target="_blank">Aide</a>'.
+echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.noalyss.eu/doku.php?id=amortissement" target="_blank">Aide</a>'.
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
 '</div>';
 echo '<div class="topmenu">';

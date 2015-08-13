@@ -98,7 +98,7 @@ if ( $cn->exist_table("version","tva_belge")==false)
 		if ( $install == 0 ) echo_warning(_("Mise à jour du plugin, pourriez-vous en vérifier le paramètrage ?"));
 		$def=5;
 }
-echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.phpcompta.eu/doku.php?id=tva" target="_blank">Aide</a>'.
+echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.noalyss.eu/doku.php?id=tva" target="_blank">Aide</a>'.
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
 '</div>';
 // show menu
