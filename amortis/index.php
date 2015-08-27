@@ -21,7 +21,7 @@
 // Copyright (c) 2002 Author Dany De Bontridder dany@alchimerys.be
 global $version_plugin;
 $version_plugin=SVNINFO;
-Extension::check_version(5300);
+Extension::check_version(6800);
 /*!\file
  * \brief main entry
  */
