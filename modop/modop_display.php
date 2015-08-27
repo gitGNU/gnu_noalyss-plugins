@@ -40,7 +40,7 @@ $sql="select jr_tech_per from jrn where jr_id=$1";
 $periode=$cn->get_value($sql,array(trim($_GET['jr_id'])));
 if ( $cn->count() == 0 )
 {
-    alert('Opération non trouvée');
+    alert(_('Opération non trouvée'));
     exit();
 }
 
@@ -72,23 +72,13 @@ if ($op->ledger_type=='ACH')
 {
 
     $jrn=new Acc_Ledger_Purchase($cn,$op->array['p_jrn']);
-    echo ICard::ipopup('ipopcard');
-    echo ICard::ipopup('ipop_newcard');
-    echo IPoste::ipopup('ipop_account');
-    $search_card=new IPopup('ipop_card');
-    $search_card->title=_('Recherche de fiche');
-    $search_card->value='';
-    echo $search_card->input();
-    $pop_tva=new IPopup('popup_tva');
-    $pop_tva->title=_('Choix TVA');
-    $pop_tva->value='';
-    echo $pop_tva->input();
-
     echo '<FORM enctype="multipart/form-data"  METHOD="POST" class="print">';
     $op->suspend_receipt();
     echo HtmlInput::hidden('ac',$_REQUEST['ac']);
     echo $jrn->input($op->array);
     echo HtmlInput::extension().dossier::hidden();
+    echo HtmlInput::hidden('bon_comm',$op->array['bon_comm']);
+    echo HtmlInput::hidden('other_info',$op->array['other_info']);
     echo HtmlInput::hidden('action','confirm');
     echo HtmlInput::submit('save','Sauve');
     echo HtmlInput::hidden('e_mp',0);
@@ -105,17 +95,6 @@ if ($op->ledger_type=='VEN')
 {
 
     $jrn=new Acc_Ledger_Sold($cn,$op->array['p_jrn']);
-    echo ICard::ipopup('ipopcard');
-    echo ICard::ipopup('ipop_newcard');
-    echo IPoste::ipopup('ipop_account');
-    $search_card=new IPopup('ipop_card');
-    $search_card->title=_('Recherche de fiche');
-    $search_card->value='';
-    echo $search_card->input();
-    $pop_tva=new IPopup('popup_tva');
-    $pop_tva->title=_('Choix TVA');
-    $pop_tva->value='';
-    echo $pop_tva->input();
     $op->suspend_receipt();
 
     echo '<FORM enctype="multipart/form-data"  METHOD="POST" class="print">';
@@ -127,7 +106,9 @@ if ($op->ledger_type=='VEN')
     echo HtmlInput::hidden('e_mp',0);
     echo HtmlInput::hidden('ext_jr_id',$op->jr_id);
     echo HtmlInput::hidden('ext_jr_internal',$op->jr_internal);
-    //echo HtmlInput::button('add_item',_('Ajout article'),      ' onClick="ledger_add_row()"');
+        echo HtmlInput::hidden('bon_comm',$op->array['bon_comm']);
+    echo HtmlInput::hidden('other_info',$op->array['other_info']);
+    echo HtmlInput::button('add_item',_('Ajout article'),      ' onClick="ledger_add_row()"');
     echo HtmlInput::button('actualiser',_('Actualiser'),      ' onClick="compute_all_ledger();"');
     echo '</form>';
 
@@ -139,13 +120,6 @@ if ($op->ledger_type=='ODS')
 {
 
     $jrn=new Acc_Ledger($cn,$op->array['p_jrn']);
-    echo ICard::ipopup('ipopcard');
-    echo ICard::ipopup('ipop_newcard');
-    echo IPoste::ipopup('ipop_account');
-    $search_card=new IPopup('ipop_card');
-    $search_card->title=_('Recherche de fiche');
-    $search_card->value='';
-    echo $search_card->input();
     $op->suspend_receipt();
 
     echo '<FORM enctype="multipart/form-data"  METHOD="POST" class="print">';
@@ -175,13 +149,6 @@ if ($op->ledger_type=='FIN')
     require_once('class_acc_ledger_fin.php');
     $f_legend='Banque';
     $jrn=new Acc_Ledger_Fin($cn,$op->array['p_jrn']);
-    echo ICard::ipopup('ipopcard');
-    echo ICard::ipopup('ipop_newcard');
-    echo IPoste::ipopup('ipop_account');
-    $search_card=new IPopup('ipop_card');
-    $search_card->title=_('Recherche de fiche');
-    $search_card->value='';
-    echo $search_card->input();
 
     $f_add_button=new IButton('add_card');
     $f_add_button->label=_('Créer une nouvelle fiche');

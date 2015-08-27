@@ -38,9 +38,9 @@ if ( $_POST['jrn_type'] == 'ACH')
         $op->suspend_receipt();
         $op->suspend_strict();
         $pj=$_POST['e_pj'];
-		$oldpj=  microtime();
-		$cn->exec_sql('update jrn set jr_pj_number=$1  where jr_id=$2',
-                      array($oldpj,$_POST['ext_jr_id']));
+        $oldpj=  microtime();
+        $cn->exec_sql('update jrn set jr_pj_number=$1  where jr_id=$2',
+              array($oldpj,$_POST['ext_jr_id']));
         $new_internal=$jrn->insert($_POST);
     }
     catch (Exception $e)
@@ -60,13 +60,17 @@ if ( $_POST['jrn_type'] == 'ACH')
     $cn->exec_sql('delete from jrnx where j_grpt in (select jr_grpt_id from jrn where jr_id=$1)',
                   array($_POST['ext_jr_id']));
 
-    /* in jrn */
+    /* in jrn, retrieve info to reattach the receipt */
     $attach=$cn->get_array('select jr_pj,jr_pj_name,jr_pj_type from jrn where jr_id=$1',
                            array($_POST['ext_jr_id']));
+    
+    
+    // delete old data from jrn
     $cn->exec_sql('delete from jrn where jr_id=$1',array($_POST['ext_jr_id']));
+    
     $cn->exec_sql('update jrn set jr_id=$1,jr_internal=$2,jr_pj_number=$3 where jr_internal=$4',
                   array($_POST['ext_jr_id'],$_POST['ext_jr_internal'],$pj,$new_internal));
-    if ($_FILES['pj']['name']=='' && $attach[0]['jr_pj_name'] != '' && ! isset ($_POST['gen_invoice']))
+    if ( $attach[0]['jr_pj_name'] != '' && ! isset ($_POST['gen_invoice']))
     {
         $cn->exec_sql('update jrn set jr_pj=$1,jr_pj_type=$2,jr_pj_name=$3 where jr_id=$4',
                       array($attach[0]['jr_pj'],$attach[0]['jr_pj_type'],$attach[0]['jr_pj_name'],$_POST['ext_jr_id']));
@@ -76,7 +80,7 @@ if ( $_POST['jrn_type'] == 'ACH')
                   array($_POST['ext_jr_internal'],$new_internal));
 
     $cn->commit();
-    echo '<h2 class="info"> Enregistrement </h2>';
+    echo '<h2 class="info"> '._('Enregistrement').' </h2>';
     echo "<h2 >" . _('Opération sauvée') .$_POST['ext_jr_internal'] ;
     if ($jrn->pj != '')
       echo ' Piece : ' . h($jrn->pj);
@@ -144,7 +148,7 @@ if ( $_POST['jrn_type'] == 'VEN')
     $cn->exec_sql('update jrn set jr_id=$1,jr_internal=$2,jr_pj_number=$3 where jr_internal=$4',
                   array($_POST['ext_jr_id'],$_POST['ext_jr_internal'],$pj,$new_internal));
 
-	if ( $_FILES['pj']['name']=='' && $attach[0]['jr_pj_name'] != '' && ! isset ($_POST['gen_invoice']))
+	if (  $attach[0]['jr_pj_name'] != '' && ! isset ($_POST['gen_invoice']))
     {
         $cn->exec_sql('update jrn set jr_pj=$1,jr_pj_type=$2,jr_pj_name=$3 where jr_id=$4',
                       array($attach[0]['jr_pj'],$attach[0]['jr_pj_type'],$attach[0]['jr_pj_name'],$_POST['ext_jr_id']));

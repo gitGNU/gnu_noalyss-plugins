@@ -42,6 +42,8 @@ if ( $_POST['jrn_type'] == 'ACH') {
   echo HtmlInput::hidden('ext_jr_internal',
 			 $_POST['ext_jr_internal']);
   echo $jrn->confirm($_POST);
+  echo HtmlInput::hidden('bon_comm',$_POST['bon_comm']);
+  echo HtmlInput::hidden('other_info',$_POST['other_info']);
 
   echo HtmlInput::submit('save','Sauver');
   echo '</FORM>';
@@ -62,6 +64,8 @@ if ( $_POST['jrn_type'] == 'VEN') {
   echo HtmlInput::hidden('ext_jr_id',$_POST['ext_jr_id']);
   echo HtmlInput::hidden('ext_jr_internal',
 			 $_POST['ext_jr_internal']);
+   echo HtmlInput::hidden('bon_comm',$_POST['bon_comm']);
+  echo HtmlInput::hidden('other_info',$_POST['other_info']);
   echo $a;
 
   echo HtmlInput::submit('save','Sauver');

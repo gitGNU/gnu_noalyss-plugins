@@ -52,7 +52,7 @@ $action=(isset ($_REQUEST['action']))?$_REQUEST['action']:'end';
   if ( ! isset ($_REQUEST['action']) && isset($_GET['seek'])) {
     /* retrieve and show the accounting */
     if ( trim($_GET['jr_id'])=='') {
-      alert('Aucune opération demandé'); exit;}
+      alert(_('Aucune opération demandé')); exit;}
     /*  retrieve and display operation */
     require_once('modop_display.php');
     exit();
