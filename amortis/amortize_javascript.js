@@ -75,7 +75,7 @@ function success_add_material(req)
 
 }
 function error_ajax() {
-    alert('Erreur ajax AMORTIS');
+    alert_box('Erreur ajax AMORTIS');
 }
 
 /**
@@ -129,7 +129,7 @@ function success_save_modify(req)
 }
 function remove_mat(g_dossier,plugin_code,a_id)
 {
-    if ( ! confirm('Vous confirmez EFFACEMENT')) { return false;}
+    confirm_form(null,'Vous confirmez EFFACEMENT',function() {
     var qs="gDossier="+g_dossier+"&plugin_code="+plugin_code+"&a_id="+a_id+"&op=rm&t=bxmat";
     var action=new Ajax.Request ( 'ajax.php',
 				  {
@@ -138,7 +138,8 @@ function remove_mat(g_dossier,plugin_code,a_id)
 				      onFailure:error_ajax,
 				      onSuccess:success_add_material
 				  }
-				);
+				) 
+                    } );
 
 
 
@@ -146,7 +147,7 @@ function remove_mat(g_dossier,plugin_code,a_id)
 
 function list_csv(obj)
 {
-    alert ("dossier = "+obj.dossier+" plugin :"+obj.plugin+" year "+obj.year);
+    alert_box ("dossier = "+obj.dossier+" plugin :"+obj.plugin+" year "+obj.year);
     var qs="gDossier="+obj.dossier+"&plugin_code="+obj.plugin+"&list_year=1"+"&year="+obj.year;
     var action=new Ajax.Request ( 'extension.raw.php',
 				  {
