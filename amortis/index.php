@@ -20,7 +20,7 @@
 
 // Copyright (c) 2002 Author Dany De Bontridder dany@alchimerys.be
 global $version_plugin;
-$version_plugin=1;
+$version_plugin=SVNINFO;
 Extension::check_version(5300);
 /*!\file
  * \brief main entry
@@ -51,7 +51,11 @@ if ( $cn->get_value('select max(val) from amortissement.version') < $amortisseme
 {
         require_once('include/class_install_plugin.php');
 	$iplugn = new Install_Plugin($cn);
-	$iplugn->upgrade($amortissement_version);
+        $current=$cn->get_value('select max(val) from amortissement.version') ;
+        for ( $e = $current;$e <= $amortissement_version ; $e++)
+        {
+            $iplugn->upgrade($e);
+        }
 }
 $menu=array(
         array($url.'&sa=card','Biens amortissables','Liste des biens amortissables',1),
