@@ -35,7 +35,7 @@ ob_end_clean();
 echo create_script($j);
 global $version_plugin;
 $version_plugin=SVNINFO;
-Extension::check_version(5500);
+Extension::check_version(6800);
 require_once 'class_acc_ledger_sold.php';
 require_once('class_zip_extended.php');
 require_once 'class_sendmail.php';

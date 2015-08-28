@@ -44,7 +44,7 @@ function modify_intervat_assujetti(p_dossier, p_ac, p_plugin_code, c_id)
 
     } catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
     }
 }
 function save_intervat_assujetti()
@@ -70,7 +70,7 @@ function save_intervat_assujetti()
 
                             if (acode.length == 0) {
                                 var rec = req.responseText;
-                                alert('erreur :' + rec);
+                                alert_box('erreur :' + rec);
                             }
                             var code = acode[0].firstChild.nodeValue;
                             var code_xml = getNodeText(html[0]);
@@ -97,7 +97,7 @@ function save_intervat_assujetti()
                             }
                         }
                         catch (e) {
-                            alert("modify_intervat_assujetti_div " + e.message);
+                            alert_box("modify_intervat_assujetti_div " + e.message);
                             return false;
                         }
 
@@ -107,7 +107,7 @@ function save_intervat_assujetti()
     }
     catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
         return false;
     }
 

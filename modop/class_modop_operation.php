@@ -255,4 +255,5 @@ class Modop_Operation
             $owner->save('MY_PJ_SUGGEST');
         }
     }
+   
 }

@@ -129,7 +129,7 @@ function success_save_modify(req)
 }
 function remove_mat(g_dossier,plugin_code,a_id)
 {
-    confirm_form(null,'Vous confirmez EFFACEMENT',function() {
+    confirm_box(null,'Vous confirmez EFFACEMENT',function() {
     var qs="gDossier="+g_dossier+"&plugin_code="+plugin_code+"&a_id="+a_id+"&op=rm&t=bxmat";
     var action=new Ajax.Request ( 'ajax.php',
 				  {

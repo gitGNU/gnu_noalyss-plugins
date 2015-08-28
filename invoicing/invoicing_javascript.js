@@ -75,7 +75,7 @@ function success_add_material(req)
 
 }
 function error_ajax() {
-    alert('Erreur ajax AMORTIS');
+    alert_box('Erreur ajax AMORTIS');
 }
 
 /**

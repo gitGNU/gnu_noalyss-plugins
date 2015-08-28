@@ -25,7 +25,7 @@
  */
 global $version_plugin;
 $version_plugin=SVNINFO;
-Extension::check_version(4400);
+Extension::check_version(6800);
 $str=new IConcerned("jr_id");
 $str->value=(isset($_GET['jr_id']))?strtoupper($_GET['jr_id']):'';
 $str->value=(isset($_GET['ext_jr_id']))?strtoupper($_GET['ext_jr_id']):$str->value;

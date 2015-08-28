@@ -51,6 +51,6 @@ function success_bank_info(req,json)
 	removeDiv(div_ctl);
     }
     catch(e) {
-	alert('Erreur success_box_info '+e.message);
+	alert_box('Erreur success_box_info '+e.message);
     }
 }

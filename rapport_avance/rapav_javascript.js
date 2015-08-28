@@ -39,7 +39,7 @@ function rapav_form_def(plugin_code, ac, dossier, f_id)
     }
     catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
     }
 }
 /**
@@ -71,7 +71,7 @@ function add_row_definition(plugin_code, ac, dossier)
 
     } catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
     }
 }
 
@@ -111,7 +111,7 @@ function add_param_detail(plugin_code, ac, dossier, p_id)
 
     } catch (e)
     {
-        alert("add_param_detail" + e.message);
+        alert_box("add_param_detail" + e.message);
     }
 }
 function modify_param_detail(plugin_code, ac, dossier, fp_id)
@@ -146,7 +146,7 @@ function modify_param_detail(plugin_code, ac, dossier, fp_id)
 
     } catch (e)
     {
-        alert("add_param_detail" + e.message);
+        alert_box("add_param_detail" + e.message);
     }
 }
 /**
@@ -184,7 +184,7 @@ function rapav_search_code(ac, plugin_code, dossier, f_id)
 
     } catch (e)
     {
-        alert("add_param_detail" + e.message);
+        alert_box("add_param_detail" + e.message);
     }
 }
 /**
@@ -217,7 +217,7 @@ function delete_param_detail(plugin_code, ac, dossier, fp_id)
         );
     } catch (e)
     {
-        alert(e);
+        alert_box(e);
     }
 }
 /**
@@ -249,7 +249,7 @@ function rapav_form_param(plugin_code, ac, dossier, f_id)
     }
     catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
     }
 }
 /**
@@ -269,7 +269,7 @@ function show_rapport_formula(p_toshow)
         $(p_toshow + '_bt').style.backgroundColor = "red";
     } catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
     }
 
 }
@@ -290,7 +290,7 @@ function show_listing_formula(p_toshow)
         $(p_toshow + '_bt').style.backgroundColor = "red";
     } catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
     }
 
 }
@@ -319,7 +319,7 @@ function save_param_detail(p_form_id)
 
                             if (acode.length == 0) {
                                 var rec = req.responseText;
-                                alert('erreur :' + rec);
+                                alert_box('erreur :' + rec);
                             }
                             var code = acode[0].firstChild.nodeValue;
                             var code_xml = getNodeText(html[0]);
@@ -351,13 +351,13 @@ function save_param_detail(p_form_id)
                             }
                         }
                         catch (e) {
-                            alert("save_param_detail " + e.message);
+                            alert_box("save_param_detail " + e.message);
                         }
                         try {
                             code_html.evalScripts();
                         }
                         catch (e) {
-                            alert("save_param_detail Impossible executer script de la reponse\n" + e.message);
+                            alert_box("save_param_detail Impossible executer script de la reponse\n" + e.message);
                         }
 
                     }
@@ -366,7 +366,7 @@ function save_param_detail(p_form_id)
     }
     catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
     }
 
     return false;
@@ -397,7 +397,7 @@ function rapav_declaration_display(plugin_code, ac, dossier, d_id)
     }
     catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
     }
 }
 function rapav_declaration_delete(plugin_code, ac, dossier, d_id)
@@ -427,7 +427,7 @@ function rapav_declaration_delete(plugin_code, ac, dossier, d_id)
     }
     catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
     }
 }
 /**
@@ -454,7 +454,7 @@ function rapav_form_export(plugin_code, ac, dossier, d_id)
 
     } catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
     }
 }
 /**
@@ -495,7 +495,7 @@ function rapav_remove_doc_template(plugin_code, ac, dossier, f_id)
 
     } catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
     }
 }
 /**
@@ -534,7 +534,7 @@ function listing_modify(json)
                             add_div({'id': json.cout, 'cssclass': 'inner_box', 'drag': 1, 'style': position});
                             $(json.cout).innerHTML = code_html;
                         } catch (e) {
-                            alert(e.message);
+                            alert_box(e.message);
                         }
                     }
                 }
@@ -542,7 +542,7 @@ function listing_modify(json)
 
     } catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
 
     }
 }
@@ -595,7 +595,7 @@ function listing_remove_modele(json)
                             code_html = unescape_xml(code_html);
                             $(json.cout).innerHTML = code_html;
                         } catch (e) {
-                            alert(e.message);
+                            alert_box(e.message);
                         }
                     }
                 }
@@ -603,7 +603,7 @@ function listing_remove_modele(json)
 
     } catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
 
     }
 }
@@ -644,7 +644,7 @@ function listing_definition(json)
                             code_html = unescape_xml(code_html);
                             $(json.cout).innerHTML = code_html;
                         } catch (e) {
-                            alert(e.message);
+                            alert_box(e.message);
                         }
                     }
                 }
@@ -652,7 +652,7 @@ function listing_definition(json)
 
     } catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
 
     }
 }
@@ -684,7 +684,7 @@ function listing_detail_modify(json)
                             $(json.cin).innerHTML = code_html;
 
                         } catch (e) {
-                            alert(e.message);
+                            alert_box(e.message);
                         }
                         code_html.evalScripts();
                     }
@@ -693,7 +693,7 @@ function listing_detail_modify(json)
 
     } catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
 
     }
 }
@@ -736,7 +736,7 @@ function listing_detail_add(json)
                             code_html.evalScripts();
 
                         } catch (e) {
-                            alert(e.message);
+                            alert_box(e.message);
                         }
                     }
                 }
@@ -744,7 +744,7 @@ function listing_detail_add(json)
 
     } catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
 
     }
 }
@@ -782,7 +782,7 @@ function save_param_listing(p_form_id)
 
                             if (acode.length == 0) {
                                 var rec = req.responseText;
-                                alert('erreur :' + rec);
+                                alert_box('erreur :' + rec);
                             }
                             var code = acode[0].firstChild.nodeValue;
                             var code_xml = getNodeText(html[0]);
@@ -815,14 +815,14 @@ function save_param_listing(p_form_id)
                             }
                         }
                         catch (e) {
-                            alert("save_param_detail " + e.message);
+                            alert_box("save_param_detail " + e.message);
                             return false;
                         }
                         try {
                             code_html.evalScripts();
                         }
                         catch (e) {
-                            alert("save_param_detail Impossible executer script de la reponse\n" + e.message);
+                            alert_box("save_param_detail Impossible executer script de la reponse\n" + e.message);
                         }
 
                     }
@@ -831,7 +831,7 @@ function save_param_listing(p_form_id)
     }
     catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
         return false;
     }
 
@@ -861,7 +861,7 @@ function listing_detail_remove(dossier, plugin_code, ac, id)
 
                             if (acode.length == 0) {
                                 var rec = req.responseText;
-                                alert('erreur :' + rec);
+                                alert_box('erreur :' + rec);
                             }
                             var code = acode[0].firstChild.nodeValue;
 
@@ -877,11 +877,11 @@ function listing_detail_remove(dossier, plugin_code, ac, id)
                             if (code == 'nok')
                             {
                                 // montre erreur
-                                alert('effacement non possible');
+                                alert_box('effacement non possible');
                             }
                         }
                         catch (e) {
-                            alert("callback : listing_detail_remove " + e.message);
+                            alert_box("callback : listing_detail_remove " + e.message);
                         }
 
                     }
@@ -889,7 +889,7 @@ function listing_detail_remove(dossier, plugin_code, ac, id)
         );
     } catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
     }
 }
 
@@ -927,7 +927,7 @@ function listing_search_code(ac, plugin_code, dossier, f_id)
 
     } catch (e)
     {
-        alert("listing_search_code" + e.message);
+        alert_box("listing_search_code" + e.message);
     }
 }
 function rapav_listing_display(plugin_code, ac, dossier, d_id)
@@ -956,7 +956,7 @@ function rapav_listing_display(plugin_code, ac, dossier, d_id)
     }
     catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
     }
 }
 function rapav_listing_delete(plugin_code, ac, dossier, d_id)
@@ -986,7 +986,7 @@ function rapav_listing_delete(plugin_code, ac, dossier, d_id)
     }
     catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
         return false;
     }
 }
@@ -1022,7 +1022,7 @@ function parameter_send_mail()
         return false;
     } catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
         return false;
 
     }
@@ -1030,17 +1030,17 @@ function parameter_send_mail()
 function send_email()
 {
     if (trim($('p_from').value) == "") {
-        alert('champs obligatoire manquant');
+        alert_box('champs obligatoire manquant');
         $('p_from').style.border = "solid 2px red";
         return false;
     }
     if (trim($('p_subject').value) == "") {
-        alert('champs obligatoire manquant');
+        alert_box('champs obligatoire manquant');
         $('p_subject').style.border = "solid 2px red";
         return false;
     }
     if (trim($('p_attach').value) == "") {
-        alert('champs obligatoire manquant');
+        alert_box('champs obligatoire manquant');
         $('p_attach').style.border = "solid 2px red";
         return false;
     }
@@ -1075,7 +1075,7 @@ function send_email()
         return false;
     } catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
         return false;
 
     }
@@ -1112,7 +1112,7 @@ function js_include_follow()
         return false;
     } catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
         return false;
 
     }
@@ -1150,7 +1150,7 @@ function js_include_follow_save()
         return false;
     } catch (e)
     {
-        alert(e.message);
+        alert_box(e.message);
         return false;
 
     }

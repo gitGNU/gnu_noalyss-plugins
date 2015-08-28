@@ -40,7 +40,7 @@ $cn=new Database(dossier::id());
 global $version_plugin;
 $version_plugin=SVNINFO;
 
-Extension::check_version(4802);
+Extension::check_version(6800);
 
 // Javascript
  ob_start();

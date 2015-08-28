@@ -25,7 +25,7 @@
  */
 global $version_plugin;
 $version_plugin=SVNINFO;
-Extension::check_version(4400);
+Extension::check_version(6800);
 /*
  * load javascript
  */

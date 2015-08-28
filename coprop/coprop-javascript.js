@@ -43,7 +43,7 @@ function mod_coprop(dossier,coprop_id,plugin_code,ac)
 				}
 				catch(e)
 				{
-					alert("Réponse Ajax ="+e.message);
+					alert_box("Réponse Ajax ="+e.message);
 				}
 			}
 		}
@@ -51,7 +51,7 @@ function mod_coprop(dossier,coprop_id,plugin_code,ac)
 	}
 	catch(e)
 	{
-		alert(e.message);
+		alert_box(e.message);
 	}
 }
 function remove_lot(plugin_code,ac,dossier,lot_id)
@@ -80,7 +80,7 @@ function remove_lot(plugin_code,ac,dossier,lot_id)
 				}
 				catch(e)
 				{
-					alert("Réponse Ajax ="+e.message);
+					alert_box("Réponse Ajax ="+e.message);
 				}
 			}
 		}
@@ -88,7 +88,7 @@ function remove_lot(plugin_code,ac,dossier,lot_id)
 	}
 	catch(e)
 	{
-		alert(e.message);
+		alert_box(e.message);
 	}
 }
 /**
@@ -103,7 +103,7 @@ function add_coprop()
 	}
 	catch(e)
 	{
-		alert(e.message);
+		alert_box(e.message);
 	}
 }
 function copro_show_list()
@@ -115,7 +115,7 @@ function copro_show_list()
 	}
 	catch(e)
 	{
-		alert(e.message);
+		alert_box(e.message);
 	}
 
 }
@@ -145,7 +145,7 @@ function add_key(dossier,plugin_code,ac)
 				}
 				catch(e)
 				{
-					alert("Réponse Ajax ="+e.message);
+					alert_box("Réponse Ajax ="+e.message);
 				}
 			}
 		}
@@ -153,7 +153,7 @@ function add_key(dossier,plugin_code,ac)
 	}
 	catch(e)
 	{
-		alert(e.message);
+		alert_box(e.message);
 	}
 }
 /**
@@ -183,7 +183,7 @@ function mod_key(dossier,plugin_code,ac,key_id)
 				}
 				catch(e)
 				{
-					alert("Réponse Ajax ="+e.message);
+					alert_box("Réponse Ajax ="+e.message);
 				}
 			}
 		}
@@ -191,7 +191,7 @@ function mod_key(dossier,plugin_code,ac,key_id)
 	}
 	catch(e)
 	{
-		alert(e.message);
+		alert_box(e.message);
 	}
 }
 
@@ -220,7 +220,7 @@ function remove_key(plugin_code,ac,dossier,key_id)
 				}
 				catch(e)
 				{
-					alert("Réponse Ajax ="+e.message);
+					alert_box("Réponse Ajax ="+e.message);
 				}
 			}
 		}
@@ -228,7 +228,7 @@ function remove_key(plugin_code,ac,dossier,key_id)
 	}
 	catch(e)
 	{
-		alert(e.message);
+		alert_box(e.message);
 	}
 }
 function compute_key()
@@ -262,7 +262,7 @@ function compute_key()
 	}
 	catch(e)
 	{
-		alert(e.message);
+		alert_box(e.message);
 	}
 }
 
@@ -287,7 +287,7 @@ function budget_detail(plugin_code,ac,dossier,bud_id)
 				}
 				catch(e)
 				{
-					alert("Réponse Ajax ="+e.message);
+					alert_box("Réponse Ajax ="+e.message);
 				}
 			}
 		}
@@ -295,7 +295,7 @@ function budget_detail(plugin_code,ac,dossier,bud_id)
 	}
 	catch(e)
 	{
-		alert(e.message);
+		alert_box(e.message);
 	}
 }
 function compute_budget()
@@ -329,7 +329,7 @@ function compute_budget()
 	}
 	catch(e)
 	{
-		alert(e.message);
+		alert_box(e.message);
 	}
 }
 function budget_add(dossier,plugin_code,ac)
@@ -353,7 +353,7 @@ function budget_add(dossier,plugin_code,ac)
 				}
 				catch(e)
 				{
-					alert("Réponse Ajax ="+e.message);
+					alert_box("Réponse Ajax ="+e.message);
 				}
 			}
 		}
@@ -361,7 +361,7 @@ function budget_add(dossier,plugin_code,ac)
 	}
 	catch(e)
 	{
-		alert(e.message);
+		alert_box(e.message);
 	}
 }
 function budget_remove(plugin_code,ac,dossier,bud_id)
@@ -390,7 +390,7 @@ function budget_remove(plugin_code,ac,dossier,bud_id)
 				}
 				catch(e)
 				{
-					alert("Réponse Ajax ="+e.message);
+					alert_box("Réponse Ajax ="+e.message);
 				}
 			}
 		}
@@ -398,7 +398,7 @@ function budget_remove(plugin_code,ac,dossier,bud_id)
 	}
 	catch(e)
 	{
-		alert(e.message);
+		alert_box(e.message);
 	}
 }
 
@@ -428,7 +428,7 @@ function appel_fond_show()
         }
     } catch(e)
     {
-        alert(e.message);
+        alert_box(e.message);
     }
 
 }

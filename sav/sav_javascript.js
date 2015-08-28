@@ -26,7 +26,7 @@ function fill_customer(p_ctl, p_dossier, p_plugin_code, p_ac)
                     parameters: queryString,
                     onSuccess: function (req)
                     {
-                        alert('ici');
+                        alert_box('ici');
                     }
                 }
 
@@ -46,7 +46,7 @@ function empty_customer(p_ctl)
     {
 
     } catch (e) {
-        alert(e.message);
+        alert_box(e.message);
     }
 
 }
@@ -78,7 +78,7 @@ function spare_part_add(p_dossier, p_access, p_plugin_code, p_repair_card)
                         if (html.length === 0)
                         {
                             var rec = req.responseText;
-                            alert('erreur :' + rec);
+                            alert_box('erreur :' + rec);
                         }
                         
                         var nodeXml = html[0];
@@ -90,7 +90,7 @@ function spare_part_add(p_dossier, p_access, p_plugin_code, p_repair_card)
                         var xml_error=getNodeText(answer.getElementsByTagName('error')[0]);
                         if ( xml_error == 1001 ) { 
                             remove_waiting_box();
-                            alert('Invalide');
+                            alert_box('Invalide');
                         }
                         else {
                             var table_len=$('spare_part_table_list_id').rows.length-1;
@@ -167,7 +167,7 @@ function workhour_add(p_dossier, p_access, p_plugin_code, p_repair_card)
                         if (html.length === 0)
                         {
                             var rec = req.responseText;
-                            alert('erreur :' + rec);
+                            alert_box('erreur :' + rec);
                         }
                         
                         var nodeXml = html[0];
@@ -179,7 +179,7 @@ function workhour_add(p_dossier, p_access, p_plugin_code, p_repair_card)
                         var xml_error=getNodeText(answer.getElementsByTagName('error')[0]);
                         if ( xml_error == 1001 ) { 
                             remove_waiting_box();
-                            alert('Invalide');
+                            alert_box('Invalide');
                         }
                         else {
                             var table_len=$('workhour_table_id').rows.length-1;

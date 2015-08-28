@@ -20,7 +20,7 @@
 // Copyright Author Dany De Bontridder danydb@aevalys.eu
 global $version_plugin;
 $version_plugin=SVNINFO;
-Extension::check_version(4400);
+Extension::check_version(6800);
 $cn=new Database(dossier::id());
 $transform_version=0;
 /*
