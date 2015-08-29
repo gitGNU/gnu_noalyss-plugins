@@ -111,15 +111,16 @@ if($_REQUEST['sa'] == 'purge')
   {
     echo '<div class="content" style="width:80%;margin-left:10%">';
     $action_form=HtmlInput::default_value_request("form_action", "");
+    $action_form2=HtmlInput::default_value_request("form_action2", "");
     if (isset($_REQUEST['delete']))
       {
 	Import_Bank::delete($_REQUEST);
       }
-    if ($action_form ==  'delete_record')
+    if ($action_form ==  'delete_record' || $action_form2 ==  'delete_record')
       {
 	Import_Bank::delete_record($_REQUEST);
       }
-    if ($action_form == "transfer_record")
+    if ($action_form == "transfer_record" || $action_form2 == "transfer_record")
       {
 	Import_Bank::transfer_record($_REQUEST);
       }
