@@ -74,8 +74,11 @@ Filtrer : <?php echo $filter->input()?>
 ?>
 
 </table>
-<form method="get" onsubmit="return confirm(this,'Vous confirmez?')">
+<form method="get" id="show_list_frm" onsubmit="return confirm_box('show_list_frm','Vous confirmez?')">
 <?php echo HtmlInput::request_to_hidden(array('gDossier','plugin_code','ac','sb','sa','id',$filter->name))?>
-<?php echo HtmlInput::submit('delete_record','Effacer')?>
-<?php echo HtmlInput::submit('transfer_record','Transfèrer')?>
+<?php echo HtmlInput::hidden('form_action','');?>
+<?php echo HtmlInput::submit('delete_record',_('Effacer'),
+        ' onclick="$(\'form_action\').value=\'delete_record\';"');?>
+<?php echo HtmlInput::submit('transfer_record',_('Transfèrer'),
+        ' onclick="$(\'form_action\').value=\'transfer_record\';"');?>
 </form>
