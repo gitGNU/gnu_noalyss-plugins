@@ -9,10 +9,13 @@ Filtrer : <?php echo $filter->input()?>
 <?php echo HtmlInput::request_to_hidden(array('gDossier','plugin_code','ac','sb','sa','id'))?>
 <?php echo HtmlInput::submit('refresh','Recharger')?>
 </form>
-<form method="get" onsubmit="return confirm('Vous confirmez ?')">
+<form method="get" id="show_list_frm2" onsubmit="return confirm_box('show_list_frm2','Vous confirmez?')">
 <?php echo HtmlInput::request_to_hidden(array('gDossier','plugin_code','ac','sb','sa','id',$filter->name))?>
-<?php echo HtmlInput::submit('delete_record','Effacer')?>
-<?php echo HtmlInput::submit('transfer_record','Transfèrer')?>
+<?php echo HtmlInput::hidden('form_action2','');?>
+<?php echo HtmlInput::submit('delete_record',_('Effacer'),
+        ' onclick="$(\'form_action2\').value=\'delete_record\';"');?>
+<?php echo HtmlInput::submit('transfer_record',_('Transfèrer'),
+        ' onclick="$(\'form_action2\').value=\'transfer_record\';"');?>
 </form>
 <?php echo HtmlInput::filter_table('record_tb_id','1,2,3,4,5,6,7',1); ?>
 <table id="record_tb_id" class="sortable" >
