@@ -70,22 +70,31 @@ catch (Exception $e)
 /* ---------------------------------------------------------------------- */
 if ($op->ledger_type=='ACH')
 {
+    try
+    {
+        $jrn=new Acc_Ledger_Purchase($cn,$op->array['p_jrn']);
+        echo '<FORM enctype="multipart/form-data"  METHOD="POST" class="print">';
+        $op->suspend_receipt();
+        echo HtmlInput::hidden('ac',$_REQUEST['ac']);
+        echo $jrn->input($op->array);
+        echo HtmlInput::extension().dossier::hidden();
+        echo HtmlInput::hidden('bon_comm',$op->array['bon_comm']);
+        echo HtmlInput::hidden('other_info',$op->array['other_info']);
+        echo HtmlInput::hidden('action','confirm');
+        echo HtmlInput::submit('save','Sauve');
+        echo HtmlInput::hidden('e_mp',0);
+        echo HtmlInput::hidden('ext_jr_id',$op->jr_id);
+        echo HtmlInput::hidden('ext_jr_internal',$op->jr_internal);
+        echo HtmlInput::button('add_item',_('Ajout article'),      ' onClick="ledger_add_row()"');
+        echo '</form>';
+        
+    }
+    catch (Exception $exc)
+    {
+        alert( $exc->getMessage());
+    }
 
-    $jrn=new Acc_Ledger_Purchase($cn,$op->array['p_jrn']);
-    echo '<FORM enctype="multipart/form-data"  METHOD="POST" class="print">';
-    $op->suspend_receipt();
-    echo HtmlInput::hidden('ac',$_REQUEST['ac']);
-    echo $jrn->input($op->array);
-    echo HtmlInput::extension().dossier::hidden();
-    echo HtmlInput::hidden('bon_comm',$op->array['bon_comm']);
-    echo HtmlInput::hidden('other_info',$op->array['other_info']);
-    echo HtmlInput::hidden('action','confirm');
-    echo HtmlInput::submit('save','Sauve');
-    echo HtmlInput::hidden('e_mp',0);
-    echo HtmlInput::hidden('ext_jr_id',$op->jr_id);
-    echo HtmlInput::hidden('ext_jr_internal',$op->jr_internal);
-    echo HtmlInput::button('add_item',_('Ajout article'),      ' onClick="ledger_add_row()"');
-    echo '</form>';
+    
 
 }
 /* ---------------------------------------------------------------------- */
@@ -94,23 +103,31 @@ if ($op->ledger_type=='ACH')
 if ($op->ledger_type=='VEN')
 {
 
-    $jrn=new Acc_Ledger_Sold($cn,$op->array['p_jrn']);
-    $op->suspend_receipt();
+    try
+    {
+        $jrn=new Acc_Ledger_Sold($cn,$op->array['p_jrn']);
+        $op->suspend_receipt();
 
-    echo '<FORM enctype="multipart/form-data"  METHOD="POST" class="print">';
-    echo $jrn->input($op->array);
-    echo HtmlInput::hidden('ac',$_REQUEST['ac']);
-    echo HtmlInput::extension().dossier::hidden();
-    echo HtmlInput::hidden('action','confirm');
-    echo HtmlInput::submit('save','Sauve');
-    echo HtmlInput::hidden('e_mp',0);
-    echo HtmlInput::hidden('ext_jr_id',$op->jr_id);
-    echo HtmlInput::hidden('ext_jr_internal',$op->jr_internal);
+        echo '<FORM enctype="multipart/form-data"  METHOD="POST" class="print">';
+        echo $jrn->input($op->array);
+        echo HtmlInput::hidden('ac',$_REQUEST['ac']);
+        echo HtmlInput::extension().dossier::hidden();
+        echo HtmlInput::hidden('action','confirm');
+        echo HtmlInput::submit('save','Sauve');
+        echo HtmlInput::hidden('e_mp',0);
+        echo HtmlInput::hidden('ext_jr_id',$op->jr_id);
+        echo HtmlInput::hidden('ext_jr_internal',$op->jr_internal);
         echo HtmlInput::hidden('bon_comm',$op->array['bon_comm']);
-    echo HtmlInput::hidden('other_info',$op->array['other_info']);
-    echo HtmlInput::button('add_item',_('Ajout article'),      ' onClick="ledger_add_row()"');
-    echo HtmlInput::button('actualiser',_('Actualiser'),      ' onClick="compute_all_ledger();"');
-    echo '</form>';
+        echo HtmlInput::hidden('other_info',$op->array['other_info']);
+        echo HtmlInput::button('add_item',_('Ajout article'),      ' onClick="ledger_add_row()"');
+        echo HtmlInput::button('actualiser',_('Actualiser'),      ' onClick="compute_all_ledger();"');
+        echo '</form>';
+    }
+    catch (Exception $exc)
+    {
+        alert( $exc->getMessage() ) ;
+    }
+
 
 }
 /* ---------------------------------------------------------------------- */
