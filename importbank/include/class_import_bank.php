@@ -75,9 +75,9 @@ class Import_Bank
 			}
 		}
 		if (!$date)
-			$error.="Il manque la colonne pour les  dates \n";
+			$error.=_("Il manque la colonne pour les  dates")." \n";
 		if (!$amount)
-			$error.=" Il manque la colonne pour les  montants \n";
+			$error.=_("Il manque la colonne pour les  montants")." \n";
 
 		foreach ($check as $row)
 		{
@@ -123,19 +123,20 @@ class Import_Bank
 	}
 
 	/**
-	 * Show detail
+	 * Show detail of a imported file
+         * @parameter $p_id is import.id 
 	 */
 	static function list_record($p_id)
 	{
 		global $cn;
 		$filter = new ISelect('fil_status');
 		$filter->value = array(
-			array('value' => 0, 'label' => 'Tous'),
-			array('value' => 1, 'label' => 'Nouveau'),
-			array('value' => 2, 'label' => 'Transfèré'),
-			array('value' => 3, 'label' => 'Attente'),
-			array('value' => 4, 'label' => 'Erreur'),
-			array('value' => 5, 'label' => 'Effacer')
+			array('value' => 0, 'label' => _('Tous')),
+			array('value' => 1, 'label' => _('Nouveau')),
+			array('value' => 2, 'label' => _('Transfèré')),
+			array('value' => 3, 'label' => _('Attente')),
+			array('value' => 4, 'label' => _('Erreur')),
+			array('value' => 5, 'label' => _('Effacer'))
 		);
 		$filter->javascript = ' onchange="submit(this)"';
 
@@ -143,19 +144,24 @@ class Import_Bank
 		$sql_filter = '';
 		switch ($filter->selected)
 		{
-			case 1:
+                        case 1: 
+                            // new
 				$sql_filter = " and status='N' ";
 				break;
 			case 2:
+                            // transfered
 				$sql_filter = " and status='T'";
 				break;
 			case 3:
+                            // waiting to be transfered
 				$sql_filter = " and status='W'";
 				break;
 			case 4:
+                            // Error
 				$sql_filter = " and status='E'";
 				break;
 			case 5:
+                            // deleted
 				$sql_filter = " and status='D'";
 				break;
 		}
