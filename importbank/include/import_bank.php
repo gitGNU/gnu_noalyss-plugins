@@ -241,8 +241,7 @@ if ( $_POST['sb'] == 'confirm')
 	$filename=$_POST['filename'];
 
 	$fbank=fopen($filename,'r');
-	$pos_date=$pos_amount=$pos_lib=$pos_operation_nb=-1;
-
+        $pos_date=$pos_amount=$pos_lib=$pos_operation_nb=$pos_third=$pos_extra=-1;
 	// Load the order of the header
 	if ( $_POST['format'] != 0)
 	  {
