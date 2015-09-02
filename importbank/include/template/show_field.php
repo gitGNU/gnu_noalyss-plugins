@@ -4,7 +4,7 @@
 ?>
 <h2>Etape 2 / 4: introduire le fichier</h2>
 
-<form method="POST"   enctype="multipart/form-data" >
+<form method="POST"  id="validate_show_field_frm" enctype="multipart/form-data"  onsubmit="return validate_show_field('validate_show_field_frm')">
 <table>
 <tr>
 	<td>
@@ -88,3 +88,17 @@ echo HtmlInput::hidden('sb',$sb);
 
 ?>
 </form>
+<script>
+    /**
+     * Validate the form, the name of the bank format can not be empty
+     * @returns {undefined}
+     */
+    function validate_show_field() {
+        if ($('format_name').value=="") {
+            alert_box('<?php echo _('Nom manquant') ?>');
+            $('format_name').parentNode.style.border="2px solid red";
+            return false
+        }
+        return true;
+    }
+</script>
