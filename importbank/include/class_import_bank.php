@@ -24,10 +24,10 @@
 /* * \file
  * \brief Manage import
  */
-require_once('class_format_bank_sql.php');
+require_once 'class_format_bank_sql.php';
 require_once NOALYSS_INCLUDE.'/class_acc_ledger_fin.php';
 require_once NOALYSS_INCLUDE.'/class_periode.php';
-require_once('class_temp_bank_sql.php');
+require_once 'class_temp_bank_sql.php';
 
 class Import_Bank
 {
@@ -420,6 +420,39 @@ class Import_Bank
             $err=$e->getMessage();
             return $err;
         }
+    }
+    /**
+     * Check that the legder has an card for the bank and this card must also
+     * have a valid accounting
+     * @param integer $p_ledger the ledger id (jrn_def.jrn_def_id)
+     * @return 0 if success , otherwise 1
+     */
+    static function check_bank_account($p_ledger)
+    {
+        global $cn;
+        $ledger=new Acc_Ledger_Fin($cn, $p_ledger);
+        // does ledger exist ?
+        if ($ledger->id==-1||$ledger->type!='FIN')
+        {
+            alert(_('Journal financier mal configuré'));
+            return;
+        }
+        
+        // get card of ledger
+        $bank=$ledger->get_bank();
+        $bank_card=new Fiche($cn);
+        $bank_card->id=$bank;
+        $bank_card->load();
+        
+        // get accounting 
+        $bank_accounting=$bank_card->strAttribut(ATTR_DEF_ACCOUNT);
+        $exist=$cn->get_value('
+                select count(*) from tmp_pcmn
+                where 
+                pcm_val = $1
+        ', array($bank_accounting)
+        );
+        return $exist;
     }
 
 }

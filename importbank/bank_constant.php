@@ -41,21 +41,21 @@ $aseparator=array(
 		  array ('value'=>2,'label'=>';')
 		  );
 $aformat_date=array(
-		    array ('value'=>1,'label'=>'DD.MM.YYYY'),
-		    array ('value'=>2,'label'=>'DD/MM/YYYY'),
-		    array ('value'=>3,'label'=>'DD-MM-YYYY'),
-		    array ('value'=>4,'label'=>'DD.MM.YY'),
-		    array ('value'=>5,'label'=>'DD/MM/YY'),
-		    array ('value'=>6,'label'=>'DD-MM-YY'),
-		    array ('value'=>7,'label'=>'YYYY-MM-DD')
+		    array ('value'=>1,'label'=>'DD.MM.YYYY','format'=>'d.m.Y'),
+		    array ('value'=>2,'label'=>'DD/MM/YYYY','format'=>'d/m/Y'),
+		    array ('value'=>3,'label'=>'DD-MM-YYYY','format'=>'d-m-Y'),
+		    array ('value'=>4,'label'=>'DD.MM.YY','format'=>'d.m.y'),
+		    array ('value'=>5,'label'=>'DD/MM/YY','format'=>'d/m/y'),
+		    array ('value'=>6,'label'=>'DD-MM-YY','format'=>'d-m-y'),
+		    array ('value'=>7,'label'=>'YYYY-MM-DD','format'=>'Y.m.d')
 		    );
 $aheader=array(
-	       array('value'=>-1,'label'=>'-- Non utilisé --'),
-	       array('value'=>0,'label'=>'Date'),
-	       array('value'=>1,'label'=>'Montant'),
-	       array('value'=>2,'label'=>'Libelle'),
-	       array('value'=>3,'label'=>'Numéro opération'),
-	       array('value'=>4,'label'=>'Tiers'),
-	       array('value'=>5,'label'=>'Info supplémentaire')
+	       array('value'=>-1,'label'=>_('-- Non utilisé --')),
+	       array('value'=>0,'label'=>_('Date')),
+	       array('value'=>1,'label'=>_('Montant')),
+	       array('value'=>2,'label'=>_('Libelle')),
+	       array('value'=>3,'label'=>_('Numéro opération')),
+	       array('value'=>4,'label'=>_('Tiers')),
+	       array('value'=>5,'label'=>_('Info supplémentaire'))
 	       );
 ?>

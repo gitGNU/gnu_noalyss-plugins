@@ -63,6 +63,7 @@ $skip->value=0;
 $skip->size=5;
 
 $nb_col=new INum('nb_col');
+
 /*
  * Step 2 : show the selected format and upload the file
  */
@@ -94,6 +95,7 @@ if ( $_REQUEST ['sb'] == 'select_form')
     echo '</div>';
     exit();
   }
+
 /*
  * Step 3: upload the file, show it and let change the values of the format
  */
@@ -208,6 +210,24 @@ if ( $_POST['sb'] == 'confirm')
     $format_bank->format_date=$_POST['format_date'];
     $format_bank->nb_col=$_POST['nb_col'];
     $format_bank->skip=$_POST['skip'];
+     /**
+    * Check that the destination ledger is well configured and the accounting
+    * is properly set and existing
+    */
+    $jrn_def_id= $jrn_def->selected;
+
+    if ($jrn_def_id == 0 ) {
+       alert(_('Journal financier mal configuré'));
+       return;
+    }
+
+    // Check if the accounting is correct and exist
+    $exist = Import_Bank::check_bank_account($jrn_def_id);
+
+    if ( $exist == 0 ) {
+       alert(_('Poste comptable de la fiche banque est incorrect'));
+       return;
+    }
     /*
      * Verify that we have at least date + amount, and not duplicate
      */

@@ -161,7 +161,7 @@ class Format_Bank_sql
             if ( $this->verify() != 0 ) return;
 	    if ( strlen(trim($this->format_name))==0)
 	      {
-		$get_id=$this->cn->get_value('select id from importbank.format_name where format_name=$1',array($this->format_name));
+		$get_id=$this->cn->get_value('select id from importbank.format_bank where format_name=$1',array($this->format_name));
 		if ( $this->cn->size() == 1) {
 		  $this->update();
 		  return;
