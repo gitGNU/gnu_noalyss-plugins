@@ -86,7 +86,7 @@ if ( $_REQUEST ['sb'] == 'select_form')
 	  }
     else
       {
-	throw new Exception('Nombre de ligne trouvé incorrect');
+	throw new Exception(_('Nombre de ligne trouvé incorrect'));
       }
       }
     echo '<div class="content" style="width:80%;margin-left:10%">';
@@ -117,7 +117,7 @@ if ( $_POST['sb']=='upload_file')
 
 	if ( trim($_FILES['import_file']['name']) == '')
 	  {
-	    alert('Pas de fichier donné');
+	    alert(_('Pas de fichier donné'));
 	    return -1;
 	  }
 	$filename=tempnam($_ENV['TMP'],'upload_');
