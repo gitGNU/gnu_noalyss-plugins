@@ -129,5 +129,5 @@ $categorie_immeuble->readOnly=true;
 		</td>
 	</tr>
 </table>
-	<?php echo HtmlInput::submit("save","Sauver")?>
+	<?php echo HtmlInput::submit("save",_("Sauver"))?>
 </form>

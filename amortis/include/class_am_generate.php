@@ -212,7 +212,7 @@ class Am_Generate
             return false;
         }
         echo $list->input();
-        echo HtmlInput::submit('save', 'Sauver');
+        echo HtmlInput::submit('save',_('Sauver'));
         echo HtmlInput::hidden('sa', $p_array['sa']);
         echo HtmlInput::hidden('sb', $p_array['sb']);
         echo HtmlInput::hidden('p_year', $p_array['p_year']);

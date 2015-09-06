@@ -45,7 +45,7 @@ if ( $_POST['jrn_type'] == 'ACH') {
   echo HtmlInput::hidden('bon_comm',$_POST['bon_comm']);
   echo HtmlInput::hidden('other_info',$_POST['other_info']);
 
-  echo HtmlInput::submit('save','Sauver');
+  echo HtmlInput::submit('save',_('Sauver'));
   echo '</FORM>';
   } catch (Exception $e) {
     alert($e->getMessage());
@@ -68,7 +68,7 @@ if ( $_POST['jrn_type'] == 'VEN') {
   echo HtmlInput::hidden('other_info',$_POST['other_info']);
   echo $a;
 
-  echo HtmlInput::submit('save','Sauver');
+  echo HtmlInput::submit('save',_('Sauver'));
   echo '</FORM>';
   } catch (Exception $e) {
     alert($e->getMessage());
@@ -92,7 +92,7 @@ if ( $_POST['jrn_type'] == 'ODS') {
 			 $_POST['ext_jr_internal']);
     echo $a;
 
-    echo HtmlInput::submit('save','Sauver');
+    echo HtmlInput::submit('save',_('Sauver'));
     echo '</FORM>';
   } catch (Exception $e) {
     alert($e->getMessage());

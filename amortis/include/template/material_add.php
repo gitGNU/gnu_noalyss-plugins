@@ -84,8 +84,8 @@
 </tr>
 </table>
 <?php 
-	echo HtmlInput::button('close','Annuler',"onclick=\"removeDiv('$t')\"");
-	echo HtmlInput::submit('sauver','Sauver',"onclick=\"return confirm('Vous confirmez ?')\" ");
+	echo HtmlInput::button('close',_('Annuler'),"onclick=\"removeDiv('$t')\"");
+	echo HtmlInput::submit('sauver',_('Sauver'),"onclick=\"return confirm('"._('Vous confirmez ?')."')\" ");
 	echo HtmlInput::extension();
 	echo dossier::hidden();
         echo HtmlInput::hidden('p_new',1);
