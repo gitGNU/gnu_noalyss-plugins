@@ -296,6 +296,8 @@ class Am_Generate
         $ledger=new Acc_Ledger($cn, $p_array['p_jrn']);
         $this->saved_operation=array();
         $msg='';
+        $oPeriode = new Periode($cn);
+        $period=$oPeriode->find_periode($p_array['e_date']);
         for ($i=0; $i<count($p_array['a_id']); $i++)
         {
             if (isset($p_array['p_ck'.$i]))
@@ -320,6 +322,7 @@ class Am_Generate
                 $p_post['e_pj_suggest']=$p_array['e_pj_suggest'];
                 $msg_operation=$cn->get_value('select vw_name from vw_fiche_attr join amortissement.amortissement using (f_id) where a_id=$1', array($p_array['a_id'][$i]));
                 $p_post['desc']=$p_array['e_comm']."-".$msg_operation;
+                $p_post['period']=$period;
                 $this->saved_operation['desc'][]=$p_post['desc'];
                 $p_post['mt']=microtime(false);
                 $p_post['nb_item']=$cred*2;
@@ -388,6 +391,8 @@ class Am_Generate
         $p_post['desc']='Amortissement ';
         $this->saved_operation['desc'][0]=$p_post['desc'];
         $p_post['mt']=microtime(false);
+        $oPeriode = new Periode($cn);
+        $p_post['period']=$oPeriode->find_periode($p_array['e_date']);
         $msg='';
         for ($i=0; $i<count($p_array['a_id']); $i++)
         {
