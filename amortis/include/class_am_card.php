@@ -131,13 +131,14 @@ class Am_Card
       {
 	for ($i=0;$i<count($p_array['h']);$i++)
 	  {
+            $id=$p_array['h'][$i];
 	    $am=new Amortissement_Histo_Sql($cn,$p_array['h'][$i]);
 	    $am->load();
 	    $am->h_amount=$p_array['p_histo'][$i];
 	    $am->h_pj=$p_array['p_pj'][$i];
             $am->jr_id=0;
-            if ( isset ($p_array['op_concerne'][$i+1])) {
-                $am->jr_id=$p_array['op_concerne'][$i+1];
+            if ( isset ($p_array['op_concerne'][$id])) {
+                $am->jr_id=$p_array['op_concerne'][$id];
                 $am->jr_internal="";
             } else {
                 $am->jr_id=0;
