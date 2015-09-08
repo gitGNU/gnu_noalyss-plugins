@@ -29,6 +29,14 @@ require_once('class_amortissement_histo_sql.php');
 
 class Am_Card
 {
+    
+    private $amortissement; //<! Amortissement_SQL
+    
+    private $amortissement_detail; //<! child records Amortissement_Detail_Sql
+                                   //contains details per year
+    
+    private $amortissement_histo; //<! child records Amortissement_Histo_Sql,
+                                  // contains histo info : concerned, amount...
   function __construct()
   {
   }
@@ -127,7 +135,13 @@ class Am_Card
 	    $am->load();
 	    $am->h_amount=$p_array['p_histo'][$i];
 	    $am->h_pj=$p_array['p_pj'][$i];
-
+            $am->jr_id=0;
+            if ( isset ($p_array['op_concerne'][$i+1])) {
+                $am->jr_id=$p_array['op_concerne'][$i+1];
+                $am->jr_internal="";
+            } else {
+                $am->jr_id=0;
+            }
 	    $this->amortissement_histo[]=clone($am);
 	  }
       }
@@ -246,6 +260,20 @@ class Am_Card
         $f_id=$cn->get_value('select f_id from vw_poste_qcode where j_qcode=trim(upper($1))',array($p_card));
         if ( $f_id != "") {
             if ( $cn->get_value('select count(*) from amortissement.amortissement where f_id = $1',array($f_id)) > 0 )            $error_msg.=_('Matériel déjà dans la liste');
+        }
+    }
+    /**
+     * Check that op_concerned has an internal
+     * and only one
+     */
+    $nb_histo=count($this->amortissement_histo);
+    for ($i=0;$i<$nb_histo;$i++)
+    {
+        $jr_id=$this->amortissement_histo[$i]->jr_id;
+        if (isNumber($jr_id) == 1 && $jr_id != 0 )
+        {
+            $this->amortissement_histo[$i]->jr_internal=$cn->get_value('select jr_internal from jrn where jr_id=$1',
+                   array( $jr_id));
         }
     }
     return $error_msg;
