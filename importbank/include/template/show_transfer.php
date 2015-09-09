@@ -102,7 +102,7 @@ while( ($row=fgetcsv($fbank,0,$sp)) !== false)
             /**
              * if date not valid we don't insert
              */
-            $test = DateTime::createFromFormat($aformat_date[$format_bank->format_date]['format'], $tp_date);
+            $test = DateTime::createFromFormat($aformat_date[$format_bank->format_date-1]['format'], trim($tp_date));
             if ( $test === false )
             {
                 throw new Exception (_('Date invalide').' '.$str_date,20);
