@@ -24,7 +24,7 @@
  * \brief set up the parameters
  */
 require_once('class_tva_parameter.php');
-$cn=new Database(dossier::id());
+$cn=Dossier::connect();
 
 // save all the parameters
 if ( isset ($_POST['save_misc']))  {

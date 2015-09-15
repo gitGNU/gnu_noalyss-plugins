@@ -61,7 +61,7 @@ switch($sa)
 
   }
 
-$cn=new Database(dossier::id());
+$cn=Dossier::connect();
 if ( $cn->exist_schema('skeleton') == false)
   {
     require_once('include/class_install_plugin.php');

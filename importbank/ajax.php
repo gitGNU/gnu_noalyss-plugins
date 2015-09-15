@@ -22,7 +22,7 @@ require_once('include/class_bank_item.php');
 require_once('bank_constant.php');
 
 extract($_GET);
-$cn=new Database($gDossier);
+$cn=Dossier::connect();
 $html='';$extra='';$ctl='';
 switch($act) {
 case 'show':

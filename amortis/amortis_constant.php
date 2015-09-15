@@ -12,7 +12,7 @@
 require_once NOALYSS_INCLUDE.'/lib/class_database.php';
 
 global $cn;
-$cn=new Database (dossier::id());
+$cn=Dossier::connect();;
 
 function detail_material($f_id,$p_label)
 {

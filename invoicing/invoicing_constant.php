@@ -27,7 +27,7 @@
 require_once NOALYSS_INCLUDE.'/lib/class_database.php';
 
 global $cn,$g_SKEL_parameter;
-$cn=new Database (dossier::id());
+$cn=Dossier::connect();;
 
 // document_type.dt_id, dt_value='FACTURE'
 define ('DOCUMENT_TYPE',4); 

@@ -34,14 +34,14 @@ global $cn;
 echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.noalyss.eu/doku.php?id=importation_de_plan_comptable" target="_blank">Aide</a>'.
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
 '</div>';
-$cn=new Database(dossier::id());
+$cn=Dossier::connect();
 /*
  * load javascript
  */
 
 $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code']."&ac=".$_REQUEST['ac'];
 
-$cn=new Database (dossier::id());
+$cn=Dossier::connect();;
 
 
 $menu=array(

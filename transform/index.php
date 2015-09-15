@@ -21,7 +21,7 @@
 global $version_plugin;
 $version_plugin=SVNINFO;
 Extension::check_version(6800);
-$cn=new Database(dossier::id());
+$cn=Dossier::connect();
 $transform_version=0;
 /*
  * load javascript

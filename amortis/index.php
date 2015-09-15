@@ -39,7 +39,7 @@ echo create_script($j);
 
 $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&ac='.$_REQUEST['ac'];
 
-$cn=new Database (dossier::id());
+$cn=Dossier::connect();;
 
 if ( $cn->exist_schema('amortissement') ==false )
   {

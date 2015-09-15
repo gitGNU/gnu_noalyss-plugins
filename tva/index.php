@@ -60,7 +60,7 @@ case 'param':
 
 }
 $install=0;
-$cn=new Database(dossier::id());
+$cn=Dossier::connect();
 if ( $cn->exist_schema('tva_belge') == false) {
   require_once('class_install_plugin.php');
   $install=1;

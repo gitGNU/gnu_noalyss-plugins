@@ -41,7 +41,7 @@ if ( ! isset($_REQUEST['decl']) ){
   echo '</div>';
   exit;
 }
-$cn=new Database(Dossier::id());
+$cn=Dossier::connect();
 if (isset($_POST['save'] )) {
   $save=new Ext_Tva($cn);
   $save->from_array($_POST);

@@ -18,7 +18,7 @@ define ("NOSPAREPART",1002);
 define ("DATEINVALIDE",1003);
 
 global $cn,$g_sav_parameter;
-$cn=new Database (dossier::id());
+$cn=Dossier::connect();;
 if ( $cn->exist_schema('service_after_sale') == true)
 {
     $g_sav_parameter=new Service_After_Sale_Parameter($cn);

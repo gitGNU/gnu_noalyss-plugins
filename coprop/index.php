@@ -72,7 +72,7 @@ switch($sa)
 	  break;
   }
 
-$cn=new Database(dossier::id());
+$cn=Dossier::connect();
 if ( $cn->exist_schema('coprop') == false)
   {
     require_once('include/class_install_plugin.php');

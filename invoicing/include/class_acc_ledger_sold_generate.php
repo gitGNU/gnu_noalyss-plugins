@@ -355,7 +355,7 @@ class Acc_Ledger_Sold_Generate extends Acc_Ledger_Sold
          $_SESSION['g_user']='phpcompta';
         $_SESSION['g_pass']='phpcompta';
         global $g_user;
-        $cn=new Database(dossier::id());
+        $cn=Dossier::connect();
         $g_user=new User($cn);
         $a=new Acc_Operation($cn);
         $a->jr_id=2889;

@@ -40,7 +40,7 @@ if ( ! isset($_REQUEST['decl']) ){
   exit;
 }
 
-$cn=new Database(Dossier::id());
+$cn=Dossier::connect();
 if (isset($_POST['save'] )) {
   $save=new Ext_List_Assujetti($cn);
   $save->from_array($_POST);

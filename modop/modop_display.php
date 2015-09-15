@@ -32,7 +32,7 @@ require_once NOALYSS_INCLUDE.'/class/class_periode.php';
 echo js_include('acc_ledger.js');
 //----------------------------------------------------------------------
 // create compute button
-$cn=new Database(dossier::id());
+$cn=Dossier::connect();
 
 /*  we can't modify from a closed periode */
 /*  get periode */
