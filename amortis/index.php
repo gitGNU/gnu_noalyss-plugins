@@ -26,8 +26,8 @@ Extension::check_version(6800);
  * \brief main entry
  */
 require_once('amortis_constant.php');
-require_once NOALYSS_INCLUDE.'/class_database.php';
-require_once NOALYSS_INCLUDE.'/class_dossier.php';
+require_once NOALYSS_INCLUDE.'/lib/class_database.php';
+require_once NOALYSS_INCLUDE.'/class/class_dossier.php';
 /*
  * load javascript
  */

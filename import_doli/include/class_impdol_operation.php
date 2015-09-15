@@ -231,7 +231,7 @@ class Impdol_Operation
 	 */
 	function result()
 	{
-		require_once 'class_html_table.php';
+                require_once NOALYSS_INCLUDE.'/lib/class_html_table.php';
 		global $cn, $g_failed, $g_succeed;
 		$sql = " select o_doli,o_date,o_qcode,o_label,o_pj,amount_unit,
 			amount_vat,
@@ -468,7 +468,7 @@ class Impdol_Operation
 
 	function result_transfer()
 	{
-		require_once 'class_html_table.php';
+		require_once NOALYSS_INCLUDE.'/lib/class_html_table.php';
 		global $cn, $g_failed, $g_succeed;
 		$sql = " select distinct jr_id, jr_pj,jr_date, jr_comment,jr_internal
 

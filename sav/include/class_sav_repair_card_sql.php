@@ -31,7 +31,7 @@
 
   @endcode
  */
-require_once('class_noalyss_sql.php');
+require_once NOALYSS_INCLUDE.'/database/class_noalyss_sql.php';
 
 /**
  * @brief Manage the table service_after_sale.sav_repair_card

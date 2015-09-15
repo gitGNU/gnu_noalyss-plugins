@@ -25,7 +25,7 @@
  * @brief Manage the tables of  transform schema
  *
  */
-require_once('class_noalyss_sql.php');
+require_once NOALYSS_INCLUDE.'/database/class_noalyss_sql.php';
 
 /**
  * @brief Manage the table transform.request

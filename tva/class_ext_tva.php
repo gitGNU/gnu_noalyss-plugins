@@ -26,7 +26,7 @@
 require_once('class_ext_tvagen.php');
 require_once('class_tva_parameter.php');
 require_once('class_tva_amount.php');
-require_once('class_html_input.php');
+require_once NOALYSS_INCLUDE.'/lib/class_html_input.php';
 class Ext_Tva extends Ext_Tva_Gen
 {
     protected   $variable=array(

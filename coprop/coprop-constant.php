@@ -25,9 +25,9 @@
  *  connection
  */
 
-require_once ('class_database.php');
+require_once NOALYSS_INCLUDE.'/lib/class_database.php';
 require_once 'include/class_copro_parameter.php';
-require_once 'class_acc_ledger.php';
+require_once NOALYSS_INCLUDE.'/class/class_acc_ledger.php';
 
 global $cn,$g_copro_parameter,$gDossier;
 $cn=Dossier::connect();

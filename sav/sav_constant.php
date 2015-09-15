@@ -9,7 +9,7 @@
  *  connection
  */
 
-require_once ('class_database.php');
+require_once NOALYSS_INCLUDE.'/lib/class_database.php';
 require_once 'include/class_service_after_sale_parameter.php';
 
 define ("NOMATERIAL",1000);

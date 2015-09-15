@@ -29,7 +29,7 @@
  *
  *
  */
-require_once 'class_impress.php';
+require_once NOALYSS_INCLUDE.'/lib/class_impress.php';
 require_once 'include/class_formulaire_param_detail.php';
 $fp_id = HtmlInput::default_value_get('fp_id', '-1');
 switch ($tab)

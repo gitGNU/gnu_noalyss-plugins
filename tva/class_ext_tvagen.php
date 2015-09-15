@@ -25,7 +25,7 @@
  */
 
 require_once('tva_constant.php');
-require_once('class_own.php');
+require_once NOALYSS_INCLUDE.'/class/class_own.php';
 /**
  *@brief transform a string into an arrau without empty element and  duplicate
  * the array is sorted
@@ -80,7 +80,7 @@ class Ext_Tva_Gen
   }
 
   static function choose_periode($by_year=false) {
-    require_once('class_iradio.php');
+    require_once NOALYSS_INCLUDE.'/lib/class_iradio.php';
     $monthly=new IRadio('periodic');
     $monthly->value=1;
 

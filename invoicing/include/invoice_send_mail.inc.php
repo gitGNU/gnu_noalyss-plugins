@@ -28,8 +28,8 @@
  * @param pdf convert to pdf
   @endnote
  */
-require_once 'class_sendmail.php';
-require_once 'class_follow_up.php';
+require_once NOALYSS_INCLUDE.'/lib/class_sendmail.php';
+require_once NOALYSS_INCLUDE.'/class/class_follow_up.php';
 global $cn;
 
 //----- Mail

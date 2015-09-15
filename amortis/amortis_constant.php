@@ -9,7 +9,7 @@
  *  connection
  */
 
-require_once NOALYSS_INCLUDE.'/class_database.php';
+require_once NOALYSS_INCLUDE.'/lib/class_database.php';
 
 global $cn;
 $cn=new Database (dossier::id());

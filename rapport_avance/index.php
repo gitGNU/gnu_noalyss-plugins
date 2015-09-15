@@ -30,9 +30,9 @@
 global $version_plugin;
 $version_plugin = SVNINFO;
 Extension::check_version(6800);
-require_once 'class_noalyss_sql.php';
+require_once NOALYSS_INCLUDE.'/database/class_noalyss_sql.php';
 require_once 'rapav_constant.php';
-require_once 'class_impress.php';
+require_once NOALYSS_INCLUDE.'/lib/class_impress.php';
 if ($cn->exist_schema('rapport_advanced') == false )
 {
 	require_once('include/class_rapav_install.php');

@@ -24,11 +24,11 @@
  * \brief display the form for the operation
  */
 require_once('class_modop_operation.php');
-require_once NOALYSS_INCLUDE.'/class_icard.php';
-require_once NOALYSS_INCLUDE.'/class_ipopup.php';
-require_once NOALYSS_INCLUDE.'/class_acc_ledger_purchase.php';
-require_once NOALYSS_INCLUDE.'/class_acc_ledger_sold.php';
-require_once NOALYSS_INCLUDE.'/class_periode.php';
+require_once NOALYSS_INCLUDE.'/lib/class_icard.php';
+require_once NOALYSS_INCLUDE.'/lib/class_ipopup.php';
+require_once NOALYSS_INCLUDE.'/class/class_acc_ledger_purchase.php';
+require_once NOALYSS_INCLUDE.'/class/class_acc_ledger_sold.php';
+require_once NOALYSS_INCLUDE.'/class/class_periode.php';
 echo js_include('acc_ledger.js');
 //----------------------------------------------------------------------
 // create compute button
@@ -163,7 +163,7 @@ if ($op->ledger_type=='ODS')
 /* ---------------------------------------------------------------------- */
 if ($op->ledger_type=='FIN')
 {
-    require_once('class_acc_ledger_fin.php');
+    require_once NOALYSS_INCLUDE.'/class/class_acc_ledger_fin.php';
     $f_legend='Banque';
     $jrn=new Acc_Ledger_Fin($cn,$op->array['p_jrn']);
 

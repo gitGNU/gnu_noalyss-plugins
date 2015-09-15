@@ -24,7 +24,7 @@
  *  connection
  */
 
-require_once ('class_database.php');
+require_once NOALYSS_INCLUDE.'/lib/class_database.php';
 
 global $cn,$g_SKEL_parameter;
 $cn=new Database (dossier::id());

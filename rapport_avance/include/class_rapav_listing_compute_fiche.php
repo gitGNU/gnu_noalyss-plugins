@@ -17,8 +17,8 @@
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-require_once 'class_sendmail.php';
-require_once 'class_follow_up.php';
+require_once NOALYSS_INCLUDE.'/lib/class_sendmail.php';
+require_once NOALYSS_INCLUDE.'/class/class_follow_up.php';
 
 /**
  * Description of class_rapav_listing_compute_fiche

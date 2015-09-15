@@ -24,7 +24,7 @@
    * \brief
    */
 require_once('class_ext_tvagen.php');
-require_once('class_acc_parm_code.php');
+require_once NOALYSS_INCLUDE.'/class/class_acc_parm_code.php';
 class Listing extends Ext_Tva_Gen {
   function find_tva_code($p_array)
 	{

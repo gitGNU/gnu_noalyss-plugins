@@ -36,9 +36,9 @@ echo create_script($j);
 global $version_plugin;
 $version_plugin=SVNINFO;
 Extension::check_version(6800);
-require_once 'class_acc_ledger_sold.php';
-require_once('class_zip_extended.php');
-require_once 'class_sendmail.php';
-require_once 'class_filetosend.php';
+require_once NOALYSS_INCLUDE.'/class/class_acc_ledger_sold.php';
+require_once NOALYSS_INCLUDE.'/lib/class_zip_extended.php';
+require_once NOALYSS_INCLUDE.'/lib/class_sendmail.php';
+require_once NOALYSS_INCLUDE.'/lib/class_filetosend.php';
 require_once 'include/invoicing.inc.php';
 ?>

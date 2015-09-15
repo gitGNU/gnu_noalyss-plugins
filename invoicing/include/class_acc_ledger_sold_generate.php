@@ -19,7 +19,7 @@
  */
 
 // Copyright (c) 2002 Author Dany De Bontridder dany@alchimerys.be
-require_once 'class_acc_ledger_sold.php';
+require_once NOALYSS_INCLUDE.'/class/class_acc_ledger_sold.php';
 class Acc_Ledger_Sold_Generate extends Acc_Ledger_Sold
 {
 

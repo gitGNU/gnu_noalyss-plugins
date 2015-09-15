@@ -64,11 +64,11 @@ if ( isset ($_POST['pi_id'])){
 }
 /* show all the possible parameters */
 $tvap=new Tva_Parameter($cn);
-require_once('class_itva_popup.php');
+require_once NOALYSS_INCLUDE.'/lib/class_itva_popup.php';
 $a=new IPopup('popup_tva');
 $a->set_title('Choisissez la tva qui convient');
 echo $a->input();
-require_once('class_iposte.php');
+require_once NOALYSS_INCLUDE.'/lib/class_iposte.php';
 echo IPoste::ipopup('ipop_account');
 
 echo dossier::hidden();
