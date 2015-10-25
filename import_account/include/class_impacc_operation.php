@@ -223,7 +223,7 @@ class Impacc_Operation
 		catch (Exception $e)
 		{
 			print_r($e->getTraceAsString());
-			$cn->rollback;
+			$cn->rollback();
 		}
 	}
 
@@ -463,7 +463,9 @@ class Impacc_Operation
 		}
 		catch (Exception $e)
 		{
-			print_r($e->getTraceAsString());
+			echo ($e->getMessage());
+			error_log($e->getMessage());
+			error_log($e->getTraceAsString());
 			$cn->rollback();
 		}
 	}
