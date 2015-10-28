@@ -27,7 +27,7 @@
 /*
  * load javascript
  */
-require_once('include/class_import_card.php');
+require_once 'include/class_import_card.php';
 require_once NOALYSS_INCLUDE.'/class/class_acc_ledger.php';
 require_once NOALYSS_INCLUDE.'/class/class_acc_ledger_purchase.php';
 require_once NOALYSS_INCLUDE.'/class/class_acc_ledger_sold.php';
