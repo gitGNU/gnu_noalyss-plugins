@@ -49,7 +49,9 @@ if (isset($_POST['generate']))
 	}
 	catch (Exception $e)
 	{
-		var_dump($e->getTraceAsString());
+            echo $e->getMessage();
+            error_log($e->getMessage());
+            error_log($e->getTraceAsString());
 	}
 }
 

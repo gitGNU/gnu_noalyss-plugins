@@ -59,7 +59,7 @@ class Pdf_Card extends PDF
         $this->Cell(0,8,'Date '.$this->date." - Page ".$this->PageNo().'/{nb}',0,0,'C');
         $this->Ln(3);
         // Created by NOALYSS
-        $this->Cell(0,8,'Created by NOALYSS, a professional opensource accounting software http://www.aevalys.eu',0,0,'C',false,'http://www.aevalys.eu');
+        $this->Cell(0,8,'Created by NOALYSS, a professional opensource accounting software http://www.noalyss.eu',0,0,'C',false,'http://www.noalyss.eu');
     }
     function Cell ($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=false, $link='')
     {

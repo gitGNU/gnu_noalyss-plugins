@@ -23,13 +23,15 @@
 /*!\file
  * \brief main file for importing card
  */
-
+global $g_dir_importbank;
+$g_dir_importbank =dirname(__FILE__);
 /*
  * load javascript
  */
-require_once('include/class_import_bank.php');
-require_once('bank_constant.php');
-require_once('class_html_table.php');
+require_once $g_dir_importbank.'/include/class_import_bank.php';
+require_once NOALYSS_INCLUDE.'/lib/class_html_table.php';
+require_once $g_dir_importbank.'/bank_constant.php';
+
 global $version_plugin;
 $version_plugin=SVNINFO;
 Extension::check_version(6800);
@@ -89,7 +91,7 @@ if ($cn->exist_schema('importbank') == false)
  */
 if ( ! isset($_REQUEST['sa']))
   {
-    require_once('include/import_bank.php');
+    require_once($g_dir_importbank.'/include/import_bank.php');
     exit();
   }
 /*
@@ -97,7 +99,7 @@ if ( ! isset($_REQUEST['sa']))
  */
 if ( $_REQUEST['sa']=='import')
   {
-    require_once('include/import_bank.php');
+    require_once($g_dir_importbank.'/include/import_bank.php');
     exit();
   }
 

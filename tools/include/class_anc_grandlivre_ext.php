@@ -26,7 +26,7 @@
  */
 class Anc_Grandlivre_Ext extends Anc_GrandLivre
 {
-    /* !
+    /*!
      * \brief Show the button to export in PDF or CSV
      * \param $url_csv url of the csv
      * \param $url_pdf url of the pdf
@@ -53,7 +53,7 @@ class Anc_Grandlivre_Ext extends Anc_GrandLivre
         return $r;
     }
 
-    /* !
+    /*!
      * \brief Show the button to export in PDF all the receipt
      * 
      * \param $p_string extra hidden value
@@ -74,7 +74,7 @@ class Anc_Grandlivre_Ext extends Anc_GrandLivre
         return $r;
     }
 
-    /* !
+    /*!
      * \brief compute the html display
      *
      *

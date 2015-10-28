@@ -73,7 +73,6 @@ function spare_part_add(p_dossier, p_access, p_plugin_code, p_repair_card)
                     onSuccess: function (req)
                     {
                         var answer = req.responseXML;
-                        console.log(answer);
                         var html = answer.getElementsByTagName('html');
                         if (html.length === 0)
                         {
@@ -162,7 +161,6 @@ function workhour_add(p_dossier, p_access, p_plugin_code, p_repair_card)
                     onSuccess: function (req)
                     {
                         var answer = req.responseXML;
-                        console.log(answer);
                         var html = answer.getElementsByTagName('html');
                         if (html.length === 0)
                         {

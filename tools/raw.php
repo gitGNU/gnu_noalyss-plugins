@@ -21,7 +21,7 @@
 
 // Copyright (c) 2002 Author Dany De Bontridder dany@alchimerys.be
 
-/* !\file
+/*!\file
  * \brief raw file for PDF ewa
  */
 //require_once('amortis_constant.php');

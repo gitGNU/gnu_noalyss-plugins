@@ -51,7 +51,7 @@ order by d_generated desc,d_title");
 <div id="declaration_list_div">
 <?php
 echo '<span style="display:block">';
-	echo _('Filtre').HtmlInput::infobulle(204);
+	echo _('Cherche').HtmlInput::infobulle(204);
 	echo HtmlInput::filter_table("t_declaration", "0,1,2,3","1");
 	echo '</span>';
 ?>

@@ -27,7 +27,7 @@ echo HtmlInput::hidden('sb',$_REQUEST['sb']);
 echo HtmlInput::hidden('ac',$_REQUEST['ac']);
 echo HtmlInput::hidden('plugin_code',$_REQUEST['plugin_code']);
 echo dossier::hidden();
-echo 'Filtre : '.HtmlInput::filter_table('amortissement_tb','1,2,3,5,6',1);
+echo _('Cherche').' : '.HtmlInput::filter_table('amortissement_tb','1,2,3,5,6',1);
 ?>
 <table id="amortissement_tb" class="result">
 <tr>

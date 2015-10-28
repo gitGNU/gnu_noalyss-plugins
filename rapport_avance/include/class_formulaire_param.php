@@ -210,7 +210,9 @@ class Formulaire_Param extends Formulaire_Param_Sql
 		}
 		catch (Exception $exc)
 		{
-			echo $exc->getTraceAsString();
+			echo $exc->getMessage();
+                        error_log($exc->getMessage());
+                        error_log($exc->getTraceAsString());
 			throw $exc;
 		}
 	}

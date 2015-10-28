@@ -31,7 +31,7 @@ $array=$cn->get_array("select lp_id,lp_code,lp_comment
         from rapport_advanced.listing_param 
         where l_id=$1 order by 2",array($f_id));
 echo HtmlInput::title_box('Code Formulaire','search_code_div');
-echo _('Filtre').':'.HtmlInput::filter_table('code_listing_tb','0,1',1);
+echo _('Cherche').':'.HtmlInput::filter_table('code_listing_tb','0,1',1);
 
 ?>
 <table id='code_listing_tb'>

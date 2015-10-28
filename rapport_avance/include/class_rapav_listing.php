@@ -29,8 +29,8 @@ require_once 'class_rapav_listing_param.php';
 class Rapav_Listing
 {
 
-    public $data; /* !< RAPAV_Listing_SQL */
-    public $a_detail; /* !< array of RAPAV_Listing_Param corresponding to the listing */
+    public $data; /*!< RAPAV_Listing_SQL */
+    public $a_detail; /*!< array of RAPAV_Listing_Param corresponding to the listing */
 
    
 

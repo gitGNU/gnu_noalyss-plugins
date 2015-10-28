@@ -101,6 +101,19 @@ if ( $_REQUEST ['sb'] == 'select_form')
  */
 if ( $_POST['sb']=='upload_file')
   {
+    $format_id=HtmlInput::default_value_post("format", -1);
+    if ( $format_id == -1 ||isNumber($format_id) == 0 )  {
+        alert(_('Format inconnu'));
+        return;
+    }
+    /**
+     * if remove format is asked , delete and return
+     */
+    if ( isset($_POST['remove_format'])) {
+        $format_bank=new Format_Bank_Sql($cn,$format_id);
+        $format_bank->delete();
+        return;
+    }
     /*
      * First time or the format is not corrected
      */
@@ -128,7 +141,7 @@ if ( $_POST['sb']=='upload_file')
 	// Load the order of the header
 	if ( $_POST['format'] != 0)
 	  {
-	    $format_bank=new Format_Bank_Sql($cn,$_POST ['format']);
+	    $format_bank=new Format_Bank_Sql($cn,$format_id);
 	    $pos_date=$format_bank->pos_date;
 	    $pos_amount=$format_bank->pos_amount;
 	    $pos_lib=$format_bank->pos_lib;

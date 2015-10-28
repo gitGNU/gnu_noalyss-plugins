@@ -210,7 +210,7 @@ class RAPAV_Listing_Compute
                     $col[]=$e;
                 }
                 $col_range=implode(",",$col);
-                echo "Filtre ".HtmlInput::filter_table($form_name."_tb", $col_range, 1);
+                echo _("Cherche")." ".HtmlInput::filter_table($form_name."_tb", $col_range, 1);
                 echo '<table id="'.$form_name.'_tb" style="min-width:100%" class="sortable">';
                 echo '<tr>';
                 if ( $with_sel ) {

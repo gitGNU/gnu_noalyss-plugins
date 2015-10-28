@@ -144,12 +144,12 @@ $cn->commit();
 $nb_col->value=($nb_col->value=='')?$max:$nb_col->value;
 ?>
 
-<h2>Etape 4/4 : les données sont sauvegardées</h2>
+<h2><?php echo _("Etape 4/4 : les données sont sauvegardées")?></h2>
 <form method="POST"   enctype="multipart/form-data">
 <table>
 <tr>
 	<td>
-	Nom du format
+	<?php echo _("Nom du format")?>
 	</td>
 	<td>
 	<?php echo $format->input()?>
@@ -157,7 +157,7 @@ $nb_col->value=($nb_col->value=='')?$max:$nb_col->value;
 </tr>
 <tr>
 	<td>
-	A importer dans le journal de banque
+	<?php echo _("A importer dans le journal de banque")?>
 	</td>
 	<td>
 	<?php echo $jrn_def->input()?>
@@ -165,7 +165,7 @@ $nb_col->value=($nb_col->value=='')?$max:$nb_col->value;
 </tr>
 <tr>
 	<td>
-Format de date
+<?php echo _("Format de date")?>
 	</td>
 	<td>
 	<?php echo $format_date->input()?>
@@ -174,7 +174,7 @@ Format de date
 
 <tr>
 	<td>
-	Séparateur de champs
+	<?php echo _("Séparateur de champs")?>
 	</td>
 	<td>
 	<?php echo $sep_field->input()?>
@@ -183,7 +183,7 @@ Format de date
 
 <tr>
 	<td>
-	Séparateur de millier
+	<?php echo _("Séparateur de millier")?>
 	</td>
 	<td>
 	<?php echo $sep_thousand->input()?>
@@ -192,7 +192,7 @@ Format de date
 
 <tr>
 	<td>
-	Séparateur décimal
+	<?php echo _("Séparateur décimal")?>
 	</td>
 	<td>
 	<?php echo $sep_decimal->input()?>
@@ -200,7 +200,7 @@ Format de date
 </tr>
 <tr>
 	<td>
-	Ligne d en-tête à ne pas prendre en considération
+	<?php echo _("Ligne d'en-tête à ne pas prendre en considération")?>
 	</td>
 	<td>
 	<?php echo $skip->input()?>
@@ -209,7 +209,7 @@ Format de date
 
 <tr>
 	<td>
-	Les lignes ayant ce nombre de colonnes sont valides
+	<?php echo _("Les lignes ayant ce nombre de colonnes sont valides")?>
 	</td>
 	<td>
 	<?php echo $nb_col->input()?>
@@ -228,8 +228,8 @@ Format de date
 $header=new ISelect('header[]');
 $header->value=$aheader;
 
-echo th('Ligne n°');
-echo th('Nbre de colonnes');
+echo th(_('Ligne n°'));
+echo th(_('Nbre de colonnes'));
 for ( $i=0;$i<$max;$i++)
 {
   $header->selected=-1;
