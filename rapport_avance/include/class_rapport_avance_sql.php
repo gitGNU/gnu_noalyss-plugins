@@ -556,7 +556,7 @@ class RAPAV_Listing_Compute_Fiche_SQL extends Noalyss_SQL
 
   @endcode
  */
-require_once NOALYSS_INCLUDE.'/database/class_noalyss_sql.php');
+require_once NOALYSS_INCLUDE.'/database/class_noalyss_sql.php';
 
 /**
  * @brief Manage the table rapport_advanced.listing_compute_detail
