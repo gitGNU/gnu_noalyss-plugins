@@ -126,8 +126,25 @@ if($_REQUEST['sa'] == 'purge')
       {
 	Import_Bank::transfer_record($_REQUEST);
       }
-
-    /*
+    //////////////////////////////////////////////////
+    // Group action      
+    //////////////////////////////////////////////////
+    if ($action_form == "selected_record" || $action_form2 == "selected_record")
+      {
+	Import_Bank::selected_action($_REQUEST);
+      }
+    /////////////////////////////////////////////////
+    // Reconcile auto
+    ////////////////////////////////////////////////
+    if ($action_form == "reconcile_auto" || $action_form2 == "reconcile_auto")
+      {
+        $id=HtmlInput::default_value_request("id", 0);
+        if ( $id == 0 || isNumber($id)==0) {
+            throw new Exception(_("Donnée invalide"));
+        }
+	Import_Bank::reconcile_auto($id);
+      }
+   /*
      * Show all the import
      */
     if ( ! isset($_REQUEST['sb']))
@@ -137,6 +154,7 @@ if($_REQUEST['sa'] == 'purge')
       }
     if ($_REQUEST['sb'] == 'list')
       {
+        // Perform other info
 	Import_Bank::list_record($_REQUEST['id']);
 	exit();
       }

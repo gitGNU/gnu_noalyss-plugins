@@ -26,7 +26,7 @@ if ( ! isset ($_REQUEST ['sb']))
     echo '<form method="get">';
     $iselect=new ISelect('format');
     $iselect->value=$cn->make_array('select id,format_name from importbank.format_bank order by format_name');
-    $new=array('value'=>0,'label'=>'--nouveau--');
+    $new=array('value'=>0,'label'=>_('--nouveau--'));
     $iselect->value[]=$new;
     require_once('template/import_new.php');
     echo HtmlInput::submit('select_submit','Valider');

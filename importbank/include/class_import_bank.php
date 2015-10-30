@@ -171,19 +171,19 @@ class Import_Bank
 				from importbank.import as a
 				join importbank.format_bank as b on (format_bank_id=b.id)
 			    where a.id=$1', array($p_id));
-        echo h1($array[0]['id']." ".$array[0]['i_date']." ".$array[0]['format_name'],
-                '');
+       
         $ret=$cn->exec_sql(" SELECT id ,ref_operation,tp_date, amount,
 				case when status='N' then 'Nouveau'
 				when status='T' then 'Transfèré'
 				when status='W' then 'Attente'
 				when status='E' then 'ERREUR'
 				when status='D' then 'Effacer'
-
 				end as f_status,
+                                f_id,
+                                tp_rec,
 				status,
 				libelle,
-		       		tp_third, tp_extra
+		       		tp_third, tp_extra,is_checked
 			  FROM importbank.temp_bank
 			  where import_id=$1 $sql_filter
 			  order by tp_date,ref_operation,amount", array($p_id));
@@ -454,5 +454,168 @@ class Import_Bank
         );
         return $exist;
     }
+    /**
+     * Do the same operation for all the selected records , the 
+     * parameters are found in $_REQUEST
+     * @throws Exception
+     */
+    static  function selected_action()
+    {
+        
+        $id=HtmlInput::default_value_request("id", 0);
+        $action=HtmlInput::default_value_request("select_action", 0);
+        $cn=Dossier::connect();
+        if ( $id == 0 || isNumber($id ) == 0 || $action == 0) {
+            throw new Exception(_("Donnée invalide"));
+        }
+        //-------------------
+        // Possible actions
+        //-------------------
+        $same_tiers         = 1;
+        $remove_tiers       = 2;
+        $suppress_reconcile = 3;
+        $accept_reconcile   = 4;
+        $delete_tiers       = 5;
+        
+        switch ($action)
+        {
+            case $same_tiers:
+                //-----------------------------------------------------------
+                // Same tiers 
+                //-----------------------------------------------------------
+                echo "same tiers";
+                $fiche_code=HtmlInput::default_value_request("fiche1000", "");
+                $fiche_code=trim($fiche_code);
+                if ($fiche_code  == "" ) {
+                    throw new Exception(_("Donnée invalide"). "\$fiche_code");
+                }
+                
+                $fiche=new Fiche($cn);
+                $fiche->get_by_qcode($fiche_code,false);
+                if ( $fiche->id == 0 ) {
+                    throw new Exception(_("Fiche non trouvée"));
+                }
+                
+                $cn->exec_sql("update importbank.temp_bank set f_id = $1 ,  "
+                        . " status = 'W' , is_checked = 0"
+                        . " where "
+                        . " import_id = $2 and "
+                        . " status in ('N','W','E','D') and"
+                        . " is_checked = 1 "
+                        , array($fiche->id,$id));
+                
+                break;
+             
+            case $remove_tiers :
+                //-----------------------------------------------------------
+                // Remove tiers from selected records
+                //-----------------------------------------------------------
+                echo "remove_tiers";
+                 $cn->exec_sql("update importbank.temp_bank set "
+                        . " status = 'N' , is_checked = 0 , f_id = null"  
+                        . " where "
+                        . " import_id = $1 and "
+                        . " status <> 'T' and"
+                        . " is_checked = 1 "
+                        , array($id));
+                break;
+            case $delete_tiers :
+                //-----------------------------------------------------------
+                // Mark for deletion selected records
+                //-----------------------------------------------------------
+                echo "Delete_tiers";
+                 $cn->exec_sql("update importbank.temp_bank set "
+                        . " status = 'D' , is_checked = 0"
+                        . " where "
+                        . " import_id = $1 and "
+                        . " status <> 'T' and"
+                        . " is_checked = 1 "
+                        , array($id));
+                break;
+            case $suppress_reconcile:    
+                //-----------------------------------------------------------
+                // Deleted auto reconcile for selected
+                //-----------------------------------------------------------
+                $sql = "
+                    delete 
+                     from importbank.suggest_bank 
+                    where 
+                      temp_bank_id in (select id 
+                                        from importbank.temp_bank  
+                                        where 
+                                        is_checked=1 and import_id=$1)";
+                $cn->exec_sql($sql,array($id));
+                $sql = " 
+                    update importbank.temp_bank set is_checked=0 
+                    where 
+                    is_checked=1 and import_id=$1";
+                $cn->exec_sql($sql,array($id));
+                
+                break;
+            case $accept_reconcile:    
+                //-----------------------------------------------------------
+                // Accept automatic reconcile for selected
+                //-----------------------------------------------------------
+                $sql= " 
+                    with dup as (select count(*), temp_bank_id from importbank.suggest_bank group by temp_bank_id having count(*) > 1)
+                    update importbank.temp_bank set tp_rec = jr_id::text,
+                    is_checked=0 ,
+                    f_id=suggest_bank.f_id,
+                    status='W'
+                    from importbank.suggest_bank  
+                    where temp_bank_id=temp_bank.id 
+                    and temp_bank.import_id=$1
+                    and temp_bank.is_checked=1
+                    and temp_bank.id not in (select temp_bank_id from dup)
+                    ";
+                    $cn->exec_sql($sql,array($id));
+                      $sql = " 
+                    update importbank.temp_bank set is_checked=0 
+                    where 
+                    is_checked=1 and import_id=$1";
+                $cn->exec_sql($sql,array($id));
+                break;
 
+            default:
+                throw new Exception(_("action impossible"));
+                break;
+        }
+    }
+    /**
+     * @brief Try to find the concerned operation, fill the table suggest_bank.
+     * 
+     * @param type $p_id import.id
+     * @param type $all only checked or all
+     */
+    static function reconcile_auto($p_id,$all=true)
+    {
+        $sql="
+            insert into importbank.suggest_bank (temp_bank_id,jr_id,f_id)
+            select distinct tb.id, jr_id,jrnx.f_id 
+            from 
+            jrnx ,
+            jrn ,
+            importbank.temp_bank as tb
+            where
+            jrnx.j_grpt=jrn.jr_grpt_id
+            and  j_date > tb.tp_date - interval '30 days'
+            and j_date < tb.tp_date + interval '30 days'
+            and tb.status = 'N'
+            and tb.import_id=$1
+            and abs(amount) = j_montant
+            and ( (amount < 0 and j_debit = false ) or (amount > 0 and j_debit=true))
+            and jrnx.f_id is not null
+            and tb.id not in (select temp_bank_id from importbank.suggest_bank)
+            and not exists (select jrn_rapt.jr_id from jrn_rapt 
+                    where jrn_rapt.jr_id = jrn.jr_id 
+                    or jrn_rapt.jra_concerned =jrn.jr_id)
+            and not exists (select lc.j_id from letter_cred as lc where
+                    lc.j_id=jrnx.j_id or lc.jl_id = jrnx.j_id)
+            and not exists (select ld.j_id from letter_deb as ld where
+                    ld.j_id=jrnx.j_id or ld.jl_id = jrnx.j_id);
+        ";
+        $cn=Dossier::connect();
+        $cn->exec_sql($sql,array($p_id));
+              
+    }
 }
