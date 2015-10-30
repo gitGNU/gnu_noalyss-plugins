@@ -253,7 +253,7 @@ echo $select_action->input();
               console.debug(a[i].type);
               console.debug(a[i].id);
               if (a[i].id == 'check_all') {continue;}
-              if ( check == 1)   {
+              if ( check == 0)   {
                   a[i].checked=false;
             } else {
                   a[i].checked=true;
