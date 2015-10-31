@@ -86,6 +86,9 @@ if ($cn->exist_schema('importbank') == false)
     $iplugn->install();
 
   }
+ if ( $cn->get_value("select count(*) from importbank.version") == 0 ) {
+     $cn->execute_script($g_dir_importbank."/sql/upgrade1.sql");
+ }
 /*
  *Menu : import bank, reconciliation operation, purge temporary table
  */
