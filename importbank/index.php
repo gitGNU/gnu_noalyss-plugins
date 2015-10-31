@@ -34,7 +34,7 @@ require_once $g_dir_importbank.'/bank_constant.php';
 
 global $version_plugin;
 $version_plugin=SVNINFO;
-Extension::check_version(6800);
+Extension::check_version(6910);
 global $cn;
 echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.noalyss.eu/doku.php?id=importation_de_banque" target="_blank">Aide</a>'.
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
