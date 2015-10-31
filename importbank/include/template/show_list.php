@@ -141,7 +141,7 @@ echo $select_action->input();
             $fiche=new Fiche($conx3,$a_suggest[0]['f_id']);
             $qcode= $fiche->get_quick_code();
             if ( $qcode != null ) {
-                echo HtmlInput::card_detail($qcode, _('A valider')."???");
+                echo HtmlInput::card_detail($qcode, _('Valide')."?");
             }
         } else {
             $text= sprintf(_('Possibles %d'),count($a_suggest));
@@ -168,7 +168,7 @@ echo $select_action->input();
         if ( count($a_suggest) == 1 ) {
             $ref=$conx3->get_value('select jr_internal from jrn where jr_id=$1',
                     array($a_suggest[0]['jr_id']));
-            echo HtmlInput::detail_op($a_suggest[0]['jr_id'],$ref);
+            echo HtmlInput::detail_op($a_suggest[0]['jr_id'],_('Valide?').$ref);
         }
     }
     

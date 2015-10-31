@@ -55,8 +55,8 @@ function success_bank_info(req,json)
 	var name_ctl=a[0].firstChild.nodeValue;
 	var ob=name_ctl.evalJSON(true);
 	$('st'+ob.id).innerHTML=unescape_xml(ob.msg);
-	if ($(ob.tiers)) { $('tiers'+ob.id).innerHTML=unescape_xml(ob.tiers);}
-	if ($(ob.concop)){$('concop'+ob.id).innerHTML=unescape_xml(ob.concop);}
+	if (ob.tiers) { $('tiers'+ob.id).innerHTML=unescape_xml(ob.tiers);}
+	if (ob.concop){$('concop'+ob.id).innerHTML=unescape_xml(ob.concop);}
 	var div=answer.getElementsByTagName('ctl');
 	var div_ctl=div[0].firstChild.nodeValue;
 	removeDiv(div_ctl);
