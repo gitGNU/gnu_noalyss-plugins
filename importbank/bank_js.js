@@ -23,7 +23,11 @@ function reconcilie(target,dossier_id,p_id,plugin_code,tiers)
 
     add_div(div);
 }
-
+/**
+ * When we save a reconcile dialog box with info
+ * @param {type} obj
+ * @returns {Boolean}
+ */
 function save_bank_info(obj)
 {
     var query_string=obj.serialize();
@@ -37,7 +41,12 @@ function save_bank_info(obj)
 
     return false;
 }
-
+/**
+ * Handle the ajax from save_bank_info
+ * @param {type} req
+ * @param {type} json
+ * @returns {undefined}
+ */
 function success_bank_info(req,json)
 {
     try {
@@ -46,12 +55,14 @@ function success_bank_info(req,json)
 	var name_ctl=a[0].firstChild.nodeValue;
 	var ob=name_ctl.evalJSON(true);
 	$('st'+ob.id).innerHTML=unescape_xml(ob.msg);
+	if ($(ob.tiers)) { $('tiers'+ob.id).innerHTML=unescape_xml(ob.tiers);}
+	if ($(ob.concop)){$('concop'+ob.id).innerHTML=unescape_xml(ob.concop);}
 	var div=answer.getElementsByTagName('ctl');
 	var div_ctl=div[0].firstChild.nodeValue;
 	removeDiv(div_ctl);
     }
     catch(e) {
-	alert_box('Erreur success_box_info '+e.message);
+	alert_box('Erreur success_bank_info '+e.message);
     }
 }
 /**
@@ -117,3 +128,59 @@ alert(e.message);
 }
 return false;
         }
+/**
+ * Display the suggest when several are found
+ * @param {type} p_dossier
+ * @param {type} p_plugin_code
+ * @param {type} p_id
+ * @returns {undefined}
+ */        
+function display_suggest(p_dossier,p_plugin_code,p_id) {
+    waiting_box();
+    new Ajax.Request(
+            'ajax.php',
+    {
+        method:'get',
+        parameters:{
+            "plugin_code":p_plugin_code,
+            "gDossier":p_dossier,
+            "id":p_id,
+            "act":"display_suggest"
+                    
+        },
+        onSuccess:function(p_xml,p_json) {
+            removeDiv('display_suggest_box');
+            var style=fixed_position(150,200)+";width:50%";
+            add_div({"id":"display_suggest_box","cssclass":"inner_box","style":style,"html":p_xml.responseText});
+            remove_waiting_box();
+        }
+        
+    })
+    
+}      
+function select_suggest(p_dossier,p_plugin_code,temp_bank_id,suggest_bank_id)
+{
+    waiting_box();
+    try {
+        new Ajax.Request(
+                'ajax.php',
+        {
+            method:'get',
+            parameters:{'act':'set_suggest','id':temp_bank_id, 'suggest_id':suggest_bank_id,'gDossier':p_dossier,'plugin_code':p_plugin_code},
+            onSuccess:function(req,json) {
+                try {
+                    remove_waiting_box();
+                    removeDiv('display_suggest_box');
+                    var json=req.responseText.evalJSON();
+                    $('tiers'+temp_bank_id).innerHTML=json.tiers;
+                    $('concop'+temp_bank_id).innerHTML=json.concop;
+                    $('st'+temp_bank_id).innerHTML=json.status;
+                }catch (x) {
+                    alert_box("select_suggest.function_ajax"+e.message);
+                }
+            }
+        });
+    }catch (e) {
+        alert_box("select_suggest"+e.message);
+    }
+}

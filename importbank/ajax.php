@@ -24,10 +24,120 @@ require_once('bank_constant.php');
 extract($_GET);
 $cn=Dossier::connect();
 $html='';$extra='';$ctl='';
+$dossier_id=Dossier::id();
 switch($act) {
-    case 'set_tiers':
-        var_dump($_GET);
+    case 'set_suggest':
+    ////////////////////////////////////////////////////////////////////
+    // set the selection coming from display_suggest
+    ////////////////////////////////////////////////////////////////////
+        $id=HtmlInput::default_value_get("id", 0);
+        $suggest_id=HtmlInput::default_value_get("suggest_id",0);
+       // Retrieve info
+        $a_suggest=$cn->get_array("select 
+                a.id,
+                a.jr_id,
+                b.jr_internal,
+                a.f_id,
+                (select ad_value from fiche_detail where ad_id=23 and f_id=a.f_id) as qcode
+            from 
+                jrn as b 
+                join importbank.suggest_bank as a on (a.jr_id=b.jr_id)
+            where 
+                a.id=$1", array($suggest_id));
+        if ( count($a_suggest)==1) 
+        {
+            $cn->exec_sql("
+            update importbank.temp_bank set status='W',tp_rec=$1,f_id=$2
+            where
+            id=$3
+                ",
+                    array
+                        (
+                        $a_suggest[0]['jr_id'],
+                        $a_suggest[0]['f_id'],
+                        $id)
+                    );
+            $a_json=array('tiers'=>HtmlInput::card_detail($a_suggest[0]['qcode']),
+                'concop'=>HtmlInput::detail_op($a_suggest[0]['jr_id'],$a_suggest[0]['jr_internal']),
+                'status'=>'<span style=\"color:red;background-color:white\">Attente</span>'
+                );
+            echo json_encode($a_json);
+        } else {
+            $a_json=array('tiers'=>"",
+                'concop'=>"",
+                'status'=>'Error'
+                );
+            echo json_encode($a_json);
+            
+        }
         return;
+        break;
+    case 'display_suggest':
+    ////////////////////////////////////////////////////////////////////
+    // If several rows are found for an import bank (temp_bank) then 
+    // display the different possibilities
+    ////////////////////////////////////////////////////////////////////
+        $id=HtmlInput::default_value_get("id", 0);
+        $plugin_code=HtmlInput::default_value_get('plugin_code',"");
+        echo HtmlInput::title_box(_("Suggestion"), "display_suggest_box");
+        /*
+         * Display operation
+         */
+        $bi_sql=new Temp_Bank_Sql($cn,$id);
+        $date=_('date');
+        $label=_('Libellé');
+        $other_info=_("Autre information");
+        $amount=_('Montant');
+        $str_tiers=_('Tiers');
+        echo "<table>";
+        echo "<tr>";
+        echo td($date);
+        echo td($bi_sql->tp_date);
+        echo "</tr>";
+        echo "<tr>";
+        echo td($str_tiers);
+        echo td($bi_sql->tp_third);
+        echo "</tr>";
+        echo "<tr>";
+        echo td($label);
+        echo td($bi_sql->libelle);
+        echo "</tr>";
+        echo "<tr>";
+        echo td($amount);
+        echo td($bi_sql->amount);
+        echo "</tr>";
+        
+        echo "<tr>";
+        echo td($other_info);
+        echo td($bi_sql->tp_extra);
+        echo "</tr>";
+        
+        echo "            </table>";
+        $a_suggest=$cn->get_array("select 
+                a.id,
+                a.jr_id,
+                b.jr_internal,
+                a.f_id,
+                (select ad_value from fiche_detail where ad_id=23 and f_id=a.f_id) as qcode
+            from 
+                jrn as b 
+                join importbank.suggest_bank as a on (a.jr_id=b.jr_id)
+            where 
+                temp_bank_id=$1", array($id));
+        $nb_asuggest=count($a_suggest);
+        echo "<ul>";
+        for ($i=0;$i<$nb_asuggest;$i++) {
+            echo '<li>'.
+                    HtmlInput::button("get{$i}", _('choisir'), sprintf("onclick=\"select_suggest('%s','%s','%s','%s')\"",$dossier_id,$plugin_code,$id,$a_suggest[$i]['id'])).
+                    HtmlInput::detail_op($a_suggest[$i]['jr_id'], $a_suggest[$i]['jr_internal']).
+                    "  ".HtmlInput::card_detail($a_suggest[$i]['qcode'])."</li>";
+        }
+        echo '</ul>';
+        echo '<p style="text-align:center">';
+        echo HtmlInput::button_close("display_suggest_box");
+        echo '</p>';
+        return;
+        break;
     case 'check_all':
         /////////////////////////////////////////////////////////////////////
         // Check all the rows or unchecked
@@ -168,19 +278,42 @@ case 'show':
     else 
       if (isset($_GET['save']))
 	{
-	  
+	  $f_id="";
+          $concerned=HtmlInput::default_value_get("e_concerned".$id, NULL);
+          $concop_json="";
+          $tiers_json="";
+          if ($concerned == "" ) $concerned=null;
+          // If we introduce a qcode , find the f_id 
 	  if ($_GET['fiche'.$id] != '')
 	    {
 	      $f_id=$cn->get_value('select f_id from fiche_Detail
 					where
 					ad_value=upper(trim($1)) and ad_id=23',array($_GET['fiche'.$id]));
-	    }
-	  if ($f_id == '') $f_id=null;
+              $status='W';
+              $msg_json='<span style=\"color:red;background-color:white\">Attente</span>';
+              $tiers_json=HtmlInput::card_detail(trim(strtoupper($_GET['fiche'.$id])));
+              if ($concerned!=null)
+                {
+                    $internal=$cn->get_value("select jr_internal from jrn where jr_id=$1",
+                            array($_GET['e_concerned'.$id]));
+                    if ($internal!="")
+                    {
+                        $concop_json=HtmlInput::detail_op($_GET['e_concerned'.$id],
+                                        $internal);
+                    }
+                }
+            }
+	  if ($f_id == '') {
+              $f_id=null;
+              $status='N';
+              $msg_json='<span style=\"color:red;background-color:white\">Nouveau</span>';
+          } 
+          
 	  $bi_sql=new Temp_Bank_Sql($cn,$id);
 	  $bi_sql->f_id=$f_id;
 	  $rec=$_GET['e_concerned'.$id];
 	  $bi_sql->tp_rec=(trim($rec) != '')?trim($rec):null;
-	  $bi_sql->status='W';
+	  $bi_sql->status=$status;
 	  $bi_sql->libelle=$_GET['libelle'];
 	  $bi_sql->amount=$_GET['amount'];
 	  $bi_sql->tp_extra=$_GET['tp_extra'];
@@ -191,14 +324,14 @@ case 'show':
 	      
 	  $msg="Attente";
 	  $bi->show_item($ctl);
-	  $extra='{"id":"'.$id.'","msg":"<span style=\"color:red;background-color:white\">Attente</span>"}';
+          $a_extra=array("id"=>$id,"msg"=>$msg_json,"tiers"=>$tiers_json,"concop"=>$concop_json);
+          $extra=json_encode($a_extra);
 	}
       else
 	$bi->show_item($ctl);
   $r=ob_get_contents();
   ob_end_clean();
 }
-
 $html=escape_xml($r);
 $extra=escape_xml($extra);
 header('Content-type: text/xml; charset=UTF-8');

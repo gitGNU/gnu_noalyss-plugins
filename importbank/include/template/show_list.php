@@ -128,7 +128,7 @@ echo $select_action->input();
 <td>
 <?php echo HtmlInput::anchor(h($row['tp_third']),"",$javascript)?>
 </td>
-<td>
+<td id="tiers<?php echo $row['id']?>">
     <?php
     if ( $row['f_id'] != "") {
         $fiche=new Fiche($conx3,$row['f_id']);
@@ -144,12 +144,15 @@ echo $select_action->input();
                 echo HtmlInput::card_detail($qcode, _('A valider')."???");
             }
         } else {
-            printf (_('trouvé %d'),count($a_suggest));
+            $text= sprintf(_('Possibles %d'),count($a_suggest));
+            $js_suggest=sprintf("onclick=\"display_suggest('%s','%s','%s')\"",
+                    $dossier_id,$_REQUEST['plugin_code'],$row["id"]);
+            echo HtmlInput::anchor($text, "", $js_suggest);
         }
     }
     ?>
 </td>
-<td>
+<td id="concop<?php echo $row['id']?>">
     <?php
     if ( $row['tp_rec'] != "") {
         $a_rec=explode(",", $row['tp_rec']);
