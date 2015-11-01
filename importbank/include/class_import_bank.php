@@ -476,6 +476,7 @@ class Import_Bank
         $suppress_reconcile = 3;
         $accept_reconcile   = 4;
         $delete_tiers       = 5;
+        $recup              = 6;
         
         switch ($action)
         {
@@ -523,12 +524,24 @@ class Import_Bank
                 //-----------------------------------------------------------
                 // Mark for deletion selected records
                 //-----------------------------------------------------------
-                echo "Delete_tiers";
                  $cn->exec_sql("update importbank.temp_bank set "
                         . " status = 'D' , is_checked = 0"
                         . " where "
                         . " import_id = $1 and "
                         . " status <> 'T' and"
+                        . " is_checked = 1 "
+                        , array($id));
+                break;
+            case $recup:
+                //-----------------------------------------------------------
+                // Remove the flag for deletion selected records, 
+                // reset the status to new
+                //-----------------------------------------------------------
+                 $cn->exec_sql("update importbank.temp_bank set "
+                        . " status = 'N' , is_checked = 0"
+                        . " where "
+                        . " import_id = $1 and "
+                        . " status = 'D' and"
                         . " is_checked = 1 "
                         , array($id));
                 break;

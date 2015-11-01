@@ -17,7 +17,8 @@ $a_selected_action = array(
     array("value"=>2,"label"=>_('Supprimer le tiers')),
     array("value"=>3,"label"=>_('Supprimer réconciliation automatique')),
     array("value"=>4,"label"=>_('Valider réconciliation automatique')),
-    array("value"=>5,"label"=>_('Marquer pour suppression'))
+    array("value"=>5,"label"=>_('Marquer pour suppression')),
+    array("value"=>6,"label"=>_('Enlever le marquage de suppression')),
 );
 // Duplicate database conx
 //
