@@ -36,7 +36,7 @@ $suggest_sql=$conx2->prepare('get_suggest','
 <h2 class="info"> 
     
     <?php echo $array[0]['id']." ".$array[0]['i_date']." ".h($array[0]['format_name'])?>
-    Journal cible = <?php echo $jrn_name?> Compte de ce journal <?php echo $jrn_account?>
+    <?php echo _('Journal')." ".h($jrn_name) ." ".  _('Fiche ').h($jrn_account)?>
 
 
 </h2>
@@ -92,6 +92,7 @@ echo $select_action->input();
             $row=Database::fetch_array($ret,$i);
             $suggest=$conx2->execute('get_suggest',array($row['id']));
             $a_suggest = Database::fetch_all($suggest);
+            if ( $a_suggest == false ) {$a_suggest = array();}
             $class=($i%2==0)?' class="even"':'class="odd"';
 
             $javascript="onclick=\"reconcilie('div${row['id']}','$gdossier','${row['id']}','$plugin_code')\"";
@@ -143,7 +144,7 @@ echo $select_action->input();
             if ( $qcode != null ) {
                 echo HtmlInput::card_detail($qcode, _('Valide')."?");
             }
-        } else {
+        } else  if (count($a_suggest) > 1 ){
             $text= sprintf(_('Possibles %d'),count($a_suggest));
             $js_suggest=sprintf("onclick=\"display_suggest('%s','%s','%s')\"",
                     $dossier_id,$_REQUEST['plugin_code'],$row["id"]);
