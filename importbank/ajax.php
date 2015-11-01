@@ -135,8 +135,8 @@ switch($act) {
                     h($a_suggest[$i]['jr_date']).  " " .      
                     HtmlInput::card_detail($a_suggest[$i]['qcode']).
                     h($a_suggest[$i]['jr_pj_number']).  " " .      
-                    h($a_suggest[$i]['jr_comment'])." " .        
                     HtmlInput::detail_op($a_suggest[$i]['jr_id'], $a_suggest[$i]['jr_internal'])." ".
+                    h($a_suggest[$i]['jr_comment'])." " .        
                             "</li>";
         }
         echo '</ul>';

@@ -74,9 +74,7 @@ function success_bank_info(req,json)
 function impb_check_item(p_dossier,p_plugin_code,p_row_id)
 {
     var name_checkbox='temp_bank';
-    console.debug($(name_checkbox+p_row_id).checked)
     var status=($(name_checkbox+p_row_id).checked)?1:0;
-    console.debug(status);
     waiting_box();
     new Ajax.Request('ajax.php', {
         method:'get',
@@ -101,11 +99,9 @@ function impb_check_item(p_dossier,p_plugin_code,p_row_id)
  */
 function selected_set_tiers(p_form_id) {
 try {
-console.debug($(p_form_id).serialize());
         smoke.confirm('Confirmez',
                 function(e) { 
                     if (e) {
-                        console.debug('confirm');
                         $(p_form_id).submit();
                         new Ajax.Request('ajax.php',
                             {
@@ -119,9 +115,8 @@ console.debug($(p_form_id).serialize());
                                             'fiche':$(p_form_id)['fiche1000'].value
                                     }
                         });
-                    } else {
-                        console.debug('Cancel');
-                    }
+                    } 
+                    
                 });
 } catch (e) {
 alert(e.message);

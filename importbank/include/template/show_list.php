@@ -201,7 +201,7 @@ echo $select_action->input();
 </form>
 <script>
     $('select_action').onchange=function(){
-        console.debug(this.value);
+        
         if ( this.value == 1 ) {
             waiting_box();
             this.value=0;
@@ -250,13 +250,9 @@ echo $select_action->input();
            var tb=document.getElementById('record_tb_id');
            var a=tb.getElementsByTagName('input');
            remove_waiting_box();
-            console.debug(a.length);
 
             var i=0;
             for (i = 0 ; i < a.length;i++) {
-              console.debug(a[i].tagName);
-              console.debug(a[i].type);
-              console.debug(a[i].id);
               if (a[i].id == 'check_all') {continue;}
               if ( check == 0)   {
                   a[i].checked=false;
