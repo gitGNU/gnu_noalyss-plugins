@@ -118,6 +118,9 @@ switch($act) {
                 a.jr_id,
                 b.jr_internal,
                 a.f_id,
+                b.jr_date,
+                b.jr_pj_number,
+                b.jr_comment,
                 (select ad_value from fiche_detail where ad_id=23 and f_id=a.f_id) as qcode
             from 
                 jrn as b 
@@ -125,12 +128,16 @@ switch($act) {
             where 
                 temp_bank_id=$1", array($id));
         $nb_asuggest=count($a_suggest);
-        echo "<ul>";
+        echo "<ul style=\"list-style:none\">";
         for ($i=0;$i<$nb_asuggest;$i++) {
             echo '<li>'.
                     HtmlInput::button("get{$i}", _('choisir'), sprintf("onclick=\"select_suggest('%s','%s','%s','%s')\"",$dossier_id,$plugin_code,$id,$a_suggest[$i]['id'])).
-                    HtmlInput::detail_op($a_suggest[$i]['jr_id'], $a_suggest[$i]['jr_internal']).
-                    "  ".HtmlInput::card_detail($a_suggest[$i]['qcode'])."</li>";
+                    h($a_suggest[$i]['jr_date']).  " " .      
+                    HtmlInput::card_detail($a_suggest[$i]['qcode']).
+                    h($a_suggest[$i]['jr_pj_number']).  " " .      
+                    h($a_suggest[$i]['jr_comment'])." " .        
+                    HtmlInput::detail_op($a_suggest[$i]['jr_id'], $a_suggest[$i]['jr_internal'])." ".
+                            "</li>";
         }
         echo '</ul>';
         echo '<p style="text-align:center">';
