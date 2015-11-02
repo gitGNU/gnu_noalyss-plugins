@@ -602,6 +602,35 @@ class Import_Bank
      */
     static function reconcile_auto($p_id,$all=true)
     {
+        $cn=Dossier::connect();
+
+        $sql="
+            insert into importbank.suggest_bank (temp_bank_id,jr_id,f_id)
+            select distinct tb.id, jrn.jr_id,jrnx.f_id 
+            from 
+            jrnx ,
+            jrn ,
+            importbank.temp_bank as tb ,
+            jrn_info 
+            where
+            jrnx.j_grpt=jrn.jr_grpt_id
+            and  j_date > tb.tp_date - interval '90 days'
+            and j_date < tb.tp_date + interval '90 days'
+            and jrn_info.jr_id = jrn.jr_id
+            and tb.status = 'N'
+            and tb.import_id=$1
+            and jrnx.f_id is not null
+            and ( (amount < 0 and j_debit = false ) or (amount > 0 and j_debit=true))
+            and tb.id not in (select temp_bank_id from importbank.suggest_bank)
+            and jrn_info.id_type in ('OTHER','BON_COMMANDE')
+            and coalesce(jrn_info.ji_value,'') != ''
+            and  
+             ( position ( lower(jrn_info.ji_value) in lower(tb.libelle)) > 0
+             or position ( lower(jrn_info.ji_value) in lower(tb.tp_extra)) > 0
+             )
+        ";
+        $cn->exec_sql($sql,array($p_id));
+
         $sql="
             insert into importbank.suggest_bank (temp_bank_id,jr_id,f_id)
             select distinct tb.id, jr_id,jrnx.f_id 
@@ -627,7 +656,6 @@ class Import_Bank
             and not exists (select ld.j_id from letter_deb as ld where
                     ld.j_id=jrnx.j_id or ld.jl_id = jrnx.j_id);
         ";
-        $cn=Dossier::connect();
         $cn->exec_sql($sql,array($p_id));
               
     }
