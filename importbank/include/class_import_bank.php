@@ -294,23 +294,27 @@ class Import_Bank
                 {
                     // error
                     self::transfert_error($row->id,
-                            'Poste comptable de la  fiche est incorrecte');
+                            _('Poste comptable de la  fiche est incorrecte'));
                     continue;
                 }
                 if (self::check_date($row->tp_date)==false)
                 {
                     // error
-                    self::transfert_error($row->id, 'Date hors des limites');
+                    self::transfert_error($row->id, _('Date hors des limites'));
                     continue;
                 }
                 $err=self::is_closed($row->tp_date, $led_id);
                 if ($err!='')
                 {
                     self::transfert_error($row->id,
-                            $err.' - Date hors des journaux');
+                            $err._(' - Date hors des journaux'));
                     continue;
                 }
-
+                // if double accounting
+                if ( strpos($poste_comptable,',') != 0 ) {
+                    list($poste_debit,$poste_credit) =explode(',',$poste_comptable);
+                    $poste_comptable=($row->amount > 0 ) ? $poste_debit: $poste_credit;
+                }
                 // Finances
 
                 $seq=$cn->get_next_seq('s_grpt');
