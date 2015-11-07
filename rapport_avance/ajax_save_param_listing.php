@@ -19,7 +19,7 @@
  *    - attribute_card : numérique ad_id
  *
  */
-require_once 'class_impress.php';
+require_once NOALYSS_INCLUDE.'/lib/class_impress.php';
 require_once 'include/class_rapav_listing_param.php';
 $lp_id = HtmlInput::default_value_get('lp_id', -1);
 $formula = new RAPAV_Listing_Param_SQL($lp_id);
