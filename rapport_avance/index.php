@@ -29,7 +29,7 @@
 
 global $version_plugin;
 $version_plugin = SVNINFO;
-Extension::check_version(6800);
+Extension::check_version(6910);
 require_once NOALYSS_INCLUDE.'/database/class_noalyss_sql.php';
 require_once 'rapav_constant.php';
 require_once NOALYSS_INCLUDE.'/lib/class_impress.php';
