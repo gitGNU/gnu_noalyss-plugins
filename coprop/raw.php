@@ -23,7 +23,7 @@
 /*!\file
  * \brief raw file for PDF ewa
  */
-require_once('amortis_constant.php');
+require_once('coprop-constant.php');
 
 extract ($_REQUEST);
 
