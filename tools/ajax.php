@@ -3,12 +3,12 @@
 //see licence.txt
   /*
 EXAMPLE
-require_once('skel_constant.php');
-require_once('class_database.php');
-require_once('class_ext_tva.php');
-require_once('class_ibutton.php');
-require_once ('class_ext_list_intra.php');
-require_once ('class_ext_list_assujetti.php');
+require_once 'skel_constant.php';
+require_once NOALYSS_INCLUDE.'/lib/class_database.php';
+require_once 'class_ext_tva.php';
+require_once NOALYSS_INCLUDE.'/lib/class_ibutton.php';
+require_once 'class_ext_list_intra.php';
+require_once 'class_ext_list_assujetti.php';
 
 extract($_GET);
 global $cn;
