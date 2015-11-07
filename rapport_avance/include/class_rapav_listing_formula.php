@@ -22,7 +22,7 @@
  *
  * @author dany
  */
-require_once 'class_impress.php';
+require_once NOALYSS_INCLUDE.'/lib/class_impress.php';
 require_once 'class_rapav.php';
 require_once 'class_rapport_avance_sql.php';
 
