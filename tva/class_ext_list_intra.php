@@ -25,7 +25,7 @@
  */
 
 require_once('class_listing.php');
-require_once('class_fiche.php');
+require_once(NOALYSS_INCLUDE.'/class/class_fiche.php');
 require_once('class_tva_parameter.php');
 class Ext_List_Intra extends Listing {
   protected $variable = array(
