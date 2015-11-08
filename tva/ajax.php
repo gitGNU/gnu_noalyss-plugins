@@ -66,7 +66,7 @@ case 'dsp_decl':
    * generate writing
    */
 case 'rw':
-  require_once('class_acc_ledger.php');
+  require_once NOALYSS_INCLUDE.'/class/class_acc_ledger.php';
   $count=$cn->get_value('select count(*) from tva_belge.declaration_amount where da_id=$1',array($_REQUEST['p_id']));
   if ( $count == 1 )
     {
