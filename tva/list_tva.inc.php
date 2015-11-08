@@ -19,8 +19,8 @@
 /* $Revision$ */
 
 // Copyright (c) 2002 Author Dany De Bontridder dany@alchimerys.be
-require_once('class_iselect.php');
-require_once 'class_sort_table.php';
+require_once(NOALYSS_INCLUDE.'/lib/class_iselect.php');
+require_once NOALYSS_INCLUDE.'/lib/class_sort_table.php';
 
 echo '<div id="detail" style="display:none; width:80%;margin-left:10%">';
 echo '<image src="image/loading.gif" border="0" alt="Chargement...">';
