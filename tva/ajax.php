@@ -16,7 +16,7 @@
  *   along with NOALYSS; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-require_once NOALYSS_INCLUDE.'/database/class_database.php';
+require_once NOALYSS_INCLUDE.'/lib/class_database.php';
 require_once('class_ext_tva.php');
 require_once NOALYSS_INCLUDE.'/lib/class_ibutton.php';
 require_once ('class_ext_list_intra.php');
