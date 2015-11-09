@@ -13,11 +13,7 @@ CREATE TABLE importbank.suggest_bank
       REFERENCES importbank.temp_bank (id) MATCH SIMPLE
       ON UPDATE CASCADE ON DELETE CASCADE
 )
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE importbank.suggest_bank
-  OWNER TO dany;
+;
 COMMENT ON TABLE importbank.suggest_bank
   IS 'Contains the possible reconciliation for tables from temp_bank';
 COMMENT ON COLUMN importbank.suggest_bank.id IS 'pk';
