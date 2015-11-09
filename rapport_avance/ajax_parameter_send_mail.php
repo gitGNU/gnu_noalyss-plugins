@@ -6,7 +6,7 @@
  * Display form to enter parameters
  */
 require_once 'include/class_rapav_listing_compute.php';
-require_once 'class_fiche_def.php';
+require_once NOALYSS_INCLUDE.'/class/class_fiche_def.php';
 
 ob_start();
 $compute=new RAPAV_Listing_Compute();
