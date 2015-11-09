@@ -36,7 +36,7 @@ ob_end_clean();
 echo create_script($j);
 global $version_plugin;
 $version_plugin=SVNINFO;
-Extension::check_version(6800);
+Extension::check_version(6910);
 
 $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].'&ac='.$_REQUEST['ac'];
 
