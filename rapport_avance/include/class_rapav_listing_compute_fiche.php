@@ -152,6 +152,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
                         when ld_value_numeric is not null then 1 
                         when ld_value_text is not null then 2
                         when ld_value_date is not null then 3
+                        else 2
                     end
                         as type
                     from rapport_advanced.listing_compute_detail where lf_id=$1 "
@@ -164,6 +165,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
                         when ld_value_numeric is not null then 1 
                         when ld_value_text is not null then 2
                         when ld_value_date is not null then 3
+                        else 2
                     end
                         as type
                     from rapport_advanced.listing_compute_detail where lf_id=$1 "
