@@ -264,7 +264,7 @@ function change_card(&$cn)
 	  echo td(format_date($row['jr_date']));
 	  echo td(HtmlInput::detail_op($id,$row['jr_internal']));
 	  echo td($row['jr_comment']);
-	  echo td(nbm($row['jr_montant'],' class="num"'));
+	  echo td(nbm($row['jr_montant']),' class="num"');
 	  echo '</tr>';
 	}
 
