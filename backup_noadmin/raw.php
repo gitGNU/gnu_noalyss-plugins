@@ -21,7 +21,8 @@
 
 // Copyright (c) 2002 Author Dany De Bontridder dany@alchimerys.be
 
-/* * \file
+/***
+ * \file
  * \brief raw file for backup
  */
 $cmd=escapeshellcmd(PG_DUMP);
