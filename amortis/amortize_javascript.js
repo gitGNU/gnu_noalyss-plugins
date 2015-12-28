@@ -77,13 +77,83 @@ function success_add_material(req)
 function error_ajax() {
     alert_box('Erreur ajax AMORTIS');
 }
+function confirm_new_material(obj) {
+    smoke.confirm('Confirmez ?',function(e)  { if ( e ) {save_new_material(obj);return false;} });
+    return false;
+}
+/**
+ * Check the values
+ *   -  amrt_date date 
+ *   -  p_card
+ *   -  p_number
+ *   -  p_year
+ *   -  p_amount
+ *   -  select_type_id
+ * @returns 0 if no error , otherwise number of error
+ */
+function check_material()
+{
+     var error=0;
+    // check date
+    if ( check_date ($('amrt_date').value)  == false ) {
+        $('amrt_date').addClassName('error');
+        error++;
+    } else {
+        $('amrt_date').removeClassName('error');
+    }
+    // check card is given
+    if ( String.trim($('p_card').value) == "") {
+            $('p_card').addClassName('error');
+        error++;
+    } else {
+        $('p_card').removeClassName('error');
+    }
+    // check amount of year
+    if ( String.trim($('p_number').value) == "") {
+            $('p_number').addClassName('error');
+        error++;
+    } else {
+        $('p_number').removeClassName('error');
+    }
+    // check year of buy
+    if ( String.trim($('p_year').value) == "" || parseFloat(String.trim($('p_year').value)) < 1970 || parseFloat(String.trim($('p_year').value)) > 2100 )
+    {
+        $('p_year').addClassName('error');
+        error++;
+    } else {
+        $('p_year').removeClassName('error');
+    }
+    // check year of buy
+    if ( String.trim($('p_amount').value) == "" ) {
+        $('p_amount').addClassName('error');
+        error++;
+    } else {
+        $('p_amount').removeClassName('error');
+    }
+    // check card or accounting
+    if ( $('select_type_id').value == -1) {
+        $('select_type_id').addClassName('error');
+        error++;
+    } else {
+        $('select_type_id').removeClassName('error');
+    }
+    return error;
+}
 
 /**
 *Answer to a post (or get) in ajax
 */
 function save_new_material(obj)
 {
-
+    
+    /*********************************************************************/
+    /* Check that all fields are properly set*/
+    /*********************************************************************/
+   
+    
+    if ( check_material() != 0 ) {  
+        return false;    
+    }
     var querystring=$(obj).serialize()+'&op=save_new_material&t=bxmat';
 
     // Create a ajax request to get all the person
@@ -105,8 +175,14 @@ function success_save_new_material(req)
     $('bxmat').style.height='auto';
     $('bxmat').width='80%';
 }
+
+function confirm_save_modify(obj) {
+    smoke.confirm('Confirmez ?',function(e)  { if ( e ) {save_modify(obj);return false;} });
+    return false;
+}
 function save_modify(obj)
 {
+    if ( check_material() != 0 ) { return false;}
      var querystring=$(obj).serialize()+'&op=save_modify&t=bxmat';
 
     // Create a ajax request to get all the person

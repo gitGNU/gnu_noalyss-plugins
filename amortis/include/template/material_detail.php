@@ -19,7 +19,7 @@
 */
 ?>
 <h2 class="title">Modification de matériel</h2>
-<form onsubmit="save_modify(this);return false">
+<form id="amrt_detail" onsubmit="return confirm_save_modify('amrt_detail');return false">
 <?php echo $p_card?>
 <?php echo $a_id?>
 <span style="text-align:center;display:block;font-size:2em" id="p_card_label"  ><?php echo  $card->strAttribut(ATTR_DEF_NAME)?></span>
@@ -31,7 +31,7 @@
 
 <tr>
 	<td>Date Acquisition</td>
-	<td><?php echo $p_date->input()?></td>
+	<td><?php $p_date->id="amrt_date" ; echo $p_date->input()?></td>
 </tr>
 <tr>
 	<td>Montant à amortir</td>
@@ -182,13 +182,15 @@ if ( $annuite !=  $p_amount->value)
 <?php
      endif;
 ?>     
+<p style="text-align: center">
 <?php 
-   echo HtmlInput::submit('sauver',_('Sauver'),"onclick=\"return confirm('Vous confirmez ?')\" ");
+   echo HtmlInput::submit('sauver',_('Sauver'));
    $rm=sprintf("remove_mat(%d,'%s',%d)",dossier::id(),$_REQUEST['plugin_code'],$value_a_id);
    echo HtmlInput::button('remove',_('Effacer'),"onclick=\"$rm\" ");
    echo HtmlInput::button('close',_('Fermer'),"onclick=\"removeDiv('bxmat');refresh_window()\" ");
 
 ?>
+    </p>
 </FORM>
 <script>
 show_selected_material($('select_type_id'));

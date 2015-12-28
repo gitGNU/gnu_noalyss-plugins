@@ -19,7 +19,7 @@
 */
 ?>
 <h2 class="title">Ajout de matériel</h2>
-<form method="POST" onsubmit="save_new_material(this);return false;">
+<form method="POST" id="amrt_add_material" onsubmit="confirm_new_material('amrt_add_material');return false;">
 <span style="text-align:center;display:block;font-size:2em" id="p_card_label"  >Nouveau matériel</span>
 <table>
 <tr>
@@ -28,7 +28,7 @@
 </tr>
 <tr>
 	<td>Date d'acquisition</td>
-	<td><?php echo $p_date->input()?></td>
+	<td><?php $p_date->id="amrt_date" ;echo $p_date->input()?></td>
 </tr>
 
 <tr>
@@ -83,13 +83,15 @@
 	<td></td>
 </tr>
 </table>
+<p style="text-align: center">
 <?php 
 	echo HtmlInput::button('close',_('Annuler'),"onclick=\"removeDiv('$t')\"");
-	echo HtmlInput::submit('sauver',_('Sauver'),"onclick=\"return confirm('"._('Vous confirmez ?')."')\" ");
+	echo HtmlInput::submit('sauver',_('Sauver'));
 	echo HtmlInput::extension();
 	echo dossier::hidden();
         echo HtmlInput::hidden('p_new',1);
 
 ?>
+</p>
 </form>
     

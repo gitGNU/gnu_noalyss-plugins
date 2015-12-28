@@ -297,6 +297,8 @@ class Am_Card
                 for ($i=0; $i<count($this->amortissement_detail); $i++)
                 {
                     $this->amortissement_detail[$i]->update();
+                    if ( $this->amortissement_histo[$i]->jr_internal == "")
+                        $this->amortissement_histo[$i]->jr_internal=null;
                     $this->amortissement_histo[$i]->update();
                 }
             } /*
