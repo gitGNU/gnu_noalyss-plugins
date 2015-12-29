@@ -31,7 +31,7 @@
 require_once NOALYSS_INCLUDE.'/class/class_acc_ledger.php';
 global $version_plugin;
 $version_plugin=SVNINFO;
-Extension::check_version(6910);
+Extension::check_version(6913);
 ob_start();
 require_once('coprop-javascript.js');
 $j=ob_get_contents();
@@ -98,8 +98,9 @@ if ( $cn->exist_schema('coprop') == false)
 echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.noalyss.eu/doku.php?id=plugin:copropriété" target="_blank">Aide</a>'.
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
 '</div>';
-
-echo ShowItem($array,'H','mtitle',' ',$def,' style="width:98%" class="topmenu"');
+echo '<div class="topmenu">';
+echo ShowItem($array,'H','mtitle','mtitle',$def,' style="width:98%" class="mtitle"');
+echo '</div>';
 
 // include the right file
 /*
