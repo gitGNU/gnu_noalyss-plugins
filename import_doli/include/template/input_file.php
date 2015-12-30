@@ -31,14 +31,7 @@ echo _('Importation de données');
 <tr>
 <td>  Texte entouré du signe </td><TD><input type="text" name="rsurround" value='"' size="1"></td>
 </tr>
-<tr>
-    <td>
-        Enlever la première ligne
-    </td>
-    <td>
-        <?php echo $skip_row->input();?>
-    </td>
-</tr>
+
 </table>
 <?php echo HtmlInput::submit('test_import','Valider');?>
 
