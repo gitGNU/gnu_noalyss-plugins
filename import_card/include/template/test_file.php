@@ -44,6 +44,14 @@ echo _('Importation de données');
 <tr>
 <td>Texte entouré par</td><td> <?php echo $_POST['rsurround'];?></td>
 </tr>
+<tr>
+    <td>
+        Suppression première ligne
+    </td>
+    <td>
+        <?php $msg=($skip_row==0)?"non":"oui"; echo $msg;?>
+    </td>
+</tr>
 </table>
 <?php 
 foreach (array('rfichedef','rdelimiter','encodage') as $e)
@@ -71,7 +79,7 @@ while (($row=fgetcsv($fcard,0,$_POST['rdelimiter'],$_POST['rsurround'])) !== fal
   {
     $row_count++;
     echo '<tr style="border:solid 1px black">';
-    echo td($row_count);
+    if ( $skip_row == 1 && $row_count==1) echo td('Supprimé'); else echo td($row_count); 
     $count_col=count($row);
     $max=($count_col>$max)?$count_col:$max;
     for ($i=0;$i<$count_col;$i++)

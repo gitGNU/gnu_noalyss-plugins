@@ -44,12 +44,14 @@ class Import_Card
 		$hidden = self::hidden() . HtmlInput::hidden('sa', 'test');
 		$delimiter = new IText('rdelimiter');
 		$delimiter->size = 1;
-		$delimiter->value = ',';
+		$delimiter->value = ';';
 		$fd = new ISelect('rfichedef');
 		$fd->value = $cn->make_array('select fd_id,fd_label from fiche_def order by 2');
 		$file = new IFile('csv_file');
 		$encodage = new ICheckBox('encodage');
 		$encodage->selected = true;
+                $skip_row=new ICheckBox('skip_row');
+                $skip_row->value=1;
 		require_once('template/input_file.php');
 		$r = ob_get_contents();
 		ob_end_clean();
@@ -73,6 +75,8 @@ class Import_Card
 		move_uploaded_file($_FILES["csv_file"]["tmp_name"], $filename);
 		$file_cat = $cn->get_value('select fd_label from fiche_def where fd_id=$1', array($_POST['rfichedef']));
 		$encoding = (isset($_REQUEST['encodage'])) ? 'Unicode' : 'latin1';
+                $skip_row=HtmlInput::default_value_request("skip_row", 0);
+                $hidden.=HtmlInput::hidden('skip_row',$skip_row);
 		require_once('template/test_file.php');
 		return 0;
 	}
@@ -147,13 +151,17 @@ class Import_Card
 		 * read the file and record card
 		 */
 		$row_count = 0;
+                $skip_row=HtmlInput::default_value_request("skip_row", 0);
+
 		echo '<table>';
 		ob_start();
 		while (($row = fgetcsv($fd, 0, $_POST['rdelimiter'], $_POST['rsurround'])) !== false)
 		{
+                   
+			$row_count++;
+                        if ( $row_count == 1 && $skip_row==1) continue;
 			$fiche = new Fiche($cn);
 			$array = array();
-			$row_count++;
 			echo '<tr style="border:solid 1px black">';
 			echo td($row_count);
 			$count_col = count($row);
