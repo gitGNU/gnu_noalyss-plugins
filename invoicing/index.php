@@ -35,10 +35,19 @@ ob_end_clean();
 echo create_script($j);
 global $version_plugin;
 $version_plugin=SVNINFO;
-Extension::check_version(6910);
+Extension::check_version(6913);
 require_once NOALYSS_INCLUDE.'/class/class_acc_ledger_sold.php';
 require_once NOALYSS_INCLUDE.'/lib/class_zip_extended.php';
 require_once NOALYSS_INCLUDE.'/lib/class_sendmail.php';
 require_once NOALYSS_INCLUDE.'/lib/class_filetosend.php';
+/*
+ * Check that schema is created
+ */
+if ( $cn->exist_schema ('invoicing') == false) {
+    require_once 'include/class_install_plugin.php';
+    $plugin_install=new Install_Plugin($cn);
+    $plugin_install->create_schema();
+}
 require_once 'include/invoicing.inc.php';
+
 ?>

@@ -26,7 +26,7 @@ if ($request <> -2)
 {
     if (!isset($_REQUEST['sel_sale']))
     {
-        echo h2("Rien n'a été choisi", 'class="notice"');
+        echo h2(_("Rien n'a été choisi"), 'class="notice"');
     } else
     {
         switch ($request)
@@ -64,8 +64,8 @@ $document->value=$cn->make_array("select md_id,md_name from document_modele wher
 
 $document_to_send=new ISelect('format_document');
 $document_to_send->value=array(
-    array('value'=>'1','Convertire en PDF'),
-    array('value'=>'2','Envoi de la facture sans conversion en PDF')
+    array('value'=>'1',_('Convertir en PDF')),
+    array('value'=>'2',_('Envoi de la facture sans conversion en PDF'))
 )
 ?>
 <div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.noalyss.eu/doku.php?id=facturation" target="_blank">Aide</a>

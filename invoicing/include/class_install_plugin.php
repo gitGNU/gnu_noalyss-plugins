@@ -29,7 +29,7 @@
 class Install_Plugin
 {
 
-	function __construct($p_cn)
+	function __construct(Database $p_cn)
 	{
 		$this->cn = $p_cn;
 	}
@@ -45,39 +45,27 @@ class Install_Plugin
 		// create the schema
 		$this->create_schema();
 		// create table + put default values
-		$this->create_table_parameter();
 		$this->cn->commit();
 	}
 
 	function create_schema()
 	{
-		$this->cn->exec_sql('create schema SKEL');
-	}
+            $this->cn->exec_sql('create schema invoicing');
+            $sql ='
+                    create table invoicing.version (id serial primary key,description text) 
+                  ';
+            $this->cn->exec_sql($sql);
+            $sql = " insert into invoicing.version (description) values ('install')";
+            $this->cn->exec_sql($sql);
+            $sql= ' create table invoicing.message_recorded 
+                    ( id serial primary key,
+                    mr_send_by text,
+                    mr_subject text,
+                    mr_message text)';
+            $this->cn->exec_sql($sql);
 
-	function create_table_parameter()
-	{
-		$sql = <<<EOF
-CREATE TABLE SKEL.parameter
-(
-  pr_id text NOT NULL,
-  pr_value text,
-  CONSTRAINT SKEL_parameter_pkey PRIMARY KEY (pr_id)
- );
-EOF;
-		$this->cn->exec_sql($sql);
-// load default value
-		$array = array(
-			'GRIL00' => array('6'),
-			'GRIL01' => array('3'),
-			'GRIL02' => array('2', ''),
+    }   
 
-		);
-
-		foreach ($array as $code => $value)
-		{
-			$this->cn->exec_sql('insert into SKEL.parameter(pr_id,pr_value,pr_other) values ($1,$2)', array($code, $value[0]));
-		}
-	}
-
+	
 }
 

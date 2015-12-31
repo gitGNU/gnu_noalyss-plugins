@@ -30,6 +30,7 @@
  */
 require_once NOALYSS_INCLUDE.'/lib/class_sendmail.php';
 require_once NOALYSS_INCLUDE.'/class/class_follow_up.php';
+require_once 'class_invoicing_recorded_message.php';
 global $cn;
 
 //----- Mail
@@ -38,6 +39,9 @@ $subject = HtmlInput::default_value_post('email_subject', 'null');
 $message = HtmlInput::default_value_post('email_message', 'null');
 $copy = HtmlInput::default_value_post('email_copy', '-1');
 $pdf = HtmlInput::default_value_post('pdf', 'null');
+
+// -- save message
+$save_message=HtmlInput::default_value_post("save_message", 0);
 
 //-- Follow up
 $ag_timestamp = HtmlInput::default_value_post('ag_timestamp', date('d.m.Y'));
@@ -178,6 +182,10 @@ foreach ($_GET['sel_sale'] as $key => $value)
     }
 }
 $cn->commit();
+if ( $save_message == 1) {
+    $recorder_message=new Invoicing_Recorded_Message($cn);
+    $recorder_message->add_message($from,$subject,$message);
+}
 ?>
 <ol>
     <?php foreach ($feedback as $line): ?>

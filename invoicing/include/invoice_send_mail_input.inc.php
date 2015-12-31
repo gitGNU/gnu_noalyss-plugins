@@ -20,6 +20,8 @@
 // Copyright Author Dany De Bontridder danydb@aevalys.eu
 
 global $g_user;
+$plugin_code=HtmlInput::default_value_request("plugin_code", "");
+$ac=HtmlInput::default_value_request("ac", "");
 
 $titre = new IText('ag_title');
 $titre->css_size='60em';
@@ -54,6 +56,10 @@ $category->readOnly = false;
 $desc = new ITextArea();
 $desc->style = ' class="itextarea" style="width:80%;margin-left:0px"';
 $desc->name = "ag_comment";
+
+// -- Save message
+ $save_message = new ICheckBox("save_message",1);
+ 
 ?>
 <form method="POST" id="sel_sale_frm" onsubmit="return verify_invoicing()">
 <?php
@@ -65,6 +71,10 @@ echo HtmlInput::hidden('sa', 'send');
     <h2 class="note"><?php echo _('Envoi uniquement à ceux ayant une adresse email et une facture') ?> </h2>
     <p>
         <input type="checkbox" name="pdf"> <?php echo _('Conversion en PDF'); ?>
+    </p>
+    <p>
+        <input type="checkbox" name="email_copy"> <?php echo _("Envoyer copie à l'expéditeur"); ?>
+
     </p>
     <p>
         <?php echo _('Email envoyé par'); ?> :
@@ -79,11 +89,18 @@ echo HtmlInput::hidden('sa', 'send');
     </p>
     <p>
         <?php echo _('Message') ?> : 
-        <textarea style="vertical-align: top;width:70em;height:20em;height:20rem;" name="email_message" class="input_text">               </textarea>
+        <textarea style="vertical-align: top;width:70em;height:20em;height:20rem;" id="email_message" name="email_message" class="input_text"></textarea>
     </p>
-    <p>
-        <input type="checkbox" name="email_copy"> <?php echo _("Envoyer copie à l'expéditeur"); ?>
+    <p>  <?php
+              echo $save_message->input(), _('Sauver le message')  ;
+         ?>
+    </p>
 
+    <p>
+        <?php echo HtmlInput::button_action(_('Choix message'), 
+                sprintf("inv_get_message('%s','%s','%s')",Dossier::id(),$ac,$plugin_code),
+                'select_message_bt_id', 
+                'smallbutton');?>
     </p>
     <h2 class="note"><?php echo _('Inclure dans le suivi') ?> </h2>
     <p>
