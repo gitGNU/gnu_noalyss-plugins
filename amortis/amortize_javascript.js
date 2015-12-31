@@ -62,7 +62,7 @@ function display_material(dossier_id,f_id,plugin_code,target)
      {
             sx=document.body.scrollTop+120;
      }
-    var str_style="top:"+sx+"px;width:70%;height:auto";
+    var str_style="top:"+sx+"px;width:auto;height:auto";
 
     var div={id:target, cssclass:'inner_box',style:str_style,html:loading(),drag:1};
 
@@ -206,17 +206,21 @@ function success_save_modify(req)
 function remove_mat(g_dossier,plugin_code,a_id)
 {
     confirm_box(null,'Vous confirmez EFFACEMENT',function() {
-    var qs="gDossier="+g_dossier+"&plugin_code="+plugin_code+"&a_id="+a_id+"&op=rm&t=bxmat";
-    var action=new Ajax.Request ( 'ajax.php',
-				  {
-				      method:'get',
-				      parameters:qs,
-				      onFailure:error_ajax,
-				      onSuccess:success_add_material
-				  }
-				) 
-                    } );
-
+            var qs="gDossier="+g_dossier+"&plugin_code="+plugin_code+"&a_id="+a_id+"&op=rm&t=bxmat";
+            var action=new Ajax.Request ( 'ajax.php',
+                                          {
+                                              method:'get',
+                                              parameters:qs,
+                                              onFailure:error_ajax,
+                                              onSuccess:function (req) {
+                                                  success_add_material(req);
+                                                   $('bxmat').style.width='80%';
+                                               }
+                                          }
+                                        ) 
+                            } 
+                );
+ 
 
 
 }

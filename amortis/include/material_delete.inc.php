@@ -1,6 +1,13 @@
 <?php 
-$cn->exec_sql('delete from amortissement.amortissement where a_id=$1',
-	      array($a_id));
-echo HtmlInput::anchor_close($t);
+
+require 'class_amortissement_sql.php';
 echo HtmlInput::title_box('Bien à amortir',$t);
-echo '<h2 class="notice">'.'Effacé'.'</h2>';
+$amrt=new Amortissement_Sql($cn,$a_id);
+$amrt->load();
+echo '<h2 class="notice">'._('Effacé').'</h2>';
+$fiche = new Fiche($cn,$amrt->f_id);
+echo $fiche->getName()." ".$fiche->get_quick_code();
+$amrt->delete();
+echo '<p style="text-align:center">';
+echo HtmlInput::button_close($t);
+echo '</p>';

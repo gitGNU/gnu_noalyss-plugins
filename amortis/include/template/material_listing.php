@@ -21,7 +21,7 @@
 <br>
 Cherche <?php echo HtmlInput::infobulle(400)?> <?php echo HtmlInput::filter_table("list_amortissement","0,1,2,3,4",1)?>
 
-<table id="list_amortissement" class="sortable" style="width:80%;margin-left:10%">
+<table id="list_amortissement" class="sortable" style="width:99%;margin-left:0.5%">
 <tr>
 <th>Quickcode</th>
 <th class=" sorttable_sorted">
