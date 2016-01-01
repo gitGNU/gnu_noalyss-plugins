@@ -24,6 +24,7 @@
  * \brief raw file for PDF
  */
 require_once('amortis_constant.php');
+require_once NOALYSS_INCLUDE.'/lib/class_noalyss_csv.php';
 
 extract ($_REQUEST);
 
@@ -44,7 +45,6 @@ if ( isset($_REQUEST['pdf_all']))
  */
 if ( isset ($_REQUEST['csv_list_year']))
 {
-    require_once NOALYSS_INCLUDE.'/lib/class_noalyss_csv.php';
     
     $year=HtmlInput::default_value_request('csv_list_year','0000');
 
@@ -114,31 +114,44 @@ if ( isset($_REQUEST['pdf_list_year']))
  */
 if ( isset($_GET['csv_material']))
   {
-    $name="listing-material";
-    header('Pragma: public');
-    header('Content-type: application/csv');
-    header('Content-Disposition: attachment;filename="'.$name.'.csv"',FALSE);
+    $csv_material=new Noalyss_Csv("listing-material");
+    $csv_material->send_header();
+    $csv_material->write_header(array(
+                                _('Visible'),
+                                _('Code'),
+                                _('Nom'),
+                                _('Description'),
+                                _('Date acquisition'),
+                                _('Année Achat'),
+                                _('Nombre annuités'),
+                                _('Poste Charge'),
+                                _('Poste amortissement'),
+                                _('Ficher Charge'),
+                                _('Ficher Amortissement acté'),
+                                _('Montant Achat'),
+                                _("Montant amorti"),
+                                _("Montant à amortir"),
+        ));
     
     $ret=$cn->get_array("select * from amortissement.v_amortissement_summary order by a_start,a_date");
-    printf ("\"Visible\";\"qcode\";\"Nom\";\"Description\";\"Date acquisition\";\"Année Achat\";\"Nbre annuité\";\"Poste Charge\";\"Poste amortis\";\"Fiche de charge\"; \"Fiche amortissement acté\";\"Montant achat\";\"Montant amorti\";\"Montant a amortir\"\r\n");
     for ($i=0;$i<count($ret);$i++)
       {
-	printf('"%s";',$ret[$i]['a_visible']);
-	printf('"%s";',$ret [$i]['quick_code']);
-	printf('"%s";',$ret [$i]['vw_name']);
-	printf('"%s";',$ret [$i]['vw_description']);
-	printf('"%s";',format_date($ret[$i]['a_date']));
-	printf('"%s";',$ret[$i]['a_start']);
-	printf('%s;',nb($ret[$i]['a_nb_year']));
-	printf('"%s";',$ret[$i]['account_deb']);
-	printf('"%s";',$ret[$i]['account_cred']);
-	printf('"%s";',$ret[$i]['card_cred_qcode']);
-	printf('"%s";',$ret[$i]['card_deb_qcode']);
-	printf('%s;',nb($ret[$i]['a_amount']));
-	printf("%s;",nb($ret[$i]['amort_done']));
+	$csv_material->add($ret[$i]['a_visible']);
+	$csv_material->add($ret [$i]['quick_code']);
+	$csv_material->add($ret [$i]['vw_name']);
+	$csv_material->add($ret [$i]['vw_description']);
+	$csv_material->add(format_date($ret[$i]['a_date']));
+	$csv_material->add($ret[$i]['a_start']);
+	$csv_material->add($ret[$i]['a_nb_year'],"number");
+	$csv_material->add($ret[$i]['account_deb']);
+	$csv_material->add($ret[$i]['account_cred']);
+	$csv_material->add($ret[$i]['card_cred_qcode']);
+	$csv_material->add($ret[$i]['card_deb_qcode']);
+	$csv_material->add($ret[$i]['a_amount'],'number');
+	$csv_material->add($ret[$i]['amort_done'],'number');
 	$remain=bcsub($ret[$i]['a_amount'],$ret[$i]['amort_done']);
-	printf("%s",nb($remain));
-	printf("\r\n");
+	$csv_material->add($remain,"number");
+        $csv_material->write();
       }
   }
 /*
