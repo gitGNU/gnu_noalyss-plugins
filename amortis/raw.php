@@ -44,38 +44,50 @@ if ( isset($_REQUEST['pdf_all']))
  */
 if ( isset ($_REQUEST['csv_list_year']))
 {
-  $name="amortis-export-".$_REQUEST['csv_list_year'];
-  header('Pragma: public');
-  header('Content-type: application/csv');
-  header('Content-Disposition: attachment;filename="'.$name.'.csv"',FALSE);
-  print "\"Code\";\"Description\";\"Date acquisition\";\"Année Achat\";\"Montant Achat\";\"Nombre annuités\";\"Montant à amortir\";\"Amortissement\";\"Reste\"\r\n";
-  $year=$_REQUEST['csv_list_year'];
+    require_once NOALYSS_INCLUDE.'/lib/class_noalyss_csv.php';
+    
+    $year=HtmlInput::default_value_request('csv_list_year','0000');
+
+    $csv_list_year=new Noalyss_Csv("amortissement-$year");
+    $csv_list_year->send_header();
+    $csv_list_year->write_header(array(_('Code'),
+                                _('Description'),
+                                _('Date acquisition'),
+                                _('Année Achat'),
+                                _('Montant Achat'),
+                                _('Nombre annuités'),
+                                _("Montant à amortir"),
+                                _('Amortissement'),
+                                _('Restant')));
+    
+  
   $sql="select * from amortissement.amortissement where a_id
          in (select a_id from amortissement.amortissement_detail where ad_year=$1)";
   $array=$cn->get_array($sql,array($year));
   bcscale(2);
   for ($i=0;$i<count($array);$i++)
     {
-      $fiche=new fiche($cn,$array[$i]['f_id']);
-      $remain=$cn->get_value("select coalesce(sum(ad_amount),0) from amortissement.amortissement_detail
-			where a_id=$1 and ad_year >= $2",
-			     array($array[$i]['a_id'],$year));
-      $amortize=$cn->get_value("select ad_amount from amortissement.amortissement_detail
-			where a_id=$1 and ad_year = $2",
-			       array($array[$i]['a_id'],$year));
-      $toamortize=bcsub($remain,$amortize);
+        $fiche=new fiche($cn,$array[$i]['f_id']);
+        $remain=$cn->get_value("select coalesce(sum(ad_amount),0) from amortissement.amortissement_detail
+                          where a_id=$1 and ad_year >= $2",
+                               array($array[$i]['a_id'],$year));
+        $amortize=$cn->get_value("select ad_amount from amortissement.amortissement_detail
+                          where a_id=$1 and ad_year = $2",
+                                 array($array[$i]['a_id'],$year));
+        $toamortize=bcsub($remain,$amortize);
 
-      printf("\"%s\";\"%s\";%s;%s;%s;%s;%s;%s;%s\r\n",
-	     $fiche->strAttribut(ATTR_DEF_QUICKCODE),
-	     $fiche->strAttribut(ATTR_DEF_NAME),
-	     format_date($array[$i]['a_date']),
-	     $array[$i]['a_start'],
-	     nb($array[$i]['a_amount']),
-	     nb($array[$i]['a_nb_year']),
-	     nb($remain),
-	     nb($amortize),
-	     nb($toamortize)
-	     );
+
+        $csv_list_year->add($fiche->strAttribut(ATTR_DEF_QUICKCODE));
+        $csv_list_year->add($fiche->strAttribut(ATTR_DEF_NAME));
+        $csv_list_year->add(format_date($array[$i]['a_date']));
+        $csv_list_year->add($array[$i]['a_start']);
+        $csv_list_year->add($array[$i]['a_amount'],'number');
+        $csv_list_year->add($array[$i]['a_nb_year'],'number');
+        $csv_list_year->add($remain,'number');
+        $csv_list_year->add($amortize,'number');
+        $csv_list_year->add($toamortize,'number');
+        
+        $csv_list_year->write();
 	     
     }
 }
