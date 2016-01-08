@@ -3,10 +3,11 @@
 //see licence.txt
 echo  HtmlInput::button('receipt_bt','Renuméroter les pièces','onclick="$(\'div_receipt\').show();"');
 ?>
+<form method="POST" id="form1" onsubmit="return confirm_box(this,'Vous confirmez ?')">
+    <input type="hidden" name="act" id="act" value="">
 <div id="div_receipt" class="inner_box" style="top:230;margin:5;overflow:visible;display:none;">
 <h2 class="info" >Rénuméroter les pièces, donner le préfixe puis le numéro</h2>
 <p class="notice">Il vaut mieux que le préfixe se termine par autre chose qu'un chiffre</p>
-<form method="POST" id="form1" onsubmit="return confirm(this,'Vous confirmez ?')">
 <?php echo $hidden?>
 <table>
 	<TR>

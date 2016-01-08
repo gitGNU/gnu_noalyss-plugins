@@ -387,7 +387,7 @@ function display_result_receipt(&$cn)
 }
 function display_download_receipt()
 {
-    echo HtmlInput::submit('download_receipt','Télécharger');
+    echo HtmlInput::submit('download_receipt','Télécharger',' onclick="$(\'act\').value=\'download\'" ');
 }
 /**
  *@brief display the prefix + from number
@@ -397,7 +397,7 @@ function display_numb_receipt()
 {
   $prefix=new IText('prefix');
   $number=new INum('number');
-  $submit=HtmlInput::submit('chg_receipt','Valider');
+  $submit=HtmlInput::submit('chg_receipt','Valider',' onclick="$(\'act\').value=\'numbering\'"  ');
   $hidden=HtmlInput::get_to_hidden(array('ledger','dend','dstart'));
   $with_step=new ISelect('istep');
   $with_step->value=array(

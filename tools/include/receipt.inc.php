@@ -24,11 +24,12 @@
  * \brief renumbered ledger
  */
 display_search_receipt($cn);
-if ( isset($_POST['chg_receipt']) )
+$act=HtmlInput::default_value_request('act', "");
+if ($act=='numbering')
   {
     change_receipt($cn);
   }
-if ( isset ($_POST['download_receipt'])) {
+if ( $act == 'download') {
     download_receipt($cn);
 }
 if (isset($_GET['search']))
