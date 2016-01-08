@@ -582,7 +582,7 @@ class Import_Bank
                     where temp_bank_id=temp_bank.id 
                     and temp_bank.import_id=$1
                     and temp_bank.is_checked=1
-                    and temp_bank.id not in ((select temp_bank_id from importbank.suggest_bank group by temp_bank_id having count(*) > 1)
+                    and temp_bank.id not in (select temp_bank_id from importbank.suggest_bank group by temp_bank_id having count(*) > 1)
                     ";
                     $cn->exec_sql($sql,array($id));
                       $sql = " 
