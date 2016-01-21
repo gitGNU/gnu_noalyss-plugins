@@ -128,7 +128,6 @@ while( ($row=fgetcsv($fbank,0,$sp)) !== false)
                 var_dump($ex->getTraceAsString());
             }
             $cn->rollback();
-            return;
             }
         }
     } // end if
