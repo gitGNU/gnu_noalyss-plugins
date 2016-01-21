@@ -149,13 +149,16 @@ switch($act) {
         /////////////////////////////////////////////////////////////////////
         // Check all the rows or unchecked
         /////////////////////////////////////////////////////////////////////
+        require_once 'include/class_import_bank.php';
         $import_id=HtmlInput::default_value_get("import_id", 0);
         $checked=HtmlInput::default_value_get("checked", 0);
-
+        $status=HtmlInput::default_value_get("status", 0);
+        $sql=Import_Bank::convert_status_sql($status);
         $cn->exec_sql("
             update importbank.temp_bank set is_checked = $2
-            where import_id=$1",
+            where import_id=$1 $sql",
                 array($import_id,$checked));
+        $r="ok";
         break;
     case 'save_check':
         ////////////////////////////////////////////////////////////////////

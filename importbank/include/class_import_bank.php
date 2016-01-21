@@ -144,29 +144,7 @@ class Import_Bank
 
         $filter->selected=HtmlInput::default_value('fil_status', 0, $_GET);
         $sql_filter='';
-        switch ($filter->selected)
-        {
-            case 1:
-                // new
-                $sql_filter=" and status='N' ";
-                break;
-            case 2:
-                // transfered
-                $sql_filter=" and status='T'";
-                break;
-            case 3:
-                // waiting to be transfered
-                $sql_filter=" and status='W'";
-                break;
-            case 4:
-                // Error
-                $sql_filter=" and status='E'";
-                break;
-            case 5:
-                // deleted
-                $sql_filter=" and status='D'";
-                break;
-        }
+        $sql_filter=Import_Bank::convert_status_sql($filter->selected);
         $array=$cn->get_array('select a.id as id,to_char(i_date,\'DD.MM.YYYY HH24:MI\') as i_date,format_name,jrn_def_id
 				from importbank.import as a
 				join importbank.format_bank as b on (format_bank_id=b.id)
@@ -661,5 +639,38 @@ class Import_Bank
         ";
         $cn->exec_sql($sql,array($p_id));
               
+    }
+    /**
+     * Convert the status (0 to 5 to importbank.temp_bank.status which is 
+     * a letter (N New T Transfered W waiting E error D deleted)
+     * @param type $p_param
+     * @return sql string
+     */
+    static function convert_status_sql($p_param) {
+        $sql_filter="";
+        switch ($p_param)
+        {
+            case 1:
+                // new
+                $sql_filter=" and status='N' ";
+                break;
+            case 2:
+                // transfered
+                $sql_filter=" and status='T'";
+                break;
+            case 3:
+                // waiting to be transfered
+                $sql_filter=" and status='W'";
+                break;
+            case 4:
+                // Error
+                $sql_filter=" and status='E'";
+                break;
+            case 5:
+                // deleted
+                $sql_filter=" and status='D'";
+                break;
+        }
+        return $sql_filter;
     }
 }

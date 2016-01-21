@@ -240,6 +240,7 @@ echo $select_action->input();
     new Ajax.Request('ajax.php',{
         method:'get',
         parameters : {'gDossier':<?php echo $dossier_id;?>,
+            'status':<?php echo  $filter->selected;?>,
             'act':'check_all',
         'plugin_code':'<?php echo $plugin_code; ?>',
         'import_id':<?php echo $array[0]['id']; ?>,

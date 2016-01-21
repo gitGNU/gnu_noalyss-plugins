@@ -150,7 +150,12 @@ if ( $_POST['sb']=='upload_file')
 	    $pos_extra=$format_bank->pos_extra;
 
 	  }
-
+          // Separator for thousand and decimal MUST be
+          // different
+        if( $sep_decimal->selected==$sep_thousand->selected ) {
+            alert(_('Les séparateurs décimals et de millier doivent être différents'));
+            
+        }
 	echo '<div class="content" style="width:80%;margin-left:10%">';
 	$sb='confirm';
 	require_once ('template/confirm_transfer.php');
@@ -188,7 +193,11 @@ if ( $_POST['sb']=='upload_file')
 	    $pos_extra=$format_bank->pos_extra;
 
 	  }
-
+          // Separator for thousand and decimal MUST be
+          // different
+        if( $sep_decimal->selected==$sep_thousand->selected ) {
+            alert(_('Les séparateurs décimals et de millier doivent être différents'));
+        }
 	echo '<div class="content" style="width:80%;margin-left:10%">';
 	$sb='confirm';
 	require_once ('template/confirm_transfer.php');
