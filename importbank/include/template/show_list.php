@@ -210,6 +210,7 @@ echo $select_action->input();
                 method:'get',
                 parameters:{'gDossier':<?php echo $dossier_id;?>,
                             'act':'display_tiers',
+                            'status':<?php echo  $filter->selected;?>,
                             'plugin_code':'<?php echo $plugin_code;?>',
                             'import_id':<?php echo $array[0]['id'];?>,
                             'ac':'<?php echo $_REQUEST['ac']?>'

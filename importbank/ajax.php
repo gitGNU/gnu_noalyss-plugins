@@ -201,6 +201,7 @@ switch($act) {
             echo _('Nombre de lignes choisies')." ".$count;
             echo '</p>';
         }
+        $status=HtmlInput::default_value_get("status", 0);
         echo '<form method="get" id="display_tiers_frm" onsubmit="selected_set_tiers(\'display_tiers_frm\');return false">';
         echo HtmlInput::array_to_hidden(array("ac","gDossier","import_id","plugin_code"), $_GET);
         echo HtmlInput::hidden("sa", "purge");
@@ -209,6 +210,7 @@ switch($act) {
         echo HtmlInput::hidden("form_action2", "selected_record");
         echo HtmlInput::hidden("form_action", "selected_record");
         echo HtmlInput::hidden("select_action", "1");
+        echo HtmlInput::hidden("fil_status", $status);
         $w=new ICard();
 	$w->jrn=$cn->get_value("select jrn_def_id from importbank.format_bank as a "
                 . "join importbank.import as b on (a.id=b.format_bank_id) "
