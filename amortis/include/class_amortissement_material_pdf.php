@@ -25,20 +25,20 @@ class Amortissement_Material_PDF extends PDFLand
     {
         parent::header();
         $this->setFont('DejaVu', 'B', 14);
-        $this->Cell(190, 10, _('Amortissement : Liste de biens'), 1, 2, 'C');
-        $this->ln();
+        $this->write_cell(190, 10, _('Amortissement : Liste de biens'), 1, 2, 'C');
+        $this->line_new();
         $this->col_size=array('qcode'=>40, 'name'=>85,'desc'=>120, 'date.purch'=>20, 'year.purch'=>20,  '#amort'=>10,'amount.purch'=>30, 'amount.amort'=>30, '%'=>20, 'amount.remain'=>30,'amount.delta'=>30);
 
         $this->setFont('DejaVu', 'B', 7);
-        $this->Cell($this->col_size['qcode'], 8, _('QCode'));
-        $this->Cell($this->col_size['name'], 8, _('Nom'));
-        $this->Cell($this->col_size['date.purch'], 8, _('Date achat'));
-        $this->Cell($this->col_size['year.purch'], 8, _('Année achat'));
-        $this->Cell($this->col_size['#amort'], 8, _('Nbre'), 0, 0, 'R');
-        $this->Cell($this->col_size['amount.purch'], 8, _('Montant'), 0, 0, 'R');
-        $this->Cell($this->col_size['amount.amort'], 8, _('A amortir'), 0, 0, 'R');
-        $this->Cell($this->col_size['amount.delta'], 8, _('Val. Comptable Net'), 0, 0, 'R');
-        $this->Ln();
+        $this->write_cell($this->col_size['qcode'], 8, _('QCode'));
+        $this->write_cell($this->col_size['name'], 8, _('Nom'));
+        $this->write_cell($this->col_size['date.purch'], 8, _('Date achat'));
+        $this->write_cell($this->col_size['year.purch'], 8, _('Année achat'));
+        $this->write_cell($this->col_size['#amort'], 8, _('Nbre'), 0, 0, 'R');
+        $this->write_cell($this->col_size['amount.purch'], 8, _('Montant'), 0, 0, 'R');
+        $this->write_cell($this->col_size['amount.amort'], 8, _('A amortir'), 0, 0, 'R');
+        $this->write_cell($this->col_size['amount.delta'], 8, _('Val. Comptable Net'), 0, 0, 'R');
+        $this->line_new();
     }
 
     function export()
@@ -62,27 +62,27 @@ class Amortissement_Material_PDF extends PDFLand
                 $fill=0;
             }
             
-            $this->Cell($this->col_size['qcode'], 8, $ret[$i]['quick_code'], 0, 0, 'L', $fill);
-            $this->Cell($this->col_size['name'], 8, $ret[$i]['vw_name'], 0, 0, 'L', $fill);
-            $this->Cell($this->col_size['date.purch'], 8, format_date($ret[$i]['a_date']), 0, 0, 'L', $fill);
-            $this->Cell($this->col_size['year.purch'], 8, $ret[$i]['a_start'], 0, 0, 'C', $fill);
-            $this->Cell($this->col_size['#amort'], 8, round($ret[$i]['a_nb_year']), 0, 0, 'R', $fill);
-            $this->Cell($this->col_size['amount.purch'], 8, nb($ret[$i]['a_amount']), 0, 0, 'R', $fill);
-            $this->Cell($this->col_size['amount.amort'], 8, nb($ret[$i]['amort_done']), 0, 0, 'R', $fill);
+            $this->write_cell($this->col_size['qcode'], 8, $ret[$i]['quick_code'], 0, 0, 'L', $fill);
+            $this->write_cell($this->col_size['name'], 8, $ret[$i]['vw_name'], 0, 0, 'L', $fill);
+            $this->write_cell($this->col_size['date.purch'], 8, format_date($ret[$i]['a_date']), 0, 0, 'L', $fill);
+            $this->write_cell($this->col_size['year.purch'], 8, $ret[$i]['a_start'], 0, 0, 'C', $fill);
+            $this->write_cell($this->col_size['#amort'], 8, round($ret[$i]['a_nb_year']), 0, 0, 'R', $fill);
+            $this->write_cell($this->col_size['amount.purch'], 8, nb($ret[$i]['a_amount']), 0, 0, 'R', $fill);
+            $this->write_cell($this->col_size['amount.amort'], 8, nb($ret[$i]['amort_done']), 0, 0, 'R', $fill);
             $delta=bcsub($ret[$i]['a_amount'],$ret[$i]['amort_done']);
-            $this->Cell($this->col_size['amount.delta'], 8, nb($delta), 0, 0, 'R', $fill);
+            $this->write_cell($this->col_size['amount.delta'], 8, nb($delta), 0, 0, 'R', $fill);
             
             $tot_purchase=bcadd($tot_purchase,$ret[$i]['a_amount']);
             $tot_amorti=bcadd($tot_amorti,$ret[$i]['amort_done']);
             $tot_remain=bcadd($tot_remain,$delta);
 	
-        $this->Ln();
+        $this->line_new();
         }
         $deca=$this->col_size['qcode']+$this->col_size['name']+$this->col_size['date.purch']+$this->col_size['year.purch']+$this->col_size['#amort'];
-        $this->Cell($deca+$this->col_size['amount.purch'],8,nb($tot_purchase) ,0,0,'R',0);
-        $this->Cell($this->col_size['amount.amort'],8,nb($tot_amorti) ,0,0,'R',0);
-        $this->Cell($this->col_size['amount.delta'],8,nb($tot_remain) ,0,0,'R',0);
-        $this->ln();
+        $this->write_cell($deca+$this->col_size['amount.purch'],8,nb($tot_purchase) ,0,0,'R',0);
+        $this->write_cell($this->col_size['amount.amort'],8,nb($tot_amorti) ,0,0,'R',0);
+        $this->write_cell($this->col_size['amount.delta'],8,nb($tot_remain) ,0,0,'R',0);
+        $this->line_new();
         $this->Output('listing-amort.pdf', 'I');
     }
 
