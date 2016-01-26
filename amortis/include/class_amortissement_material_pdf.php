@@ -25,20 +25,20 @@ class Amortissement_Material_PDF extends PDFLand
     {
         parent::header();
         $this->setFont('DejaVu', 'B', 14);
-        $this->write_cell(190, 10, _('Amortissement : Liste de biens'), 1, 2, 'C');
-        $this->line_new();
+        $this->Cell(190, 10, _('Amortissement : Liste de biens'), 1, 2, 'C');
+        $this->Ln();
         $this->col_size=array('qcode'=>40, 'name'=>85,'desc'=>120, 'date.purch'=>20, 'year.purch'=>20,  '#amort'=>10,'amount.purch'=>30, 'amount.amort'=>30, '%'=>20, 'amount.remain'=>30,'amount.delta'=>30);
 
         $this->setFont('DejaVu', 'B', 7);
-        $this->write_cell($this->col_size['qcode'], 8, _('QCode'));
-        $this->write_cell($this->col_size['name'], 8, _('Nom'));
-        $this->write_cell($this->col_size['date.purch'], 8, _('Date achat'));
-        $this->write_cell($this->col_size['year.purch'], 8, _('Année achat'));
-        $this->write_cell($this->col_size['#amort'], 8, _('Nbre'), 0, 0, 'R');
-        $this->write_cell($this->col_size['amount.purch'], 8, _('Montant'), 0, 0, 'R');
-        $this->write_cell($this->col_size['amount.amort'], 8, _('A amortir'), 0, 0, 'R');
-        $this->write_cell($this->col_size['amount.delta'], 8, _('Val. Comptable Net'), 0, 0, 'R');
-        $this->line_new();
+        $this->Cell($this->col_size['qcode'], 8, _('QCode'));
+        $this->Cell($this->col_size['name'], 8, _('Nom'));
+        $this->Cell($this->col_size['date.purch'], 8, _('Date achat'));
+        $this->Cell($this->col_size['year.purch'], 8, _('Année achat'));
+        $this->Cell($this->col_size['#amort'], 8, _('Nbre'), 0, 0, 'R');
+        $this->Cell($this->col_size['amount.purch'], 8, _('Montant'), 0, 0, 'R');
+        $this->Cell($this->col_size['amount.amort'], 8, _('A amortir'), 0, 0, 'R');
+        $this->Cell($this->col_size['amount.delta'], 8, _('Val. Comptable Net'), 0, 0, 'R');
+        $this->Ln();
     }
 
     function export()

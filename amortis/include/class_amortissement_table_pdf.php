@@ -33,21 +33,21 @@ class Amortissement_Table_PDF extends PDFLand
     {
         parent::header();
         $this->setFont('DejaVu', 'B', 14);
-        $this->write_cell(200, 10, _('Amortissement ').$this->year, 1, 2, 'C');
+        $this->Cell(200, 10, _('Amortissement ').$this->year, 1, 2, 'C');
         $col_size=array('code'=>20, 'desc'=>80, 'date.purch'=>20, 'year.purch'=>20, 'amount.purch'=>30, '#amort'=>10, 'amount.amort'=>30, '%'=>20, 'amount.remain'=>20);
-        $this->line_new();
+        $this->Ln();
         $this->SetFont('DejaVu', 'BI', 7);
-        $this->write_cell($col_size['code'], 8, _('Code'));
-        $this->write_cell($col_size['desc'], 8, _('Description'));
-        $this->write_cell($col_size['date.purch'], 8, _('Date achat'));
-        $this->write_cell($col_size['year.purch'], 8, _('Année achat'));
-        $this->write_cell($col_size['amount.purch'], 8, _('Montant'), 0, 0, 'R');
-        $this->write_cell($col_size['#amort'], 8, _('Nbre'), 0, 0, 'R');
-        $this->write_cell($col_size['amount.amort'], 8, _('A amortir'), 0, 0, 'R');
-        $this->write_cell($col_size['%'], 8, _('%'), 0, 0, 'R');
-        $this->write_cell($col_size['amount.remain'], 8, _('Dot'), 0, 0, 'R');
-        $this->write_cell($col_size['amount.remain'], 8, _('Reste'), 0, 0, 'R');
-        $this->line_new();
+        $this->Cell($col_size['code'], 8, _('Code'));
+        $this->Cell($col_size['desc'], 8, _('Description'));
+        $this->Cell($col_size['date.purch'], 8, _('Date achat'));
+        $this->Cell($col_size['year.purch'], 8, _('Année achat'));
+        $this->Cell($col_size['amount.purch'], 8, _('Montant'), 0, 0, 'R');
+        $this->Cell($col_size['#amort'], 8, _('Nbre'), 0, 0, 'R');
+        $this->Cell($col_size['amount.amort'], 8, _('A amortir'), 0, 0, 'R');
+        $this->Cell($col_size['%'], 8, _('%'), 0, 0, 'R');
+        $this->Cell($col_size['amount.remain'], 8, _('Dot'), 0, 0, 'R');
+        $this->Cell($col_size['amount.remain'], 8, _('Reste'), 0, 0, 'R');
+        $this->Ln();
         
     }
 

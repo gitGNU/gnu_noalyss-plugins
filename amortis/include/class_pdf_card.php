@@ -45,9 +45,9 @@ class Pdf_Card extends PDF
         //Arial bold 12
         $this->SetFont('DejaVu', 'B', 12);
         //Title
-        $this->write_cell(0,10,$this->dossier, 'B', 0, 'C');
+        $this->Cell(0,10,$this->dossier, 'B', 0, 'C');
         //Line break
-        $this->line_new(20);
+        $this->Ln(20);
     }
     function Footer()
     {
@@ -56,10 +56,10 @@ class Pdf_Card extends PDF
         //Arial italic 8
         $this->SetFont('Arial', 'I', 8);
         //Page number
-        $this->write_cell(0,8,'Date '.$this->date." - Page ".$this->PageNo().'/{nb}',0,0,'C');
-        $this->line_new(3);
+        $this->Cell(0,8,'Date '.$this->date." - Page ".$this->PageNo().'/{nb}',0,0,'C');
+        $this->Ln(3);
         // Created by NOALYSS
-        $this->write_cell(0,8,'Created by NOALYSS, a professional opensource accounting software http://www.noalyss.eu',0,0,'C',false,'http://www.noalyss.eu');
+        $this->Cell(0,8,'Created by NOALYSS, a professional opensource accounting software http://www.noalyss.eu',0,0,'C',false,'http://www.noalyss.eu');
     }
     
 
