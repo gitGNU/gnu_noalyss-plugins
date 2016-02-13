@@ -786,7 +786,7 @@ class Rapav_dd_Compute extends Rapav_Declaration_Detail
         $formula = $this->form->fp_formula;
 
         // split the string from  into smaller piece
-        preg_match_all("/\[([A-Z]*[0-9]*)*([0-9]*[A-Z]*)\]/i", $formula, $e);
+        preg_match_all("/\[([A-Z]*[0-9]*)*_*([0-9]*[A-Z]*)\]/i", $formula, $e);
         $tmp = $e[0];
 
         foreach ($tmp as $piece)
