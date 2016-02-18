@@ -22,12 +22,23 @@ if ( $fiche_def->HasAttribute(ATTR_DEF_EMAIL) == false) {
     $from=new IText('p_from');
     $message=new ITextarea('p_message');
     $attach=new ISelect('p_attach');
-    $attach->value=array (
-            array('value'=>0,'label'=>_('Aucun document')),
-            array('value'=>1,'label'=>_('Document en PDF')),
-            array('value'=>2,'label'=>_('Document généré'))
-    );
     $copy=new ICheckBox('copy');
+    //-----
+    // Propose to generate document to attach at the email ,
+    // if there is a template
+    if ( $compute->has_template() )
+    {
+        $attach->value=array (
+                array('value'=>0,'label'=>_('Aucun document')),
+                array('value'=>1,'label'=>_('Document en PDF')),
+                array('value'=>2,'label'=>_('Document généré'))
+        );
+        
+    } else {
+        $attach->value=array(
+            array('value'=>0,'label'=>_('Aucun document'))
+        );
+    }
     require_once 'include/template/parameter_send_mail_input.php';
     
 }

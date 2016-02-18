@@ -102,10 +102,7 @@ if (isset($_GET['generate_document']))
     }
 
     $listing->display(false);
-    if ($listing->has_template())
-    {
-        $listing->propose_send_mail();
-    }
+    $listing->propose_send_mail();
     $listing->propose_include_follow();
     if ($listing->has_template())
     {
@@ -212,16 +209,14 @@ $operation_paid->value = array(
 ?>
 <div id="Choix">
     <h2>Choisissez ce que vous souhaitez générer</h2>
-    <table style="border-collapse: separate;width: 40%">
-        <tr >
-            <td id="rapport_td_id" class="mtitle" style="border-radius:0;border-bottom: 2;border-top:0;border-left:0;border-right:0">
-                <A class="mtitle" HREF="javascript:void(0)" onclick="select_rapport();"> Formulaire</A>
-            </td>
-            <td id="listing_td_id" class="mtitle" style="border-radius:0;border-bottom: 2;border-top:0;border-left:0;border-right:0">
-                <A class="mtitle" HREF="javascript:void(0)"onclick="select_listing();"> Listing /Mailing</A>
-            </td>
-        </tr>
-    </table>
+    <ul class="tabs">
+        <li class="tabs" id="listing_td_id">
+                <A  class="mtitle" HREF="javascript:void(0)"onclick="select_listing();"> Listing /Mailing</A>
+        </li>
+        <li class="tabs"  id="rapport_td_id">
+            <A class="mtitle" HREF="javascript:void(0)" onclick="select_rapport();"> Formulaire</A>
+        </li>
+    </ul>
 </div>
 
 <div id="id_rapport_div" style="display: none">
@@ -318,13 +313,13 @@ $operation_paid->value = array(
 <script charset="UTF8" lang="javascript">
     function validate() {
         if (check_date_id('<?php echo $date_start->id ?>') == false) {
-            alert('Date de début incorrecte');
+            smoke.alert('Date de début incorrecte');
             $('<?php echo $date_start->id ?>').style.borderColor = 'red';
             $('<?php echo $date_start->id ?>').style.borderWidth = 2;
             return false;
         }
         if (check_date_id('<?php echo $date_end->id ?>') == false) {
-            alert('Date de fin incorrecte');
+            smoke.alert('Date de fin incorrecte');
             $('<?php echo $date_end->id ?>').style.borderColor = 'red';
             $('<?php echo $date_end->id ?>').style.borderWidth = 2;
             return false;
@@ -336,13 +331,13 @@ $operation_paid->value = array(
          * @todo to adapt to listing
          */
         if (check_date_id('<?php echo $date_start_listing->id ?>') == false) {
-            alert('Date de début incorrecte');
+            smoke.alert('Date de début incorrecte');
             $('<?php echo $date_start_listing->id ?>').style.borderColor = 'red';
             $('<?php echo $date_start_listing->id ?>').style.borderWidth = 2;
             return false;
         }
         if (check_date_id('<?php echo $date_end_listing->id ?>') == false) {
-            alert('Date de fin incorrecte');
+            smoke.alert('Date de fin incorrecte');
             $('<?php echo $date_end_listing->id ?>').style.borderColor = 'red';
             $('<?php echo $date_end_listing->id ?>').style.borderWidth = 2;
             return false;
@@ -352,17 +347,17 @@ $operation_paid->value = array(
     function select_rapport() {
         $('id_rapport_div').show();
         $('id_listing_div').hide();
-        $('rapport_td_id').addClassName('selectedcell');
-        if ($('listing_td_id').hasClassName('selectedcell')) {
-            $('listing_td_id').removeClassName('selectedcell');
+        $('rapport_td_id').addClassName('tabs_selected');
+        if ($('listing_td_id').hasClassName('tabs_selected')) {
+            $('listing_td_id').removeClassName('tabs_selected');
         }
     }
     function select_listing() {
         $('id_rapport_div').hide();
         $('id_listing_div').show();
-        $('listing_td_id').addClassName('selectedcell');
-        if ($('rapport_td_id').hasClassName('selectedcell')) {
-            $('rapport_td_id').removeClassName('selectedcell');
+        $('listing_td_id').addClassName('tabs_selected');
+        if ($('rapport_td_id').hasClassName('tabs_selected')) {
+            $('rapport_td_id').removeClassName('tabs_selected');
         }
 
     }
