@@ -48,9 +48,6 @@
             "id"=>$row['l_id']
            ));
     ?>
-    <a class="line"href="extension.raw.php?gDossier=10077&amp;ac=rapav&amp;plugin_code=rapav&amp;id=1&amp;act=downloadTemplateListing" >00.m3u</a>
-    <a class="line" href="extension.raw.php?gDossier=10077&amp;ac=EXT%2FRAPAV&amp;plugin_code=EXT%2FRAPAV&amp;act=downloadTemplateListing&amp;id=1">00.m3u</a>
-    
     	<tr <?php echo $class; ?>>
         <td>
             <?php echo HtmlInput::anchor(h($row['l_name']),'',' onclick="'.$json.'"'); ?>

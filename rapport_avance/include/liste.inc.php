@@ -11,7 +11,23 @@
     require_once 'class_rapav_listing.php';
     global $cn;
     $listing = new Rapav_Listing();
-
+    /**
+     * if cloning request
+     */
+    if ( isset ($_POST['listing_clone']) )
+    {
+        $l_id=HtmlInput::default_value_post('l_id',0);
+        if ($l_id == 0 ) 
+            throw new Exception('Invalide');
+        
+        $old=new Rapav_Listing($l_id);
+        $new = $old->make_clone();
+        $new->display();
+        echo '<p>';
+        $new->button_add_param();
+        echo '</p>';
+        return;
+    }
     /**
      * save new listing
      */

@@ -75,12 +75,14 @@ class Rapav_Listing
     {
         global $cn;
         $name = new IText('name');
+        $name->size=120;
         $description = new ITextArea('description');
         $description->style = ' style="margin:0px;width:100%" class="itextarea"';
         $file = new IFile('listing_mod');
         $fichedef = new ISelect('fiche_def');
         $fichedef->value = $cn->make_array('select fd_id,fd_label from fiche_def order by fd_label');
         $str_remove = "";
+        
         /*
          * if $this->l_id <> -1 then modification otherwise add
          */
@@ -217,7 +219,7 @@ class Rapav_Listing
             $cn->commit();
         } catch (Exception $e)
         {
-            $cn->rollback;
+            $cn->rollback();
             throw $ex;
         }
     }
@@ -228,13 +230,15 @@ class Rapav_Listing
      */
     function delete()
     {
+        global $cn;
         try
         {
+            $cn->start();
             $this->remove_modele();
             $this->data->delete();
         } catch (Exception $e)
         {
-            $cn->rollback;
+            $cn->rollback();
             throw $ex;
         }
     }
@@ -330,6 +334,90 @@ class Rapav_Listing
         $cat = $cn->get_value('select fd_description from fiche_def where fd_id=$1', array($this->data->getp('fiche_def_id')));
         return $cat;
     }
-    
+    /**
+     * Create a clone of the current object and return the created object
+     * @return RAPAV_Listing
+     */
+    function make_clone()
+    {
+        global $cn;
+        try {
+            $cn->start();
+            //insert RAPAV Listing
+            $new=new RAPAV_Listing_SQL($this->data->l_id);
+            $new->l_id=-1;
+            $new->save();
+
+            //Add detail for RAPAV Listing
+            $cn->exec_sql("
+                INSERT INTO rapport_advanced.listing_param
+                        (lp_id, 
+                          l_id, 
+                          lp_code, 
+                          lp_comment, 
+                          l_order, 
+                          ad_id, 
+                          lp_card_saldo, 
+                          lp_with_card, 
+                          tmp_val, 
+                          tva_id, 
+                          fp_formula, 
+                          fp_signed, 
+                          jrn_def_type, 
+                          tt_id, 
+                          with_tmp_val, 
+                          type_sum_account, 
+                          operation_pcm_val, 
+                          jrn_def_id, 
+                          date_paid, 
+                          type_detail, 
+                          lp_paid, 
+                          lp_histo)
+                select 
+                    nextval('rapport_advanced.listing_param_lp_id_seq'), 
+                    $1, 
+                    lp_code, 
+                    lp_comment, 
+                    l_order, 
+                    ad_id, 
+                    lp_card_saldo, 
+                    lp_with_card, 
+                    tmp_val, 
+                    tva_id, 
+                    fp_formula, 
+                    fp_signed, 
+                    jrn_def_type, 
+                    tt_id, 
+                    with_tmp_val, 
+                    type_sum_account, 
+                    operation_pcm_val, 
+                    jrn_def_id, 
+                    date_paid, 
+                    type_detail, 
+                    lp_paid, 
+                    lp_histo
+                    from rapport_advanced.listing_param
+                    where 
+                    l_id=$2",array($new->l_id,$this->data->l_id));
+
+            // Duplicate the document if needed
+            if ($new->l_lob != null ) {
+                $dirname=tempnam($_ENV['TMP'],'rapav_clone_doc_');
+                unlink($dirname);
+                mkdir($dirname);
+                $cn->lo_export($new->l_lob,$dirname.'/'.$new->l_filename);
+                $new->l_lob=$cn->lo_import($dirname.'/'.$new->l_filename);
+                $cn->commit();
+            }
+            $object=new Rapav_Listing($new->l_id);
+            return $object;
+        
+        } catch(Exception $e) {
+            echo _('Clonage impossible');
+            $cn->rollback();
+            return null;
+        }
+        
+    }
 
 }

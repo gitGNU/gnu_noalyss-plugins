@@ -530,7 +530,7 @@ function listing_modify(json)
                             remove_waiting_box();
                             var code_html = getNodeText(html[0]);
                             code_html = unescape_xml(code_html);
-                            var position = fixed_position(35, 217);
+                            var position = fixed_position(35, 217)+";width:auto";
                             add_div({'id': json.cout, 'cssclass': 'inner_box', 'drag': 1, 'style': position});
                             $(json.cout).innerHTML = code_html;
                         } catch (e) {
