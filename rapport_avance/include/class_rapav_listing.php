@@ -407,8 +407,8 @@ class Rapav_Listing
                 mkdir($dirname);
                 $cn->lo_export($new->l_lob,$dirname.'/'.$new->l_filename);
                 $new->l_lob=$cn->lo_import($dirname.'/'.$new->l_filename);
-                $cn->commit();
             }
+            $cn->commit();
             $object=new Rapav_Listing($new->l_id);
             return $object;
         
