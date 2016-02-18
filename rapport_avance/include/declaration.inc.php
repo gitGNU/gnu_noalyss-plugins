@@ -211,10 +211,10 @@ $operation_paid->value = array(
     <h2>Choisissez ce que vous souhaitez générer</h2>
     <ul class="tabs">
         <li class="tabs" id="listing_td_id">
-                <A  class="mtitle" HREF="javascript:void(0)"onclick="select_listing();"> Listing /Mailing</A>
+                <A  HREF="javascript:void(0)"onclick="select_listing();"> Listing /Mailing</A>
         </li>
         <li class="tabs"  id="rapport_td_id">
-            <A class="mtitle" HREF="javascript:void(0)" onclick="select_rapport();"> Formulaire</A>
+            <A  HREF="javascript:void(0)" onclick="select_rapport();"> Formulaire</A>
         </li>
     </ul>
 </div>
@@ -348,16 +348,20 @@ $operation_paid->value = array(
         $('id_rapport_div').show();
         $('id_listing_div').hide();
         $('rapport_td_id').addClassName('tabs_selected');
+        $('rapport_td_id').removeClassName('tabs');
         if ($('listing_td_id').hasClassName('tabs_selected')) {
             $('listing_td_id').removeClassName('tabs_selected');
+            $('listing_td_id').addClassName('tabs');
         }
     }
     function select_listing() {
         $('id_rapport_div').hide();
         $('id_listing_div').show();
         $('listing_td_id').addClassName('tabs_selected');
+        $('listing_td_id').removeClassName('tabs');
         if ($('rapport_td_id').hasClassName('tabs_selected')) {
             $('rapport_td_id').removeClassName('tabs_selected');
+            $('rapport_td_id').addClassName('tabs');
         }
 
     }
