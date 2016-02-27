@@ -77,13 +77,13 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
         {
             fputcsv($out, $a_title[0], ";");
             
-            $a_row = $cn->get_array('select dr_code,dr_libelle,dr_amount,dr_start,dr_end
+            $a_row = $cn->get_array('select dr_code,dr_libelle,dr_amount,dr_start,dr_end,dr_account
 			from rapport_advanced.declaration_row
 			where d_id=$1 order by dr_order,dr_start', array($p_id));
 
             for ($i = 0; $i < count($a_row); $i++)
             {
-                printf('"%s";"%s";%s;"%s";"%s"' . "\r\n", $a_row[$i]['dr_code'], $a_row[$i]['dr_libelle'], nb($a_row[$i]['dr_amount']), format_date($a_row[$i]['dr_start']), format_date($a_row[$i]['dr_end'])
+                printf('"%s";"%s";"%s";%s;"%s";"%s"' . "\r\n", $a_row[$i]['dr_code'],$a_row[$i]['dr_account'],$a_row[$i]['dr_libelle'], nb($a_row[$i]['dr_amount']), format_date($a_row[$i]['dr_start']), format_date($a_row[$i]['dr_end'])
                 );
             }
         }
@@ -95,8 +95,8 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 			from rapport_advanced.declaration_row
 			where d_id=$1 order by dr_start', array($p_id));
 
-             // 2 blank columns
-             printf(';');
+             // 3 blank columns
+             printf(';;');
             for ($i = 0; $i < count($a_periode); $i++)
             {
                 printf(';"%s-%s"', format_date($a_periode[$i]['dr_start']), format_date($a_periode[$i]['dr_end']));
@@ -104,17 +104,18 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
             printf("\r\n");
             
             // print each code on one line
-             $a_row = $cn->get_array('select dr_code,dr_libelle,dr_amount,dr_start,dr_end
+             $a_row = $cn->get_array('select dr_code,dr_libelle,dr_amount,dr_start,dr_end,dr_account
 			from rapport_advanced.declaration_row
 			where d_id=$1 order by dr_order,dr_start', array($p_id));
-            $last_code="";
+            $last_code=""; $last_lib="";
             for ($i = 0; $i < count($a_row); $i++)
             {
-                if ( $last_code != $a_row[$i]['dr_code'])
+                if ( $last_code != $a_row[$i]['dr_code'] || $last_lib != $a_row[$i]['dr_libelle'])
                 {
                     if ($last_code!=""){ printf("\r\n"); }
-                    printf('"%s";"%s"', $a_row[$i]['dr_code'],$a_row[$i]['dr_libelle']);
+                    printf('"%s";"%s";"%s"', $a_row[$i]['dr_account'],$a_row[$i]['dr_code'],$a_row[$i]['dr_libelle']);
                     $last_code=$a_row[$i]['dr_code'];
+                    $last_lib=$a_row[$i]['dr_libelle'];
                 }
                 printf(';%s',nb($a_row[$i]['dr_amount']));
             }
@@ -216,13 +217,24 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
         if ($p_type == "OOo")
         {
             $array = $cn->get_array("select '&lt;&lt;'||dr_code||'&gt;&gt;' as code,dr_amount from rapport_advanced.declaration_row where d_id=$1 and dr_type=3", array($this->d_id));
+            $array_mult = $cn->get_array("select '&lt;&lt;'||dr_code||'&gt;&gt;' as code,
+                    '&lt;&lt;'||dr_code||'_LIB&gt;&gt;' as code_lib,
+                    '&lt;&lt;'||dr_code||'_ACC&gt;&gt;' as code_acc,
+                    dr_account,
+                    dr_amount,dr_libelle from rapport_advanced.declaration_row where d_id=$1 and dr_type=9", array($this->d_id));
         } else
         {
             $array = $cn->get_array("select '<<'||dr_code||'>>' as code,dr_amount from rapport_advanced.declaration_row where d_id=$1 and dr_type=3", array($this->d_id));
+            $array_mult = $cn->get_array("select '<<'||dr_code||'>>' as code,
+                '<<'||dr_code||'_LIB>>' as code_lib, 
+                '<<'||dr_code||'_ACC>>' as code_acc, 
+                dr_account,
+                dr_amount,dr_libelle from rapport_advanced.declaration_row where d_id=$1 and dr_type=9 order by dr_order", array($this->d_id));
         }
 
         // open the files
-        $ifile = fopen($p_dir . '/' . $p_filename, 'r');
+        $ifilename=$p_dir . '/' . $p_filename;
+        $ifile = fopen($ifilename, 'r');
 
         // check if tmpdir exist otherwise create it
         $temp_dir = $_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . 'tmp';
@@ -239,25 +251,44 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
         $ofile = fopen($oname, "w+");
 
         // read ifile
-        while (!feof($ifile))
+        $buffer = fread($ifile,  filesize($ifilename));
+        // for each code replace in p_filename the code surrounded by << >> by the amount (value) or &lt; or &gt;
+        foreach ($array as $key => $value)
         {
-            $buffer = fgets($ifile);
-            // for each code replace in p_filename the code surrounded by << >> by the amount (value) or &lt; or &gt;
-            foreach ($array as $key => $value)
+            if (is_numeric($value['dr_amount']))
+            {
+                /* -- works only with OOo Calc -- */
+                $searched = 'office:value-type="string"><text:p>' . $value['code'];
+                $replaced = 'office:value-type="float" office:value="' . $value['dr_amount'] . '"><text:p>' . $value['code'];
+                $buffer = str_replace($searched, $replaced, $buffer);
+            }
+            $buffer = str_replace($value['code'], $value['dr_amount'], $buffer);
+        }
+        // Do the same but for multiple account
+        if ($array_mult==false)
+        {
+
+        }
+        else
+        {
+            foreach ($array_mult as $key=> $value)
             {
                 if (is_numeric($value['dr_amount']))
                 {
                     /* -- works only with OOo Calc -- */
-                    $searched = 'office:value-type="string"><text:p>' . $value['code'];
-                    $replaced = 'office:value-type="float" office:value="' . $value['dr_amount'] . '"><text:p>' . $value['code'];
-                    $buffer = str_replace($searched, $replaced, $buffer);
+                    $searched='office:value-type="string"><text:p>'.$value['code'];
+                    $replaced='office:value-type="float" office:value="'.$value['dr_amount'].'"><text:p>'.$value['code'];
+                    $buffer=preg_replace("/".$searched."/", $replaced, $buffer,1);
                 }
-                $buffer = str_replace($value['code'], $value['dr_amount'], $buffer);
+                $buffer=preg_replace("/".$value['code']."/", $value['dr_amount'],$buffer,1);
+                $buffer=preg_replace("/".$value['code_lib']."/", $value['dr_libelle'],$buffer,1);
+                $buffer=preg_replace("/".$value['code_acc']."/", $value['dr_account'],$buffer,1);
             }
-            // write to output
-            fwrite($ofile, $buffer);
         }
-
+        // write to output
+        fwrite($ofile, $buffer);
+        
+        
         // copy the output to input
         fclose($ifile);
         fclose($ofile);
@@ -407,16 +438,32 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
                 $row->d_id = $this->d_id;
                 $row->dr_id = $cn->get_next_seq('rapport_advanced.declaration_param_seq');
                 $row->from_array($array[$i]);
-                if ($array[$i]['p_type'] == 3)
-                {
-                    $row->compute($p_start, $p_end);
-                } else
-                {
-                    $row->amount = 0;
-                }
                 $row->dr_start = $p_start;
                 $row->dr_end = $p_end;
-                $row->insert();
+                $row->dr_account=null;
+                if ($array[$i]['p_type'] == 3 )
+                {
+                    $row->compute($p_start, $p_end);
+                    // insert into DECLARATION_ROW
+                    $row->insert(); 
+                } elseif ($array[$i]['p_type'] == 9)
+                {
+                    /**
+                     * children must be inserted into DECLARATION_ROW and
+                     * DECLARARION_ROW_DETAIL for each depending accounting
+                     * impact also order(use of decimal)
+                     */
+                   
+                    $this->add_child_account($row,$array[$i], $p_start, $p_end);
+                    
+                }else
+                {
+                    $row->amount = 0;
+                    $row->dr_start = $p_start;
+                    $row->dr_end = $p_end;
+                    $row->insert();
+                }
+               
             }
         } else
         {
@@ -429,6 +476,7 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
                     $row->d_id = $this->d_id;
                     $row->dr_id = $cn->get_next_seq('rapport_advanced.declaration_param_seq');
                     $row->from_array($array[$i]);
+                    $row->dr_account=null;
                     if ($array[$i]['p_type'] == 3)
                     {
                         $row->compute($this->start, $this->end);
@@ -436,10 +484,52 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
                         $row->dr_end = $this->end;
                         $row->insert();
                     }
+                     elseif ($array[$i]['p_type'] == 9)
+                    {
+                    /**
+                     * children must be inserted into DECLARATION_ROW and
+                     * DECLARARION_ROW_DETAIL for each depending accounting
+                     * impact also order(use of decimal)
+                     */
+                   
+                        $this->add_child_account($row,$array[$i], $this->start, $this->end);
+                    
+                    }
                 }
             }
         }
         $cn->commit();
+    }
+    function add_child_account(Rapav_Declaration_Param $row,$p_array,$p_start,$p_end)
+    {
+        global $cn;
+        $a_depending=$row->get_depending();
+        if ($a_depending==false)
+        {
+            $row->amount=0;
+            $row->dr_start=$p_start;
+            $row->dr_end=$p_end;
+            $row->insert();
+        }
+        else
+        {
+            $nb_depending=count($a_depending);
+            for ($j=0; $j<$nb_depending; $j++)
+            {
+                $row=new Rapav_Declaration_Param();
+                $row->d_id=$this->d_id;
+                $row->dr_id=$cn->get_next_seq('rapport_advanced.declaration_param_seq');
+                $row->from_array($p_array);
+                $row->dr_start=$p_start;
+                $row->dr_end=$p_end;
+                $row->compute_child($a_depending[$j]['pcm_val'], $p_start,$p_end);
+                $row->dr_account=$a_depending[$j]['pcm_val'];
+                $row->param->p_libelle=$a_depending[$j]['pcm_lib'];
+                $row->param->p_order=$row->param->p_order+$j/1000;
+                // insert into DECLARATION_ROW
+                $row->insert();
+            }
+        }
     }
 
     function compute_interval($p_start, $p_end, $p_step)
@@ -542,6 +632,7 @@ class Rapav_Declaration_Param
         $data->dr_type = $this->param->p_type;
         $data->dr_start = $this->dr_start;
         $data->dr_end = $this->dr_end;
+        $data->dr_account=$this->dr_account;
         $data->insert();
     }
 
@@ -565,6 +656,7 @@ class Rapav_Declaration_Param
             $this->param->$e = $p_array[$e];
         }
         $this->param->load();
+        
     }
 
     /**
@@ -630,8 +722,37 @@ class Rapav_Declaration_Param
         $this->start = $per_start->first_day();
         $this->end = $per_end->last_day();
     }
+    /***
+     * @brief compute amount of all the detail of apport_advanced.formulaire_param
+     * @param $p_pcm_val accounting
+     * @param $p_start requested start date
+     * @param $p_start requested end date
+     *
+     *
+     */
 
-    /*     * *
+    function compute_child($p_pcm_val,$p_start, $p_end)
+    {
+        global $cn;
+        bcscale(2);
+        $this->amount = "0";
+
+        $array = $cn->get_array("select fp_id,p_id,tmp_val,tva_id,fp_formula,fp_signed,jrn_def_type,tt_id,type_detail,
+			with_tmp_val,type_sum_account,operation_pcm_val,jrn_def_id,date_paid
+			from rapport_advanced.formulaire_param_detail where p_id=$1", array($this->param->p_id));
+        $this->compute_date($p_start, $p_end);
+        for ($e = 0; $e < count($array); $e++)
+        {
+            $row_detail = Rapav_Declaration_Detail::factory($array[$e]);
+            $row_detail->form->tmp_val=$p_pcm_val;
+            $row_detail->dr_id = $this->dr_id;
+            $row_detail->d_id = $this->d_id;
+            $tmp_amount = $row_detail->compute($this->start, $this->end);
+            $this->amount = bcadd("$tmp_amount", "$this->amount");
+            $row_detail->insert();
+        }
+    }
+    /***
      * @brief compute amount of all the detail of apport_advanced.formulaire_param
      * @param $p_start requested start date
      * @param $p_start requested end date
@@ -658,6 +779,21 @@ class Rapav_Declaration_Param
             $this->amount = bcadd("$tmp_amount", "$this->amount");
             $row_detail->insert();
         }
+    }
+    /**
+     * @brief find depending accounting 
+     */
+    function get_depending()
+    {
+        global $cn;
+        $accounting = $cn->get_value(" select tmp_val 
+                from rapport_advanced.formulaire_param_detail 
+                where p_id=$1", array($this->param->p_id));
+        
+        $array=$cn->get_array("select pcm_val,pcm_lib from  tmp_pcmn  where 
+                 pcm_val like $1||'%' order by pcm_val::text",array($accounting));
+        
+        return $array;
     }
 
 }
@@ -692,6 +828,10 @@ class Rapav_Declaration_Detail extends RAPAV_Declaration_Row_Detail_SQL
                 break;
             case '5':
                 $ret = new Rapav_dd_Reconcile();
+                break;
+            case '6' :
+                // For each child we have a Rapav_dd_Account
+                $ret = new Rapav_dd_Account();
                 break;
             default:
                 throw new Exception("Type inconnu");
@@ -788,7 +928,7 @@ class Rapav_dd_Compute extends Rapav_Declaration_Detail
         // split the string from  into smaller piece
         preg_match_all("/\[([A-Z]*[0-9]*)*_*([0-9]*[A-Z]*)\]/i", $formula, $e);
         $tmp = $e[0];
-
+        
         foreach ($tmp as $piece)
         {
             // Find the code in the database
@@ -798,6 +938,8 @@ class Rapav_dd_Compute extends Rapav_Declaration_Detail
 				from rapport_advanced.declaration_row where d_id=$1 and dr_code=$2', array($this->d_id, $search));
             $formula = str_replace($piece, $value, $formula);
         }
+        
+        print '$amount = ' . $formula . ';';
         eval('$amount = ' . $formula . ';');
         //
         return $amount;
@@ -980,7 +1122,7 @@ class Rapav_dd_Account extends Rapav_Declaration_Detail
             $filter_ledger = " and jrn1.j_jrn_def = " . sql_string($this->form->jrn_def_id);
         }
         
-        
+        $amount=0;
 
         bcscale(2);
         switch ($this->form->type_sum_account)

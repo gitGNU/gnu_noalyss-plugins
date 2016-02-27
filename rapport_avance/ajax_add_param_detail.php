@@ -30,8 +30,23 @@ require_once 'include/class_formulaire_param.php';
 require_once 'include/class_formulaire_param_detail.php';
 
 global $cn;
-
+/**
+ * Retrouve le type de row si == 3
+ */
+$type=$cn->get_value("select p_type from rapport_advanced.formulaire_param"
+        . " where p_id=$1",array($p_id));
 $obj=new Formulaire_Param_Detail();
-
-$obj->input_new($p_id);
+if ( $type == 3)
+{
+    /*
+     * type = formula
+     */
+    $obj->input_new($p_id);
+} elseif ($type==9) {
+    /*
+     * type = child
+     */
+    $obj->input_new_child($p_id);
+    
+}
 ?>

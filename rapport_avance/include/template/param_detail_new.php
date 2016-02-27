@@ -113,11 +113,11 @@
 <form id="new_paded" method="POST" onsubmit="save_param_detail('new_paded');return false">
 
 	<?php echo HtmlInput::request_to_hidden(array('gDossier','ac','plugin_code','p_id'))?>
-
+        
 	<?php echo HtmlInput::hidden('tab','new_account_id')?>
 	<?php echo RAPAV_Account::new_row($p_id)?>
-        
-<?php echo HtmlInput::submit('save','Sauve','style="   position: absolute;
+        Une ligne par poste comptable qui dépend du poste donné en (1)
+<?php echo HtmlInput::submit('save','Sauve','style="   left:16px;position: absolute;
     bottom: 10px"')?>
 </form>
 </div>
@@ -133,5 +133,5 @@
     bottom: 10px"')?>
 </form>
 </div>
-	</div>
+</div>
 </div>

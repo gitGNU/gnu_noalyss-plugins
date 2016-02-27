@@ -157,6 +157,9 @@ if (isset($_GET['compute_listing']))
         $p_listing = new Rapav_Listing($_GET['p_listing']);
         $listing->filter_operation($_GET['p_operation_paid']);
         $listing->compute($p_listing, $_GET['p_start'], $_GET['p_end']);
+        /**
+         * @todo clean thx given conditions
+         */
         echo '<form class="print" id="' . 'select_card_frm' . '" method="POST">';
         echo HtmlInput::hidden('lc_id', $listing->lc_id);
         $listing->display(true, 'select_card_frm');

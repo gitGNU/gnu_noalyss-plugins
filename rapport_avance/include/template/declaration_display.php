@@ -77,6 +77,12 @@ switch($row['dr_type'])
 	case 8:
 		echo '<p class="notice" > '.$row['dr_libelle'].'</p>';
 		break;
+        case 9:
+            	$input=new INum('amount[]',$row['dr_amount']);
+		$input->size=15;
+		echo HtmlInput::hidden('code[]',$row['dr_id']);
+		echo '<p>'.$row['dr_code']." ".$row['dr_libelle']." = ".$input->input()."  $per ".' </p>';
+		break;
 
 }
 

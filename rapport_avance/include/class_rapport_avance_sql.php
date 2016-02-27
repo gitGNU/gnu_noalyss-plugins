@@ -235,7 +235,8 @@ class RAPAV_Declaration_Row_SQL extends Noalyss_SQL
             "dr_amount" => "dr_amount",
             "dr_type" => "dr_type",
             "dr_start" => "dr_start",
-            "dr_end" => "dr_end"
+            "dr_end" => "dr_end",
+            "dr_account"=>"dr_account"
         );
 
         $this->type = array(
@@ -247,7 +248,8 @@ class RAPAV_Declaration_Row_SQL extends Noalyss_SQL
             "dr_amount" => "numeric",
             "dr_type" => "numeric",
             "dr_start" => "date",
-            "dr_end" => "date"
+            "dr_end" => "date",
+            "dr_account"=>"numeric"
         );
 
         $this->default = array(

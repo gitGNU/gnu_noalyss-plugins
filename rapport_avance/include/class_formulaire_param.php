@@ -56,6 +56,8 @@ class Formulaire_Param extends Formulaire_Param_Sql
 				return new Formulaire_Text($form);
 			case 8:
 				return new Formulaire_Notice($form);
+                        case 9: 
+                                return new Formulaire_Child($form);
 		}
 	}
 
@@ -348,7 +350,7 @@ class formulaire_title3 extends Formulaire_Row
  */
 class Formulaire_Formula extends Formulaire_Row
 {
-
+    
 	function __construct(formulaire_param_sql $e)
 	{
 		$this->obj = $e;
@@ -424,5 +426,16 @@ class Formulaire_Formula extends Formulaire_Row
 	}
 
 }
-
+class Formulaire_Child extends Formulaire_Formula
+{
+    function __construct(formulaire_param_sql $e)
+    {
+        parent::__construct($e);
+    }
+    function make_object($p_index)
+    {
+        $elt = $this->parametre[$p_index]['type_detail'];
+        return new RAPAV_Account($this->parametre[$p_index]['fp_id']);
+    }
+}
 ?>

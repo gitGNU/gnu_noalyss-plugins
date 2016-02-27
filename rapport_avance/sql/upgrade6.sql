@@ -21,3 +21,6 @@
 
 alter table rapport_advanced.formulaire_param_detail drop constraint formulaire_param_detail_jrn_def_id_fkey;
 alter table rapport_advanced.formulaire_param_detail drop constraint formulaire_param_detail_tva_id_fkey;
+alter table rapport_advanced.declaration_row alter dr_order type numeric(20,8);
+alter table rapport_advanced.declaration_row add dr_account text;
+insert into rapport_advanced.type_row values(9,'Liste de postes');

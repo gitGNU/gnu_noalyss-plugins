@@ -42,7 +42,14 @@ class Formulaire_Param_Detail extends Formulaire_Param_Detail_SQL
 
         require_once 'template/param_detail_new.php';
     }
-
+    function input_new_child($p_id){
+        global $cn;
+        $parent = new Formulaire_Param($p_id);
+        echo HtmlInput::title_box('Formule', 'param_detail_div');
+        echo '<h2>' . $parent->p_code . " " . $parent->p_libelle . '</h2>';
+        
+        require_once 'template/param_detail_new_child.php';
+    }
     function button_delete()
     {
         $html='<td id="del_' . $this->fp_id . '">';
@@ -292,7 +299,7 @@ class RAPAV_Account extends Formulaire_Param_Detail
         echo $sum_type->input();
         echo '</p>';
         echo '<p>';
-        echo _('du poste comptable') . " ". HtmlInput::infobulle(203);
+        echo _('du poste comptable') . '(1)'." ". HtmlInput::infobulle(203);
         echo $account->input();
         echo '</p>';
         echo '<p>';
@@ -317,7 +324,7 @@ class RAPAV_Account extends Formulaire_Param_Detail
         }
         return 0;
     }
-
+   
 }
 
 /**

@@ -129,17 +129,34 @@ switch ($tab)
             $html = $acc_account->errcode;
         } else
         {
-            $acc_account->save();
-            $fp_id = $acc_account->fp_id;
             $code = 'ok';
             $html = '<td>';
-            ob_start();
-            $acc_account->display_row();
-            $html.=ob_get_contents();
-            ob_end_clean();
-            $html.= '</td>';
-            $html.=$acc_account->button_delete();
-            $html.=$acc_account->button_modify();
+            $child=HtmlInput::default_value_get("child", 0);
+            if ( $child == 0 )
+            {
+                // Normal : without child
+                $acc_account->save();
+                $fp_id = $acc_account->fp_id;
+                ob_start();
+                $acc_account->display_row();
+                $html.=ob_get_contents();
+                ob_end_clean();
+                $html.= '</td>';
+                $html.=$acc_account->button_delete();
+                $html.=$acc_account->button_modify();
+            } else {
+                // with all children
+                $acc_account->type_detail = 6;
+                $acc_account->save();
+                $fp_id = $acc_account->fp_id;
+                ob_start();
+                $acc_account->display_row();
+                $html.=ob_get_contents();
+                ob_end_clean();
+                $html.= '</td>';
+                $html.=$acc_account->button_delete();
+                $html.=$acc_account->button_modify();
+            }
         }
         break;
 
