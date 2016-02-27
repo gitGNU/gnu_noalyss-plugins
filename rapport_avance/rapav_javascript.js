@@ -17,10 +17,10 @@ function rapav_form_def(plugin_code, ac, dossier, f_id)
 {
     try
     {
-        $('form_list_div').hide();
+        waiting_box();
+       if ( $('form_list_div') ) $('form_list_div').hide();
         $('form_mod_div').innerHTML = "";
         $('form_mod_div').show();
-        waiting_box();
         var querystring = 'plugin_code=' + plugin_code + '&ac=' + ac + '&gDossier=' + dossier + '&act=mod_form' + "&f_id=" + f_id;
         var action = new Ajax.Request(
                 "ajax.php",
@@ -234,10 +234,10 @@ function rapav_form_param(plugin_code, ac, dossier, f_id)
 {
     try
     {
-        $('form_list_div').hide();
+        waiting_box();
+        if ( $('form_list_div') ) $('form_list_div').hide();
         $('form_mod_div').innerHTML = "";
         $('form_mod_div').show();
-        waiting_box();
         var querystring = 'plugin_code=' + plugin_code + '&ac=' + ac + '&gDossier=' + dossier + '&act=mod_param' + "&f_id=" + f_id;
         var action = new Ajax.Request(
                 "ajax.php",

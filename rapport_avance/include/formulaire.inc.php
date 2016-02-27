@@ -47,7 +47,11 @@ if ( isset($_POST['form_def_sub']))
 
 			//throw $exc;
 		}
+                echo '<div id="form_mod_div">';
 		require_once 'formulaire_definition_show.inc.php';
+                 echo '<hr>';
+                echo HtmlInput::button_action("Paramètre", sprintf("rapav_form_param('%s','%s','%s','%s')",$_REQUEST['plugin_code'],$_REQUEST['ac'],$_REQUEST['gDossier'],$_REQUEST['f_id'] ));
+                echo '</div>';
 		return;
 	}
 }
