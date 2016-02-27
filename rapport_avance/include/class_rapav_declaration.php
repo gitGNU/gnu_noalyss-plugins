@@ -569,7 +569,7 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
 
     function get_interval($p_step)
     {
-        $array_interval = array("", "P7D", "P14D", "P1M", "P2M", "P3M");
+        $array_interval = array("", "P7D", "P14D", "P1M", "P2M", "P3M",'P6M','P1Y');
         return new DateInterval($array_interval[$p_step]);
     }
 
@@ -939,7 +939,6 @@ class Rapav_dd_Compute extends Rapav_Declaration_Detail
             $formula = str_replace($piece, $value, $formula);
         }
         
-        print '$amount = ' . $formula . ';';
         eval('$amount = ' . $formula . ';');
         //
         return $amount;

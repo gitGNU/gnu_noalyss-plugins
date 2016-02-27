@@ -189,7 +189,9 @@ $istep->value = array(
     array('label' => '14 jours', 'value' => 2),
     array('label' => '1 mois', 'value' => 3),
     array('label' => '2 mois', 'value' => 4),
-    array('label' => '3 mois', 'value' => 5)
+    array('label' => '3 mois', 'value' => 5),
+    array('label' => '6 mois', 'value' => 6),
+    array('label' => '1 an', 'value' => 7)
 );
 /*
  * For listing
