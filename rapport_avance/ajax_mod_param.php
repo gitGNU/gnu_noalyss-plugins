@@ -15,4 +15,6 @@ $form = new RAPAV_formulaire($_REQUEST['f_id']);
 $form->load_definition();
 $form->echo_formulaire();
 $form->input_parameter();
+echo '<hr>';
+echo HtmlInput::button_action("Définition", sprintf("rapav_form_def('%s','%s','%s','%s')",$plugin_code,$ac,$gDossier,$_REQUEST['f_id'] ));
 ?>
