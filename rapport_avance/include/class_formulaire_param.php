@@ -437,5 +437,43 @@ class Formulaire_Child extends Formulaire_Formula
         $elt = $this->parametre[$p_index]['type_detail'];
         return new RAPAV_Account($this->parametre[$p_index]['fp_id']);
     }
+    /**
+	 * @brief input value
+	 */
+	function input()
+	{
+		echo '<h4 class="title">' . $this->obj->p_libelle . "(" . $this->obj->p_code . ")" . '</h4>';
+		echo HtmlInput::hidden('p_id[]', $this->obj->p_id);
+		$max = count($this->parametre);
+		echo HtmlInput::hidden("count_" . $this->id, $max);
+		//echo '<h5 class="title">' . 'code ' . $this->obj->p_code . '</h5>';
+		echo '<p>';
+		echo '<table id="table_' . $this->id . '">';
+		for ($i = 0; $i < $max; $i++)
+		{
+			$formula = $this->make_object($i);
+
+			echo '<tr id="tr_' . $formula->fp_id . '">';
+			echo '<td>';
+			echo $formula->display_row();
+			echo '</td>';
+                        echo $formula->button_delete();
+                        echo $formula->button_modify();
+			echo '</tr>';
+		}
+		if ($max == 0)
+			echo '<tr></tr>';
+		echo "</table>";
+		echo '</p>';
+                echo HtmlInput::button_anchor(
+				"Ajout d'une ligne", "javascript:void(0)", "add_row" . $this->id, sprintf("onclick=\"add_param_detail('%s','%s','%s','%s');\"", $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $this->id)
+		);
+                if ( $max > 0 ) {
+                    echo "<script> 
+                    $('add_row".$this->id."').hide();
+                    </script>
+                    ";
+                } 
+        }
 }
 ?>

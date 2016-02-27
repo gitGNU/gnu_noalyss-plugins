@@ -53,8 +53,8 @@ class Formulaire_Param_Detail extends Formulaire_Param_Detail_SQL
     function button_delete()
     {
         $html='<td id="del_' . $this->fp_id . '">';
-        $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"delete_param_detail('%s','%s','%s','%s')\""
-                                , $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $this->fp_id));
+        $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"delete_param_detail('%s','%s','%s','%s','%s','%s')\""
+                                , $_REQUEST['plugin_code'], $_REQUEST['ac'], $_REQUEST['gDossier'], $this->fp_id,$this->p_id,$this->type_detail));
         $html.= '</td>';
         return $html;
     }

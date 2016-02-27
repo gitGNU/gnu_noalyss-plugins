@@ -9,6 +9,7 @@ $fp_id = HtmlInput::default_value_get('fp_id', -1);
 $title="none";$comment="";$tab='none';
 if ($fp_id != -1)
 {
+    $str="";
     $obj = new Formulaire_Param_Detail_SQL($fp_id);
     switch ($obj->type_detail)
     {
@@ -50,6 +51,14 @@ if ($fp_id != -1)
             $tab='new_account_id';
             $title = "Poste comptable";
             break;
+        // Account with children
+        case 6:
+            $obj = new RAPAV_Account($fp_id);
+            $comment="";
+            $tab='new_account_id';
+            $title = "Poste comptable";
+            $str=HtmlInput::hidden("child", 1);
+            break;
         // -- operation reconciliee
         case 5:
             $comment='';
@@ -79,6 +88,7 @@ if ($errcode == 0)
   echo '<form method="post" onsubmit="save_param_detail(\'modify_param_detail_frm\');return false;" id="modify_param_detail_frm">';
   $obj->input();
   echo HtmlInput::hidden('p_id',$obj->p_id);
+  echo $str;
   echo HtmlInput::hidden('tab',$tab);
   echo HtmlInput::hidden('fp_id',$obj->fp_id);
   echo HtmlInput::hidden('ac',$_REQUEST['ac']);

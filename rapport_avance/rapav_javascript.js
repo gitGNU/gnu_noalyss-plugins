@@ -190,17 +190,18 @@ function rapav_search_code(ac, plugin_code, dossier, f_id)
 /**
  *@brief delete a parameter detail
  */
-function delete_param_detail(plugin_code, ac, dossier, fp_id)
+function delete_param_detail(plugin_code, ac, dossier, fp_id,p_id,child)
 {
     try
     {
-        if (!confirm("Confirmez-vous l'effacement ?")) {
-            return false;
-        }
-        waiting_box();
+        smoke.confirm("Confirmez-vous l'effacement ?",function (event)
+        {
+            if (event) 
+            {
+                waiting_box();
 
-        var querystring = 'plugin_code=' + plugin_code + '&ac=' + ac + '&gDossier=' + dossier + '&act=delete_param_detail' + "&fp_id=" + fp_id;
-        var action = new Ajax.Request(
+                var querystring = 'plugin_code=' + plugin_code + '&ac=' + ac + '&gDossier=' + dossier + '&act=delete_param_detail' + "&fp_id=" + fp_id;
+                var action = new Ajax.Request(
                 "ajax.php",
                 {
                     method: 'get',
@@ -212,13 +213,19 @@ function delete_param_detail(plugin_code, ac, dossier, fp_id)
                         $('tr_' + fp_id).style.color = "red";
                         $('del_' + fp_id).innerHTML = "";
                         $('mod_' + fp_id).innerHTML = "";
+                        if (child == 6) {
+                            $('add_row'+p_id).show();
+                        }
                     }
                 }
-        );
+                    );
+            }   
+        });
     } catch (e)
     {
         alert_box(e);
     }
+      
 }
 /**
  * @brief  montre les détails d'un formulaire
@@ -302,6 +309,7 @@ function save_param_detail(p_form_id)
     try
     {
         var qs = $(p_form_id).serialize() + '&act=save_param_detail';
+        var child=$(p_form_id)['child'];
         waiting_box();
         var action = new Ajax.Request(
                 "ajax.php",
@@ -342,7 +350,9 @@ function save_param_detail(p_form_id)
                                     $(update).innerHTML = code_html;
                                 }
                                 removeDiv('param_detail_div');
-
+                                if ( child) {
+                                    $('add_row'+p_id).hide();
+                                }
                             }
                             if (code == 'nok')
                             {
@@ -839,11 +849,9 @@ function save_param_listing(p_form_id)
 }
 function listing_detail_remove(dossier, plugin_code, ac, id)
 {
-    if (confirm('Confirmez-vous effacer ce détail ?') == false)
-    {
-        return;
-    }
-    try {
+    smoke.confirm('Confirmez-vous effacer ce détail ?',function (event) {
+        if (event ) {
+            try {
         var query = 'plugin_code=' + plugin_code + '&ac=' + ac + '&gDossier=' + dossier + '&act=listing_detail_remove' + "&id=" + id;
         waiting_box();
         var action = new Ajax.Request(
@@ -891,6 +899,9 @@ function listing_detail_remove(dossier, plugin_code, ac, id)
     {
         alert_box(e.message);
     }
+        }
+    });
+    
 }
 
 /**
