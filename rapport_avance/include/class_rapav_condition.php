@@ -166,11 +166,15 @@ class RAPAV_Condition
      */
     function delete_by_filter($p_listing_compute_id){
         global $cn;
+        $cn->start();
        // echo $p_listing_compute_id; return;
-        for ($i=0;$i<count(self::$a_operator);$i++)
+        $operator = self::$a_operator;
+        for ($i=0;$i<count($operator);$i++)
         {
-            $operator = self::$a_operator;
-        
+        echo "op :",$operator[$i]['label'];
+        echo "value:",$operator[$i]['value'];
+        echo "listing_compute_id:",$p_listing_compute_id;
+        echo '<hr>';
             // Keep first the text
             $cn->exec_sql(" delete 
                 from rapport_advanced.listing_compute_fiche 
@@ -186,7 +190,8 @@ class RAPAV_Condition
             and c_operator = $2
             and lcd.lc_id = $1 
             )",array($p_listing_compute_id,$operator[$i]['value']));
-        
+        echo $cn->sql;
+        echo "<hr>";
             // Keep the amount
             $cn->exec_sql(" delete 
                 from rapport_advanced.listing_compute_fiche 
@@ -202,7 +207,8 @@ class RAPAV_Condition
             and c_operator = $2
             and lcd.lc_id = $1 
             )",array($p_listing_compute_id,$operator[$i]['value']));
-        
+        echo $cn->sql;
+        echo "<hr>";
             // Keep the date
             $cn->exec_sql(" delete 
                 from rapport_advanced.listing_compute_fiche 
@@ -214,11 +220,15 @@ class RAPAV_Condition
             join rapport_advanced.listing_condition as lc on (lcd.lp_id=lc.lp_id)
             where
             ld_value_date is not null
+            and c_value ~ E'^\\\\d{2}.\\\\d{2}.\\\\d{4}'
             and not ( ld_value_date ".$operator[$i]['label']." to_date(c_value,'DD.MM.YYYY') )
             and c_operator = $2
             and lcd.lc_id = $1 
             )",array($p_listing_compute_id,$operator[$i]['value']));
-        
+        echo $cn->sql;
+        echo "<hr>";
         }
+       /// $cn->exec_sql("delete from rapport_advanced.listing_compute_detail where lf_id not in (select lf_id from rapport_advanced.listing_compute_fiche)");
+        $cn->commit();
     }
 }
