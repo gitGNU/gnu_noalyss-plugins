@@ -93,13 +93,22 @@ echo HtmlInput::hidden('sb',$sb);
         <?php echo HtmlInput::submit('input_file',_('Valider'));?>
     </li>
     <li class="menuv">
-        <?php echo HtmlInput::submit('remove_format',_('Effacer'));?>
+        <?php echo HtmlInput::button_action(_('Effacer'),"confirm_remove()");?>
     </li>
 
 </ol>
     
     
 </form>
+<div id="confirm_remove_format" style="display:none">
+    <form id="confirm_remove_format_frm" method="post">
+        <?php
+        echo HtmlInput::get_to_hidden(array('format','gDossier','sa','plugin_code','format'));
+        echo HtmlInput::hidden('sb',$sb);
+        echo HtmlInput::hidden('remove_format','1');
+        ?>
+    </form>
+</div>
 <script>
     /**
      * Validate the form, the name of the bank format can not be empty
@@ -113,4 +122,14 @@ echo HtmlInput::hidden('sb',$sb);
         }
         return true;
     }
+    function confirm_remove(){
+        smoke.confirm('Confirmez',function (e) {
+                    if (e ) {
+                        $('confirm_remove_format_frm').submit();
+                }
+            }
+            );
+    }
+    $('confirm_remove_format').hide();
+    
 </script>
