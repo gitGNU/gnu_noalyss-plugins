@@ -102,6 +102,7 @@ class RAPAV_Listing_Param {
         $account=new RAPAV_Formula_Account($this->Param);
         $account->set_listing($p_id);
         $attribute->set_listing($p_id);
+        $cond=new RAPAV_Condition();
         require 'template/listing_param_input.php';
     }
     function button_delete()

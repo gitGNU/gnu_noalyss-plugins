@@ -25,6 +25,7 @@
  */
 require_once 'class_rapport_avance_sql.php';
 require_once 'class_rapav_listing_param.php';
+require_once 'class_rapav_condition.php';
 
 class Rapav_Listing
 {

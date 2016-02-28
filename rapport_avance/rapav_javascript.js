@@ -385,10 +385,10 @@ function rapav_declaration_display(plugin_code, ac, dossier, d_id)
 {
     try
     {
+        waiting_box();
         $('declaration_list_div').hide();
         $('declaration_display_div').innerHTML = "";
         $('declaration_display_div').show();
-        waiting_box();
         var querystring = 'plugin_code=' + plugin_code + '&ac=' + ac + '&gDossier=' + dossier + '&act=rapav_declaration_display' + "&d_id=" + d_id;
         var action = new Ajax.Request(
                 "ajax.php",
@@ -414,12 +414,13 @@ function rapav_declaration_delete(plugin_code, ac, dossier, d_id)
 {
     try
     {
-        if (confirm('Confirmez-vous l\'effacement ?') == false) {
-            return;
-        }
-        waiting_box();
-        var querystring = 'plugin_code=' + plugin_code + '&ac=' + ac + '&gDossier=' + dossier + '&act=rapav_declaration_delete' + "&d_id=" + d_id;
-        var action = new Ajax.Request(
+        smoke.confirm(
+                'Confirmez-vous l\'effacement ?',
+        function (e) {
+            if (e) {
+                waiting_box();
+                var querystring = 'plugin_code=' + plugin_code + '&ac=' + ac + '&gDossier=' + dossier + '&act=rapav_declaration_delete' + "&d_id=" + d_id;
+                var action = new Ajax.Request(
                 "ajax.php",
                 {
                     method: 'get',
@@ -433,7 +434,9 @@ function rapav_declaration_delete(plugin_code, ac, dossier, d_id)
                         $('mod_' + d_id).innerHTML = "";
                     }
                 }
-        );
+                );  
+            }
+        });
     }
     catch (e)
     {
@@ -482,31 +485,32 @@ function rapav_form_export(plugin_code, ac, dossier, d_id)
  */
 function rapav_remove_doc_template(plugin_code, ac, dossier, f_id)
 {
-    if (!confirm("Confirmez-vous l'effacement de ce modèle ?"))
-    {
-        return;
-    }
-    try {
-        var querystring = 'plugin_code=' + plugin_code + '&ac=' + ac + '&gDossier=' + dossier + '&act=rapav_remove_doc_template' + "&f_id=" + f_id;
-        var action = new Ajax.Request(
-                "ajax.php",
-                {
-                    method: 'get',
-                    parameters: querystring,
-                    onFailure: error_get_predef,
-                    onSuccess: function() {
-                        $('rapav_template').style.textDecoration = 'line-through';
-                        $('rapav_template').style.color = 'red';
-                        $('rapav_template_ctl').innerHTML = '';
-                        $('rapav_new_file').style.display = 'block';
+    smoke.confirm("Confirmez-vous l'effacement de ce modèle ?"),
+            function (e) {
+                if (e) {
+                    try {
+                        var querystring = 'plugin_code=' + plugin_code + '&ac=' + ac + '&gDossier=' + dossier + '&act=rapav_remove_doc_template' + "&f_id=" + f_id;
+                        var action = new Ajax.Request(
+                                "ajax.php",
+                                {
+                                    method: 'get',
+                                    parameters: querystring,
+                                    onFailure: error_get_predef,
+                                    onSuccess: function () {
+                                        $('rapav_template').style.textDecoration = 'line-through';
+                                        $('rapav_template').style.color = 'red';
+                                        $('rapav_template_ctl').innerHTML = '';
+                                        $('rapav_new_file').style.display = 'block';
+                                    }
+                                }
+                        );
+
+                    } catch (e)
+                    {
+                        alert_box(e.message);
                     }
                 }
-        );
-
-    } catch (e)
-    {
-        alert_box(e.message);
-    }
+            }
 }
 /**
  * Receive a json object and display a window to add a new listing
@@ -653,6 +657,7 @@ function listing_definition(json)
                             var code_html = getNodeText(html[0]);
                             code_html = unescape_xml(code_html);
                             $(json.cout).innerHTML = code_html;
+                            code_html.evalScripts();
                         } catch (e) {
                             alert_box(e.message);
                         }
@@ -1214,3 +1219,84 @@ function js_include_follow_save()
           }
       })
     }
+/**
+ * Display a dialog box to enter a new condition for listing
+ * @param {type} plugin_code
+ * @param {type} ac
+ * @param {type} dossier
+ * @param {type} l_id listing_id
+ * @param {type} lc_id listing_condition_id
+ * @returns {undefined}
+ */    
+function listing_condition_input(plugin_code,ac,dossier,l_id,lc_id)
+{
+    waiting_box();
+    var param = {'gDossier':dossier,'plugin_code':plugin_code,'act':'listing_condition_input','l_id':l_id,'lc_id':lc_id};
+    new Ajax.Request('ajax.php',
+    {
+        parameters:param,
+        method:'get',
+        onSuccess: function(req) {
+            var answer = req.responseText;
+            var position = fixed_position(451, 217) + ';width:50%';
+            add_div({'id': 'listing_condition_add', 'cssclass': 'inner_box', 'drag': 1, 'style': position});
+            remove_waiting_box();
+            $('listing_condition_add').innerHTML = answer;
+            
+        }
+    });
+}
+
+/**
+ * From Declaration screen , save the new condition
+ * @returns {undefined}
+ */
+function listing_condition_save()
+{
+    waiting_box();
+    var param=$('listing_condition_input_frm').serialize(true);
+    param['act']="listing_condition_save";
+    var dossier=$('listing_condition_input_frm')['gDossier'];
+    var plugin_code=$('listing_condition_input_frm')['plugin_code'];
+    var ac=$('listing_condition_input_frm')['ac'];
+    var l_id=$('listing_condition_input_frm')['l_id'];
+    
+    new Ajax.Request('ajax.php',{
+        parameters:param,
+        method:'get',
+        onSuccess:function(req) {
+            try {
+            removeDiv('listing_condition_add');
+            generation_fill_condition();
+            remove_waiting_box();
+            }catch (e) {
+                smoke.alert(e.getMessage);
+            }
+        }
+    });
+}
+/***
+ * In the declaration screen , confirm the removal of a condition of a listing
+ * @param {type} plugin_code
+ * @param {type} ac
+ * @param {type} dossier
+ * @param {type} lc_id
+ * @returns {undefined}
+ */
+function listing_condition_remove(plugin_code,ac,dossier,lc_id,l_id) {
+    smoke.confirm('Confirmez ?',function (e) {
+        if (e) {
+            waiting_box();
+            new Ajax.Request('ajax.php',
+            {
+                method:'GET',
+                parameters:{'gDossier':dossier,'ac':ac,'plugin_code':plugin_code,'lc_id':lc_id,'act':"listing_condition_remove"},
+                onSuccess:function(){
+                    generation_fill_condition();
+                    remove_waiting_box();
+                }
+            })
+        }
+    });
+    
+}

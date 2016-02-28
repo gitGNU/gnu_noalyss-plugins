@@ -679,5 +679,38 @@ class RAPAV_Listing_Compute_Historique_SQL extends Noalyss_SQL
     }
 
 }
+class RAPAV_Condition_SQL extends Noalyss_SQL
+{
+    var $id;
+    var $lp_id;
+    var $c_operator;
+    var $c_value;
+    function __construct( $p_id=-1)
+    {
+        $this->table = "rapport_advanced.listing_condition";
+        $this->primary_key = "id";
+
+        $this->name = array(
+            "id" => "id"
+            ,"lp_id" => "lp_id"
+            , "c_operator" => "c_operator"
+            , "c_value" => "c_value"
+        );
+
+        $this->type = array(
+            "id" => "numeric"
+            ,"lp_id" => "numeric"
+            , "c_operator" => "numeric"
+            , "c_value" => "text"
+        );
+
+        $this->default = array(
+            "id" => "auto"
+        );
+        global $cn;
+        $this->date_format = "DD.MM.YYYY";
+        parent::__construct($cn, $p_id);
+    }
+}
 
 ?>

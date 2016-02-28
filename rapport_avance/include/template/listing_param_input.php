@@ -1,6 +1,7 @@
 <?php
 //This file is part of NOALYSS and is under GPL 
 //see licence.txt
+
 ?>
 <div>
     <form id="common_frm">
@@ -36,34 +37,43 @@
                     <?php echo $order->input(); ?>
                 </td>
             </tr>
+             <tr>
+                <td>
+                    <?php $cond->html_select();?>
+                </td>
+                <td>
+                    <?php 
+                    $value=new IText('c_value',$cond->get_value());
+                    echo $value->input();
+                    ?>
+                </td>
+            </tr>
         </table>
     </form>
-    <table id="table_<?php echo $p_id;?>" style="width:90%;margin-left:5%" >
-        <tr>
-            <td id="new_formula_id_bt" class="tool" style="background:red">
+    <ul id="table_<?php echo $p_id;?>" class="tabs" >
+            <li id="new_formula_id_bt" class="tabs" style="background:red">
                 <a class="mtitle"  href="javascript:void(0)"  onclick="show_listing_formula('new_formula_id')">
                     Formule
                 </a>
-            </td>
-            <td id="new_compute_id_bt"  class="tool" style="background:inherit">
+            </li>
+            <li id="new_compute_id_bt"  class="tabs" style="background:inherit">
                 <a class="mtitle" href="javascript:void(0)"
                    onclick="show_listing_formula('new_compute_id')">
                     Compute
                 </a>
-            </td>
+            </li>
 
-            <td id="new_account_id_bt"  class="tool" style="background:inherit">
+            <li id="new_account_id_bt"  class="tabs" style="background:inherit">
                 <a class="mtitle" href="javascript:void(0)"   onclick="show_listing_formula('new_account_id')">
                     Solde Fiche / Poste Comptable
                 </a>
-            </td>
-            <td id="new_attribute_id_bt"  class="tool" style="background:inherit">
+            </li>
+            <li id="new_attribute_id_bt"  class="tabs" style="background:inherit">
                 <a class="mtitle" href="javascript:void(0)"   onclick="show_listing_formula('new_attribute_id')">
                     Attribut
                 </a>
-            </td>
-        </tr>
-    </table>
+            </li>
+    </ul>
     <div style="width:90%;height:290px;margin-left:5%">
         <span class="error" id="info_listing_param_input_div_id"></span>
 

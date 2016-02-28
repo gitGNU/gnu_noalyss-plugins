@@ -41,6 +41,7 @@
             echo '<p>';
             $new->button_add_param();
             echo '</p>';
+            
             return;
         } else
             $new->delete($_POST);

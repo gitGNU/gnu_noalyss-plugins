@@ -3,6 +3,7 @@
 //see licence.txt
 
 require_once 'include/class_rapav_listing_formula.php';
+require_once 'include/class_rapav_condition.php';
 $id=HtmlInput::default_value_get('id',-1);
 if ($id == -1 )
 {
@@ -24,7 +25,8 @@ if ($id !=-1)
         'ACCOUNT'=>'new_account_id',
         'COMP'=>'compute_id',
         'FORM'=>'formula'
-    )
+    );
+    
     ?>
 <?php echo HtmlInput::hidden("listing_id", $obj->l_id); ?>
     <form id="common_frm">
@@ -60,8 +62,10 @@ if ($id !=-1)
                     <?php echo $order->input(); ?>
                 </td>
             </tr>
+            
         </table>
     </form>
+
  <span class="error" id="info_listing_param_input_div_id"></span>
 <?php
     echo '<form method="POST" id="listing_detail_modify_frm" onsubmit="save_param_listing(\'listing_detail_modify_frm\'); return false;">';

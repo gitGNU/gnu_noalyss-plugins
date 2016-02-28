@@ -157,9 +157,12 @@ if (isset($_GET['compute_listing']))
         $p_listing = new Rapav_Listing($_GET['p_listing']);
         $listing->filter_operation($_GET['p_operation_paid']);
         $listing->compute($p_listing, $_GET['p_start'], $_GET['p_end']);
-        /**
-         * @todo clean thx given conditions
-         */
+        
+        // Delete thanks condition
+        $cond=new RAPAV_Condition();        
+        $cond->delete_by_filter($listing->lc_id);
+        
+        
         echo '<form class="print" id="' . 'select_card_frm' . '" method="POST">';
         echo HtmlInput::hidden('lc_id', $listing->lc_id);
         $listing->display(true, 'select_card_frm');
@@ -199,7 +202,8 @@ $istep->value = array(
 $date_start_listing = new IDate('p_start');
 $date_end_listing = new IDate('p_end');
 $select_listing = new ISelect('p_listing');
-$select_listing->value = $cn->make_array("select l_id, l_name||' '||coalesce(l_description,'') from rapport_advanced.listing order by 2");
+$select_listing->value = $cn->make_array("select l_id, l_name from rapport_advanced.listing order by 2");
+$select_listing->javascript=' onchange ="generation_fill_condition ();generation_fill_description()"';
 $description_listing = new ITextArea('p_description');
 $description_listing->heigh = 2;
 $description_listing->style = ' class="itextarea" style="margin:0"';
@@ -270,6 +274,22 @@ $operation_paid->value = array(
     </form>
 </div>
 <div id="id_listing_div" style="display: none">
+    <div style="float:left;width: 20%">
+    <h1 class="legend">
+        Condition
+    </h1>
+    <div id="condition_div">
+        
+    </div>
+    </div>
+    <div style="float:right;width: 20%">
+    <h1 class="legend">
+        Description
+    </h1>
+    <div id="description_div">
+        
+    </div>
+    </div>
     <form method="GET" onsubmit="return validate_listing()">
                     <?php echo $hidden ?>
         <input type="hidden" name="form" value="rapport">
@@ -314,6 +334,7 @@ $operation_paid->value = array(
         </p>
 <?php echo HtmlInput::submit('compute_listing', 'Générer') ?>
     </form>
+    
 </div>
 <script charset="UTF8" lang="javascript">
     function validate() {
@@ -370,4 +391,24 @@ $operation_paid->value = array(
         }
 
     }
+    function generation_fill_condition() {
+        // Take the l_id from the list (p_listing)
+        var l_id = $('p_listing').options[$('p_listing').selectedIndex].value;
+        
+        var url ="<?php
+        echo "ajax.php?".http_build_query(array('gDossier'=>$_REQUEST['gDossier'],'ac'=>$_REQUEST['ac'],'plugin_code'=>$_REQUEST['plugin_code']));
+        ?>"+"&l_id="+l_id+"&act="+"get_condition";
+        new Ajax.Updater("condition_div",url);
+    }
+    function generation_fill_description() {
+        // Take the l_id from the list (p_listing)
+        var l_id = $('p_listing').options[$('p_listing').selectedIndex].value;
+        
+        var url ="<?php
+        echo "ajax.php?".http_build_query(array('gDossier'=>$_REQUEST['gDossier'],'ac'=>$_REQUEST['ac'],'plugin_code'=>$_REQUEST['plugin_code']));
+        ?>"+"&l_id="+l_id+"&act="+"listing_get_description";
+        new Ajax.Updater("description_div",url);
+    }
+    generation_fill_condition();
+    generation_fill_description();
 </script>

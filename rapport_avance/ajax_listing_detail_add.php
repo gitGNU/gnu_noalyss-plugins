@@ -7,6 +7,7 @@
  * @brief Ajax file
  */
 require_once 'include/class_rapav_listing.php';
+require_once 'include/class_rapav_condition.php';
 
 ob_start();
 echo HtmlInput::title_box("Nouveau paramètre", $cin);

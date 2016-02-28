@@ -14,5 +14,5 @@ require_once NOALYSS_INCLUDE.'/lib/class_database.php';
 global $cn,$rapav_version,$errcode;
 
 $cn=Dossier::connect();;
-$rapav_version=5;
+$rapav_version=6;
 ?>

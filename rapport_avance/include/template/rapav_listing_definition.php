@@ -33,6 +33,9 @@
             Ordre
         </th>
         <th>
+            Condition
+        </th>
+        <th>
             action
         </th>
     </tr>
@@ -58,6 +61,15 @@ for ($i = 0; $i < $nb; $i++):
     <?php echo $this->a_detail[$i]->Param->getp('order'); ?>
             </td>
             <td>
+    <?php  
+        $condition=new RAPAV_Condition();
+        $a_cond=$condition->load_by_listing_param_id($this->a_detail[$i]->Param->getp('lp_id'));
+        $nb_cond=count($a_cond);
+        for ( $j = 0;$j < $nb_cond ; $j++)
+            echo $a_cond[$j]->get_condition();
+    ?>
+            </td>
+            <td>
     <?php
     echo $this->a_detail[$i]->button_delete();
     ?>
@@ -74,4 +86,4 @@ for ($i = 0; $i < $nb; $i++):
                 <?php
             endfor;
             ?>   
-</table>    
+</table> 

@@ -21,10 +21,12 @@
  */
 require_once NOALYSS_INCLUDE.'/lib/class_impress.php';
 require_once 'include/class_rapav_listing_param.php';
+require_once 'include/class_rapav_condition.php';
 $lp_id = HtmlInput::default_value_get('lp_id', -1);
 $formula = new RAPAV_Listing_Param_SQL($lp_id);
-
+$attr="ACCOUNT";
 $html = "";
+$str_cond="";
 switch ($tab)
 {
     case 'formula':
@@ -49,10 +51,7 @@ switch ($tab)
             echo td($acc_formula->display_order());
             $html.=ob_get_contents();
             ob_end_clean();
-            $html.='<td>';
-            $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"listing_detail_remove('%s','%s','%s','%s')\""
-                                    , $_REQUEST['gDossier'], $_REQUEST['plugin_code'], $_REQUEST['ac'], $lp_id));
-            $html.='</td>';
+            
          
         }
         break;
@@ -78,10 +77,7 @@ switch ($tab)
             echo td($compute->display_order());
             $html.=ob_get_contents();
             ob_end_clean();
-            $html.='<td>';
-            $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"listing_detail_remove('%s','%s','%s','%s')\""
-                                    , $_REQUEST['gDossier'], $_REQUEST['plugin_code'], $_REQUEST['ac'], $lp_id));
-            $html.='</td>';
+            
             
         }
         break;
@@ -107,10 +103,7 @@ switch ($tab)
             echo td($compute->display_order());
             $html.=ob_get_contents();
             ob_end_clean();
-            $html.='<td>';
-            $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"listing_detail_remove('%s','%s','%s','%s')\""
-                                    , $_REQUEST['gDossier'], $_REQUEST['plugin_code'], $_REQUEST['ac'], $lp_id));
-            $html.='</td>';
+           
             
         }
         break;
@@ -128,14 +121,26 @@ switch ($tab)
         echo td($attr->display_order());
         $html.=ob_get_contents();
         ob_end_clean();
-        $html.='<td>';
-        $html.=HtmlInput::anchor("Effacer", "", sprintf("onclick=\"listing_detail_remove('%s','%s','%s','%s')\"", $_REQUEST['gDossier'], $_REQUEST['plugin_code'], $_REQUEST['ac'], $lp_id));
-        $html.='</td>';
        
-
+       
+        $attr="ATTR";
         break;
 }
+$cond=new RAPAV_Condition();
+$a_cond=$cond->load_by_listing_param_id($lp_id);
+$nb_cond = count($a_cond);
+    $str_cond="<td>";
+    $and="";
+for ($i=0;$i<$nb_cond;$i++) {
+    $str_cond .= $a_cond[$i]->get_condition().$and;
+    $and=_(' et ');
+}
+$str_cond.="</td>";
 ob_start();
+echo $str_cond;
+ echo '<td>';
+echo HtmlInput::anchor("Effacer", "", sprintf("onclick=\"listing_detail_remove('%s','%s','%s','%s')\"", $_REQUEST['gDossier'], $_REQUEST['plugin_code'], $_REQUEST['ac'], $lp_id));
+echo '</td>';
  echo '<td>';
  $obj = new Rapav_Listing_Param($lp_id);
 $obj->button_modify();
