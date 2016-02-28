@@ -190,10 +190,14 @@ class Import_Bank
     static function color_status($id)
     {
         $style="";
+        $id=strtoupper($id);
         switch ($id)
         {
             case 'E':
                 $style="background-color:red;color:white";
+                break;
+            case 'W':
+                $style="background-color:orange;color:white";
                 break;
             case 'T':
                 $style="background-color:darkgreen;color:white";
@@ -205,7 +209,7 @@ class Import_Bank
                 $style="background-color:white;color:blue";
                 break;
             default:
-                return "";
+                return "$id";
         }
         $style='style="'.$style.'"';
         return $style;
