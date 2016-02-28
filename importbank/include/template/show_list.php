@@ -36,7 +36,12 @@ $suggest_sql=$conx2->prepare('get_suggest','
 ?>
 <h2 class="info"> 
     
-    <?php echo $array[0]['id']." ".$array[0]['i_date']." ".h($array[0]['format_name'])?>
+    <?php 
+    if ( isset ($array[0]['id']))
+    {
+        echo $array[0]['id']." ".$array[0]['i_date']." ".h($array[0]['format_name']);
+    }
+    ?>
     <?php echo _('Journal')." ".h($jrn_name) ." ".  _('Fiche ').h($jrn_account)?>
 
 
@@ -47,6 +52,10 @@ Filtrer : <?php echo $filter->input()?>
 <?php echo HtmlInput::request_to_hidden(array('gDossier','plugin_code','ac','sb','sa','id'))?>
 <?php echo HtmlInput::submit('refresh','Recharger')?>
 </form>
+<?php
+if ( ! $remove ):
+    ?>
+    
 <form method="get" id="show_list_frm2" onsubmit="return confirm_box('show_list_frm2','Vous confirmez?')">
 <?php echo HtmlInput::request_to_hidden(array('gDossier','plugin_code','ac','sb','sa','id',$filter->name))?>
 <?php echo HtmlInput::hidden('form_action2','');?>
@@ -66,6 +75,7 @@ echo $select_action->input();
 ?>
     
 </form>
+<?php endif; ?>
 <?php echo HtmlInput::filter_table('record_tb_id','1,2,3,4,5,6,7',1); ?>
 <table id="record_tb_id" class="sortable" >
 	<TR>

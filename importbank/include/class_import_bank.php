@@ -98,7 +98,7 @@ class Import_Bank
 
         $ret=$cn->exec_sql('select a.id,to_char(i_date,\'DD.MM.YYYY HH24:MI\') as str_date,format_name,i_date
 				from importbank.import as a
-				join importbank.format_bank as b on (format_bank_id=b.id)
+				left join importbank.format_bank as b on (format_bank_id=b.id)
 				order by i_date desc');
         $link='?'.Dossier::get().'&plugin_code='.$_REQUEST['plugin_code'].
                 '&sb=list&sa='.$_REQUEST['sa']."&ac=".$_REQUEST['ac'];
@@ -147,7 +147,7 @@ class Import_Bank
         $sql_filter=Import_Bank::convert_status_sql($filter->selected);
         $array=$cn->get_array('select a.id as id,to_char(i_date,\'DD.MM.YYYY HH24:MI\') as i_date,format_name,jrn_def_id
 				from importbank.import as a
-				join importbank.format_bank as b on (format_bank_id=b.id)
+				left join importbank.format_bank as b on (format_bank_id=b.id)
 			    where a.id=$1', array($p_id));
        
         $ret=$cn->exec_sql(" SELECT id ,ref_operation,tp_date, amount,
@@ -165,11 +165,19 @@ class Import_Bank
 			  FROM importbank.temp_bank
 			  where import_id=$1 $sql_filter
 			  order by tp_date,ref_operation,amount", array($p_id));
-        $jrn_name=$cn->get_value('select jrn_def_name from jrn_def where  jrn_def_id=$1',
+        $remove=false;
+        if ( isset ($array[0]['jrn_def_id']) )
+        {
+            $jrn_name=$cn->get_value('select jrn_def_name from jrn_def where  jrn_def_id=$1',
                 array($array[0]['jrn_def_id']));
-        $jrn_account=$cn->get_value("select ad_value from fiche_detail
+            $jrn_account=$cn->get_value("select ad_value from fiche_detail
 						where ad_id=1 and f_id=(select jrn_Def_bank from jrn_def where jrn_def_id=$1) "
                 , array($array[0]['jrn_def_id']));
+        } else {
+            $remove=true;
+            $jrn_name=_("Format effacé");
+            $jrn_account="";
+        }
         require_once('template/show_list.php');
     }
 
