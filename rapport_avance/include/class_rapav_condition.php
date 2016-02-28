@@ -171,10 +171,6 @@ class RAPAV_Condition
         $operator = self::$a_operator;
         for ($i=0;$i<count($operator);$i++)
         {
-        echo "op :",$operator[$i]['label'];
-        echo "value:",$operator[$i]['value'];
-        echo "listing_compute_id:",$p_listing_compute_id;
-        echo '<hr>';
             // Keep first the text
             $cn->exec_sql(" delete 
                 from rapport_advanced.listing_compute_fiche 
@@ -190,8 +186,6 @@ class RAPAV_Condition
             and c_operator = $2
             and lcd.lc_id = $1 
             )",array($p_listing_compute_id,$operator[$i]['value']));
-        echo $cn->sql;
-        echo "<hr>";
             // Keep the amount
             $cn->exec_sql(" delete 
                 from rapport_advanced.listing_compute_fiche 
@@ -207,8 +201,6 @@ class RAPAV_Condition
             and c_operator = $2
             and lcd.lc_id = $1 
             )",array($p_listing_compute_id,$operator[$i]['value']));
-        echo $cn->sql;
-        echo "<hr>";
             // Keep the date
             $cn->exec_sql(" delete 
                 from rapport_advanced.listing_compute_fiche 
@@ -225,10 +217,7 @@ class RAPAV_Condition
             and c_operator = $2
             and lcd.lc_id = $1 
             )",array($p_listing_compute_id,$operator[$i]['value']));
-        echo $cn->sql;
-        echo "<hr>";
         }
-       /// $cn->exec_sql("delete from rapport_advanced.listing_compute_detail where lf_id not in (select lf_id from rapport_advanced.listing_compute_fiche)");
         $cn->commit();
     }
 }
