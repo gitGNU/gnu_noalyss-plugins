@@ -27,7 +27,7 @@ require 'include/class_rapav_condition.php';
  * @brief 
  * @param type $name Descriptionara
  */
-$cond=new RAPAV_Condition();
+$cond=new RAPAV_Condition($lc_id);
 $c_value=HtmlInput::default_value_get("c_value", "");
 $cond->set_value($c_value);
 $cond->set_operator($c_operator);
