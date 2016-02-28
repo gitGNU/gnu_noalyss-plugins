@@ -89,9 +89,7 @@ if ($cn->exist_schema('importbank') == false)
  if ( $cn->get_value("select count(*) from importbank.version") == 0 ) {
      $cn->execute_script($g_dir_importbank."/sql/upgrade1.sql");
  }
- if ( $cn->get_value("select max(version) from importbank.version") == 1 ) {
-     $cn->execute_script($g_dir_importbank."/sql/upgrade2.sql");
- }
+ 
 /*
  *Menu : import bank, reconciliation operation, purge temporary table
  */
