@@ -81,7 +81,7 @@ switch($row['dr_type'])
             	$input=new INum('amount[]',$row['dr_amount']);
 		$input->size=15;
 		echo HtmlInput::hidden('code[]',$row['dr_id']);
-		echo '<p>'.$row['dr_code']." ".$row['dr_libelle']." = ".$input->input()."  $per ".' </p>';
+		echo '<p>'.$row['dr_code']." ".$row['dr_account'].$row['dr_libelle']." = ".$input->input()."  $per ".' </p>';
 		break;
 
 }
