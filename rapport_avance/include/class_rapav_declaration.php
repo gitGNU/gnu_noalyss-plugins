@@ -221,7 +221,7 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
                     '&lt;&lt;'||dr_code||'_LIB&gt;&gt;' as code_lib,
                     '&lt;&lt;'||dr_code||'_ACC&gt;&gt;' as code_acc,
                     dr_account,
-                    dr_amount,dr_libelle from rapport_advanced.declaration_row where d_id=$1 and dr_type=9", array($this->d_id));
+                    dr_amount,dr_libelle from rapport_advanced.declaration_row where d_id=$1 and dr_type=9 and dr_amount <> 0", array($this->d_id));
         } else
         {
             $array = $cn->get_array("select '<<'||dr_code||'>>' as code,dr_amount from rapport_advanced.declaration_row where d_id=$1 and dr_type=3", array($this->d_id));
@@ -229,7 +229,7 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
                 '<<'||dr_code||'_LIB>>' as code_lib, 
                 '<<'||dr_code||'_ACC>>' as code_acc, 
                 dr_account,
-                dr_amount,dr_libelle from rapport_advanced.declaration_row where d_id=$1 and dr_type=9 order by dr_order", array($this->d_id));
+                dr_amount,dr_libelle from rapport_advanced.declaration_row where d_id=$1 and dr_type=9 and dr_amount <> 0 order by dr_order", array($this->d_id));
         }
 
         // open the files
@@ -237,7 +237,7 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
         $ifile = fopen($ifilename, 'r');
 
         // check if tmpdir exist otherwise create it
-        $temp_dir = $_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . 'tmp';
+        $temp_dir = $_ENV['TMP'];
         if (is_dir($temp_dir) == false)
         {
             if (mkdir($temp_dir) == false)
@@ -271,8 +271,27 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
         }
         else
         {
+            $a_code_clean=array();
+            $a_code_lib_clean=array();
+            $a_code_acc_clean=array();
+            $idx=0;
             foreach ($array_mult as $key=> $value)
             {
+                // Get all the code to replace without duplicate
+                
+                if ( $idx == 0 ) {
+                    $a_code_clean[$idx]=$value['code'];
+                    $a_code_lib_clean[$idx]=$value['code_lib'];
+                    $a_code_acc_clean[$idx]=$value['code_acc'];
+                    $idx++;
+                } else {
+                    if ( ! in_array($value['code'], $a_code_clean)){
+                        $a_code_clean[$idx]=$value['code'];
+                        $a_code_lib_clean[$idx]=$value['code_lib'];
+                        $a_code_acc_clean[$idx]=$value['code_acc'];
+                        $idx++;
+                    }
+                }
                 if (is_numeric($value['dr_amount']))
                 {
                     /* -- works only with OOo Calc -- */
@@ -284,6 +303,17 @@ class Rapav_Declaration extends RAPAV_Declaration_SQL
                 $buffer=preg_replace("/".$value['code_lib']."/", $value['dr_libelle'],$buffer,1);
                 $buffer=preg_replace("/".$value['code_acc']."/", $value['dr_account'],$buffer,1);
             }
+            // clean all unused 
+            for ($k=0;$k<$idx;$k++){
+                $code=$a_code_clean[$k];
+                $code_lib=$a_code_lib_clean[$k];
+                $code_acc=$a_code_acc_clean[$k];
+                $buffer=preg_replace("/".$code."/","",$buffer);
+                $buffer=preg_replace("/".$code_lib."/", "",$buffer);
+                $buffer=preg_replace("/".$code_acc."/", "",$buffer);
+                
+            }
+            
         }
         // write to output
         fwrite($ofile, $buffer);
