@@ -485,7 +485,7 @@ function rapav_form_export(plugin_code, ac, dossier, d_id)
  */
 function rapav_remove_doc_template(plugin_code, ac, dossier, f_id)
 {
-    smoke.confirm("Confirmez-vous l'effacement de ce modèle ?"),
+    smoke.confirm("Confirmez-vous l'effacement de ce modèle ?",
             function (e) {
                 if (e) {
                     try {
@@ -510,7 +510,7 @@ function rapav_remove_doc_template(plugin_code, ac, dossier, f_id)
                         alert_box(e.message);
                     }
                 }
-            }
+            });
 }
 /**
  * Receive a json object and display a window to add a new listing
