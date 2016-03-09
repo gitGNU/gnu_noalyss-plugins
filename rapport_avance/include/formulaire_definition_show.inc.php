@@ -29,7 +29,7 @@
 echo '<h1>Définition </h1>';
 $form = new RAPAV_formulaire($_REQUEST['f_id']);
 $form->load_definition();
-echo '<form method="POST" enctype="multipart/form-data" class="print">';
+echo '<form id="form_definition_frm" method="POST" enctype="multipart/form-data" class="print">';
 $form->input_formulaire();
 $form->input_definition();
 echo '<p>';

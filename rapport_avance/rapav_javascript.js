@@ -235,6 +235,26 @@ function rapav_form_param(plugin_code, ac, dossier, f_id)
     try
     {
         waiting_box();
+        /*--------------------
+         * Save the definition first 
+         */
+        if ($('form_definition_frm') )
+        {
+            var param=$('form_definition_frm').serialize(true);
+            param['act']='save_definition';
+            param['gDossier']=dossier;
+            param['f_id']=f_id;
+            param['plugin_code']=plugin_code;
+            param['ac']=ac;
+            new Ajax.Request('ajax.php',
+            {
+                method:'get',
+                parameters:param
+            
+            }
+            );
+        }
+        
         if ( $('form_list_div') ) $('form_list_div').hide();
         $('form_mod_div').innerHTML = "";
         $('form_mod_div').show();

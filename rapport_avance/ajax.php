@@ -14,7 +14,8 @@ $a_action=explode(',',
         'listing_detail_add,save_param_listing,listing_detail_remove,'.
         'listing_search_code,rapav_listing_display,parameter_send_mail,send_mail,'
         . 'include_follow,include_follow_save,modify_param_detail,listing_detail_modify,modify_listing_description'
-        . ',modify_rapav_description,get_condition,listing_get_description,listing_condition_input,listing_condition_save');
+        . ',modify_rapav_description,get_condition,listing_get_description,listing_condition_input,listing_condition_save,'
+        . 'save_definition');
 if ( in_array($act,$a_action ) == true )
 {
     include 'ajax_'.$act.'.php';
