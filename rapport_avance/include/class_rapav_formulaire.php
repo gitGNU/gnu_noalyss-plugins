@@ -130,7 +130,7 @@ class RAPAV_Formulaire extends Formulaire_Sql
 					array($p_array['p_code'][$i],$p_array['p_id'][$i],$p_array['f_id']));
 
 			if ( $c > 0 ) {
-				$p_array['p_code'][$i]='C'.$i.microtime(false);
+				$p_array['p_code'][$i]=RAPAV_Formulaire::generate_code();
 			}
 		}
                 
