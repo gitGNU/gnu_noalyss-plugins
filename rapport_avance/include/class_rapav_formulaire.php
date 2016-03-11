@@ -139,7 +139,7 @@ class RAPAV_Formulaire extends Formulaire_Sql
                     for ($e=0;$e<$count_code;$e++) {
                         if ($p_array['p_code'][$i] == $p_array['p_code'][$e] && $i != $e)
                         {
-                            $p_array['p_code'][$e]='C'.$i.microtime(false);
+                            $p_array['p_code'][$e]=  RAPAV_Formulaire::generate_code();
                         }
                     }
                 }
@@ -162,7 +162,7 @@ class RAPAV_Formulaire extends Formulaire_Sql
 		for ($i = 0; $i < $nb_line ; $i++)
 		{
 			$form_param = new formulaire_param_sql($p_array['p_id'][$i]);
-			$form_param->p_code = (trim($p_array['p_code'][$i])!="")?$p_array['p_code'][$i]:'C'.$i.microtime();
+			$form_param->p_code = (trim($p_array['p_code'][$i])!="")?$p_array['p_code'][$i]:  RAPAV_Formulaire::generate_code();
 			// remove space from p_code
 			$form_param->p_code=str_replace(' ', "",$form_param->p_code);
 
@@ -268,6 +268,20 @@ class RAPAV_Formulaire extends Formulaire_Sql
 		$this->f_lob=null;
 		$this->update();
 	}
+        static function generate_code() {
+            $a_possible= explode(',', 'A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,0,1,2,3,4,5,6,7,8,9');
+            $max=count($a_possible);
+            $max--;
+            $code=$a_possible[rand(0,$max)].
+                    $a_possible[rand(0,$max)].
+                    $a_possible[rand(0,$max)].
+                    $a_possible[rand(0, $max)].
+                    $a_possible[rand(0, $max)].
+                    $a_possible[rand(0, $max)]
+                    ;
+            return$code;
+            
+        }
 }
 
 ?>
