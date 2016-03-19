@@ -38,7 +38,14 @@ $data=$cn->get_array("select d_id,d_title,
                 1 as type
 		from rapport_advanced.declaration
 		where to_keep='Y'
-            
+                union all		
+                select lc_id,l_name,l_start,l_end,to_char(l_timestamp,'DD/MM/YY HH24:MI') as fmt_generated,
+		l_description,l_timestamp,
+		to_char(l_start,'YYMMDD') as fmt_start,
+		to_char(l_end,'YYMMDD') as fmt_end,
+		to_char(l_timestamp,'YYMMDDHH24MI') as fmt_order_generated,
+                2
+		from rapport_advanced.listing_compute
 order by d_generated desc,d_title");
 ?>
 <div id="declaration_list_div">

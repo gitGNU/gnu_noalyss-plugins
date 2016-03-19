@@ -10,9 +10,12 @@ global $cn;
 $a_action=explode(',',
         'mod_form,add_row_definition,mod_param,add_param_detail,'.
         'rapav_search_code,save_param_detail,rapav_declaration_display,'.
-         'modify_param_detail,'.
-         ',modify_rapav_description,'.
-         'save_definition');
+        'listing_modify,listing_remove_modele,listing_display_definition,'.
+        'listing_detail_add,save_param_listing,listing_detail_remove,'.
+        'listing_search_code,rapav_listing_display,parameter_send_mail,send_mail,'
+        . 'include_follow,include_follow_save,modify_param_detail,listing_detail_modify,modify_listing_description'
+        . ',modify_rapav_description,get_condition,listing_get_description,listing_condition_input,listing_condition_save,'
+        . 'save_definition');
 if ( in_array($act,$a_action ) == true )
 {
     include 'ajax_'.$act.'.php';
@@ -20,6 +23,10 @@ if ( in_array($act,$a_action ) == true )
 }
 switch ($act)
 {
+    case 'listing_condition_remove':
+        $cn->exec_sql(" delete from rapport_advanced.listing_condition where id=$1",
+                array($lc_id));
+        break;
     /////////////////////////////////////////////////////////////////////////
     // Delete un formulaire_param_detail
     /////////////////////////////////////////////////////////////////////////
@@ -32,6 +39,13 @@ switch ($act)
     /////////////////////////////////////////////////////////////////////
     case 'rapav_declaration_delete':
         $cn->exec_sql("delete from rapport_advanced.declaration where d_id=$1",
+                array($_GET['d_id']));
+        break;
+    /////////////////////////////////////////////////////////////////////
+    // Delete a saved listing (from history)
+    /////////////////////////////////////////////////////////////////////
+    case 'rapav_listing_delete':
+        $cn->exec_sql("delete from rapport_advanced.listing_compute where lc_id=$1",
                 array($_GET['d_id']));
         break;
     /////////////////////////////////////////////////////////////////////

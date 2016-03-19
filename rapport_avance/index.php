@@ -57,13 +57,12 @@ echo create_script($j);
 
 $url = '?' . dossier::get() . "&plugin_code=" . $_REQUEST['plugin_code'] . "&ac=" . $_REQUEST['ac'];
 $array = array(
-	array($url . '&sa=li', _('Liste'), _('Création, modification, Paramètre de listes, mailing list'), 0),
 	array($url . '&sa=fo', _('Formulaire'), _('Création, modification, Paramètre'), 1),
  	array($url . '&sa=de', _('Génération'), _('Génération Déclaration / listing'), 2),
 	array($url . '&sa=hi', _('Historique'), _('Historique des déclarations faites'), 3)
 );
 
-$sa = (isset($_REQUEST['sa'])) ? $_REQUEST['sa'] : "";
+$sa = (isset($_REQUEST['sa'])) ? $_REQUEST['sa'] : "fo";
 $def = 0;
 switch ($sa)
 {
@@ -76,9 +75,6 @@ switch ($sa)
 	case 'hi':
 		$def = 3;
 		break;
-        case 'li':
-                $def=0;
-                break;
 }
 
 $cn = Dossier::connect();
@@ -90,11 +86,6 @@ echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="ht
 echo ShowItem($array, 'H', 'mtitle ', 'mtitle ', $def, ' style="width:80%;margin-left:10%;border-collapse: separate;border-spacing:  5px;"');
 echo '<div class="content" style="width:80%;margin-left:10%">';
 // include the right file
-if ($def == 0)
-{
-	require_once('include/liste.inc.php');
-	exit();
-}
 
 // include the right file
 if ($def == 1)
