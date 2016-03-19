@@ -1,6 +1,7 @@
 <?php
 //This file is part of NOALYSS and is under GPL 
 //see licence.txt
+require_once 'listing_constant.php';
 
 extract($_GET);
 if ( ! isset($act)) {
