@@ -999,28 +999,30 @@ function rapav_listing_delete(plugin_code, ac, dossier, d_id)
 {
     try
     {
-        if (confirm('Confirmez-vous l\'effacement ?') == false) {
-            return;
+        smoke.confirm('Confirmez-vous l\'effacement ?', function (e)
+        {
+            if (e) {
+                waiting_box();
+                var querystring = 'plugin_code=' + plugin_code + '&ac=' + ac + '&gDossier=' + dossier + '&act=rapav_listing_delete' + "&d_id=" + d_id;
+                var action = new Ajax.Request(
+                        "ajax.php",
+                        {
+                            method: 'get',
+                            parameters: querystring,
+                            onFailure: error_get_predef,
+                            onSuccess: function (req) {
+                                remove_waiting_box();
+                                $('tr_' + d_id).style.textDecoration = "line-through";
+                                $('tr_' + d_id).style.color = "red";
+                                $('del_' + d_id).innerHTML = "";
+                                $('mod_' + d_id).innerHTML = "";
+                            }
+                        });
+
+            }
         }
-        waiting_box();
-        var querystring = 'plugin_code=' + plugin_code + '&ac=' + ac + '&gDossier=' + dossier + '&act=rapav_listing_delete' + "&d_id=" + d_id;
-        var action = new Ajax.Request(
-                "ajax.php",
-                {
-                    method: 'get',
-                    parameters: querystring,
-                    onFailure: error_get_predef,
-                    onSuccess: function(req) {
-                        remove_waiting_box();
-                        $('tr_' + d_id).style.textDecoration = "line-through";
-                        $('tr_' + d_id).style.color = "red";
-                        $('del_' + d_id).innerHTML = "";
-                        $('mod_' + d_id).innerHTML = "";
-                    }
-                }
         );
-    }
-    catch (e)
+    } catch (e)
     {
         alert_box(e.message);
         return false;
