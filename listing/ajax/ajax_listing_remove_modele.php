@@ -2,7 +2,7 @@
 //This file is part of NOALYSS and is under GPL 
 //see licence.txt
 
-require_once 'include/class_rapav_listing.php';
+require_once $g_listing_home.'/include/class_rapav_listing.php';
 $obj=new Rapav_Listing($id);
 $obj->remove_modele();
 

@@ -5,7 +5,7 @@
 /**
  * Display form to enter parameters
  */
-require_once 'include/class_rapav_listing_compute.php';
+require_once $g_listing_home.'/include/class_rapav_listing_compute.php';
 require_once NOALYSS_INCLUDE.'/class/class_fiche_def.php';
 
 ob_start();
@@ -39,7 +39,7 @@ if ( $fiche_def->HasAttribute(ATTR_DEF_EMAIL) == false) {
             array('value'=>0,'label'=>_('Aucun document'))
         );
     }
-    require_once 'include/template/parameter_send_mail_input.php';
+    require_once $g_listing_home.'/template/parameter_send_mail_input.php';
     
 }
 $response = ob_get_clean();

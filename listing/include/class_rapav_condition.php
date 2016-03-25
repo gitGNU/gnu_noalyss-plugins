@@ -141,7 +141,7 @@ class RAPAV_Condition
     }
     static function display_condition($p_listing_id)
     {
-        global $cn;
+        global $cn,$g_listing_home;
         $a_condition = $cn->get_array(
                 "
                     select lc.id,lp_code , c_operator,c_value 
@@ -156,7 +156,7 @@ class RAPAV_Condition
                 , array ($p_listing_id));
        if ( $a_condition == false ) return ;
        $nb_condition = count($a_condition);
-       require 'template/display_condition.php';
+       require $g_listing_home.'/template/display_condition.php';
     }
     /**
      * Delete the row which do not match the given condition. So we 

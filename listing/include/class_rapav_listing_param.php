@@ -87,7 +87,7 @@ class RAPAV_Listing_Param {
      */
     function input($p_id)
     {
-        global $cn;
+        global $cn,$g_listing_home;
         $code=new IText('code_id');
         $comment=new IText('comment');
         $order=new INum('order');
@@ -103,7 +103,7 @@ class RAPAV_Listing_Param {
         $account->set_listing($p_id);
         $attribute->set_listing($p_id);
         $cond=new RAPAV_Condition();
-        require 'template/listing_param_input.php';
+        require $g_listing_home.'/template/listing_param_input.php';
     }
     function button_delete()
     {

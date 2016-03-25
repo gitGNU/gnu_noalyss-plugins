@@ -19,7 +19,7 @@ $a_action=explode(',',
         . 'save_definition');
 if ( in_array($act,$a_action ) == true )
 {
-    include 'ajax_'.$act.'.php';
+    include $g_listing_home.'/ajax/ajax_'.$act.'.php';
     exit();
 }
 switch ($act)

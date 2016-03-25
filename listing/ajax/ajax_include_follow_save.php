@@ -2,7 +2,7 @@
 //This file is part of NOALYSS and is under GPL 
 //see licence.txt
 
-require_once 'include/class_rapav_listing_compute.php';
+require_once $g_listing_home.'/include/class_rapav_listing_compute.php';
 
 ob_start();
 $compute = new RAPAV_Listing_Compute();

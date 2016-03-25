@@ -19,7 +19,7 @@
 
 require_once NOALYSS_INCLUDE.'/lib/class_sendmail.php';
 require_once NOALYSS_INCLUDE.'/class/class_follow_up.php';
-
+require_once 'class_rapport_avance_sql.php';
 /**
  * Description of class_rapav_listing_compute_fiche
  *
@@ -263,7 +263,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         $ifile = fopen($p_dir . '/' . $p_filename, 'r');
 
         // check if tmpdir exist otherwise create it
-        $temp_dir = $_SERVER["DOCUMENT_ROOT"] . DIRECTORY_SEPARATOR . 'tmp';
+        $temp_dir = $_ENV['TMP'];
         if (is_dir($temp_dir) == false)
         {
             if (mkdir($temp_dir) == false)

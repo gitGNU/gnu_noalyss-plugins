@@ -21,7 +21,7 @@
 
 if (!defined('ALLOWED'))
     die('Appel direct ne sont pas permis');
-require 'include/class_rapav_condition.php';
+require $g_listing_home.'/include/class_rapav_condition.php';
 /**
  * @file
  * @brief 

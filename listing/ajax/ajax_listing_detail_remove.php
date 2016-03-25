@@ -7,7 +7,7 @@
  * @brief delete a row in Listing_Param
  */
 global $cn;
-require_once 'include/class_rapav_listing_param.php';
+require_once $g_listing_home.'/include/class_rapav_listing_param.php';
 $del=new RAPAV_Listing_Param($id);
 $del->Param->delete();
 

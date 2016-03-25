@@ -30,7 +30,7 @@ if ($id == 0 ) return;
 $comment=HtmlInput::default_value_get('comment', NULL);
 $comment=strip_tags($comment);
 
-require_once 'include/class_rapport_avance_sql.php';
+require_once $g_listing_home.'/include/class_rapport_avance_sql.php';
 
 $list=new RAPAV_Listing_Compute_SQL($id);
 

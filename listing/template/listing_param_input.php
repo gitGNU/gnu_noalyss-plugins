@@ -37,17 +37,7 @@
                     <?php echo $order->input(); ?>
                 </td>
             </tr>
-             <tr>
-                <td>
-                    <?php $cond->html_select();?>
-                </td>
-                <td>
-                    <?php 
-                    $value=new IText('c_value',$cond->get_value());
-                    echo $value->input();
-                    ?>
-                </td>
-            </tr>
+             
         </table>
     </form>
     <ul id="table_<?php echo $p_id;?>" class="tabs" >

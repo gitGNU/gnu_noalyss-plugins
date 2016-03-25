@@ -41,7 +41,7 @@ $desc = new ITextArea();
 $desc->style = ' class="itextarea" style="width:90%;margin-left:5%"';
 $desc->name = "ag_comment";
 
-require_once 'include/template/include_follow.php';
+require_once $g_listing_home.'/template/include_follow.php';
 
 $response = ob_get_clean();
 $html = escape_xml($response);

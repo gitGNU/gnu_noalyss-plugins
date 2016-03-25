@@ -20,8 +20,8 @@
  *
  */
 require_once NOALYSS_INCLUDE.'/lib/class_impress.php';
-require_once 'include/class_rapav_listing_param.php';
-require_once 'include/class_rapav_condition.php';
+require_once $g_listing_home.'/include/class_rapav_listing_param.php';
+require_once $g_listing_home.'/include/class_rapav_condition.php';
 $lp_id = HtmlInput::default_value_get('lp_id', -1);
 $formula = new RAPAV_Listing_Param_SQL($lp_id);
 $attr="ACCOUNT";

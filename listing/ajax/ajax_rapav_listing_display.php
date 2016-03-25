@@ -6,8 +6,7 @@
  * @file
  * @brief display a declaration from history but you can't modify it
  */
-require_once 'rapav_constant.php';
-require_once 'include/class_rapav_listing_compute.php';
+require_once $g_listing_home.'/include/class_rapav_listing_compute.php';
 global $cn;
 echo '<div class="content">';
 echo '<p>';

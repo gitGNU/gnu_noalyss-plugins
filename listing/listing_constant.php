@@ -12,7 +12,8 @@
 require_once NOALYSS_INCLUDE.'/lib/class_database.php';
 
 global $cn,$rapav_version,$errcode;
-
+global $g_listing_home ;
+$g_listing_home=__DIR__;
 $cn=Dossier::connect();;
 $rapav_version=6;
 ?>

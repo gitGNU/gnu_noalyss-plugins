@@ -46,8 +46,9 @@ class Rapav_Listing
      */
     function to_list()
     {
+        global $g_listing_home;
         $res = $this->data->seek('join fiche_def using (fd_id) order by l_name');
-        require 'template/rapav_listing_to_list.php';
+        require $g_listing_home.'/template/rapav_listing_to_list.php';
     }
 
     /**
@@ -74,7 +75,7 @@ class Rapav_Listing
      */
     function form_modify()
     {
-        global $cn;
+        global $cn,$g_listing_home;
         $name = new IText('name');
         $name->size=120;
         $description = new ITextArea('description');
@@ -120,7 +121,7 @@ class Rapav_Listing
                         HtmlInput::anchor('X', "", ' onclick="' . $json . '"',' class="tinybutton"');
             }
         }
-        require 'template/rapav_listing_form_modify.php';
+        require $g_listing_home.'/template/rapav_listing_form_modify.php';
     }
 
     /**
@@ -250,7 +251,8 @@ class Rapav_Listing
      */
     function display()
     {
-        require_once 'class_rapav_listing_formula.php';
+        global $g_listing_home;
+        require_once $g_listing_home.'/include/class_rapav_listing_formula.php';
         // Load all listing_parameter
         $this->load_detail();
 
@@ -268,7 +270,7 @@ class Rapav_Listing
 
 
         // Display them avec an anchor to update / delete (javascript)
-        include_once 'template/rapav_listing_definition.php';
+        include_once $g_listing_home.'/template/rapav_listing_definition.php';
     }
 
     /**

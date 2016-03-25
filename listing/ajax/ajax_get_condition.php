@@ -27,7 +27,7 @@ if (!defined('ALLOWED'))
  * @brief 
  * @param Display the condition
  */
-require_once 'include/class_rapav_condition.php';
+require_once $g_listing_home.'/include/class_rapav_condition.php';
 
 RAPAV_Condition::display_condition($l_id);
 echo HtmlInput::button_action("Ajout Condition", sprintf("listing_condition_input('%s','%s','%s','%s',-1)",
