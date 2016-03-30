@@ -398,7 +398,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         $ifile = fopen($p_dir . '/' . $p_filename, 'r');
 
         // check if tmpdir exist otherwise create it
-        $temp_dir = $_env['TMP'];
+        $temp_dir = $_ENV['TMP'];
         if (is_dir($temp_dir) == false)
         {
             if (mkdir($temp_dir) == false)
