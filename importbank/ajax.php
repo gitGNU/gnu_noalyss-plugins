@@ -25,6 +25,7 @@ extract($_GET);
 $cn=Dossier::connect();
 $html='';$extra='';$ctl='';
 $dossier_id=Dossier::id();
+$r="";
 switch($act) {
     case 'set_suggest':
     ////////////////////////////////////////////////////////////////////

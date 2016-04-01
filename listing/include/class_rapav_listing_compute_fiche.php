@@ -199,6 +199,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
                 switch ($value['type'])
                 {
                     case 1:
+                        // Numeric value
                         if ($p_type=='OOo')
                         {
                             $searched = 'office:value-type="string"><text:p>' . $value['code'];
@@ -209,9 +210,20 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
                         $buffer = str_replace($value['code'], $value['ld_value_numeric'], $buffer);
                     break;
                     case 2:
-                         $buffer = str_replace($value['code'], $value['ld_value_text'], $buffer);
+                        $text=$value['ld_value_text'];
+                        // Text value
+                        if ($p_type == 'OOo') {
+                            // For OOo we need to change some special char 
+                            $text=str_replace('&','&amp;',$text);
+			    $text=str_replace('<','&lt;',$text);
+			    $text=str_replace('>','&gt;',$text);
+			    $text=str_replace('"','&quot;',$text);
+			    $text=str_replace("'",'&apos;',$text);
+                        }
+                         $buffer = str_replace($value['code'],$text , $buffer);
                         break;
                     case 3:
+                        // Date Value
                          $buffer = str_replace($value['code'], $value['ld_value_date'], $buffer);
                         break;
                     default:
