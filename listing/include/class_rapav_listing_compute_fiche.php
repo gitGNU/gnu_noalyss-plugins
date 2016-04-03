@@ -528,7 +528,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         $ext=  strrpos($this->lf_filename,".");
         $dst_file=  substr($this->lf_filename, 0, $ext);
         $dst_file.=".pdf";
-        passthru(OFFICE.$file,$status);
+        passthru(OFFICE.escapeshellarg($file),$status);
         // reload it into database
         $this->lf_pdf=$cn->lo_import($_ENV['TMP']."/".$dst_file);
         $this->lf_pdf_filename=$dst_file;

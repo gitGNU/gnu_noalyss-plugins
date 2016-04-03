@@ -117,7 +117,7 @@ foreach ($_GET['sel_sale'] as $key => $value)
             $filetosend = substr($file, 0, $ext);
             $filetosend .=".pdf";
 
-            passthru(OFFICE . $file, $status);
+            passthru(OFFICE . escapeshellarg($file), $status);
             if ($status == 1)
             {
                 $feedback[] = "Cannot convert to PDF , email not sent for " .
