@@ -166,7 +166,8 @@ class RAPAV_Formulaire extends Formulaire_Sql
 			// remove space from p_code
 			$form_param->p_code=str_replace(' ', "",$form_param->p_code);
 
-			$form_param->p_libelle = $p_array['p_libelle'][$i];
+			$form_param->p_libelle = trim($p_array['p_libelle'][$i]);
+                        if ( $form_param->p_libelle == '') continue;
 			$form_param->p_type = $p_array['p_type'][$i];
 			$form_param->p_order = (isNumber($p_array['p_order'][$i]) == 0) ?  ($i+1) * 10 : $p_array['p_order'][$i];
 			$form_param->t_id = $p_array['t_id'][$i];
