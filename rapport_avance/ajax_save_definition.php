@@ -28,5 +28,5 @@ require_once 'include/class_formulaire_param.php';
  * @brief 
  * @param type $name Descriptionara
  */
-RAPAV_formulaire::save_definition($_GET);
+RAPAV_formulaire::save_definition($_REQUEST);
 ?>

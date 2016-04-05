@@ -2,8 +2,9 @@
 //This file is part of NOALYSS and is under GPL 
 //see licence.txt
 
-extract($_GET);
-if ( ! isset($act)) {
+$act = HtmlInput::default_value_request('act','');
+extract($_REQUEST);
+if ( $act=="") {
     die(_('act invalide'));
 }
 global $cn;

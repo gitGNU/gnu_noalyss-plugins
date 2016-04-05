@@ -248,7 +248,7 @@ function rapav_form_param(plugin_code, ac, dossier, f_id)
             param['ac']=ac;
             new Ajax.Request('ajax.php',
             {
-                method:'get',
+                method:'post',
                 parameters:param
             
             }
