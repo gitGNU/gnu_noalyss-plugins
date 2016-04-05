@@ -63,8 +63,11 @@ function add_row_definition(plugin_code, ac, dossier)
                         var answer = req.responseText;
                         var mytable = g("table_formulaire_definition_id").tBodies[0];
                         var nNumberRow = mytable.rows.length;
+                         var count =  parseFloat(mytable.rows[nNumberRow-1].cells[5].childNodes[1].value)+10;
                         var oRow = mytable.insertRow(nNumberRow);
                         oRow.innerHTML = answer;
+                        mytable.rows[nNumberRow].cells[5].childNodes[1].value=count;
+                        oRow.cells[1].childNodes[1].focus()
                     }
                 }
         );
