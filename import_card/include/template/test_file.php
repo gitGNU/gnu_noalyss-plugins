@@ -113,9 +113,13 @@ $header->value=$cn->make_array($sql);
 $header->value[]=array('value'=>-1,'label'=>'-- Non Utilisé --');
 $header->selected=-1;
 echo th('Numéro de ligne');
+$nb_attribute = count($a_attribute);
 for ($i=0;$i<$max;$i++)
   {
-    $header->selected=$a_attribute[$i]['ad_id'];
+    if ($i >= $nb_attribute) 
+        $header->selected=-1;
+    else
+        $header->selected=$a_attribute[$i]['ad_id'];
     echo '<th>'.$header->input().'</th>';
   }
 echo '</tr>';
