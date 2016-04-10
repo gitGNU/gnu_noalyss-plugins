@@ -134,17 +134,17 @@ class Import_Card
 		}
 		if ($valid_col == 0)
 		{
-			alert("Aucune colonne n'est définie");
+			alert(_("Aucune colonne n'est définie"));
 			return -1;
 		}
 		if ($valid_name == 0)
 		{
-			alert("Les fiches doivent avoir au minimum un nom");
+			alert(_("Les fiches doivent avoir au minimum un nom"));
 			return -1;
 		}
 		if ($duplicate != 0)
 		{
-			alert('Vous avez défini plusieurs fois la même colonne');
+			alert(_('Vous avez défini plusieurs fois la même colonne'));
 			return -1;
 		}
 		/*
@@ -160,6 +160,7 @@ class Import_Card
                    
 			$row_count++;
                         if ( $row_count == 1 && $skip_row==1) continue;
+                        $qcode="";
 			$fiche = new Fiche($cn);
 			$array = array();
 			echo '<tr style="border:solid 1px black">';
@@ -175,6 +176,9 @@ class Import_Card
 				echo td($row[$i]);
 				$attr = sprintf('av_text%d', $head_col[$i]);
 				$array[$attr] = $row[$i];
+                                if ( $head_col [$i] == ATTR_DEF_QUICKCODE) {
+                                    $qcode=$row[$i];
+                                }
 			}
 			/*
 			 * If no quick code is given we compute it ourself
@@ -183,6 +187,7 @@ class Import_Card
 			{
 				$attr = sprintf('av_text%d', ATTR_DEF_QUICKCODE);
 				$array[$attr] = '';
+                                
 			}
 			/*
 			 * Force the creating of an accounting
@@ -194,8 +199,25 @@ class Import_Card
 			}
 			try
 			{
+                            /**
+                             * if qcode already exists then update otherwise insert
+                             */
+                            $msg=(_('Ajout'));
+                            if ($valid_qcode == 0 || trim($qcode) == "")
+                            {
 				$fiche->insert($rfichedef, $array);
-				echo td($g_succeed);
+                            } else {
+                                // Retrieve the card with the qcode
+                                $fiche->get_by_qcode($qcode,false);
+                                // if qcode is found update otherwise insert
+                                if ( $fiche->id !=0) {
+                                    $fiche->update($array);
+                                    $msg=(_('Mise à jour'));
+                                } else {
+                                    $fiche->insert($rfichedef,$array);
+                                }
+                            }   
+				echo td($g_succeed." ".$msg);
 			}
 			catch (Exception $e)
 			{
@@ -219,7 +241,7 @@ class Import_Card
 		$name = $cn->get_value('select fd_label from fiche_def where fd_id=$1', array($rfichedef));
 		$cn->get_value('select comptaproc.fiche_attribut_synchro($1)', array($rfichedef));
 		echo '<span class="notice">';
-		echo $row_count . ' fiches sont insérées dans la catégorie ' . $name;
+		printf (_('%d fiches sont insérées dans la catégorie %s') ,$row_count , $name);
 		echo '</span>';
 		return 0;
 	}
