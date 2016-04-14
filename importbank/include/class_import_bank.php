@@ -633,8 +633,8 @@ class Import_Bank
             importbank.temp_bank as tb
             where
             jrnx.j_grpt=jrn.jr_grpt_id
-            and  j_date > tb.tp_date - interval '30 days'
-            and j_date < tb.tp_date + interval '30 days'
+            and  j_date > tb.tp_date - interval '80 days'
+            and j_date < tb.tp_date + interval '80 days'
             and tb.status = 'N'
             and tb.import_id=$1
             and abs(amount) = j_montant
