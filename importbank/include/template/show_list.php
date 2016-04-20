@@ -11,15 +11,6 @@
 <?php
 // variable
 $dossier_id=Dossier::id();
-$a_selected_action = array(
-    array("value"=>0,"label"=>_('--choix--')),
-    array("value"=>1,"label"=>_('Donner le tiers')),
-    array("value"=>2,"label"=>_('Supprimer le tiers')),
-    array("value"=>3,"label"=>_('Supprimer réconciliation automatique')),
-    array("value"=>4,"label"=>_('Valider réconciliation automatique')),
-    array("value"=>5,"label"=>_('Marquer pour suppression')),
-    array("value"=>6,"label"=>_('Enlever le marquage de suppression')),
-);
 // Duplicate database conx
 //
 $conx2=clone $cn;
@@ -67,19 +58,30 @@ if ( ! $remove ):
         ' onclick="$(\'form_action2\').value=\'reconcile_auto\';"');?>
 <?php echo HtmlInput::submit('selected_record',_('Opérations sélectionnées'),
         ' onclick="$(\'form_action2\').value=\'selected_record\';"');?>
-<?php
-$select_action=new ISelect('select_action');
-$select_action->value=$a_selected_action;
-$select_action->selected=0;
-echo $select_action->input();
-?>
-    
+    <select name="select_action" id="select_action">
+        <option selected="" value="0"><?php echo _("--choix--")?>
+        </option>
+        <optgroup label="<?php echo _("Tiers")?>">
+        <option value="1"><?php echo _("Donner le tiers")?></option>
+        <option value="2"><?php echo _("Supprimer le tiers")?></option>
+        </optgroup>
+        <optgroup label="<?php echo _("Réconciliation")?>">
+        
+        <option value="4"><?php echo _("Valider réconciliation")?></option>
+        <option value="3"><?php echo _("Supprimer réconciliation")?></option>
+        </optgroup>
+        <optgroup label="<?php echo _("Suppression")?>">
+        <option value="5"><?php echo _("Marquer pour suppression")?></option>
+        <option value="6"><?php echo _("Enlever le marquage de suppression")?></option>
+        </optgroup>
+    </select>
+ 
 </form>
 <?php endif; ?>
 <?php echo HtmlInput::filter_table('record_tb_id','1,2,3,4,5,6,7',1); ?>
 <table id="record_tb_id" class="sortable" >
 	<TR>
-            <th class="no">
+            <th class="sorttable_nosort">
                 <?php
                 $check_all=new ICheckBox('check_all');
                 $check_all->javascript=' onclick = "impb_check_all()"';
