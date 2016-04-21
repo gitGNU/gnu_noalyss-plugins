@@ -1,11 +1,23 @@
 <?php
 //This file is part of NOALYSS and is under GPL 
 //see licence.txt
+$f=HtmlInput::default_value_request("format", 0);
 ?>
+
 <h2><?php echo _('Etape 2 / 4: introduire le fichier')?></h2>
+<?php
+    if ( $f != 0 ) :
+        echo _("Nom du format");
+        echo " ";
+        echo h($format->value);
+        echo '<br>';
+        echo HtmlInput::button_action(_('Changer'), "$('bank_format_div').show()");
+    endif;
+
+?>
 
 <form method="POST"  id="validate_show_field_frm" enctype="multipart/form-data"  onsubmit="return validate_show_field('validate_show_field_frm')">
-<table>
+<table id="bank_format_div">
 <tr>
 	<td>
 	<?php echo _('Nom du format')?>
@@ -131,5 +143,11 @@ echo HtmlInput::hidden('sb',$sb);
             );
     }
     $('confirm_remove_format').hide();
-    
+    <?php 
+    if ($f != 0 ):
+    ?>
+        $('bank_format_div').hide();
+    <?php
+    endif;
+    ?>
 </script>

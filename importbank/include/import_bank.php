@@ -84,10 +84,10 @@ if ( $_REQUEST ['sb'] == 'select_form')
 	    $nb_col->value=$format_bank->nb_col;
 	    $skip->value=$format_bank->skip;
 	  }
-    else
-      {
-	throw new Exception(_('Nombre de ligne trouvé incorrect'));
-      }
+        else
+          {
+            throw new Exception(_('Nombre de ligne trouvé incorrect'));
+         }
       }
     echo '<div class="content" style="width:80%;margin-left:10%">';
     $sb='upload_file';

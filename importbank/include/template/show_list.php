@@ -7,8 +7,6 @@
  * set the tiers, remove, transfer the imported operation
  * @see Import_Bank::list_record
  */
-?>
-<?php
 // variable
 $dossier_id=Dossier::id();
 // Duplicate database conx
@@ -61,9 +59,9 @@ if ( ! $remove ):
     <select name="select_action" id="select_action">
         <option selected="" value="0"><?php echo _("--choix--")?>
         </option>
-        <optgroup label="<?php echo _("Tiers")?>">
-        <option value="1"><?php echo _("Donner le tiers")?></option>
-        <option value="2"><?php echo _("Supprimer le tiers")?></option>
+        <optgroup label="<?php echo _("Contrepartie")?>">
+        <option value="1"><?php echo _("Donner la contrepartie")?></option>
+        <option value="2"><?php echo _("Supprimer la contrepartie")?></option>
         </optgroup>
         <optgroup label="<?php echo _("Réconciliation")?>">
         
