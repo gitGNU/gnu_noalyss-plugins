@@ -138,6 +138,9 @@ $nb_col->value=($nb_col->value=='')?$max:$nb_col->value;
 ?>
 
 <h2>Etape 3/4 : confirmez le transfert</h2>
+                Nom du format  <?php echo hb($format->value); ?>
+                <?php echo HtmlInput::button_action(_('Changer format'), "$('import_bank_format_div').show()",'x','smallbutton')?>
+<div id="import_bank_format_div" class="inner_box" style="width:auto;display:none;">
 <form method="POST"   enctype="multipart/form-data">
     <table>
         <tr>
@@ -218,10 +221,17 @@ $nb_col->value=($nb_col->value=='')?$max:$nb_col->value;
 echo HtmlInput::post_to_hidden(array('gDossier', 'plugin_code', 'sa', 'format'));
 echo HtmlInput::hidden('sb', 'upload_file');
 echo HtmlInput::hidden('filename', $filename);
-echo HtmlInput::submit('correct_format', 'Changer format');
-echo '</form>';
 ?>
-
+    <ul class="aligned-block">
+        <li>
+            <?php echo HtmlInput::submit('correct_format', 'Changer format');?>
+        </li>
+        <li>
+            <?php echo HtmlInput::button_action(_('Fermer'), "$('import_bank_format_div').hide()","closeit","smallbutton");?>
+        </li>
+    </ul>
+</form>
+</div>         
     <form method="POST"   enctype="multipart/form-data">
 
         <?php

@@ -11,7 +11,7 @@ $f=HtmlInput::default_value_request("format", 0);
         echo " ";
         echo h($format->value);
         echo '<br>';
-        echo HtmlInput::button_action(_('Changer'), "$('bank_format_div').show()");
+        echo HtmlInput::button_action(_('Changer'), "$('bank_format_div').show()","x","smallbutton");
     endif;
 
 ?>
