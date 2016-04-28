@@ -258,7 +258,7 @@ class RAPAV_Formula_Attribute extends RAPAV_Listing_Formula
                     l_id=$1
                     ', array($this->data->getp('listing_id')));
         $select = new ISelect('p_attribute');
-
+        $select->rowsize=4;
         $select->value = $cn->make_array('select a.ad_id,a.ad_text 
                                         from
                                         attr_def as a join jnt_fic_attr as j on (a.ad_id=j.ad_id)
@@ -266,7 +266,7 @@ class RAPAV_Formula_Attribute extends RAPAV_Listing_Formula
                                         fd_id=' .$this->cat . ' order by a.ad_text ');
 
         $select->selected = $this->data->getp('attribut_card');
-        return "Attribut à afficher pour chaque fiche " . $select->input();
+        return "Attribut à afficher pour chaque fiche <br>" . $select->input();
     }
 
     function save($p_array)
