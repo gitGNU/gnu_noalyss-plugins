@@ -17,11 +17,15 @@ $obj->form_modify();
 echo '<p>';
 echo '<ul class="aligned-block">';
 echo '<li >';
-echo HtmlInput::submit("listing_add_sb", "Valider");
+echo HtmlInput::submit("listing_add_sb", _("Valider"));
 echo '</li>';
-echo '<li class="menu">';
-echo HtmlInput::submit("listing_clone", "Cloner");
-echo '</li>';
+// For existing listing show the button "CLONE"
+if ( $id != -1 )
+{
+    echo '<li class="menu">';
+    echo HtmlInput::submit("listing_clone", _("Cloner"));
+    echo '</li>';
+}
 echo '</ul>';
 echo '</p>';
 echo '</form>';
