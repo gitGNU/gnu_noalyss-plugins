@@ -39,7 +39,7 @@ echo _('Importation de données');
     
 </p>
 <p>
-   <?php echo _("Par défaut, correspond à un export CSV depuis Calc (OpenOffice.org ou libreoffice)");?>
+   <?php echo _("Chargement d'un fichier CSV , crée depuis Calc (OpenOffice.org ou libreoffice)");?>
 <a class="line" href="http://download.noalyss.eu/contrib/import_operation/" target="_blank">Fichiers exemples</a>
 </p>
 <form method="POST" enctype="multipart/form-data">
