@@ -1,5 +1,5 @@
-<?php
-
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
 /*
  *   This file is part of NOALYSS.
  *
@@ -16,37 +16,33 @@
  *   You should have received a copy of the GNU General Public License
  *   along with NOALYSS; if not, write to the Free Software
  *   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- */
-/* $Revision$ */
+*/
+// Copyright  (c) 2002-2014 Author Dany De Bontridder danydb@aevalys.eu
+-->
 
-// Copyright (c) 2002 Author Dany De Bontridder dany@alchimerys.be
 
-/**
- * @file
- * @brief
- *
- */
-class install_impacc
-{
-
-    function install($p_cn)
-    {
-        global $g_impacc;
-        try
-        {
-            $p_cn->start();
-            $p_cn->execute_script($g_impacc."/sql/install.sql");
-
-            $p_cn->commit();
-        }
-        catch (Exception $e)
-        {
-            $p_cn->rollback();
-            echo _('ERREUR')." Install_Impacc::install";
-            error_log($e->getTraceAsString());
-        }
-    }
-
-}
-
-?>
+<plugins>
+    <plugin>
+        <name>
+            Importation operations
+        </name>
+        <description>
+            Non terminé
+        </description>
+        <code>
+            IMPOP
+        </code>
+        <root>
+            import_account
+        </root>
+        <file>
+            index.php
+        </file>
+        <author>
+            Dany De Bontridder
+        </author>
+        <noalyss_version>
+            6915
+        </noalyss_version>
+    </plugin>
+</plugins>    

@@ -43,7 +43,7 @@
 			</td>
 			<td>
 				<?php
-				$wrate = new INum('rate' . $atva[$i]['pt_id']);
+				$wrate = new Itext('rate' . $atva[$i]['pt_id']);
 				$wrate->value=$atva[$i]['pt_rate'];
 				echo $wrate->input();
 				?>

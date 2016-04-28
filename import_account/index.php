@@ -27,21 +27,27 @@
 /*
  * load javascript
  */
-require_once 'include/class_import_card.php';
-require_once NOALYSS_INCLUDE.'/class/class_acc_ledger.php';
-require_once NOALYSS_INCLUDE.'/class/class_acc_ledger_purchase.php';
-require_once NOALYSS_INCLUDE.'/class/class_acc_ledger_sold.php';
-require_once NOALYSS_INCLUDE.'/class/class_acc_operation.php';
+require_once 'impacc_constant.php';
+
 global $cn;
-echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.noalyss.eu/doku.php?id=importation_dolibarr" target="_blank">Aide</a>'.
+echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="http://wiki.noalyss.eu/doku.php?id=importation_operation" target="_blank">Aide</a>'.
 '<span style="font-size:0.8em;color:red;display:inline">vers:SVNINFO</span>'.
 '</div>';
 $cn=Dossier::connect();
 global $version_plugin;
 $version_plugin=SVNINFO;
 
-Extension::check_version(6910);
+Extension::check_version(6915);
+$plugin_code=HtmlInput::default_value_request("plugin_code", "");
+$ac=HtmlInput::default_value_request("ac", "");
 
+?>
+<script>
+    var dossier=<?php echo $gDossier;?>;
+    var plugin_code="<?php echo $plugin_code;?>";
+    var ac=<?php echo Dossier::id();?>;
+</script>
+<?php
 // Javascript
  ob_start();
  require_once('impacc.js');
@@ -54,17 +60,14 @@ echo create_script($j);
 $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code']."&ac=".$_REQUEST['ac'];
 
 $array=array (
-	array($url.'&sa=fiche',_('Fiches'),_('Importation de nouvelles fiches'),1),
-	array($url.'&sa=opr',_('Opérations Ventes/Achats'),_('Importation d\'opérations de vente ou d\'achat'),2),
+	array($url.'&sa=opr',_('Opérations'),_('Importation d\'opérations '),2),
 	array($url.'&sa=parm',_('Paramètrage'),_('Paramètrage'),5)
 	);
 
 $sa=(isset($_REQUEST['sa']))?$_REQUEST['sa']:1;
 switch($sa)
   {
-  case 'fiche':
-    $default=1;
-    break;
+ 
   case 'opr':
     $default=2;
     break;
@@ -72,7 +75,7 @@ switch($sa)
     $default=5;
     break;
   default:
-    $default=0;
+    $default=2;
   }
 
   if ($cn->exist_schema('impacc') == false)
@@ -85,28 +88,7 @@ switch($sa)
   }
 echo ShowItem($array,'H','mtitle','mtitle',$default,' style="width:80%;margin-left:10%"');
 echo '<div class="content" style="padding:10">';
-if ($default==1)
-{
-	if ( ! isset($_REQUEST['sb']))
-	{
-		Import_Card::new_import();
-		exit();
-	}
 
-	if ( $_REQUEST['sb']=='test')
-	{
-		if (Import_Card::test_import() == 0 )    exit();
-		Import_Card::new_import();
-		exit();
-
-	}
-
-	if($_REQUEST['sb'] == 'record')
-	{
-		if (Import_Card::record_import() ==0 )     exit();
-		Import_Card::new_import();
-  }
-}
 if ($default == 5)
 {
 	require_once('include/imd_parameter.inc.php');
