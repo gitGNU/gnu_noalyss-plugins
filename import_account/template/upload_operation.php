@@ -27,23 +27,11 @@
  * @see Impacc_Operation::input_format
  */
 ?>
-<h2>
-<h2> 
-<?php
-echo _("Etape"),' 1/3',' ';
-echo _('Importation de données');
-?>
-</h2>
-
-<p>
-    
-</p>
 <p>
    <?php echo _("Chargement d'un fichier CSV , crée depuis Calc (OpenOffice.org ou libreoffice)");?>
 <a class="line" href="http://download.noalyss.eu/contrib/import_operation/" target="_blank">Fichiers exemples</a>
 </p>
-<form method="POST" enctype="multipart/form-data">
-<?php echo HtmlInput::array_to_hidden(array('gDossier','ac','plugin_code','sa'), $_REQUEST)?>
+
 <table>    
 <tr>
 <td>
@@ -83,11 +71,5 @@ echo _('Importation de données');
         <?php echo $in_thousand->input()?></td>
     </td>
 </tr>
-<tr>
-<td><?php echo _("Fichier à charger");?></td>
-<TD> <?php echo $in_filename->input()?></td>
-</tr>
-</table>
-<?php echo HtmlInput::submit('test_import',_('Charger'));?>
 
-</form>
+</table>

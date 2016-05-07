@@ -14,26 +14,29 @@ CREATE TABLE impacc.parameter_tva
     CONSTRAINT parameter_tva_pkey PRIMARY KEY (pt_id )
 );
 
-create table impacc.import (
-    id serial primary key,
-    jrn_def_id bigint references jrn_def(jrn_def_id) on delete cascade on update cascade,
-    i_date_transfer timestamp ,
-    i_date_import timestamp
-);
+CREATE TABLE impacc.import_file
+(
+  id serial NOT NULL,
+  i_filename text not null,
+  i_tmpname text not null,
+  i_type text not null,
+  i_date_transfer timestamp without time zone,
+  i_date_import timestamp without time zone,
+  CONSTRAINT import_file_pkey PRIMARY KEY (id )
+)
+;
+comment on table impacc.import_file is '';
+comment on column impacc.import_file.i_filename is '';
 
-comment on table impacc.import is '';
-comment on column impacc.import.jrn_def_id is '';
-comment on column impacc.import.jrn_def_id is '';
-comment on column impacc.import.jrn_def_id is '';
-comment on column impacc.import.jrn_def_id is '';
 
 create table impacc.import_detail 
 (
     id serial primary key,
-    import_id bigint references impacc.import(id),
+    import_id bigint references impacc.import_file(id),
     id_date text,
-    id_code_group varchar(10) not null,
-    id_nb_row int not null,
+    id_label text,
+    id_code_group varchar(20),
+    id_nb_row int default 0,
     id_pj varchar(20) ,
     id_acc varchar(255),
     id_acc_second varchar(255),
@@ -41,7 +44,9 @@ create table impacc.import_detail
     id_amount_novat varchar(255),
     id_amount_vat varchar(255),
     tva_code varchar(10),
-    jr_id bigint references jrn(jr_id)
+    jr_id bigint references jrn(jr_id),
+    id_status int not null default (0),
+    id_message text
     
 );
 comment on table impacc.import_detail is '';
@@ -55,3 +60,22 @@ comment on column impacc.import_detail.  is '';
 comment on column impacc.import_detail.  is '';
 comment on column impacc.import_detail.  is '';
 comment on column impacc.import_detail.  is '';
+
+CREATE TABLE impacc.import_csv
+(
+  id serial NOT NULL, -- PK
+  s_decimal "char",
+  s_thousand "char",
+  s_encoding text,
+  jrn_def_id integer,
+  s_surround "char",
+  s_delimiter "char",
+  import_id integer,
+  CONSTRAINT import_csv_pkey PRIMARY KEY (id ),
+ CONSTRAINT import_csv_import_id_fkey FOREIGN KEY (import_id)
+      REFERENCES impacc.import_file (id) MATCH SIMPLE
+      ON UPDATE CASCADE ON DELETE CASCADE
+);
+COMMENT ON TABLE impacc.import_csv   IS 'Record the setting for CSV';
+COMMENT ON COLUMN impacc.import_csv.id IS 'PK';
+

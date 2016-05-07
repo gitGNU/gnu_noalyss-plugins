@@ -26,26 +26,28 @@
  * @brief upload operation
  *
  */
-require_once 'class_impacc_operation.php';
+require_once 'class_impacc_file.php';
 
 // step 1, select a file
 if (!isset($_POST['upload'])&&!isset($_POST['check'])&&!isset($_POST['transfer']))
 {
     
-    $impacc_Operation = new Impacc_Operation();
-    $impacc_Operation->input_format();
+    $impacc_Operation = new Impacc_File();
+    $impacc_Operation->input_file();
     return;
 }
 // step 2 save file into impdol.operation
 if (isset($_POST['upload']))
 {
     // save the file
-    $io=new Impacc_Operation();
+    $io=new Impacc_File();
+    
+    // save info for file + setting
     $io->save_file();
-
-    // record the file into the table operation
+    
+    // record the rows of the file into the right table CSV or XML
     $io->record();
-
+    return;
     // show the data
     $io->check();
 

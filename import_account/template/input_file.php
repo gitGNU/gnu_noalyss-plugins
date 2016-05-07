@@ -24,9 +24,32 @@ if (!defined('ALLOWED'))     die('Appel direct ne sont pas permis');
 /**
  * @file
  * @brief 
- * Contains standard info for the plugins
+ * First screen for import , ask for the file and the format (CSV , FEC or XML)
  */
+?>
+<script>
+function ctl_display() {
+            if ($('format_sel').value==1) 
+            {$('csv_div_id').show();} else {$('csv_div_id').hide();};
+}    
+</script>
+<form method="POST" enctype="multipart/form-data" >
+    <?php echo HtmlInput::array_to_hidden(array('gDossier','ac','plugin_code','sa'), $_REQUEST)?>
+    <?php
+        echo _('Fichier'),
+                $file->input();
+    ?>
+    <?php 
+    echo _("Format"),$format->input();
+    ?>
+    <div id="csv_div_id" style="display: none">
+    <?php 
+    $csv=new Impacc_CSV();
+    $csv->input_format();
+    ?>
+    </div>
+<?php
+    echo HtmlInput::submit("upload", _("Sauve"))
+?>
+</form>
 
-global $g_impacc;
-$g_impacc =dirname(__FILE__);
-define ('DIR_IMPORT_ACCOUNT',$g_impacc);
