@@ -18,13 +18,14 @@
  */
 
 
-/* * *
+/*!
  * @file 
- * @brief
+ * @brief Filter for the Financial format
  *
  */
 require_once DIR_IMPORT_ACCOUNT."/include/class_impacc_csv.php";
 
+///Filter for the Financial format
 class Impacc_Csv_Bank
 {
     /*!
@@ -32,11 +33,13 @@ class Impacc_Csv_Bank
      */
     function record(Impacc_Csv $p_csv, Impacc_File $p_file)
     {
+        global $aseparator;
         // Open the CSV file
         $hFile=fopen($p_file->import_file->i_tmpname, "r");
         $cn=Dossier::connect();
+        $delimiter=$aseparator[$p_csv->detail->s_delimiter-1]['label'];
         //---- For each row ---
-        while ($row=fgetcsv($hFile, 0, $p_csv->delimiter, $p_csv->surround))
+        while ($row=fgetcsv($hFile, 0,$delimiter , $p_csv->detail->s_surround))
         {
             $insert=new Impacc_Import_detail_SQL($cn);
             $insert->import_id=$p_file->import_file->id;
@@ -44,7 +47,7 @@ class Impacc_Csv_Bank
             if ($nb_row<5)
             {
                 $insert->id_status=-1;
-                $insert->id_message=join($row,$p_csv->delimiter);
+                $insert->id_message=join($row,$delimiter );
             }
             else
             {

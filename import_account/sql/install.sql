@@ -67,10 +67,11 @@ CREATE TABLE impacc.import_csv
   s_decimal "char",
   s_thousand "char",
   s_encoding text,
-  jrn_def_id integer,
+  jrn_def_id integer not null,
   s_surround "char",
   s_delimiter "char",
   import_id integer,
+  s_date_format integer not null,
   CONSTRAINT import_csv_pkey PRIMARY KEY (id ),
  CONSTRAINT import_csv_import_id_fkey FOREIGN KEY (import_id)
       REFERENCES impacc.import_file (id) MATCH SIMPLE

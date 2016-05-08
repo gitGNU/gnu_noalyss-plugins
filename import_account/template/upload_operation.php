@@ -47,6 +47,13 @@
 <TD> <?php echo $in_delimiter->input()?></td>
 </tr>
 
+</tr>
+<tr>
+<td><?php echo _("Format de date");?> </td>
+<TD> <?php echo $in_date_format->input()?></td>
+</tr>
+
+
 <tr>
 <td><?php echo _("Encodage");?></td>
 <TD> <?php echo $in_encoding->input()?></td>

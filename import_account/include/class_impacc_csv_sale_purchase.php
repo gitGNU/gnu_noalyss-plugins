@@ -30,13 +30,12 @@ class Impacc_Csv_Sale_Purchase
 
     function transform()
     {
-        
+        throw new Exception("Not Yet Implemented");
     }
 
     /*!
      * \brief call parent and after specific check
      */
-
     function check()
     {
         throw new Exception("Not Yet Implemented");
@@ -72,12 +71,16 @@ class Impacc_Csv_Sale_Purchase
      */
     function record(Impacc_Csv $p_csv, Impacc_File $p_file)
     {
+         global $aseparator;
         // Open the CSV file
         $hFile=fopen($p_file->import_file->i_tmpname, "r");
         $error=0;
         $cn=Dossier::connect();
+        var_dump($p_csv->detail);
+        var_dump($aseparator);
+        $delimiter=$aseparator[$p_csv->detail->s_delimiter-1]['label'];
         //---- For each row ---
-        while ($row=fgetcsv($hFile, 0, $p_csv->delimiter, $p_csv->surround))
+        while ($row=fgetcsv($hFile, 0, $delimiter, $p_csv->detail->s_surround))
         {
             $nb_row=count($row);
             $insert=new Impacc_Import_detail_SQL($cn);
@@ -85,7 +88,7 @@ class Impacc_Csv_Sale_Purchase
             if ($nb_row<9)
             {
                  $insert->id_status=-1;
-                $insert->id_message=join($row,$p_csv->delimiter);
+                $insert->id_message=join($row,$delimiter);
             }
             else
             {

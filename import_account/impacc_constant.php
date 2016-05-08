@@ -30,3 +30,29 @@ if (!defined('ALLOWED'))     die('Appel direct ne sont pas permis');
 global $g_impacc;
 $g_impacc =dirname(__FILE__);
 define ('DIR_IMPORT_ACCOUNT',$g_impacc);
+global $adecimal,$athousand,$aseparator,$aformat_date;
+
+$adecimal=array(
+		array ('value'=>0,'label'=>' '),
+		array ('value'=>1,'label'=>','),
+		array ('value'=>2,'label'=>'.')
+		);
+
+$athousand=array(
+		 array ('value'=>0,'label'=>' '),
+		 array ('value'=>1,'label'=>','),
+		 array ('value'=>2,'label'=>'.')
+		 );
+$aseparator=array(
+		  array ('value'=>1,'label'=>','),
+		  array ('value'=>2,'label'=>';')
+		  );
+$aformat_date=array(
+		    array ('value'=>1,'label'=>'DD.MM.YYYY','format'=>'d.m.Y'),
+		    array ('value'=>2,'label'=>'DD/MM/YYYY','format'=>'d/m/Y'),
+		    array ('value'=>3,'label'=>'DD-MM-YYYY','format'=>'d-m-Y'),
+		    array ('value'=>4,'label'=>'DD.MM.YY','format'=>'d.m.y'),
+		    array ('value'=>5,'label'=>'DD/MM/YY','format'=>'d/m/y'),
+		    array ('value'=>6,'label'=>'DD-MM-YY','format'=>'d-m-y'),
+		    array ('value'=>7,'label'=>'YYYY-MM-DD','format'=>'Y.m.d')
+		    );

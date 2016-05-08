@@ -49,6 +49,7 @@ class Impacc_Import_csv_SQL extends Noalyss_SQL
             , "s_surround"=>"s_surround"
             , "s_delimiter"=>"s_delimiter"
             ,"import_id"=>"import_id"
+            ,"s_date_format"=>"s_date_format"
         );
         /*
          * Type of columns
@@ -62,6 +63,7 @@ class Impacc_Import_csv_SQL extends Noalyss_SQL
             , "s_surround"=>"text"
             , "s_delimiter"=>"text"
             ,"import_id"=>"numeric"
+            ,"s_date_format"=>"numeric"
         );
 
 
