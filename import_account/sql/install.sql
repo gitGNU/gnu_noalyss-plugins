@@ -46,7 +46,9 @@ create table impacc.import_detail
     tva_code varchar(10),
     jr_id bigint references jrn(jr_id),
     id_status int not null default (0),
-    id_message text
+    id_message text,
+    id_date_limit text,
+    id_date_payment text
     
 );
 comment on table impacc.import_detail is '';
@@ -57,9 +59,9 @@ comment on column impacc.import_detail.  is '';
 comment on column impacc.import_detail.  is '';
 comment on column impacc.import_detail.  is '';
 comment on column impacc.import_detail.  is '';
-comment on column impacc.import_detail.  is '';
-comment on column impacc.import_detail.  is '';
-comment on column impacc.import_detail.  is '';
+comment on column impacc.import_detail.jr_id  is 'jrn.jr_id corresponding operation ';
+comment on column impacc.import_detail.id_message is 'Contains the error code , separated by a comma';
+comment on column impacc.import_detail.id_status  is '0 means OK,-1 too few row, 1 error see in id_message for detail , 2 transferred successfully';
 
 CREATE TABLE impacc.import_csv
 (

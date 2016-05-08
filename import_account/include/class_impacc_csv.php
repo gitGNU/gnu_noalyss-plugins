@@ -23,12 +23,21 @@ require_once 'class_impacc_csv_sale_purchase.php';
 require_once 'class_impacc_csv_misc_operation.php';
 require_once DIR_IMPORT_ACCOUNT."/database/class_impacc_import_detail_sql.php";
 
+$err_code=array(
+    "CK_FORMAT_DATE"=>_("Format de date incorrect"),
+    "CK_PERIODE_CLOSED"=>_("Période fermée ou période non trouvée"),
+    "CK_INVALID_AMOUNT"=>_("Montant invalide"),
+    "CK_INVALID_ACCOUNTING"=>_("Poste comptable ou Fiche non existante"));
+
+
 ///Used by all Import CSV Operation , contains the setting (delimiter,thousand ...) 
 class Impacc_CSV
 {
 
     
-    var $detail; 
+    var $detail; //!< Object Impacc_Import_csv_SQL
+
+    var $errcode; //!< Array of error code will be recorded in import_detail.id_message
 
     function __construct()
     {
@@ -41,6 +50,15 @@ class Impacc_CSV
         $this->detail->s_decimal='.';
         $this->detail->s_thousand='';
         $this->detail->s_date_format=4;
+        $this->errcode=    array(
+            "CK_FORMAT_DATE"=>_("Format de date incorrect"),
+            "CK_PERIODE_CLOSED"=>_("Période non trouvée"),
+            "CK_INVALID_PERIODE"=>_("Période non trouvée"),
+            "CK_INVALID_AMOUNT"=>_("Montant invalide"),
+            "CK_INVALID_ACCOUNTING"=>_("Poste comptable ou Fiche non existante"),
+            "CK_TVA_INVALID"=>_("Code TVA Invalide")
+            );
+
     }
 
     /// Display a form to upload a CSV file with operation
@@ -110,7 +128,106 @@ class Impacc_CSV
 //2 encoding and delimiter can not be empty
 //3 ledger must be writable for user
 //4 Check Date format
-//5 if date format ok check if periode closed or open        
+    }
+    /// Check that upload file is correct
+    function check(Impacc_File $p_file)
+    {
+        global $aformat_date;
+            
+        $this->load_import($p_file->impid);
+        $cn=Dossier::connect();
+        $ledger=new Acc_Ledger($cn, $this->detail->jrn_def_id);
+        $ledger_type=$ledger->get_type();
+        
+         // connect to DB
+        $cn=Dossier::connect();
+        
+        // load all rows where status != -1
+        $t1=new Impacc_Import_detail_SQL($cn);
+        $array=$t1->collect_objects(" where import_id = $1 and coalesce(id_status,0) <> -1 ",
+                array($p_file->impid));
+        // for each row check 
+        $nb_array=count($array);
+        $date_format=$aformat_date[$this->detail->s_date_format-1]['format'];
+        $date_format_sql=$aformat_date[$this->detail->s_date_format-1]['label'];
+        
+        for ($i =0 ; $i<$nb_array;$i++)
+        {
+            $array[$i]->id_status=0;
+            //------------------------------------
+            //Check date format
+            //------------------------------------
+            $test=DateTime::createFromFormat($date_format, $array[$i]->id_date);
+            if ( $test == false) {
+                $array[$i]->id_status=-1;
+                $and=($array[$i]->id_message=="")?"":",";
+                $array[$i]->id_message .= "CK_FORMAT_DATE";
+            } else {
+                // Check if date exist and in a open periode
+                  $sql=sprintf("select p_id from parm_periode where p_start <= to_date($1,'%s') and p_end >= to_date($1,'%s') ",
+                          $date_format_sql,$date_format_sql);
+                  $periode_id=$cn->get_value($sql,array($array[$i]->id_date));
+
+                  if ( $cn->size() == 0) {
+                      $and=($array[$i]->id_message=="")?"":",";
+                      $array[$i]->id_message.=$and."CK_INVALID_PERIODE";
+                  } else 
+                    // Check that this periode is open for this ledger
+                  {
+                      $per=new Periode($cn, $periode_id);
+                      $per->jrn_def_id=$this->detail->jrn_def_id;
+                      if ( $per->is_open() == 0 ) {
+                        $and=($array[$i]->id_message=="")?"":",";
+                        $array[$i]->id_message.=$and."CK_PERIODE_CLOSED";
+                      }
+                  }
+                }
+            //----------------------------------------------------------------
+            // Check that first id_acc does exist , for ODS it could be an
+            // accounting, the card must be accessible for the ledger
+            //----------------------------------------------------------------
+            $card=new Fiche($cn);
+            $card->get_by_qcode($array[$i]->id_acc,false);
+            if ( $card->id == 0 ) {
+                
+                if (  $ledger_type != 'ODS' )
+                {
+                    $and=($array[$i]->id_message=="")?"":",";
+                    $array[$i]->id_message.=$and."CK_INVALID_ACCOUNTING";
+                }else 
+                {
+                    // If ods we must check for Accounting
+                    $poste=new Acc_Account_Ledger($cn,$array[$i]->id_acc);
+                    if ($poste->do_exist() == 0) {
+                            $and=($array[$i]->id_message=="")?"":",";
+                            $array[$i]->id_message.=$and."CK_INVALID_ACCOUNTING";
+                    }
+                }
+            }
+            //----------------------------------------------------------------
+            // Test for specific filter
+            //----------------------------------------------------------------
+            switch ($ledger_type)
+            {
+                case 'ACH':
+                    Impacc_Csv_Sale_Purchase::check($array[$i],$date_format);
+                    break;
+                case 'VEN':
+                    Impacc_Csv_Sale_Purchase::check($array[$i],$date_format);
+                    break;
+                case 'ODS':
+                    break;
+                case 'FIN':
+                    break;
+                default :
+                    throw new Exception(_('type journal inconnu'));
+
+            }
+            // update status
+            $array[$i]->update();
+        }
+                
+        
     }
     ///Save the Impacc_Import_csv_SQL object into db
     function save_setting()

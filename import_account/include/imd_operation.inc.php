@@ -47,10 +47,11 @@ if (isset($_POST['upload']))
     
     // record the rows of the file into the right table CSV or XML
     $io->record();
-    return;
-    // show the data
+    
+    // Basic check
     $io->check();
 
+    return;
     // show the result
     $io->result();
     echo '<div style="margin-left:20%">';

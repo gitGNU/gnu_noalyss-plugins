@@ -59,9 +59,6 @@ class Impacc_Csv_Bank
             }
             $insert->insert();
         }
-        if ( $error > 0 ) {
-            echo "</ul>";
-        }
 
     }
 

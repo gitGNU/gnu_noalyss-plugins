@@ -28,9 +28,10 @@ require_once DIR_IMPORT_ACCOUNT."/include/class_impacc_csv.php";
 class Impacc_Csv_Misc_Operation 
 {
 
-    /***
-     * @brief insert file into the table import_detail
-     */
+    //----------------------------------------------
+    ///insert file into the table import_detail
+    //!\param Impacc_Csv $p_csv CSV setting
+    //!\param Impacc_File $p_file File information
     function record(Impacc_Csv $p_csv, Impacc_File $p_file)
     {
          global $aseparator;
@@ -61,9 +62,12 @@ class Impacc_Csv_Misc_Operation
             }
             $insert->insert();
         }
-        if ( $error > 0 ) {
-            echo "</ul>";
-        }
+    }
+    /// Check if Data are valid for one row
+    //!@param $row is an Impacc_Import_detail_SQL object
+    function check(Impacc_Import_detail_SQL $row)      
+    {
+        
     }
 }
     

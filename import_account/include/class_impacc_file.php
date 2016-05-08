@@ -43,7 +43,7 @@ class Impacc_File
     var $filename;
     
 
-
+    /// Save the uploaded file and CSV setting if it is CSV import
     function save_file()
     {
         if (trim($_FILES['file_operation']['name'])=='')
@@ -101,6 +101,14 @@ class Impacc_File
         );
         $format->javascript="onchange=\"ctl_display()\"";
         require_once DIR_IMPORT_ACCOUNT."/template/input_file.php";
+    }
+    function check()
+    {
+        if ( $this->import_file->i_type == 'CSV') 
+        {
+            $operation=new Impacc_Operation();
+            $operation->check($this);
+        }
     }
 
 }

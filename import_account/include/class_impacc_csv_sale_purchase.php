@@ -32,40 +32,86 @@ class Impacc_Csv_Sale_Purchase
     {
         throw new Exception("Not Yet Implemented");
     }
-
-    /*!
-     * \brief call parent and after specific check
-     */
-    function check()
+    //-------------------------------------------------------------------
+    /// Check if Data are valid for one row
+    //!@param $row is an Impacc_Import_detail_SQL object
+    //!@param $p_format_date check for date_limit and date_payment
+    //-------------------------------------------------------------------
+    static  function check(Impacc_Import_detail_SQL $row,$p_format_date)      
     {
-        throw new Exception("Not Yet Implemented");
+        self::check_tva($row);
+        self::check_date_payment($row,$p_format_date);
+        self::check_date_limit($row,$p_format_date);
+        self::check_service($row);
     }
 
     function insert()
     {
         throw new Exception("Not Yet Implemented");
     }
-
-    function check_tva()
+    //-------------------------------------------------------------------
+    /// Check that the sale / purchase card exist
+    /// Update the object $row (id_message)
+    //-------------------------------------------------------------------
+    static  function check_service(Impacc_Import_detail_SQL $row)
     {
-        throw new Exception("Not Yet Implemented");
+        $cn=Dossier::connect();
+        $card=new Fiche($cn);
+        $card->get_by_qcode($row->id_acc_second, false);
+        if ($card->id==0)
+        {
+            $and=($row->id_message=="")?"":",";
+            $row->id_message.=$and."CK_INVALID_ACCOUNTING";
+        }
+    }
+    //-------------------------------------------------------------------
+    /// Check that TVA_CODE does exist
+    /// Update the object $row (id_message)
+    //-------------------------------------------------------------------
+    static  function check_tva(Impacc_Import_detail_SQL $row)
+    {
+        $cn=Dossier::connect();
+        $exist=$cn->get_value("select count(*) from impacc.parameter_tva where tva_code=$1",array($row->tva_code));
+        if ($exist != 1 ){
+            $and=($row->id_message=='')?"":",";
+            $row->id_message.=$and."CK_TVA_INVALID";
+        }
     }
 
-    function check_date_payment()
+    //-------------------------------------------------------------------
+    /// Check that the date payment has valid format
+    /// Update the object $row (id_message)
+    //-------------------------------------------------------------------
+    static  function check_date_payment(Impacc_Import_detail_SQL $row,$p_format_date)
     {
-        throw new Exception("Not Yet Implemented");
+        if ($row->id_date_payment =="")return;
+        
+        $test=DateTime::createFromFormat($p_format_date, $row->id_date_payment);
+        
+        if ( $test == false) {
+            $and=($row->id_message=='')?"":",";
+            $row->id_message .= $and."CK_FORMAT_DATE";
+        }
     }
-
-    function check_date_limit()
+    //-------------------------------------------------------------------
+    /// Check that the date limit has valid format
+    /// Update the object $row (id_message)
+    //-------------------------------------------------------------------
+    static  function check_date_limit(Impacc_Import_detail_SQL $row,$p_format_date)
     {
-        throw new Exception("Not Yet Implemented");
+        if ($row->id_date_limit =="")return;
+        $test=DateTime::createFromFormat($p_format_date, $row->id_date_limit);
+        
+        if ( $test == false) {
+            $and=($row->id_message=='')?"":",";
+            $row->id_message .= $and."CK_FORMAT_DATE";
+        }
     }
 
     function check_nb_column()
     {
         throw new Exception("Not Yet Implemented");
     }
-
     /**
      * @brief insert file into the table import_detail
      */
@@ -106,14 +152,10 @@ class Impacc_Csv_Sale_Purchase
                 $date_limit=(isset($row[10]))?$row[10]:"";
                 $insert->id_date_limit=$date_limit;
                 $date_payment=(isset($row[11]))?$row[11]:"";
-                $insert->id_date_limit=$date_payment;
+                $insert->id_date_payment=$date_payment;
                 $insert->id_nb_row=0;
             }
             $insert->insert();
-        }
-        if ($error>0)
-        {
-            echo "</ul>";
         }
 
 

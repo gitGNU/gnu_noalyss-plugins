@@ -20,13 +20,13 @@
 
 /***
  * @file 
- * @brief
+ * @brief Redirect to CSV or other format
  *
  */
-
+/// Redirect to CSV or other format
 class Impacc_Operation
 {
-
+    /// call the right filter to import operation
     function record_file(Impacc_File $p_file)
     {
         // in p_file we have the type CSV , XML NOALYSS or XML FEC
@@ -47,6 +47,20 @@ class Impacc_Operation
                 throw new Exception(_("Non supporté"), 1);
         }
     }
+    /// call the check and validate import , depending of the format (CSV...)
+    function check(Impacc_File $p_file)
+    {
+        switch ($p_file->format)
+        {
+            case 'CSV':
 
+                $csv=new Impacc_CSV();
+                $csv->check($p_file);
+                break;
+
+            default:
+                break;
+        }
+    }
    
 }

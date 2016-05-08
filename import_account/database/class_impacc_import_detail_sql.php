@@ -54,6 +54,8 @@ function __construct(Database $p_cn,$p_id=-1)
 	,"jr_id"=>"jr_id"
         ,'id_status'=>'id_status'
         ,'id_message'=>'id_message'
+        ,'id_date_limit'=>'id_date_limit'
+        ,'id_date_payment'=>'id_date_payment'
         );
 /*
  * Type of columns
@@ -75,6 +77,8 @@ function __construct(Database $p_cn,$p_id=-1)
 	,"jr_id"=>"numeric"
         ,'id_status'=>'numeric'
         ,'id_message'=>'text'
+        ,'id_date_limit'=>'text'
+        ,'id_date_payment'=>'text'
           );
  
 
