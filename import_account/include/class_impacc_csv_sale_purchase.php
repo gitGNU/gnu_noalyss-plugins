@@ -19,16 +19,21 @@
 
 
 /* * *
- * @file 
- * @brief Insert into the the table impacc.import_detail + status
+ //!@file 
+ ///Insert into the the table impacc.import_detail + status
  *
  */
 require_once DIR_IMPORT_ACCOUNT."/include/class_impacc_csv.php";
 
+ ///Manage one row of operation of Sale / Purchase for importing them
 class Impacc_Csv_Sale_Purchase
 {
-
-    function transform()
+    ///Works by id_group_code : all the rows with the same id_code_group belong
+    ///to the same operation
+    ///The operation will be written in the right ledger 
+    ///Only operation with a id_status = 0 can be transferred , -1 is in error and
+    ///1 means that it has already  been transferred
+    function transform($ledger_id,$import_id)
     {
         throw new Exception("Not Yet Implemented");
     }
@@ -43,15 +48,36 @@ class Impacc_Csv_Sale_Purchase
         self::check_date_payment($row,$p_format_date);
         self::check_date_limit($row,$p_format_date);
         self::check_service($row);
+        self::check_quantity($row);
+        self::check_amount_novat($row);
     }
 
     function insert()
     {
         throw new Exception("Not Yet Implemented");
     }
+    //-----------------------------------------------------------------------
+    ///
+    ///
+    //!@param $row is an Impacc_Import_detail_SQL object
+    //-----------------------------------------------------------------------
+    static function check_quantity(Impacc_Import_detail_SQL $row)
+    {
+        throw new Exception("Not Yet Implemented");
+    }
+    //-----------------------------------------------------------------------
+    ///
+    ///
+    //!@param $row is an Impacc_Import_detail_SQL object
+    //-----------------------------------------------------------------------
+    static function check_amount_novat(Impacc_Import_detail_SQL $row)
+    {
+        throw new Exception("Not Yet Implemented");
+    }
     //-------------------------------------------------------------------
     /// Check that the sale / purchase card exist
     /// Update the object $row (id_message)
+    //!@param $row is an Impacc_Import_detail_SQL object
     //-------------------------------------------------------------------
     static  function check_service(Impacc_Import_detail_SQL $row)
     {
@@ -67,10 +93,23 @@ class Impacc_Csv_Sale_Purchase
     //-------------------------------------------------------------------
     /// Check that TVA_CODE does exist
     /// Update the object $row (id_message)
+    //!@param $row is an Impacc_Import_detail_SQL object
     //-------------------------------------------------------------------
     static  function check_tva(Impacc_Import_detail_SQL $row)
     {
         $cn=Dossier::connect();
+        $own=Own($cn);
+        // If we don't use VAT , no need to check it
+        if ($own->MY_TVA_USE == "N" ) return;
+        
+        // VAT Mandatory and empty 
+        if ($row->tva_code=="") 
+        {
+            $and=($row->id_message=='')?"":",";
+            $row->id_message.=$and."CK_TVA_INVALID";
+            return;
+        }
+        
         $exist=$cn->get_value("select count(*) from impacc.parameter_tva where tva_code=$1",array($row->tva_code));
         if ($exist != 1 ){
             $and=($row->id_message=='')?"":",";
@@ -81,6 +120,8 @@ class Impacc_Csv_Sale_Purchase
     //-------------------------------------------------------------------
     /// Check that the date payment has valid format
     /// Update the object $row (id_message)
+    //!@param $row is an Impacc_Import_detail_SQL object
+    //!@param $p_format_date check for date_limit and date_payment
     //-------------------------------------------------------------------
     static  function check_date_payment(Impacc_Import_detail_SQL $row,$p_format_date)
     {
@@ -96,6 +137,8 @@ class Impacc_Csv_Sale_Purchase
     //-------------------------------------------------------------------
     /// Check that the date limit has valid format
     /// Update the object $row (id_message)
+    //!@param $row is an Impacc_Import_detail_SQL object
+    //!@param $p_format_date check for date_limit and date_payment
     //-------------------------------------------------------------------
     static  function check_date_limit(Impacc_Import_detail_SQL $row,$p_format_date)
     {
