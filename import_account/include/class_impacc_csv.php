@@ -67,11 +67,11 @@ class Impacc_CSV
         global $cn ,$adecimal,$athousand,$aseparator,$aformat_date ;
         $in_delimiter=new ISelect('in_delimiter');
         $in_delimiter->value=$aseparator;
-        $in_delimiter->selected=htmlentities($this->detail->s_delimiter);
+        $in_delimiter->selected=$this->detail->s_delimiter;
         $in_delimiter->size=1;
 
         $in_surround=new IText('in_surround',
-                htmlentities($this->detail->s_surround));
+                $this->detail->s_surround);
         $in_surround->size=1;
 
         $ledger=new Acc_Ledger($cn, $this->detail->jrn_def_id);
