@@ -63,7 +63,7 @@ class Impacc_CSV
         $in_delimiter->size=1;
 
         $in_surround=new IText('in_surround',
-                htmlentities($this->detail->s_surround));
+                $this->detail->s_surround);
         $in_surround->size=1;
 
         $ledger=new Acc_Ledger($cn, $this->detail->jrn_def_id);
