@@ -69,5 +69,11 @@ class Impacc_Csv_Misc_Operation
     {
         
     }
+    /// Transfer operation with the status correct to the
+    /// accountancy
+    function transfer()
+    {
+        throw new Exception("Not Yet Implemented");
+    }
 }
     

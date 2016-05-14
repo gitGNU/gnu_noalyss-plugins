@@ -19,9 +19,9 @@
  */
 /* $Revision$ */
 
-// Copyright (c) 2002 Author Dany De Bontridder dany@alchimerys.be
+// Copyright (c) 2016 Author Dany De Bontridder dany@alchimerys.be
 
-/**
+/***
  * @file
  * @brief upload operation
  *
@@ -51,7 +51,6 @@ if (isset($_POST['upload']))
     // Basic check
     $io->check();
 
-    return;
     // show the result
     $io->result();
     echo '<div style="margin-left:20%">';
@@ -60,12 +59,15 @@ if (isset($_POST['upload']))
     _("Les opérations qui ne sont pas marquées comme correctes ne seront pas transfèrées").
     " </p>";
     echo HtmlInput::hidden("impid", $io->impid);
-    $l=new ISelect("p_jrn");
-    $l->value=$cn->make_array("select jrn_def_id, jrn_def_name ||'  ['||jrn_def_type||']' from jrn_def
-		where
-		jrn_def_type in ('ACH','VEN')
-		order by jrn_def_name");
-    echo "Vers le journal ".$l->input();
+    // If CSV show the target
+    if ( $io->import_file->i_type=="CSV")
+    {
+        $csv=new Impacc_CSV();
+        $csv->load_import($io->impid);
+        $target=$csv->make_csv_class($io->impid);
+        $ledger=new Acc_Ledger($cn,$csv->detail->jrn_def_id);
+        printf (_("Transfert vers le journal %s"),$ledger->get_name());
+    }
     echo '<p>';
     echo HtmlInput::submit("transfer", _("Transfert des opérations"));
     echo '</p>';
@@ -75,9 +77,11 @@ if (isset($_POST['upload']))
 // step 3, insert data into the target ledger
 if (isset($_POST['transfer']))
 {
-    $io=new Impdol_Operation();
-    $io->impid=$_POST['impid'];
+    $io=new Impacc_File();
+    $io->impid=HtmlInput::default_value_post('impid',0);
+    $io->load($io->impid);
+    if ( $io->impid == 0 )        throw new Exception(_("Erreur paramètre"));
     $io->transfer();
-    $io->result_transfer();
+    //$io->result_transfer();
 }
 ?>

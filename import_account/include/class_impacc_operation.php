@@ -62,5 +62,21 @@ class Impacc_Operation
                 break;
         }
     }
-   
+    ///Transfer operation from uploaded file to the 
+    /// tables of Noalyss
+    //!\param $p_file Impacc_File $p_file
+   function transfer(Impacc_File $p_file)
+   {
+       switch($p_file->format) 
+       {
+           case 'CSV':
+               $csv=new Impacc_CSV();
+               $obj=$csv->make_csv_class($p_file->import_file->id);
+               $obj->transfer();
+               break;
+           default:
+              throw new Exception(_("Non supporté"), 1);
+
+       }
+   }
 }

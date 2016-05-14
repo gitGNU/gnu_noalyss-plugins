@@ -33,7 +33,6 @@ define ('DIR_IMPORT_ACCOUNT',$g_impacc);
 global $adecimal,$athousand,$aseparator,$aformat_date;
 
 $adecimal=array(
-		array ('value'=>0,'label'=>' '),
 		array ('value'=>1,'label'=>','),
 		array ('value'=>2,'label'=>'.')
 		);

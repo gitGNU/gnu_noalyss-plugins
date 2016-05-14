@@ -26,7 +26,7 @@
 require_once DIR_IMPORT_ACCOUNT."/include/class_impacc_csv.php";
 
  ///Manage one row of operation of Sale / Purchase for importing them
-class Impacc_Csv_Sale_Purchase
+ abstract class Impacc_Csv_Sale_Purchase
 {
     ///Works by id_group_code : all the rows with the same id_code_group belong
     ///to the same operation
@@ -42,37 +42,42 @@ class Impacc_Csv_Sale_Purchase
     //!@param $row is an Impacc_Import_detail_SQL object
     //!@param $p_format_date check for date_limit and date_payment
     //-------------------------------------------------------------------
-    static  function check(Impacc_Import_detail_SQL $row,$p_format_date)      
+    static  function check(Impacc_Import_detail_SQL $row,$p_format_date,$p_thousand,$p_decimal)      
     {
         self::check_tva($row);
         self::check_date_payment($row,$p_format_date);
         self::check_date_limit($row,$p_format_date);
         self::check_service($row);
-        self::check_quantity($row);
-        self::check_amount_novat($row);
+        self::check_quantity($row,$p_thousand,$p_decimal);
+        self::check_amount_vat($row,$p_thousand,$p_decimal);
     }
 
-    function insert()
+   
+    //-----------------------------------------------------------------------
+    ///
+    ///
+    //!@param $row is an Impacc_Import_detail_SQL object
+    //-----------------------------------------------------------------------
+    static function check_quantity(Impacc_Import_detail_SQL $row,$p_thousand,$p_decimal)
     {
-        throw new Exception("Not Yet Implemented");
+        $row->id_quant_conv=Impacc_Tool::convert_amount($row->id_quant, $p_thousand, $p_decimal);
+        if (isNumber( $row->id_quant_conv) == 0 ) {
+           $and=($row->id_message=="")?"":",";
+            $row->id_message.=$and."CK_INVALID_AMOUNT";
+        }
     }
     //-----------------------------------------------------------------------
     ///
     ///
     //!@param $row is an Impacc_Import_detail_SQL object
     //-----------------------------------------------------------------------
-    static function check_quantity(Impacc_Import_detail_SQL $row)
+    static function check_amount_vat(Impacc_Import_detail_SQL $row,$p_thousand,$p_decimal)
     {
-        throw new Exception("Not Yet Implemented");
-    }
-    //-----------------------------------------------------------------------
-    ///
-    ///
-    //!@param $row is an Impacc_Import_detail_SQL object
-    //-----------------------------------------------------------------------
-    static function check_amount_novat(Impacc_Import_detail_SQL $row)
-    {
-        throw new Exception("Not Yet Implemented");
+        $row->id_amount_vat_conv=Impacc_Tool::convert_amount($row->id_amount_vat, $p_thousand, $p_decimal);
+        if (isNumber($row->id_amount_vat_conv) == 0 ) {
+           $and=($row->id_message=="")?"":",";
+            $row->id_message.=$and."CK_INVALID_AMOUNT";
+        }
     }
     //-------------------------------------------------------------------
     /// Check that the sale / purchase card exist
@@ -98,9 +103,9 @@ class Impacc_Csv_Sale_Purchase
     static  function check_tva(Impacc_Import_detail_SQL $row)
     {
         $cn=Dossier::connect();
-        $own=Own($cn);
+        global $g_parameter;
         // If we don't use VAT , no need to check it
-        if ($own->MY_TVA_USE == "N" ) return;
+        if ($g_parameter->MY_TVA_USE == "N" ) return;
         
         // VAT Mandatory and empty 
         if ($row->tva_code=="") 
@@ -132,6 +137,8 @@ class Impacc_Csv_Sale_Purchase
         if ( $test == false) {
             $and=($row->id_message=='')?"":",";
             $row->id_message .= $and."CK_FORMAT_DATE";
+        } else {
+             $row->id_date_payment_conv=$test->format('d.m.Y');
         }
     }
     //-------------------------------------------------------------------
@@ -148,6 +155,8 @@ class Impacc_Csv_Sale_Purchase
         if ( $test == false) {
             $and=($row->id_message=='')?"":",";
             $row->id_message .= $and."CK_FORMAT_DATE";
+        }else {
+             $row->id_date_limit_conv=$test->format('d.m.Y');
         }
     }
 
@@ -165,8 +174,6 @@ class Impacc_Csv_Sale_Purchase
         $hFile=fopen($p_file->import_file->i_tmpname, "r");
         $error=0;
         $cn=Dossier::connect();
-        var_dump($p_csv->detail);
-        var_dump($aseparator);
         $delimiter=$aseparator[$p_csv->detail->s_delimiter-1]['label'];
         //---- For each row ---
         while ($row=fgetcsv($hFile, 0, $delimiter, $p_csv->detail->s_surround))
@@ -198,11 +205,13 @@ class Impacc_Csv_Sale_Purchase
                 $insert->id_date_payment=$date_payment;
                 $insert->id_nb_row=0;
             }
+            // insert row into table with status
             $insert->insert();
         }
 
 
-        // insert row into table with status
     }
-
+    /// Abstract cannot be called 
+  //  abstract function insert($a_group, $p_ledger);
+   
 }

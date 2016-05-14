@@ -30,8 +30,10 @@ require_once DIR_IMPORT_ACCOUNT."/include/class_impacc_csv.php";
 require_once DIR_IMPORT_ACCOUNT."/include/class_impacc_operation.php";
 require_once DIR_IMPORT_ACCOUNT."/database/class_impacc_import_file_sql.php";
 require_once DIR_IMPORT_ACCOUNT."/database/class_impacc_import_csv_sql.php";
+
 class Impacc_File
 {
+
 //--------------------------------------------------
 // Will be replaced by Impacc_CSV as soon as the XML
 // 
@@ -41,9 +43,10 @@ class Impacc_File
     static $aformat=array(1=>"CSV");
     var $format;
     var $filename;
-    
+    var $import_file; //!< Impacc_Import_file_SQL $impid
 
     /// Save the uploaded file and CSV setting if it is CSV import
+
     function save_file()
     {
         if (trim($_FILES['file_operation']['name'])=='')
@@ -52,43 +55,61 @@ class Impacc_File
             return -1;
         }
         $format=HtmlInput::default_value_post("format", -1);
-       
-        if ( !isset (self::$aformat[$format])) {
+
+        if (!isset(self::$aformat[$format]))
+        {
             alert(_("Format inconnu"));
             return -1;
         }
         $this->format=self::$aformat[$format];
         $this->filename=tempnam($_ENV['TMP'], 'upload_');
-        if ( ! move_uploaded_file($_FILES["file_operation"]["tmp_name"], $this->filename) )
+        if (!move_uploaded_file($_FILES["file_operation"]["tmp_name"],
+                        $this->filename))
         {
-            throw new Exception(_("Fichier non sauvé"),1);
+            throw new Exception(_("Fichier non sauvé"), 1);
         }
         $cn=Dossier::connect();
         $imp=new Impacc_Import_file_SQL($cn);
         $imp->setp('i_tmpname', $this->filename);
         $imp->setp('i_filename', $_FILES['file_operation']['name']);
-        $imp->setp("i_type",self::$aformat[$format]);
+        $imp->setp("i_type", self::$aformat[$format]);
         $imp->insert();
         $this->import_file=$imp;
         $this->impid=$imp->getp("id");
-        
+
         // For CSV only
-        if ( $imp->i_type =="CSV")
+        if ($imp->i_type=="CSV")
         {
-            $csv=new Impacc_CSV();
-            $csv->set_import($this->impid);
-            $csv->set_setting();
-            $csv->save_setting();
+            try
+            {
+                $csv=new Impacc_CSV();
+                $csv->set_import($this->impid);
+                $csv->set_setting();
+                $csv->check_setting();
+                $csv->save_setting();
+            }
+            catch (Exception $ex)
+            {
+                error_log($ex->getTraceAsString());
+                echo _("Format invalide")," : ",$ex->getMessage();
+            }
         }
+    }
+    function load($p_import_id)
+    {
+        $cn=Dossier::connect();
+        $this->import_file=new Impacc_Import_file_SQL($cn,$p_import_id);
         
     }
-
+    /// Load the file in a temporary table
     function record()
     {
-       $operation=new Impacc_Operation();
-       $operation->record_file($this);
+        $operation=new Impacc_Operation();
+        $operation->record_file($this);
     }
 
+    /// Display the parameters and the file
+    /// to upload
     function input_file()
     {
 
@@ -96,18 +117,40 @@ class Impacc_File
         $format=new ISelect("format");
         $format->id="format_sel";
         $format->value=array(
-            array("value"=>0,"label"=>"-"),
-            array("value"=>1,"label"=>"CSV")
+            array("value"=>0, "label"=>"-"),
+            array("value"=>1, "label"=>"CSV")
         );
         $format->javascript="onchange=\"ctl_display()\"";
         require_once DIR_IMPORT_ACCOUNT."/template/input_file.php";
     }
+
+    /// Check the rows of the imported file 
     function check()
     {
-        if ( $this->import_file->i_type == 'CSV') 
+        if ($this->import_file->i_type=='CSV')
         {
             $operation=new Impacc_Operation();
             $operation->check($this);
+        }
+    }
+
+    /// Display the rows of the imported file and a status for each row
+    function result()
+    {
+        if ($this->import_file->i_type=='CSV')
+        {
+            $operation=new Impacc_CSV();
+            $operation->result($this);
+        }
+    }
+    /// Transfer to accountancy
+    function transfer()
+    {
+        if ($this->import_file->i_type=='CSV')
+        {
+            $operation=new Impacc_CSV();
+            $operation->load_import($this->impid);
+            $operation->transfer();
         }
     }
 

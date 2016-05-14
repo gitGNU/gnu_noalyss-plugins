@@ -29,27 +29,36 @@ comment on table impacc.import_file is '';
 comment on column impacc.import_file.i_filename is '';
 
 
-create table impacc.import_detail 
+CREATE TABLE impacc.import_detail
 (
-    id serial primary key,
-    import_id bigint references impacc.import_file(id),
-    id_date text,
-    id_label text,
-    id_code_group varchar(20),
-    id_nb_row int default 0,
-    id_pj varchar(20) ,
-    id_acc varchar(255),
-    id_acc_second varchar(255),
-    id_quant varchar(255),
-    id_amount_novat varchar(255),
-    id_amount_vat varchar(255),
-    tva_code varchar(10),
-    jr_id bigint references jrn(jr_id),
-    id_status int not null default (0),
-    id_message text,
-    id_date_limit text,
-    id_date_payment text
-    
+  id serial NOT NULL,
+  import_id bigint,
+  id_date text,
+  id_code_group character varying(10),
+  id_nb_row integer,
+  id_pj character varying(20),
+  id_acc character varying(255),
+  id_acc_second character varying(255),
+  id_quant character varying(255),
+  id_amount_novat character varying(255),
+  id_amount_vat character varying(255),
+  tva_code character varying(10),
+  jr_id bigint,
+  id_status integer,
+  id_message text,
+  id_label text,
+  id_date_limit text,
+  id_date_payment text,
+  id_date_conv text,
+  id_date_limit_conv text,
+  id_date_payment_conv text,
+  id_quant_conv text,
+  id_amount_novat_conv text,
+  id_amount_vat_conv text,
+  CONSTRAINT import_detail_pkey PRIMARY KEY (id ),
+  CONSTRAINT import_detail_jr_id_fkey FOREIGN KEY (jr_id)
+      REFERENCES jrn (jr_id) MATCH SIMPLE
+      ON UPDATE cascade ON DELETE cascade
 );
 comment on table impacc.import_detail is '';
 comment on column impacc.import_detail.  is '';
