@@ -172,36 +172,42 @@ switch (get_class($csv_class))
        endif;
 
        ?>    
-        
         <td>
             <?php
-            if ( $row->id_message == "" ) {
+            if ( $row->id_message == "" && $row->id_status !=2) {
                 echo $g_succeed;
-            } else {
-                if ( $row->id_message != "")
+            } else
+            if ( $row->id_message == "" && $row->id_status ==2) {
+                $internal=$cn->get_value("select jr_internal from jrn where jr_id=$1",array($row->jr_id));
+                echo HtmlInput::detail_op($row->jr_id,$internal);
+                echo $g_succeed;
+                
+            } else
                 {
-                    $msg_all=explode(",", $row->id_message);
-                    $msg=array_unique($msg_all);
-                    $nb_msg=count($msg);
-                    echo "<ol>";
-                    for ($e=0;$e<$nb_msg;$e++)
+                    if ( $row->id_message != "")
                     {
-                        $idx=$msg[$e];
-                        if ( isset($this->errcode[$idx]))
+                        $msg_all=explode(",", $row->id_message);
+                        $msg=array_unique($msg_all);
+                        $nb_msg=count($msg);
+                        echo "<ol>";
+                        for ($e=0;$e<$nb_msg;$e++)
                         {
-                            echo '<li>',h($this->errcode[$idx]),'</li>';
-                        } else {
-                            echo '<li>',
-                                    _("ERREUR")," : ",
-                                    $idx,
-                                    '</li>';
+                            $idx=$msg[$e];
+                            if ( isset($this->errcode[$idx]))
+                            {
+                                echo '<li>',h($this->errcode[$idx]),'</li>';
+                            } else {
+                                echo '<li>',
+                                        _("ERREUR")," : ",
+                                        $idx,
+                                        '</li>';
+                            }
                         }
+                        echo "</ol>";
+                    } else if ($row->id_status==-1) {
+                        echo _("Erreur importation");
+                        echo h($row->id_message);
                     }
-                    echo "</ol>";
-                } else if ($row->id_status==-1) {
-                    echo _("Erreur importation");
-                    echo h($row->id_message);
-                }
             }
             
             ?>

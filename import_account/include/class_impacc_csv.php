@@ -111,7 +111,7 @@ class Impacc_CSV
                         "");
         $this->detail->jrn_def_id=HtmlInput::default_value_post("in_ledger", "");
         $this->detail->s_encoding=HtmlInput::default_value_post("in_encoding",
-                        "");
+                        " ");
         $this->detail->s_decimal=HtmlInput::default_value_post("in_decimal", "");
         $this->detail->s_thousand=HtmlInput::default_value_post("in_thousand",
                         "");
@@ -154,12 +154,13 @@ class Impacc_CSV
 
         for ($i=0; $i<$nb_array; $i++)
         {
+            $and=($array[$i]->id_message=="")?"":",";
             $array[$i]->id_status=0;
             if ( trim($array[$i]->id_code_group) == "")
             {
                 $array[$i]->id_status=-1;
-                $and=($array[$i]->id_message=="")?"":",";
                 $array[$i]->id_message .= $and."CK_CODE_GROUP";
+                $and=",";
             }
             //------------------------------------
             //Check date format
@@ -168,8 +169,8 @@ class Impacc_CSV
             if ($test==false)
             {
                 $array[$i]->id_status=-1;
-                $and=($array[$i]->id_message=="")?"":",";
                 $array[$i]->id_message .= $and."CK_FORMAT_DATE";
+                $and=","; 
             }
             else
             {
@@ -180,8 +181,8 @@ class Impacc_CSV
                 $periode_id=$cn->get_value($sql, array($array[$i]->id_date));
                 if ($cn->size()==0)
                 {
-                    $and=($array[$i]->id_message=="")?"":",";
                     $array[$i]->id_message.=$and."CK_INVALID_PERIODE";
+                    $and=","; 
                 }
                 else
                 // Check that this periode is open for this ledger
@@ -190,8 +191,8 @@ class Impacc_CSV
                     $per->jrn_def_id=$this->detail->jrn_def_id;
                     if ($per->is_open()==0)
                     {
-                        $and=($array[$i]->id_message=="")?"":",";
                         $array[$i]->id_message.=$and."CK_PERIODE_CLOSED";
+                        $and=","; 
                     }
                 }
             }
@@ -199,26 +200,21 @@ class Impacc_CSV
             // Check that first id_acc does exist , for ODS it could be an
             // accounting, the card must be accessible for the ledger
             //----------------------------------------------------------------
-            $card=new Fiche($cn);
-            $card->get_by_qcode($array[$i]->id_acc, false);
-            if ($card->id==0)
+            $card = Impacc_Verify::check_card($array[$i]->id_acc);
+            if ( $ledger_type == 'ODS' && $card == false) 
             {
-
-                if ($ledger_type!='ODS')
+                // For ODS it could be an accounting
+                $poste=new Acc_Account_Ledger($cn, $array[$i]->id_acc);
+                if ($poste->do_exist()==0)
                 {
-                    $and=($array[$i]->id_message=="")?"":",";
                     $array[$i]->id_message.=$and."CK_INVALID_ACCOUNTING";
+                    $and=","; 
                 }
-                else
-                {
-                    // If ods we must check for Accounting
-                    $poste=new Acc_Account_Ledger($cn, $array[$i]->id_acc);
-                    if ($poste->do_exist()==0)
-                    {
-                        $and=($array[$i]->id_message=="")?"":",";
-                        $array[$i]->id_message.=$and."CK_INVALID_ACCOUNTING";
-                    }
-                }
+            }
+            if ( $ledger_type != 'ODS' && $card == false) 
+            {
+                    $array[$i]->id_message.=$and."CK_INVALID_ACCOUNTING";
+                    $and=","; 
             }
             //---------------------------------------------------------------
             // Check amount
@@ -227,8 +223,8 @@ class Impacc_CSV
             $array[$i]->id_amount_novat_conv=Impacc_Tool::convert_amount($array[$i]->id_amount_novat,$this->detail->s_thousand,$this->detail->s_decimal);
             if (isNumber($array[$i]->id_amount_novat_conv)==0)
             {
-                $and=($array[$i]->id_message=="")?"":",";
                 $array[$i]->id_message.=$and."CK_INVALID_AMOUNT";
+                $and=","; 
             }
 
             //----------------------------------------------------------------

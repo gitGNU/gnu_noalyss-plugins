@@ -82,6 +82,6 @@ if (isset($_POST['transfer']))
     $io->load($io->impid);
     if ( $io->impid == 0 )        throw new Exception(_("Erreur paramètre"));
     $io->transfer();
-    //$io->result_transfer();
+    $io->result_transfer();
 }
 ?>

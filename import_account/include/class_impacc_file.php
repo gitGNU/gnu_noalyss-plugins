@@ -154,6 +154,25 @@ class Impacc_File
         }
     }
 
+    /// Show the result of the file import
+    function result_transfer()
+    {
+        if ($this->import_file->i_type == 'CSV')
+        {
+            $cn=Dossier::connect();
+            // Show first the successfully transfered record
+            // Show the failed
+            $operation=new Impacc_CSV();
+            $operation->load_import($this->import_file->id);
+            // Show the target ledger
+            $ledger=new Acc_Ledger($cn,$operation->detail->jrn_def_id);
+            echo "<h1>";
+            printf(_("Importation dans le journal %s"),$ledger->get_name());
+            echo "</h1>";
+            $operation->result($this);
+        }
+    }
+
 }
 
 ?>
