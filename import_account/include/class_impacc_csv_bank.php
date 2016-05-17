@@ -38,8 +38,9 @@ class Impacc_Csv_Bank
         $hFile=fopen($p_file->import_file->i_tmpname, "r");
         $cn=Dossier::connect();
         $delimiter=$aseparator[$p_csv->detail->s_delimiter-1]['label'];
+        $surrount=($p_csv->detail->s_surround=="")?'"':$p_csv->detail->s_surround;
         //---- For each row ---
-        while ($row=fgetcsv($hFile, 0,$delimiter , $p_csv->detail->s_surround))
+        while ($row=fgetcsv($hFile, 0,$delimiter ,$surrount ))
         {
             $insert=new Impacc_Import_detail_SQL($cn);
             $insert->import_id=$p_file->import_file->id;
@@ -52,19 +53,84 @@ class Impacc_Csv_Bank
             else
             {
                 $insert->id_date=$row[0];
-                $insert->id_acc=$row[1];
-                $insert->id_pj=$row[2];
-                $insert->id_label=$row[3];
-                $insert->id_amount_novat=$row[4];
+                $insert->id_code_group=$row[1];
+                $insert->id_acc=$row[2];
+                $insert->id_pj=$row[3];
+                $insert->id_label=$row[4];
+                $insert->id_amount_novat=$row[5];
             }
             $insert->insert();
         }
 
     }
-    /// Transfer operation with the status correct to the
-    /// accountancy
-    function transfer()
+     /// Transform a group of rows to an array and set $jr_date_paid
+    /// useable by Acc_Ledger_Sold::insert
+    function adapt( $p_row)
     {
-        throw new Exception("Not Yet Implemented");
+        bcscale(4);
+        $cn=Dossier::connect();
+        
+        // Get the code_group
+        $code_group=$p_row;
+        
+        // get all rows from this group
+        $t=new Impacc_Import_detail_SQL($cn);
+        $all_row=$t->collect_objects("where import_id=$1 and id_code_group=$2",
+                array($p_row['import_id'],$p_row['id_code_group']));
+        
+        // No block due to analytic
+        global $g_parameter;
+        $g_parameter->MY_ANALYTIC="N";
+        
+        // Initialise the array
+        $array=array();
+         // The first row gives all the information , the others of the group
+        // add services
+        $array['nb_item']=count($all_row); // must == 1
+        $array['chdate']=2; // must == 1
+        $array['e_other0']=$all_row[0]->id_acc;
+        $array['e_concerned0']="";
+        $array['e_other0_comment']=$all_row[0]->id_label;
+        // Must be transformed into DD.MM.YYYY
+        $array['dateop0']=$all_row[0]->id_date_conv; 
+        $array['e_pj']=$all_row[0]->id_pj;
+        
+        $array['mt']=microtime();
+        $array['jrn_type']='FIN';
+        $array["e_other0_amount"]=$all_row[0]->id_amount_novat;
+        return $array;
+    }
+    /// Transfer operation with the status correct to the
+    /// accountancy . Change the status of the row (id_status to 1) after
+    /// because it can transferred several rows in one operation
+    function insert($a_group, Acc_Ledger_Fin $p_ledger)
+    {
+       $cn=Dossier::connect();
+       $nb_group=count($a_group);
+       for ( $i=0;$i< $nb_group;$i++)
+       {
+            $array=$this->adapt($a_group[$i]);
+            
+            //Complete the array
+            $array["p_jrn"]=$p_ledger->id;
+            
+            //Receipt
+            if (trim($array['e_pj'])=="") $array["e_pj"]=$p_ledger->guess_pj();
+            $array['e_pj_suggest']=$p_ledger->guess_pj();
+            
+            // Because of a bug in Acc_Ledger_Fin we have to unset this
+            // global variable 
+            unset($_FILES);
+            
+            // Insert
+            $p_ledger->insert($array);
+            
+           // Update this group , status = 2  , jr_id
+           // and date_payment
+            $cn->exec_sql("update impacc.import_detail set id_status=2 where id_code_group=$1",
+                    array($a_group[$i]['id_code_group']));
+            
+       }
+       
     }
 }

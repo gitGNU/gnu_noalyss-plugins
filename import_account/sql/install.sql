@@ -35,15 +35,15 @@ CREATE TABLE impacc.import_detail
   id serial NOT NULL,
   import_id bigint,
   id_date text,
-  id_code_group character varying(10),
+  id_code_group character varying(50),
   id_nb_row integer,
-  id_pj character varying(20),
+  id_pj character varying(50),
   id_acc character varying(255),
   id_acc_second character varying(255),
   id_quant character varying(255),
   id_amount_novat character varying(255),
   id_amount_vat character varying(255),
-  tva_code character varying(10),
+  tva_code character varying(20),
   jr_id bigint,
   id_status integer,
   id_message text,
@@ -61,6 +61,9 @@ CREATE TABLE impacc.import_detail
   CONSTRAINT import_detail_pkey PRIMARY KEY (id ),
   CONSTRAINT import_detail_jr_id_fkey FOREIGN KEY (jr_id)
       REFERENCES jrn (jr_id) MATCH SIMPLE
+      ON UPDATE cascade ON DELETE cascade,
+ CONSTRAINT import_detail_import_id_fkey FOREIGN KEY (import_id)
+      REFERENCES impacc.import_file(id) MATCH SIMPLE
       ON UPDATE cascade ON DELETE cascade
 );
 comment on table impacc.import_detail is 'Detail of imported rows';

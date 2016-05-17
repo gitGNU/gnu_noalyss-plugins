@@ -74,6 +74,8 @@ class Impacc_File
         $imp->setp('i_filename', $_FILES['file_operation']['name']);
         $imp->setp("i_type", self::$aformat[$format]);
         $imp->insert();
+        $cn->exec_sql("update impacc.import_file set i_date_transfer=now() where id=$1",
+                array($imp->id));
         $this->import_file=$imp;
         $this->impid=$imp->getp("id");
 
@@ -188,7 +190,7 @@ class Impacc_File
                  to_char(i_date_import,'DD.MM.YY HH:MI') as simport
                  from 
                  impacc.import_file
-                 order by i_date_import desc
+                 order by i_date_import asc
                 "
                 );
         require_once DIR_IMPORT_ACCOUNT."/template/history_file.php";

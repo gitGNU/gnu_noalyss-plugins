@@ -20,15 +20,18 @@
 // Copyright (2014) Author Dany De Bontridder <dany@alchimerys.be>
 
 require_once NOALYSS_INCLUDE."/lib/class_noalyss_csv.php";
+
 /**
  * @file
  * @brief Export
  */
 class Impacc_Export_CSV
 {
+
     var $ledger;     //!< Ledger id (jrn_def.jrn_def_id
     var $date_start; //!< date start
     var $date_end;   //!< date_end
+
     function __construct()
     {
         global $g_user;
@@ -39,23 +42,23 @@ class Impacc_Export_CSV
         $lim=$per->get_limit($exercice);
         $this->date_start=$lim[0]->first_day();
         $this->date_end=$lim[1]->last_day();
-        
     }
+
     //--------------------------------------------------------------------
     /// Show a form to input the parameter , ledger , stard and end date 
     //--------------------------------------------------------------------
     function input_param()
     {
         $cn=Dossier::connect();
-        $l=new Acc_Ledger($cn,$this->ledger);
+        $l=new Acc_Ledger($cn, $this->ledger);
         $select_ledger=$l->select_ledger();
-        
+
         $date_start=new IDate("date_start", $this->date_start);
         $date_end=new IDate("date_end", $this->date_end);
-                
+
         require DIR_IMPORT_ACCOUNT."/template/export_param.php";
     }
-    
+
     //--------------------------------------------------------------------
     //--------------------------------------------------------------------
     function get_param()
@@ -64,34 +67,44 @@ class Impacc_Export_CSV
         $this->date_start=HtmlInput::default_value_request("date_start", 0);
         $this->date_end=HtmlInput::default_value_request("date_end", 0);
     }
+
     //--------------------------------------------------------------------
     //--------------------------------------------------------------------
     function export_csv()
     {
         $cn=Dossier::connect();
-        $ledger=new Acc_Ledger($cn,$this->ledger);
+        $ledger=new Acc_Ledger($cn, $this->ledger);
         $cvs=new Noalyss_Csv("ledger".$ledger->get_name());
         $type=$ledger->get_type();
-        if ( $type == 'ACH' ) {
+        if ($type=='ACH')
+        {
             $cvs->send_header();
             $this->export_purchase($cvs);
-        } else
-        if ( $type == 'VEN' ) {
+        }
+        else
+        if ($type=='VEN')
+        {
             $cvs->send_header();
             $this->export_sale($cvs);
-        } else
+        }
+        else
         if ($type=="ODS")
         {
             $cvs->send_header();
             $this->export_misc($cvs);
-        } else
-        if ( $type=="FIN") {
+        }
+        else
+        if ($type=="FIN")
+        {
             $cvs->send_header();
             $this->export_fin($cvs);
-        } else {
-            throw new Exception (_("Journal invalide"));
+        }
+        else
+        {
+            throw new Exception(_("Journal invalide"));
         }
     }
+
     //--------------------------------------------------------------------
     /// Export a ledger of Sale 
     //--------------------------------------------------------------------
@@ -121,9 +134,10 @@ class Impacc_Export_CSV
           jr_def_id=$3
       order by jr_date,j_id
             ";
-        $ret=$cn->exec_sql($sql,array($this->date_end,$this->date_start,$this->ledger));
+        $ret=$cn->exec_sql($sql,
+                array($this->date_end, $this->date_start, $this->ledger));
         $nb=Database::num_row($ret);
-        for ($i=0;$i<$nb;$i++)
+        for ($i=0; $i<$nb; $i++)
         {
             $row=Database::fetch_array($ret, $i);
             $p_csv->add($row["sdate"]);
@@ -132,22 +146,22 @@ class Impacc_Export_CSV
             $p_csv->add($row["jr_pj"]);
             $p_csv->add($row["jr_comment"]);
             $p_csv->add($row["qcode_serv"]);
-            $p_csv->add($row["qs_unit"],"number");
-            $p_csv->add($row["qs_price"],"number");
+            $p_csv->add($row["qs_unit"], "number");
+            $p_csv->add($row["qs_price"], "number");
             $p_csv->add($row["qs_vat_code"]);
-            $p_csv->add($row["price_tax"],"number");
+            $p_csv->add($row["price_tax"], "number");
             $p_csv->add($row["slimit"]);
             $p_csv->add($row["sdatepaid"]);
             $p_csv->write();
         }
-        
     }
+
     //--------------------------------------------------------------------
     /// Export a ledger of Purchase 
     //--------------------------------------------------------------------
     function export_purchase(Noalyss_Csv $p_csv)
     {
-         $cn=Dossier::connect();
+        $cn=Dossier::connect();
 
         $sql="
         select 
@@ -172,9 +186,10 @@ class Impacc_Export_CSV
           jr_def_id=$3
         order by jr_date,j_id
             ";
-         $ret=$cn->exec_sql($sql,array($this->date_end,$this->date_start,$this->ledger));
+        $ret=$cn->exec_sql($sql,
+                array($this->date_end, $this->date_start, $this->ledger));
         $nb=Database::num_row($ret);
-        for ($i=0;$i<$nb;$i++)
+        for ($i=0; $i<$nb; $i++)
         {
             $row=Database::fetch_array($ret, $i);
             $p_csv->add($row["sdate"]);
@@ -183,25 +198,27 @@ class Impacc_Export_CSV
             $p_csv->add($row["jr_pj"]);
             $p_csv->add($row["jr_comment"]);
             $p_csv->add($row["qcode_serv"]);
-            $p_csv->add($row["qp_unit"],"number");
-            $p_csv->add($row["qp_price"],"number");
+            $p_csv->add($row["qp_unit"], "number");
+            $p_csv->add($row["qp_price"], "number");
             $p_csv->add($row["qp_vat_code"]);
-            $p_csv->add($row["price_tax"],"number");
+            $p_csv->add($row["price_tax"], "number");
             $p_csv->add($row["slimit"]);
             $p_csv->add($row["sdatepaid"]);
             $p_csv->write();
         }
     }
+
     //--------------------------------------------------------------------
     /// Export a financial ledger
     //--------------------------------------------------------------------
     function export_fin(Noalyss_Csv $p_csv)
     {
         $cn=Dossier::connect();
-        $sql= "
+        $sql="
         select 
+            jr_id,
            to_char(jr_date,'DD.MM.YYYY') as sdate,
-          (select ad_value from fiche_detail where f_id=qf_other and ad_id=23),
+          (select ad_value from fiche_detail where f_id=qf_other and ad_id=23) as qcode,
            jr_pj_number,
            jr_comment,
            qf_amount
@@ -212,16 +229,31 @@ class Impacc_Export_CSV
           jr_date <= to_date($1,'DD.MM.YYYY') and
           jr_date >= to_date($2,'DD.MM.YYYY') and
           jr_def_id=$3
-";            
-
+          order by jr_date
+";
+        $ret=$cn->exec_sql($sql,
+                array($this->date_end, $this->date_start, $this->ledger));
+        $nb=Database::num_row($ret);
+        for ($i=0; $i<$nb; $i++)
+        {
+            $row=Database::fetch_array($ret, $i);
+            $p_csv->add($row["sdate"]);
+            $p_csv->add($row["jr_id"]);
+            $p_csv->add($row["qcode"]);
+            $p_csv->add($row["jr_pj_number"]);
+            $p_csv->add($row["jr_comment"]);
+            $p_csv->add($row["qf_amount"]);
+            $p_csv->write();
+        }
     }
+
     //--------------------------------------------------------------------
     /// Export ODS ledger
     //--------------------------------------------------------------------
     function export_misc(Noalyss_Csv $p_csv)
     {
         $cn=Dossier::connect();
-        $sql= "
+        $sql="
             select 
                 to_char(jr_date,'DD.MM.YYYY') as sdate,
                 jr_id,
@@ -241,5 +273,7 @@ class Impacc_Export_CSV
                 jr_def_id=$3
 ";
     }
+
 }
+
 ?>
