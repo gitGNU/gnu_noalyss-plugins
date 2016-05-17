@@ -49,7 +49,8 @@ class Impacc_CSV
             "CK_INVALID_PERIODE"=>_("Période non trouvée"),
             "CK_INVALID_AMOUNT"=>_("Montant invalide"),
             "CK_INVALID_ACCOUNTING"=>_("Poste comptable ou Fiche non existante"),
-            "CK_TVA_INVALID"=>_("Code TVA Invalide")
+            "CK_TVA_INVALID"=>_("Code TVA Invalide"),
+            "CK_CARD_LEDGER"=>_("Fiche non disponible pour journal")
         );
     }
 
@@ -62,8 +63,7 @@ class Impacc_CSV
         $in_delimiter->selected=$this->detail->s_delimiter;
         $in_delimiter->size=1;
 
-        $in_surround=new IText('in_surround',
-                $this->detail->s_surround);
+        $in_surround=new IText('in_surround', $this->detail->s_surround);
         $in_surround->size=1;
 
         $ledger=new Acc_Ledger($cn, $this->detail->jrn_def_id);
@@ -123,7 +123,7 @@ class Impacc_CSV
     {
 // Check if valid
 // 1 sep for thousand and decimal MUST be different
-        if ( $this->detail->s_thousand == $this->detail->s_decimal)
+        if ($this->detail->s_thousand==$this->detail->s_decimal)
             throw new Exception(_("Séparateur de décimal et milliers doivent être différent"));
 //2 encoding and delimiter can not be empty
 //3 ledger must be writable for user
@@ -156,7 +156,7 @@ class Impacc_CSV
         {
             $and=($array[$i]->id_message=="")?"":",";
             $array[$i]->id_status=0;
-            if ( trim($array[$i]->id_code_group) == "")
+            if (trim($array[$i]->id_code_group)=="")
             {
                 $array[$i]->id_status=-1;
                 $array[$i]->id_message .= $and."CK_CODE_GROUP";
@@ -170,11 +170,12 @@ class Impacc_CSV
             {
                 $array[$i]->id_status=-1;
                 $array[$i]->id_message .= $and."CK_FORMAT_DATE";
-                $and=","; 
+                $and=",";
             }
             else
             {
                 $array[$i]->id_date_conv=$test->format('d.m.Y');
+                $array[$i]->id_date_format_conv=$test->format('Ymd');
                 // Check if date exist and in a open periode
                 $sql=sprintf("select p_id from parm_periode where p_start <= to_date($1,'%s') and p_end >= to_date($1,'%s') ",
                         $date_format_sql, $date_format_sql);
@@ -182,7 +183,7 @@ class Impacc_CSV
                 if ($cn->size()==0)
                 {
                     $array[$i]->id_message.=$and."CK_INVALID_PERIODE";
-                    $and=","; 
+                    $and=",";
                 }
                 else
                 // Check that this periode is open for this ledger
@@ -192,7 +193,7 @@ class Impacc_CSV
                     if ($per->is_open()==0)
                     {
                         $array[$i]->id_message.=$and."CK_PERIODE_CLOSED";
-                        $and=","; 
+                        $and=",";
                     }
                 }
             }
@@ -200,31 +201,41 @@ class Impacc_CSV
             // Check that first id_acc does exist , for ODS it could be an
             // accounting, the card must be accessible for the ledger
             //----------------------------------------------------------------
-            $card = Impacc_Verify::check_card($array[$i]->id_acc);
-            if ( $ledger_type == 'ODS' && $card == false) 
+            $card=Impacc_Verify::check_card($array[$i]->id_acc);
+            if ($ledger_type=='ODS'&&$card==false)
             {
                 // For ODS it could be an accounting
                 $poste=new Acc_Account_Ledger($cn, $array[$i]->id_acc);
                 if ($poste->do_exist()==0)
                 {
                     $array[$i]->id_message.=$and."CK_INVALID_ACCOUNTING";
-                    $and=","; 
+                    $and=",";
                 }
             }
-            if ( $ledger_type != 'ODS' && $card == false) 
+            if ($ledger_type!='ODS'&&$card==false)
             {
-                    $array[$i]->id_message.=$and."CK_INVALID_ACCOUNTING";
-                    $and=","; 
+                $array[$i]->id_message.=$and."CK_INVALID_ACCOUNTING";
+                $and=",";
+            }
+            // If card is valid check if belong to ledger
+            if ($card instanceof Fiche)
+            {
+                if ($card->belong_ledger($this->detail->jrn_def_id)!=1)
+                {
+                    $array[$i]->id_message.=$and."CK_CARD_LEDGER";
+                    $and=",";
+                }
             }
             //---------------------------------------------------------------
             // Check amount
             // --------------------------------------------------------------
-            
-            $array[$i]->id_amount_novat_conv=Impacc_Tool::convert_amount($array[$i]->id_amount_novat,$this->detail->s_thousand,$this->detail->s_decimal);
+
+            $array[$i]->id_amount_novat_conv=Impacc_Tool::convert_amount($array[$i]->id_amount_novat,
+                            $this->detail->s_thousand, $this->detail->s_decimal);
             if (isNumber($array[$i]->id_amount_novat_conv)==0)
             {
                 $array[$i]->id_message.=$and."CK_INVALID_AMOUNT";
-                $and=","; 
+                $and=",";
             }
 
             //----------------------------------------------------------------
@@ -233,10 +244,40 @@ class Impacc_CSV
             switch ($ledger_type)
             {
                 case 'ACH':
-                    Impacc_Csv_Sale_Purchase::check($array[$i], $date_format,$this->detail->s_thousand,$this->detail->s_decimal);
+                    //-----------------
+                    ///- Check Service
+                    //-----------------
+                    $card=Impacc_Verify::check_card($array[$i]->id_acc_second);
+                    if ($card==false)
+                    {
+                        $array[$i]->id_message=$and."CK_INVALID_ACCOUNTING";
+                        $and=",";
+                    }
+                    if ($card instanceof  Fiche &&  $card->belong_ledger($this->detail->jrn_def_id)!=1)
+                    {
+                        $array[$i]->id_message.=$and."CK_CARD_LEDGER";
+                        $and=",";
+                    }
+                    Impacc_Csv_Sale_Purchase::check($array[$i], $date_format,
+                            $this->detail->s_thousand, $this->detail->s_decimal);
                     break;
                 case 'VEN':
-                    Impacc_Csv_Sale_Purchase::check($array[$i], $date_format,$this->detail->s_thousand,$this->detail->s_decimal);
+                    //-----------------
+                    ///- Check Service
+                    //-----------------
+                    $card=Impacc_Verify::check_card($array[$i]->id_acc_second);
+                    if ($card==false)
+                    {
+                        $array[$i]->id_message=$and."CK_INVALID_ACCOUNTING";
+                        $and=",";
+                    }
+                    if ($card instanceof  Fiche && $card->belong_ledger($this->detail->jrn_def_id)!=1)
+                    {
+                        $array[$i]->id_message.=$and."CK_CARD_LEDGER";
+                        $and=",";
+                    }
+                    Impacc_Csv_Sale_Purchase::check($array[$i], $date_format,
+                            $this->detail->s_thousand, $this->detail->s_decimal);
                     break;
                 case 'ODS':
                     break;
@@ -340,7 +381,7 @@ class Impacc_CSV
         $cn=Dossier::connect();
         $display=new Impacc_Import_detail_SQL($cn);
         $ret=$display->seek(" where import_id = $1 order by id",
-               array( $importfile->impid));
+                array($importfile->impid));
         $nb=Database::num_row($ret);
         require DIR_IMPORT_ACCOUNT."/template/operation_result.php";
     }
@@ -365,12 +406,14 @@ class Impacc_CSV
                                     import_id=$1
                                     and (id_status != 0 or trim(COALESCE(id_message,'')) !='')
                                     ) 
-                select distinct id_code_group , import_id
+                select distinct id_code_group ,id_date_format_conv, import_id
                 from 
                     impacc.import_detail 
                 where 
                     import_id=$1 
                     and id_code_group not in (select coalesce(id_code_group,'') from rejected)
+                
+                order by id_date_format_conv asc
                 ";
 
             $array=$cn->get_array($sql, array($this->detail->import_id));
@@ -385,5 +428,4 @@ class Impacc_CSV
         }
     }
 
- 
 }

@@ -130,7 +130,7 @@ class Impacc_Verify
     //-------------------------------------------------------------------
     /// Check that a card exist and use a valid accounting
     //!@param $p_account quick_code of a card, 
-    //!@returns true if correct , else false
+    //!@returns a Fiche object if correct , else false
     //-------------------------------------------------------------------
     static function check_card($p_account)
     {
@@ -153,6 +153,17 @@ class Impacc_Verify
                 return false;
             }
         }
+        return $card;
+    }
+    //-------------------------------------------------------------------
+    /// Check that a card belong to a ledger
+    //!@param $p_account quick_code of a card, 
+    //!@param $p_ledger ledger id , to see if not zero check if belong to ledger
+    //!@returns true if correct , else false
+    //-------------------------------------------------------------------
+    static function check_belong_card(Fiche $p_account,$p_ledger)
+    {
+        
         return true;
     }
 

@@ -22,6 +22,7 @@
 
 require_once 'impacc_constant.php';
 require_once DIR_IMPORT_ACCOUNT."/include/class_impacc_tva.php";
+require_once DIR_IMPORT_ACCOUNT."/include/class_impacc_file.php";
 /**
  * @file
  * @brief Ajax 
@@ -43,5 +44,12 @@ if ( $action == "tva_parameter_delete")
     $tva=new Impacc_TVA();
     $tva_id=HtmlInput::default_value_request("pt_id", 0);
     $tva->delete($tva_id);
+    echo "";
+}
+if ( $action == "history_delete")
+{
+    $hist=new Impacc_File();
+    $id=HtmlInput::default_value_request("id", 0);
+    $hist->delete($id);
     echo "";
 }

@@ -75,3 +75,19 @@ function tva_parameter_delete(id)
    }
 });
 }
+/// Delete a TVA Code
+function history_delete(id)
+{
+    smoke.confirm("Effacement ?",function (e)
+    {
+   if ( e) 
+   {
+       waiting_box();
+        new Ajax.Updater($("row"+id),"ajax.php",{
+            method:"get",
+            parameters:{"id":id,action:"history_delete",gDossier: dossier, plugin_code: plugin_code, ac: ac}
+        });
+        remove_waiting_box();
+   }
+});
+}

@@ -62,6 +62,7 @@ function __construct(Database $p_cn,$p_id=-1)
 	,"id_quant_conv"=>"id_quant_conv"
 	,"id_amount_novat_conv"=>"id_amount_novat_conv"
 	,"id_amount_vat_conv"=>"id_amount_vat_conv"
+        ,"id_date_format_conv"=>"id_date_format_conv"
         );
 /*
  * Type of columns
@@ -91,6 +92,7 @@ function __construct(Database $p_cn,$p_id=-1)
 	,"id_quant_conv"=>"text"
 	,"id_amount_novat_conv"=>"text"
 	,"id_amount_vat_conv"=>"text"
+        ,"id_date_format_conv"=>"text"
           );
  
 

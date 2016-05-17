@@ -70,6 +70,7 @@ class Impacc_Csv_Purchase extends Impacc_Csv_Sale_Purchase
             $pricetax=$all_row[$i]->id_amount_vat_conv;
             $price_unit=bcdiv($price,$quant);
             $array["e_march".$i."_price"]=$price_unit;
+            $array["e_march".$i."_label"]=$all_row[$i]->id_label;
             $array["e_march".$i."_tva_id"]=Impacc_Tool::convert_tva($all_row[$i]->tva_code); // Find code
             $array["e_march".$i."_tva_amount"]=bcsub($pricetax,$price);
             $array["e_quant".$i]=$quant;

@@ -119,7 +119,7 @@ class Impacc_Export_CSV
           jr_date <= to_date($1,'DD.MM.YYYY') and
           jr_date >= to_date($2,'DD.MM.YYYY') and
           jr_def_id=$3
-      order by jrn.jr_id,jrnx.j_id
+      order by jr_date,j_id
             ";
         $ret=$cn->exec_sql($sql,array($this->date_end,$this->date_start,$this->ledger));
         $nb=Database::num_row($ret);
@@ -170,7 +170,7 @@ class Impacc_Export_CSV
           jr_date <= to_date($1,'DD.MM.YYYY') and
           jr_date >= to_date($2,'DD.MM.YYYY') and
           jr_def_id=$3
-        order by jrn.jr_id,jrnx.j_id
+        order by jr_date,j_id
             ";
          $ret=$cn->exec_sql($sql,array($this->date_end,$this->date_start,$this->ledger));
         $nb=Database::num_row($ret);

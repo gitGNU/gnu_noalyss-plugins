@@ -87,13 +87,7 @@ abstract class Impacc_Csv_Sale_Purchase
                 $row->id_date_limit_conv=$date;
             }
         }
-        //-----------------
-        ///- Check Service
-        //-----------------
-        if ( Impacc_Verify::check_card($row->id_acc_second) == false ) {
-              $row->id_message=$and."CK_INVALID_ACCOUNTING";
-              $and=",";
-        }
+
         //-----------------
         ///- Check Amount VAT
         //-----------------

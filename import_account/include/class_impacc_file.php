@@ -106,6 +106,9 @@ class Impacc_File
     {
         $operation=new Impacc_Operation();
         $operation->record_file($this);
+        $cn=Dossier::connect();
+        $cn->exec_sql("update impacc.import_file set i_date_transfer=now() where id=$1",
+                array($this->import_file->id));
     }
 
     /// Display the parameters and the file
@@ -172,7 +175,31 @@ class Impacc_File
             $operation->result($this);
         }
     }
-
+    function display_list()
+    {
+        $cn=Dossier::connect();
+        $array=$cn->get_array(
+                "
+                 select   
+                 id,
+                 i_filename,
+                 i_type,
+                 to_char(i_date_transfer,'DD.MM.YY HH:MI') as stransfer,
+                 to_char(i_date_import,'DD.MM.YY HH:MI') as simport
+                 from 
+                 impacc.import_file
+                 order by i_date_import desc
+                "
+                );
+        require_once DIR_IMPORT_ACCOUNT."/template/history_file.php";
+    }
+    /// Delete a row in impacc.import_file
+    function delete($id)
+    {
+        $cn=Dossier::connect();
+        $cn->exec_sql("delete from impacc.import_file where id=$1",array($id));
+        
+    }
 }
 
 ?>

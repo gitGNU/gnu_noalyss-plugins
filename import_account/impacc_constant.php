@@ -20,7 +20,7 @@
 // Copyright (2014) Author Dany De Bontridder <dany@alchimerys.be>
 
 if (!defined('ALLOWED'))  {
-    defined('ALLOWED',"TRUE");
+    define('ALLOWED',"TRUE");
 }
 
 /**

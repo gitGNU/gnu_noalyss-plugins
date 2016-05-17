@@ -62,6 +62,7 @@ $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code']."&ac=".$_REQUES
 $array=array (
 	array($url.'&sa=opr',_('Import'),_('Importation d\'opérations '),2),
 	array($url.'&sa=exp',_('Export'),_('Exportation d\'opérations '),3),
+	array($url.'&sa=hist',_('Historique'),_('Historique importation'),4),
 	array($url.'&sa=parm',_('Paramètrage'),_('Paramètrage'),5)
 	);
 
@@ -77,6 +78,9 @@ switch($sa)
     break;
   case 'parm':
     $default=5;
+    break;
+  case 'hist':
+    $default=4;
     break;
   default:
     $default=2;
@@ -107,5 +111,10 @@ if ( $default== 2 )
 if ( $default== 3 )
 {
 	require_once 'include/imd_export.inc.php';
+	exit();
+}
+if ( $default== 4 )
+{
+	require_once 'include/imd_history.inc.php';
 	exit();
 }

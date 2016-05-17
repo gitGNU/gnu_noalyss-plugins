@@ -21,8 +21,8 @@ CREATE TABLE impacc.import_file
   i_filename text not null,
   i_tmpname text not null,
   i_type text not null,
-  i_date_transfer timestamp without time zone,
-  i_date_import timestamp without time zone,
+  i_date_transfer timestamp without time zone ,
+  i_date_import timestamp without time zone default now(),
   CONSTRAINT import_file_pkey PRIMARY KEY (id )
 )
 ;
@@ -57,6 +57,7 @@ CREATE TABLE impacc.import_detail
   id_amount_novat_conv text,
   id_amount_vat_conv text,
   id_debit text,
+  id_date_format_conv text,
   CONSTRAINT import_detail_pkey PRIMARY KEY (id ),
   CONSTRAINT import_detail_jr_id_fkey FOREIGN KEY (jr_id)
       REFERENCES jrn (jr_id) MATCH SIMPLE

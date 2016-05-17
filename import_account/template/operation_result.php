@@ -122,7 +122,13 @@ switch (get_class($csv_class))
         </td>
         
         <td>
-            <?php echo h($row->id_pj); ?>
+            <?php
+            if ( $row->id_message == "" && $row->id_status ==2) {
+                $internal=$cn->get_value("select jr_pj_number from jrn where jr_id=$1",array($row->jr_id));
+                echo HtmlInput::detail_op($row->jr_id,$internal);
+            }else {
+            echo h($row->id_pj);}
+            ?>
         </td>
         <td>
             <?php echo h($row->id_acc); ?>
@@ -175,7 +181,7 @@ switch (get_class($csv_class))
         <td>
             <?php
             if ( $row->id_message == "" && $row->id_status !=2) {
-                echo $g_succeed;
+                echo $g_succeed,_('Valide et non transférré');
             } else
             if ( $row->id_message == "" && $row->id_status ==2) {
                 $internal=$cn->get_value("select jr_internal from jrn where jr_id=$1",array($row->jr_id));
