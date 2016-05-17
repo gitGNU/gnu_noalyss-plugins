@@ -43,7 +43,7 @@ $nb=count($ret);
         </th>
     </tr>
     <?php for ($i=0;$i<$nb;$i++):?>
-    <tr>
+    <tr id="row<?php echo $ret[$i]['pt_id']?>">
         
         <td>
             <?php echo HtmlInput::anchor(h($ret[$i]['tva_label']), "", sprintf("onclick=\"tva_parameter_modify('%s')\"",$ret[$i]["pt_id"]))?>
@@ -57,6 +57,12 @@ $nb=count($ret);
         </td>
         <td>
             <?php echo h($ret[$i]['tva_rate'])?>
+        </td>
+        <td>
+            <?php
+            echo HtmlInput::anchor(_("Efface"), "", sprintf("onclick=\"tva_parameter_delete('%s')\"",$ret[$i]['pt_id']));
+            ?>
+        </td>
     </tr>
     <?php endfor;?>
 </table>

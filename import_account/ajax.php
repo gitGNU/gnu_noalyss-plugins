@@ -38,3 +38,10 @@ if ( $action == "tva_parameter_add")
     $tva=new Impacc_TVA();
     $tva->display_add();
 }
+if ( $action == "tva_parameter_delete")
+{
+    $tva=new Impacc_TVA();
+    $tva_id=HtmlInput::default_value_request("pt_id", 0);
+    $tva->delete($tva_id);
+    echo "";
+}
