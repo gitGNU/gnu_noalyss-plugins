@@ -40,8 +40,9 @@ class Impacc_Csv_Misc_Operation
         $error=0;
         $cn=Dossier::connect();
         $delimiter=$aseparator[$p_csv->detail->s_delimiter-1]['label'];
+        $surround=($p_csv->detail->s_surround=="")?'"':$p_csv->detail->s_surround;
         //---- For each row ---
-        while ($row=fgetcsv($hFile, 0, $delimiter, $p_csv->detail->s_surround))
+        while ($row=fgetcsv($hFile, 0, $delimiter, $surround))
         {
             $insert=new Impacc_Import_detail_SQL($cn);
             $insert->import_id=$p_file->import_file->id;
@@ -81,45 +82,56 @@ class Impacc_Csv_Misc_Operation
         $code_group=$p_row;
         
         // get all rows from this group
-        $t=new Impacc_Import_detail_SQL($cn);
-        $all_row=$t->collect_objects("where import_id=$1 and id_code_group=$2",
+        $sql_row= "
+            select id,
+                id_amount_novat_conv, 
+                id_date_conv,
+                (select f_id from fiche_detail where ad_value=id_acc and ad_id=23) as f_id , 
+                id_acc ,
+                id_label,
+                id_debit,
+                id_acc,
+                id_pj
+            from 
+                impacc.import_detail
+            where
+                import_id=$1 
+                and id_code_group=$2";
+        $all_row=$cn->get_array($sql_row,
                 array($p_row['import_id'],$p_row['id_code_group']));
-        
         // No block due to analytic
         global $g_parameter;
         $g_parameter->MY_ANALYTIC="N";
-        // Save the date of payment
-        $this->jr_date_paid=$all_row[0]->id_date_payment_conv;
         
         // Initialise the array
         $array=array();
-        // Suppress payment
-        $array['e_mp']=0;
          // The first row gives all the information , the others of the group
         // add services
-        $array['e_client']=$all_row[0]->id_acc;
         $array['nb_item']=count($all_row);
-        $array['e_comm']=$all_row[0]->id_label;
+        $array['e_comm']=$all_row[0]['id_label'];
+        $array['desc']=$all_row[0]['id_label'];
+        $array['jrn_concerned']="";
         // Must be transformed into DD.MM.YYYY
-        $array['e_date']=$all_row[0]->id_date_conv; 
-        $array['e_ech']=$all_row[0]->id_date_limit_conv; 
-        $array['e_pj']=$all_row[0]->id_pj;
+        $array['e_pj']=$all_row[0]['id_pj'];
+        $array['e_date']=$all_row[0]['id_date_conv'];
         
         $array['mt']=microtime();
         $array['jrn_type']='ODS';
         $nb_row=count($all_row);
         for ( $i=0;$i<$nb_row;$i++)
         {
-            $array["e_march".$i]=$all_row[$i]->id_acc_second;
-            $price=$all_row[$i]->id_amount_novat_conv;
-            $quant=$all_row[$i]->id_quant_conv;
-            $pricetax=$all_row[$i]->id_amount_vat_conv;
-            $price_unit=bcdiv($price,$quant);
-            $array["e_march".$i."_price"]=$price_unit;
-            $array["e_march".$i."_label"]=$all_row[$i]->id_label;
-            $array["e_march".$i."_tva_id"]=Impacc_Tool::convert_tva($all_row[$i]->tva_code); // Find code
-            $array["e_march".$i."_tva_amount"]=bcsub($pricetax,$price);
-            $array["e_quant".$i]=$quant;
+            $price=$all_row[$i]['id_amount_novat_conv'];
+            if ( $all_row[$i]['id_debit'] == "D") {
+                $array["ck".$i]="";
+            }
+            if ($all_row[$i]['f_id']=="")
+            {
+                $array["poste".$i]=$all_row[$i]["id_acc"];
+            }else {
+                $array["qc_".$i]=$all_row[$i]["id_acc"];
+            }
+            $array["amount".$i]=$price;
+            $array["ld".$i]=$all_row[$i]["id_label"];
         }
         return $array;
     }
@@ -141,15 +153,14 @@ class Impacc_Csv_Misc_Operation
             if (trim($array['e_pj'])=="") $array["e_pj"]=$p_ledger->guess_pj();
             $array['e_pj_suggest']=$p_ledger->guess_pj();
             
+            var_dump($array);
             // Insert
-            $p_ledger->insert($array);
+            $p_ledger->save($array);
             
            // Update this group , status = 2  , jr_id
            // and date_payment
             $cn->exec_sql("update impacc.import_detail set jr_id=$1 , id_status=2 where id_code_group=$2",
                     array($p_ledger->jr_id,$a_group[$i]['id_code_group']));
-            $cn->exec_sql(" update public.jrn set jr_date_paid=to_date($1,'DD.MM.YYYY') where jr_id=$2",
-                    array($this->jr_date_paid,$p_ledger->jr_id));
             
        }
        

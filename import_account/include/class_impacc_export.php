@@ -257,13 +257,13 @@ class Impacc_Export_CSV
             select 
                 to_char(jr_date,'DD.MM.YYYY') as sdate,
                 jr_id,
-                coalesce(j_qcode,j_poste),
+                coalesce(j_qcode,j_poste) as qcode,
                 jr_pj_number,
                 jr_comment,
                 j_montant,
                 case when j_debit = false then 'C'
                 else  'D'
-                end
+                end as deb
             from 
                 jrn 
                 join jrnx on (jr_grpt_id=j_grpt)
@@ -272,6 +272,21 @@ class Impacc_Export_CSV
                 jr_date >= to_date($2,'DD.MM.YYYY') and
                 jr_def_id=$3
 ";
+        $ret=$cn->exec_sql($sql,
+                array($this->date_end, $this->date_start, $this->ledger));
+        $nb=Database::num_row($ret);
+        for ($i=0; $i<$nb; $i++)
+        {
+            $row=Database::fetch_array($ret, $i);
+            $p_csv->add($row["sdate"]);
+            $p_csv->add($row["jr_id"]);
+            $p_csv->add($row["qcode"]);
+            $p_csv->add($row["jr_pj_number"]);
+            $p_csv->add($row["jr_comment"]);
+            $p_csv->add($row["j_montant"],"number");
+            $p_csv->add($row["deb"]);
+            $p_csv->write();
+        }
     }
 
 }

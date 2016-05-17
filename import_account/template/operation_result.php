@@ -90,6 +90,11 @@ switch (get_class($csv_class))
         <th>
             <?php echo $amount;?>
         </th>
+<?php if ($type=="O"):?>
+        <th>
+            <?php echo _('D/C');?>
+        </th>
+<?php endif;?>        
 <?php
 // ----------------------------------------------------------------------
 // For sale and purchase only
@@ -176,7 +181,13 @@ switch (get_class($csv_class))
         </td>
 <?php           
        endif;
-
+       if ( $type == "O") :
+?>
+        <td>
+            <?php echo $row->id_debit;?>
+        </td>
+<?php
+       endif;
        ?>    
         <td>
             <?php

@@ -50,7 +50,9 @@ class Impacc_CSV
             "CK_INVALID_AMOUNT"=>_("Montant invalide"),
             "CK_INVALID_ACCOUNTING"=>_("Poste comptable ou Fiche non existante"),
             "CK_TVA_INVALID"=>_("Code TVA Invalide"),
-            "CK_CARD_LEDGER"=>_("Fiche non disponible pour journal")
+            "CK_CARD_LEDGER"=>_("Fiche non disponible pour journal"),
+            "CK_BALANCE"=>_("Balance incorrecte"),
+            "CK_ERROR_DEBIT"=>_("Erreur D/C")
         );
     }
 
@@ -253,7 +255,7 @@ class Impacc_CSV
                         $array[$i]->id_message=$and."CK_INVALID_ACCOUNTING";
                         $and=",";
                     }
-                    if ($card instanceof  Fiche &&  $card->belong_ledger($this->detail->jrn_def_id)!=1)
+                    if ($card instanceof Fiche&&$card->belong_ledger($this->detail->jrn_def_id)!=1)
                     {
                         $array[$i]->id_message.=$and."CK_CARD_LEDGER";
                         $and=",";
@@ -271,7 +273,7 @@ class Impacc_CSV
                         $array[$i]->id_message=$and."CK_INVALID_ACCOUNTING";
                         $and=",";
                     }
-                    if ($card instanceof  Fiche && $card->belong_ledger($this->detail->jrn_def_id)!=1)
+                    if ($card instanceof Fiche&&$card->belong_ledger($this->detail->jrn_def_id)!=1)
                     {
                         $array[$i]->id_message.=$and."CK_CARD_LEDGER";
                         $and=",";
@@ -280,14 +282,56 @@ class Impacc_CSV
                             $this->detail->s_thousand, $this->detail->s_decimal);
                     break;
                 case 'ODS':
+                    // Check that colonne id_debit is C or D
+                    if ($array[$i]->id_debit!="D"&&$array[$i]->id_debit!="C")
+                    {
+                        $array[$i]->id_message.=$and."CK_ERROR_DEBIT";
+                        $and=",";
+                    }
                     break;
                 case 'FIN':
+
                     break;
                 default :
                     throw new Exception(_('type journal inconnu'));
             }
             // update status
             $array[$i]->update();
+        }
+        if ($ledger_type=="ODS")
+        {
+            // Check that D == C for each group
+            $array=$cn->get_array("
+with deb as (
+        select sum(coalesce(id_amount_novat_conv::numeric,0)) as sum_debit,
+            id_code_group 
+        from 
+            impacc.import_detail 
+        where 
+            import_id = $1 
+            and id_debit='D' 
+        group by id_code_group
+) ,cred as (
+        select sum(coalesce(id_amount_novat_conv::numeric,0)) as sum_credit,
+        id_code_group 
+        from 
+            impacc.import_detail 
+        where 
+            import_id = $1 and 
+            id_debit='C' 
+        group by id_code_group)
+        select id_code_group,sum_debit-sum_credit
+        from
+        deb join cred using(id_code_group)
+        where
+        sum_debit <> sum_credit
+        ", array($p_file->impid));
+            $nb_array=count($array);
+            for ($e=0; $e<$nb_array; $e++)
+            {
+                $cn->exec_sql("update impacc.import_detail set id_message = id_message||',CK_BALANCE' where id_code_group=$1 ",
+                        array($array[$e]['id_code_group']));
+            }
         }
     }
 
