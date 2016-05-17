@@ -45,7 +45,7 @@ $ac=HtmlInput::default_value_request("ac", "");
 <script>
     var dossier="<?php echo Dossier::id();?>";
     var plugin_code="<?php echo $plugin_code;?>";
-    var ac=<?php echo Dossier::id();?>;
+    var ac="<?php echo $ac;?>";
 </script>
 <?php
 // Javascript

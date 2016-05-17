@@ -23,67 +23,44 @@
 
 /**
  * @file
- * @brief matching between tva and rate
+ * @brief Matching between code from Noalyss and TVA code from file
  *
  */
-global $cn;
-if (isset($_POST['ftvaadd']))
-{
-	extract($_POST);
-	try
-	{
-		if (isNumber($pt_rate) == 0)
-			throw new Exception("le taux n'est pas un nombre");
-		if ($pt_rate < 0 || $pt_rate > 100)
-			throw new Exception("le taux est invalide");
-		$tva = new Acc_Tva($cn, $tva_id);
-		if ($tva->load() == -1)
-			throw new Exception('Cette tva est invalide');
-		$sql = "insert into impacc.parameter_tva(tva_id,pt_rate) values ($1,$2)";
-		$cn->exec_sql($sql, array($_POST['tva_id'], $_POST['pt_rate']));
-	}
-	catch (Exception $e)
-	{
-		alert($e->getMessage());
-	}
-}
-if (isset($_POST['mod']))
-{
-	extract ($_POST);
-	$aparm = $cn->get_array("select pt_id from impacc.parameter_tva");
-	try
-	{
-		for ($i = 0; $i < count($aparm); $i++)
-		{
-			if (isset(${'tva_' . $aparm[$i]['pt_id']}))
-			{
-				$pt_rate = ${'rate' . $aparm[$i]['pt_id']};
-				$tva_id = ${'tva_' . $aparm[$i]['pt_id']};
-				if (isNumber($pt_rate) == 0)
-					throw new Exception("le taux n'est pas un nombre");
-				if ($pt_rate < 0 || $pt_rate > 100)
-					throw new Exception("le taux est invalide");
-				$tva = new Acc_Tva($cn, $tva_id);
-				if ($tva->load() == -1)
-					throw new Exception('Cette tva est invalide');
-				$sql = "update impacc.parameter_tva set tva_id = $1, pt_rate = $2 where pt_id=$3";
-				$cn->exec_sql($sql, array($tva_id, $pt_rate,$aparm[$i]['pt_id']));
-			}
-		}
-	}
-	catch (Exception $e)
-	{
-		alert($e->getMessage());
-	}
-}
-/**
- * get data from database
- */
-$atva = $cn->get_array("select * from impacc.parameter_tva order by pt_rate");
-require 'template/parameter_tva_add.php';
-echo '<form method="POST">';
-require 'template/parameter.php';
-echo HtmlInput::submit("mod", "Modification");
 
-echo '</form>';
+require_once DIR_IMPORT_ACCOUNT."/include/class_impacc_tva.php";
+
+$tva = new Impacc_TVA();
+// If some data are submitted we must save them before displaying the list
+$save=HtmlInput::default_value_post("save", "#");
+////////////////////////////////////////////////////////////
+// Save modification
+////////////////////////////////////////////////////////////
+if ( $save != "#")
+{
+    $id=HtmlInput::default_value_post("pt_id", "0");
+    $tva_code=HtmlInput::default_value_post("tva_code", "");
+    $tva_id=HtmlInput::default_value_post("tva_id", 0);
+    if ( $tva_id != 0 &&
+         $tva_code !=""&&
+         $id!=0
+        )
+    {
+        if ($id < 0 ) $tva->insert($tva_id,$tva_code);
+        else
+            $tva->update($id,$tva_id,$tva_code);
+    }
+    
+}
+////////////////////////////////////////////////////////////
+// Delete
+////////////////////////////////////////////////////////////
+$delete = HtmlInput::default_value_post("delete","#");
+if ( $delete !="#")        
+{    
+    $id=HtmlInput::default_value_post("pt_id", "0");
+    $tva->delete($id);
+}
+$tva->display_list();
+
+
 ?>
