@@ -59,15 +59,7 @@ if ( $save != "#")
     }
     
 }
-////////////////////////////////////////////////////////////
-// Delete
-////////////////////////////////////////////////////////////
-$delete = HtmlInput::default_value_post("delete","#");
-if ( $delete !="#")        
-{    
-    $id=HtmlInput::default_value_post("pt_id", "0");
-    $tva->delete($id);
-}
+
 $tva->display_list();
 
 
