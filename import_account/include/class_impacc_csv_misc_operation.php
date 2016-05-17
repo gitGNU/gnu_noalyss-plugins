@@ -59,6 +59,7 @@ class Impacc_Csv_Misc_Operation
                 $insert->id_pj=$row[3];
                 $insert->id_label=$row[4];
                 $insert->id_amount_novat=$row[5];
+                $insert->id_debit=$row[6];
             }
             $insert->insert();
         }

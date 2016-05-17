@@ -60,7 +60,8 @@ echo create_script($j);
 $url='?'.dossier::get().'&plugin_code='.$_REQUEST['plugin_code']."&ac=".$_REQUEST['ac'];
 
 $array=array (
-	array($url.'&sa=opr',_('Opérations'),_('Importation d\'opérations '),2),
+	array($url.'&sa=opr',_('Import'),_('Importation d\'opérations '),2),
+	array($url.'&sa=exp',_('Export'),_('Exportation d\'opérations '),3),
 	array($url.'&sa=parm',_('Paramètrage'),_('Paramètrage'),5)
 	);
 
@@ -70,6 +71,9 @@ switch($sa)
  
   case 'opr':
     $default=2;
+    break;
+  case 'exp':
+    $default=3;
     break;
   case 'parm':
     $default=5;
@@ -98,5 +102,10 @@ if ($default == 5)
 if ( $default== 2 )
 {
 	require_once 'include/imd_operation.inc.php';
+	exit();
+}
+if ( $default== 3 )
+{
+	require_once 'include/imd_export.inc.php';
 	exit();
 }

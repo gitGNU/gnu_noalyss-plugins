@@ -55,19 +55,25 @@ CREATE TABLE impacc.import_detail
   id_quant_conv text,
   id_amount_novat_conv text,
   id_amount_vat_conv text,
+  id_debit text,
   CONSTRAINT import_detail_pkey PRIMARY KEY (id ),
   CONSTRAINT import_detail_jr_id_fkey FOREIGN KEY (jr_id)
       REFERENCES jrn (jr_id) MATCH SIMPLE
       ON UPDATE cascade ON DELETE cascade
 );
-comment on table impacc.import_detail is '';
-comment on column impacc.import_detail.  is '';
-comment on column impacc.import_detail.  is '';
-comment on column impacc.import_detail.  is '';
-comment on column impacc.import_detail.  is '';
-comment on column impacc.import_detail.  is '';
-comment on column impacc.import_detail.  is '';
-comment on column impacc.import_detail.  is '';
+comment on table impacc.import_detail is 'Detail of imported rows';
+comment on column impacc.import_detail.id_pj is 'receipt number';
+comment on column impacc.import_detail.id_acc  is 'qcode of the tiers';
+comment on column impacc.import_detail.id_acc_second  is 'qcode of the service only (Purch and Sale)';
+comment on column impacc.import_detail.id_quant  is 'Quantity';
+comment on column impacc.import_detail.id_amount_novat  is 'Total wo VAT';
+comment on column impacc.import_detail.id_amount_vat  is 'Total with VAT';
+comment on column impacc.import_detail.id_date_conv  is 'Date after conversion';
+comment on column impacc.import_detail.id_date_limit_conv  is 'Limit date after conversion';
+comment on column impacc.import_detail.id_quant_conv  is 'Quantity after conversion';
+comment on column impacc.import_detail.id_date_payment  is 'Date payment after conversion';
+comment on column impacc.import_detail.id_amount_novat_conv  is 'Amount NO vat after conversion';
+comment on column impacc.import_detail.id_amount_vat_conv  is 'Amount incl. VAT after conversion';
 comment on column impacc.import_detail.jr_id  is 'jrn.jr_id corresponding operation ';
 comment on column impacc.import_detail.id_message is 'Contains the error code , separated by a comma';
 comment on column impacc.import_detail.id_status  is '0 means OK,-1 too few row, 1 error see in id_message for detail , 2 transferred successfully';

@@ -40,7 +40,7 @@ class Impacc_CSV
         $this->detail->s_surround='"';
         $this->detail->jrn_def_id=3;
         $this->detail->s_encoding="utf-8";
-        $this->detail->s_decimal='2';
+        $this->detail->s_decimal='1';
         $this->detail->s_thousand='0';
         $this->detail->s_date_format=1;
         $this->errcode=array(
