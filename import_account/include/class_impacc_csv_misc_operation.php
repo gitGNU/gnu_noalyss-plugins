@@ -153,7 +153,6 @@ class Impacc_Csv_Misc_Operation
             if (trim($array['e_pj'])=="") $array["e_pj"]=$p_ledger->guess_pj();
             $array['e_pj_suggest']=$p_ledger->guess_pj();
             
-            var_dump($array);
             // Insert
             $p_ledger->save($array);
             
