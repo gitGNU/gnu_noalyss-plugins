@@ -42,19 +42,39 @@ class Impacc_TVA
         
     }
     /// the TVA Code must be unique
-    function check_valid($tva_code)
+    function check_valid($tva_code,$pt_id)
     {
-        
+        $cn=Dossier::connect();
+        $count=$cn->get_value(
+                "select 
+                    count(*) 
+                 from 
+                    impacc.parameter_tva 
+                 where
+                    pt_id <> $1
+                    and tva_code=$2",
+                    array($pt_id,$tva_code)
+                );
+        return $count;
     }
     function insert($tva_id,$tva_code)
     {
+        if ( $this->check_valid($tva_code,-1) > 0)
+        {
+            throw new Exception(_("Duplicate"));
+        }
         $cn=Dossier::connect();
+        
         $cn->exec_sql("insert into impacc.parameter_tva(tva_id,tva_code) 
                 values ($1,$2)
                 returning pt_id", array($tva_id,$tva_code));
     }
     function update($id,$tva_id,$tva_code)
     {
+        if ( $this->check_valid($tva_code,$id) > 0)
+        {
+            throw new Exception(_("Duplicate"));
+        }
         $cn=Dossier::connect();
         $cn->exec_sql("update impacc.parameter_tva set tva_id=$1,tva_code=$2 where pt_id=$3",
                 array($tva_id,$tva_code,$id));

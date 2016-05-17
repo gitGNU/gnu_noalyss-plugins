@@ -10,9 +10,10 @@ CREATE TABLE impacc.parameter_tva
 (
     pt_id serial NOT NULL,
     tva_id bigint not null references tva_rate(tva_id) on delete cascade on update cascade,
-    tva_code varchar(10) not null,
+    tva_code varchar(20) not null ,
     CONSTRAINT parameter_tva_pkey PRIMARY KEY (pt_id )
 );
+alter table impacc.parameter_tva add   CONSTRAINT tva_code_unique unique(tva_code);
 
 CREATE TABLE impacc.import_file
 (

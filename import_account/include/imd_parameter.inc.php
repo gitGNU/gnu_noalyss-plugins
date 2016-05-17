@@ -45,9 +45,17 @@ if ( $save != "#")
          $id!=0
         )
     {
+        try
+        {
+            
         if ($id < 0 ) $tva->insert($tva_id,$tva_code);
         else
             $tva->update($id,$tva_id,$tva_code);
+        }
+        catch (Exception $ex)
+        {
+            alert($ex->getMessage());
+        }
     }
     
 }
