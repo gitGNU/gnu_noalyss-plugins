@@ -66,7 +66,7 @@ class Impacc_Csv_Sale extends Impacc_Csv_Sale_Purchase
         {
             $array["e_march".$i]=$all_row[$i]->id_acc_second;
             $price=$all_row[$i]->id_amount_novat_conv;
-            $quant=$all_row[$i]->id_quant_conv;
+            $quant=($all_row[$i]->id_quant_conv<>0)?$all_row[$i]->id_quant_conv:1;
             $pricetax=$all_row[$i]->id_amount_vat_conv;
             $price_unit=bcdiv($price,$quant);
             $array["e_march".$i."_price"]=$price_unit;
