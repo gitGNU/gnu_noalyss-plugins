@@ -187,10 +187,11 @@ class Impacc_File
                  i_filename,
                  i_type,
                  to_char(i_date_transfer,'DD.MM.YY HH:MI') as stransfer,
-                 to_char(i_date_import,'DD.MM.YY HH:MI') as simport
+                 to_char(i_date_import,'DD.MM.YY HH:MI') as simport,
+                 to_char(i_date_transfer,'YYYYMMDDHHMI') as sorder_transfer
                  from 
                  impacc.import_file
-                 order by i_date_import asc
+                 order by i_date_transfer desc
                 "
                 );
         require_once DIR_IMPORT_ACCOUNT."/template/history_file.php";

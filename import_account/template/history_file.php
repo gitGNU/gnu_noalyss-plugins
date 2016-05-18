@@ -28,7 +28,7 @@ $plugin_code=HtmlInput::default_value_request("plugin_code", "#");
  * @param $array
  */
 ?>
-<table class="result">
+<table class="result sortable">
     <tr>
         <th>
             <?php echo _("Fichier")?>
@@ -64,10 +64,11 @@ $plugin_code=HtmlInput::default_value_request("plugin_code", "#");
         <td>
             <?php echo h($array[$i]['i_type'])?>
         </td>
-        <td>
+      <!--  <td>
             <?php echo h($array[$i]['simport'])?>
         </td>
-        <td>
+      -->
+        <td sorttable_customkey="<?=$array[$i]['sorder_transfer']?>" >
             <?php echo h($array[$i]['stransfer'])?>
         </td>
         <td>
