@@ -58,8 +58,8 @@ for ($i=0;$i<count($array);$i++) :
         }
 	echo td($msg);
    $ic=new ICheckBox('p_sel[]');
-
-   echo td($ic->input().HtmlInput::hidden('h[]',$array[$i]['ha_id']));
+   $ic->value=$array[$i]['ha_id'];
+   echo td($ic->input());
 
 
 

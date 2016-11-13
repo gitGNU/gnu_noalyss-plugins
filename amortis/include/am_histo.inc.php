@@ -45,14 +45,15 @@ $sql.=$sql_ord;
 
 if ( isset($_POST['remove']))
   {
-    for ($i=0;$i<count($_POST['h']);$i++)
-      {
-	if ( isset($_POST['p_sel'][$i]))
-	  {
-	    $cn->exec_sql("update amortissement.amortissement_histo set h_amount=0,h_pj='',jr_internal=null where ha_id=$1",
-			  array($_POST['h'][$i]));
-	  }
-      }
+    $nb_sel=count($_POST['p_sel']);
+    for ($i = 0 ; $i < $nb_sel ;$i++)
+    {
+        if ( isset($_POST['p_sel'][$i]))
+              {
+                $cn->exec_sql("update amortissement.amortissement_histo set h_amount=0,h_pj='',jr_internal=null where ha_id=$1",
+                              array($_POST['p_sel'][$i]));
+          }
+    }
   }
 $array=$cn->get_array($sql);
 require_once('template/listing_histo.php');
