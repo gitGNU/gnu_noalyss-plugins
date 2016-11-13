@@ -248,31 +248,34 @@ if ( ! $remove ):
     function impb_check_all() {
     waiting_box();
     var check=($('check_all').checked)?1:0;
-    new Ajax.Request('ajax.php',{
-        method:'get',
-        parameters : {'gDossier':<?php echo $dossier_id;?>,
-            'status':<?php echo  $filter->selected;?>,
-            'act':'check_all',
-        'plugin_code':'<?php echo $plugin_code; ?>',
-        'import_id':<?php echo $array[0]['id']; ?>,
-        'ac':'<?php echo $_REQUEST['ac'] ?>',
-        'checked':check
-        },
-       onSuccess:function(e) {
-           var tb=document.getElementById('record_tb_id');
-           var a=tb.getElementsByTagName('input');
-           remove_waiting_box();
+    var gDossier='<?php echo $dossier_id; ?>';
+    var plugin_code='<?php echo $plugin_code; ?>';
+   
+    var tb=document.getElementById('record_tb_id');
+    var a=tb.getElementsByTagName('input');
+    
+    
+    var i=0;
+     for (i = 0 ; i < a.length;i++) {
+        if (a[i].id == 'check_all') {continue;}
 
-            var i=0;
-            for (i = 0 ; i < a.length;i++) {
-              if (a[i].id == 'check_all') {continue;}
-              if ( check == 0)   {
-                  a[i].checked=false;
-            } else {
-                  a[i].checked=true;
-            }
+        // Avoid selecting the no visible row
+        if (! a[i].parentNode.parentNode.visible()) {
+            continue;
         }
+
+        if ( check == 0)   {
+              a[i].checked=false;
+        } else {
+              a[i].checked=true;
         }
-      });
+        var row_id=a[i].id;
+        row_id=row_id.replace(/temp_bank/,"");
+        impb_check_item(gDossier,plugin_code,row_id);
+     
     }
+    remove_waiting_box();
+ }
+     
+    
 </script>
