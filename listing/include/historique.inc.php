@@ -41,7 +41,7 @@ $data=$cn->get_array("
 		to_char(l_timestamp,'YYMMDDHH24MI') as fmt_order_generated,
                 2
 		from rapport_advanced.listing_compute
-order by fmt_generated desc,l_description");
+order by l_timestamp desc,l_description");
 ?>
 <div id="declaration_list_div">
 <?php
