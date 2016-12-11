@@ -38,9 +38,21 @@ foreach ($_GET['sel_sale'] as $key => $value)
     $invoice = $a_invoice[0];
     if ($invoice['jr_pj_name'] != "" && $invoice['jr_pj'] != "")
     {
-        $file = $dirname . '/' . $invoice['jr_pj_name'];
+        $filename= $invoice['jr_pj_name'];
+        $file = $dirname . '/' .$filename;
+        /*
+         * Avoid that the file is overwritten by another one with
+         * the same name
+         */
+        $i=1;
+        while (file_exists($file))
+        {
+            $filename=sprintf("%s-%s",$i,$filename);
+            $file = $dirname . '/' .$filename;
+            $i++;
+        }
         $cn->lo_export($invoice['jr_pj'], $file);
-        $feedback[] = _('Ajout facture ') . $invoice['jr_pj_name'];
+        $feedback[] = _('Ajout facture ') . $filename;
     }
 }
 // -- zip file
