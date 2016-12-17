@@ -70,16 +70,13 @@ Format = {
           onSuccess:function(req) {
               // Parse the answer
               var json=req.responseText.evalJSON(true);
-              console.log(json);
               $("rdelimiter").value=json.rdelimiter;
               $("encodage").checked=(json.encodage=="Y")?true:false;
               // Problème avec le double quote
               // $("rsurround").value=json.rsurround; 
               $("skip_row").value=json.skip_row;
-              console.log("skip row"+json.skip_row);
               var i=0;var e=0;
               var header=document.getElementsByName("head_col[]");
-              console.log(header);
               for (i=0;i<header.length;i++){
                   var t=header[i];
                   if ( json.f_position[i] <= header.length) 
@@ -93,7 +90,6 @@ Format = {
                   } else {
                       t.selectedIndex=-1;
                   }
-                  console.log(json.f_position[i]);
               }
               
           }
