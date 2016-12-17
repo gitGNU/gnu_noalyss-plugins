@@ -52,6 +52,11 @@ $cn=Dossier::connect();
 if ( ! $cn->exist_schema("importcard")) {
     $cn->execute_script(__DIR__."/sql/install.sql");
 }
+
+/* delete old record */
+$cn->exec_sql("delete from importcard.format where f_saved=0 and f_timestamp < now() - interval '2 hours'");
+$cn->exec_sql("delete from importcard.file_csv where file_timestamp < now() - interval '2 hours'");
+
 // retrieve file and format if they exist
 $format_id=HtmlInput::default_value_request("format", -1);
 $record_id=HtmlInput::default_value_request("record", -1);
