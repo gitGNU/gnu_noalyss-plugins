@@ -174,7 +174,9 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
 
         // open the files
         $ifile = fopen($p_dir . '/' . $p_filename, 'r');
-
+        if ($ifile == false){
+            die (_("Cannot open file $p_filename"));
+        }
         // check if tmpdir exist otherwise create it
         $temp_dir = $_ENV['TMP'];
         if (is_dir($temp_dir) == false)
@@ -188,7 +190,7 @@ class RAPAV_Listing_Compute_Fiche extends RAPAV_Listing_Compute_Fiche_SQL
         // Compute output_name
         $oname = tempnam($temp_dir, "listing_");
         $ofile = fopen($oname, "w+");
-
+        
         // read ifile
         while (!feof($ifile))
         {
