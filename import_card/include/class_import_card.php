@@ -49,6 +49,7 @@ class Import_Card
         $this->format->f_skiprow=0;
         $this->format->f_surround='"';
         $this->format->f_delimiter=";";
+        $this->format->f_saved=0;
         if ($p_fiche_card == 0 ){
             $this->format->f_position="-1";
         } else {
@@ -369,4 +370,16 @@ class Import_Card
 		echo '</span>';
 		return 0;
 	}
+        function propose_save_template()
+        {
+            require_once __DIR__."/template/template_save.php";
+        }
+        function show_template()
+        {
+            global $cn;
+            $select_template=new ISelect("template_id");
+            $select_template->value=$cn->make_array("select id,f_name from importcard.format where f_saved=1 order by f_name");
+            require_once __DIR__."/template/template_show.php";
+            
+        }
 }

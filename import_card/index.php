@@ -80,9 +80,13 @@ if ($_REQUEST['sa']=="test")
     {
         // retrieve information and store them into db
         $upload->get_post_format();
-
+        
+        // Propose a template
+        $upload->show_template();
+        
         // Display the parameter
         $upload->propose_format();
+        
         // Show the result 
         $upload->test_import();
         exit();
@@ -94,7 +98,10 @@ if ($_REQUEST['sa']=="test")
     {
         // retriev info 
         $upload->get_post_format();
-
+        
+        // Propose to save the template
+        // 
+        $upload->propose_save_template();
         // Import
         // show imported row
         $upload->record_import();

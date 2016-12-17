@@ -45,6 +45,7 @@ class Importcard_Format_SQL extends Noalyss_SQL
             , "f_surround"=>"f_surround"
             , "f_unicode_encoding"=>"f_unicode_encoding"
             , "f_position"=>"f_position"
+            , "f_saved"=>"f_saved"
         );
         /*
          * Type of columns
@@ -53,11 +54,12 @@ class Importcard_Format_SQL extends Noalyss_SQL
             "id"=>"numeric"
             , "f_name"=>"text"
             , "f_card_category"=>"numeric"
-            , "f_skiprow"=>"text"
+            , "f_skiprow"=>"numeric"
             , "f_delimiter"=>"text"
             , "f_surround"=>"text"
             , "f_unicode_encoding"=>"text"
             , "f_position"=>"text"
+            , "f_saved"=>"numeric"
         );
 
 

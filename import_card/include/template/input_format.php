@@ -37,7 +37,7 @@
     </tr>
     <tr>
         <td><?php echo _("  Texte entouré du signe");?> </td>
-        <TD><input type="text" name="rsurround" value='"' size="1"></td>
+        <TD><input type="text" class="input_text" name="rsurround" value='"' size="1"></td>
     </tr>
     <tr>
         <td><?php echo _("Supprimer la première ligne");?></td>

@@ -28,31 +28,18 @@ if (!defined('ALLOWED'))     die('Appel direct ne sont pas permis');
 require_once __DIR__."/include/class_impcard_format_sql.php";
 /// Save a format
 if (isset($_POST["format_save"])) {
+    $format_id=HtmlInput::default_value_post("format_id", 0);
     $name=HtmlInput::default_value_post("format_name", "");
-    $delimiter=HtmlInput::default_value_post("rdelimiter", "");
-    $skip_row=HtmlInput::default_value_post("skip_row", "");
-    $surround=HtmlInput::default_value_post("rsurround", "");
-    $encoding=HtmlInput::default_value_post("encodage", "N");
-    $card_category=HtmlInput::default_value_post("rfichedef", "");
-    $head_code=HtmlInput::default_value_post("head_col", "");
-    
-    // if name , delimiter , fiche_def or head_col is empty then
-    // we throw an error
-    if ( trim($name)=="") { echo "NONAME"; exit;}
-    if ( trim($card_category)=="") { echo "NOCARD"; exit;}
-    if ( ! is_array($head_code) || empty($head_code)) { echo "NOHEAD"; exit;}
-    if ( trim($delimiter)=="") { echo "NODELIM"; exit;}
-    
-    $format=new Importcard_Format_SQL($cn,-1);
-    $format->f_name=$name;
-    $format->f_card_category=$card_category;
-    $format->f_skiprow=$skip_row;
-    $format->f_delimiter=$delimiter;
-    $format->f_surrount=$surround;
-    $format->f_unicode_encoding=($encoding=="N")?"N":"Y";
-    $format->f_position=join($head_code,",");
+    if ( $format_id == 0 || trim($name)=="")
+    {
+        echo "Paramètre invalide";
+        return;
+    }
+    $format=new Importcard_Format_SQL($cn,$format_id);
+    $format->f_name=html_entity_decode($name,ENT_COMPAT | ENT_HTML401,"utf-8");
+    $format->f_saved=1;
     $format->save();
-    echo "OK";
+    printf(_("Sauvegarde du modèle %s"), $name);
     return;
 }
 if (isset($_GET["getFormat"]) )
@@ -62,5 +49,15 @@ if (isset($_GET["getFormat"]) )
         echo 'ERRFORMAT';
         return;
     }
+    // retrieve info 
+    $format=new Importcard_Format_SQL($cn,$id);
+    $array=array();
+    $array['rdelimiter']=$format->f_delimiter;
+    $array['encodage']=$format->f_unicode_encoding;
+    $array['rsurround']=$format->f_surround;
+    $array['skip_row']=$format->f_skiprow;
+    $array['f_position']=explode(',',$format->f_position);
+    header('Content-Type: application/json');
+    echo json_encode($array);
     
 }
