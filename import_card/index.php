@@ -46,7 +46,12 @@ echo '<div style="float:right"><a class="mtitle" style="font-size:140%" href="ht
 '</div>';
 
 $cn=Dossier::connect();
-
+/*
+ *  Check if schema exists , if not install it
+ */
+if ( ! $cn->exist_schema("importcard")) {
+    $cn->execute_script(__DIR__."/sql/install.sql");
+}
 // retrieve file and format if they exist
 $format_id=HtmlInput::default_value_request("format", -1);
 $record_id=HtmlInput::default_value_request("record", -1);
