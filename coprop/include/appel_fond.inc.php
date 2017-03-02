@@ -28,7 +28,7 @@
  */
 global $cn, $g_copro_parameter;
 require_once 'class_coprop_appel_fond.php';
-extract($_GET);
+extract($_GET, EXTR_SKIP);
 $error = 0;
 
 // Demande génération

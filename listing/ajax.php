@@ -3,7 +3,7 @@
 //see licence.txt
 require_once 'listing_constant.php';
 
-extract($_GET);
+extract($_GET, EXTR_SKIP);
 if ( ! isset($act)) {
     die(_('act invalide'));
 }

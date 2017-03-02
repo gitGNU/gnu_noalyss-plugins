@@ -238,7 +238,7 @@ class Copro_Budget
 	{
 		global $cn;
 		try {
-			extract ($p_array);
+			extract ($p_array, EXTR_SKIP);
 			// update coprop.budget
 			$cn->exec_sql("update coprop.budget set b_name=$1,
 					b_exercice=$2,
@@ -268,7 +268,7 @@ class Copro_Budget
 	{
 		global $cn;
 		try {
-			extract ($p_array);
+			extract ($p_array, EXTR_SKIP);
 			// update coprop.budget
 			$this->b_id=$cn->get_value("insert into coprop.budget (b_name,b_exercice,b_type,b_amount)
 				values ($1,
@@ -292,7 +292,7 @@ class Copro_Budget
 	}
 	function save_detail($p_array)
 	{
-		extract($p_array);
+		extract($p_array, EXTR_SKIP);
 		global $cn;
 		try
 		{

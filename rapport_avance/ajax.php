@@ -3,7 +3,7 @@
 //see licence.txt
 
 $act = HtmlInput::default_value_request('act','');
-extract($_REQUEST);
+extract($_REQUEST, EXTR_SKIP);
 if ( $act=="") {
     die(_('act invalide'));
 }

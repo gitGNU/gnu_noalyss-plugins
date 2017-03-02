@@ -29,7 +29,7 @@
 global $cn;
 if (isset($_POST['ftvaadd']))
 {
-	extract($_POST);
+	extract($_POST, EXTR_SKIP);
 	try
 	{
 		if (isNumber($pt_rate) == 0)
@@ -49,7 +49,7 @@ if (isset($_POST['ftvaadd']))
 }
 if (isset($_POST['mod']))
 {
-	extract ($_POST);
+	extract ($_POST, EXTR_SKIP);
 	$aparm = $cn->get_array("select pt_id from impdol.parameter_tva");
 	try
 	{

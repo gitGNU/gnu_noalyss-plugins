@@ -25,7 +25,7 @@
  */
 require_once('coprop-constant.php');
 
-extract ($_REQUEST);
+extract ($_REQUEST, EXTR_SKIP);
 
 /* export all cards in PDF */
 /* EXAMPLE

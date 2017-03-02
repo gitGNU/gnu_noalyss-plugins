@@ -24,7 +24,7 @@
  * \brief raw file for PDF ewa
  */
 require_once('invoicing_constant.php');
-extract ($_REQUEST);
+extract ($_REQUEST, EXTR_SKIP);
 $zip_file=HtmlInput::default_value_request('file','null');
 if ($zip_file=='null')
 {

@@ -23,7 +23,7 @@ require_once ('class_ext_list_intra.php');
 require_once ('class_ext_list_assujetti.php');
 require_once NOALYSS_INCLUDE.'/class/class_acc_ledger.php';
 
-extract($_GET);
+extract($_GET, EXTR_SKIP);
 global $g_parameter,$cn;
 
 $html='';$extra='';$ctl='';
@@ -107,7 +107,7 @@ case 'sw':
   $ctl='record_write';
   ob_start();
   echo   '<div style="float:right"><a class="mtitle" href="javascript:void(0)" onclick="removeDiv(\'record_write\')">fermer</a></div>';
-  extract($_GET);
+  extract($_GET, EXTR_SKIP);
   try {
     $array=array();
     $array['e_date']=$pdate;

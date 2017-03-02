@@ -113,7 +113,7 @@ class Import_Card
 	{
 
 		global $cn, $g_failed, $g_succeed;
-		extract($_POST);
+		extract($_POST, EXTR_SKIP);
 		$fd = fopen($filename, 'r');
 		/*
 		 * Check the column

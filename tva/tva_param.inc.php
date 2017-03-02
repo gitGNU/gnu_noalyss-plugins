@@ -28,7 +28,7 @@ $cn=Dossier::connect();
 
 // save all the parameters
 if ( isset ($_POST['save_misc']))  {
-	extract($_POST);
+	extract($_POST, EXTR_SKIP);
 
 	foreach ( array('CRTVA','ATVA','DTTVA') as $i){
 		$value=${$i};
@@ -48,7 +48,7 @@ if ( isset ($_POST['save_misc']))  {
 }
 
 if ( isset ($_POST['save_addparam'])){
-	extract ($_POST);
+	extract ($_POST, EXTR_SKIP);
 	try {
 		if ( trim($tva_id)=="")			throw new Exception("TVA n'existe pas");
 		if ( trim($paccount)=="")			throw new Exception("Poste comptable vide");

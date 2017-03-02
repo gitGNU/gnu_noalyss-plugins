@@ -26,7 +26,7 @@
 require_once('amortis_constant.php');
 require_once NOALYSS_INCLUDE.'/lib/class_noalyss_csv.php';
 
-extract ($_REQUEST);
+extract ($_REQUEST, EXTR_SKIP);
 bcscale(2);
 /* export all cards in PDF */
 if ( isset($_REQUEST['pdf_all']))

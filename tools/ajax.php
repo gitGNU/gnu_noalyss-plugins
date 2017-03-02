@@ -10,7 +10,7 @@ require_once NOALYSS_INCLUDE.'/lib/class_ibutton.php';
 require_once 'class_ext_list_intra.php';
 require_once 'class_ext_list_assujetti.php';
 
-extract($_GET);
+extract($_GET, EXTR_SKIP);
 global $cn;
 $html='';$extra='';$ctl='';
 ob_start();

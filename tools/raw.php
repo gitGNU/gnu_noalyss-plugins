@@ -105,7 +105,7 @@ if ($act == 'export_operation')
  */
 if ($act=='download_receipt')
 {
-    extract ($_REQUEST);
+    extract ($_REQUEST, EXTR_SKIP);
 
     $zip_file=HtmlInput::default_value_request('file', 'null');
     if ($zip_file=='null')

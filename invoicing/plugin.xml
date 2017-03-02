@@ -38,6 +38,12 @@
         <file>
             index.php
         </file>
+        <depend>
+            VENMENU
+        </depend>
+        <order>
+            100
+        </order>
         <author>
             Dany De Bontridder
         </author>

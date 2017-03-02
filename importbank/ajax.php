@@ -21,7 +21,7 @@ require_once NOALYSS_INCLUDE.'/lib/class_database.php';
 require_once('include/class_bank_item.php');
 require_once('bank_constant.php');
 
-extract($_GET);
+extract($_GET, EXTR_SKIP);
 $cn=Dossier::connect();
 $html='';$extra='';$ctl='';
 $dossier_id=Dossier::id();

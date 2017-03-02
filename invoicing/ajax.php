@@ -19,7 +19,7 @@
  */
 require_once NOALYSS_INCLUDE.'/lib/class_database.php';
 
-extract($_GET);
+extract($_GET, EXTR_SKIP);
 global $cn;
 
 switch ($act)

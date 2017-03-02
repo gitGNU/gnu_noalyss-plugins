@@ -240,7 +240,7 @@ if ( $_POST['jrn_type'] == 'ODS')
 /* ---------------------------------------------------------------------- */
 if ( $_POST['jrn_type'] == 'FIN')
 {
-    extract ($_POST);
+    extract ($_POST, EXTR_SKIP);
     $user=new User($cn);
     try
     {

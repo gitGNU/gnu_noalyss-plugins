@@ -31,7 +31,7 @@ class Copro_key
     function verify ($p_array,$b_dupl=true)
     {
         global $cn;
-        extract ($p_array);
+        extract ($p_array, EXTR_SKIP);
         if (strlen(trim ($cr_name))==0)
             throw new Exception("Le nom est vide");
         if ($b_dupl )
@@ -46,7 +46,7 @@ class Copro_key
 	function insert($p_array)
 	{
 		global $cn;
-		extract($p_array);
+		extract($p_array, EXTR_SKIP);
 		try
 		{
                     $this->verify($p_array);
@@ -71,7 +71,7 @@ class Copro_key
 	function update($p_array)
 	{
 		global $cn;
-		extract($p_array);
+		extract($p_array, EXTR_SKIP);
 		try
 		{
                     $this->verify($p_array,false);

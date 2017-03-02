@@ -26,7 +26,7 @@
  *@parameter $op is the request action
  *@return xml <ctl> the destination object <code> the HTML to display <extra> various usage
  */
-extract ($_REQUEST);
+extract ($_REQUEST, EXTR_SKIP);
 
 $ctl=$t;
 $html='opération non trouvée';

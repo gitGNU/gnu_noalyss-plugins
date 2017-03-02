@@ -27,7 +27,7 @@
 require_once 'include/class_formulaire_param.php';
 require_once 'include/class_rapav_declaration.php';
 
-extract($_REQUEST);
+extract($_REQUEST, EXTR_SKIP);
 if ($act == 'rapav_form_export')
 {
 	Formulaire_Param::to_csv($d_id);
