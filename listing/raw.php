@@ -27,7 +27,7 @@
 require_once 'include/class_rapav_listing_compute_fiche.php';
 require_once 'include/class_rapav_listing_compute.php';
 
-extract($_REQUEST, EXTR_SKIP;
+extract($_REQUEST, EXTR_SKIP);
 if ($act == 'export_listing_csv')
 {
    $decl = new RAPAV_Listing_Compute();
