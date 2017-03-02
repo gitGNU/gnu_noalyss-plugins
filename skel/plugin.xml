@@ -45,6 +45,11 @@
         <noalyss_version>
             6915
         </noalyss_version>
+	<order>
+		9000
+	</order>
+	<depend>
+	</depend>
         <schema>
             skeleton
         </schema>
