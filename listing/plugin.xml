@@ -38,6 +38,12 @@
         <file>
             index.php
         </file>
+	<depend>
+	    PRINT
+	</depend>
+	<order>
+		1000
+	</order>
         <author>
             Dany De Bontridder
         </author>

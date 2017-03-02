@@ -35,6 +35,12 @@
         <root>
             importbank
         </root>
+	<depend>
+	   MENUFIN
+	</depend>
+	<order>
+	  1000
+	</order>
         <file>
             index.php
         </file>
