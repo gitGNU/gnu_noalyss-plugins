@@ -66,7 +66,7 @@ echo '<span style="display:block">';
 		</th>
 		<th>
 			Date génération
-			<span id="sorttable_sortrevind">&nbsp;&blacktriangle;</span>
+			<span id="sorttable_sortrevind"><img src="image/down.gif"></span>
 		</th>
 		<th>
 

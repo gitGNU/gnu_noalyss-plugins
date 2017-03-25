@@ -87,7 +87,7 @@ if ( ! $remove ):
                 ?>
             </th>
 	<TH>N° opération</TH>
-	<th  class=" sorttable_sorted_reverse" >Date <span id="sorttable_sortrevind">&nbsp;&blacktriangle;</span></th>
+        <th  class=" sorttable_sorted" >Date <span id="sorttable_sortfwdind"><img src="image/up.gif"></span></th>
 	<th>Montant</th>
 	<th>Etat</th>
 	<th>Tiers</th>
